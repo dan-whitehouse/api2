@@ -19,16 +19,12 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 
 import java.util.List;
 
 @Configuration
 public class Configurer implements WebMvcConfigurer {
-    static {
-        System.err.println("IM GETTING HERE");
-    }
-
-
 
     /*@Override
     public void addInterceptors(InterceptorRegistry registry) {
@@ -51,49 +47,16 @@ public class Configurer implements WebMvcConfigurer {
         argumentResolvers.add(resolver);
     }
 
-
     @Override
     public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
         configurer
-                .favorPathExtension(false)
-                //.favorParameter(true).parameterName("mediaType")
-                .ignoreAcceptHeader(false)
-                .ignoreUnknownPathExtensions(true)
-                .defaultContentType(MediaType.APPLICATION_JSON)
-                .mediaType("json", MediaType.APPLICATION_JSON)
-                .mediaType("xml", MediaType.APPLICATION_XML);
-
-    }
-
-
-    @Override
-    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-        converters.add(jsonConverter());
-        converters.add(jaxbConverter());
-        //TODO Still need to figure out how to handle a 406 (Not Acceptable)
-    }
-
-    @Bean
-    public MappingJackson2HttpMessageConverter jsonConverter() {
-        SimpleModule simpleModule = new SimpleModule();
-        simpleModule.addSerializer(String.class, new StringSerializer());
-
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
-        mapper.disable(SerializationFeature.WRITE_NULL_MAP_VALUES);
-        mapper.disable(SerializationFeature.WRITE_EMPTY_JSON_ARRAYS);
-        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        mapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
-        mapper.registerModule(simpleModule);
-
-        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
-        converter.setObjectMapper(mapper);
-        return converter;
-    }
-
-    @Bean
-    public Jaxb2RootElementHttpMessageConverter jaxbConverter() {
-        System.err.println("Loading: jaxbConverter");
-        return new Jaxb2RootElementHttpMessageConverter();
+            .favorPathExtension(true)
+            //.favorParameter(true).parameterName("mediaType")
+            .ignoreAcceptHeader(false)
+            .ignoreUnknownPathExtensions(true)
+            .defaultContentType(MediaType.APPLICATION_JSON)
+            .mediaType("json", MediaType.APPLICATION_JSON)
+            .mediaType("xml", MediaType.APPLICATION_XML)
+            .useRegisteredExtensionsOnly(true);
     }
 }

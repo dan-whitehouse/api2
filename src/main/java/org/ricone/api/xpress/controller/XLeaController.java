@@ -15,20 +15,20 @@ import javax.servlet.http.HttpServletResponse;
 
 @RestController
 public class XLeaController extends BaseController {
-    @Autowired
-    private XLeaService service;
+	@Autowired
+	private XLeaService service;
 
-    @ResponseBody
-    @GetMapping(value = "/requests/xLeas")
-    @PreAuthorize("hasAuthority('get:/requests/xLeas')")
-    public XLeasResponse getXLeas(HttpServletRequest request, HttpServletResponse response, Pageable pageable) throws Exception {
-        return service.findAll(getMetaData(request, response, pageable));
-    }
+	@ResponseBody
+	@GetMapping(value = "/requests/xLeas")
+	@PreAuthorize("hasAuthority('get:/requests/xLeas')")
+	public XLeasResponse getXLeas(HttpServletRequest request, HttpServletResponse response, Pageable pageable) throws Exception {
+		return service.findAll(getMetaData(request, response, pageable));
+	}
 
-    @ResponseBody
-    @GetMapping(value = "/requests/xSchools/{refId}/xLeas")
-    @PreAuthorize("hasAuthority('get:/requests/xSchools/{}/xLeas')")
-    public XLeasResponse getXLeasByXSchool(HttpServletRequest request, HttpServletResponse response, Pageable pageable, @PathVariable(value = "refId") String refId) throws Exception {
-        return service.findAll(getMetaData(request, response, pageable));
-    }
+	@ResponseBody
+	@GetMapping(value = "/requests/xSchools/{refId}/xLeas")
+	@PreAuthorize("hasAuthority('get:/requests/xSchools/{}/xLeas')")
+	public XLeasResponse getXLeasByXSchool(HttpServletRequest request, HttpServletResponse response, Pageable pageable, @PathVariable(value = "refId") String refId) throws Exception {
+		return service.findAll(getMetaData(request, response, pageable));
+	}
 }

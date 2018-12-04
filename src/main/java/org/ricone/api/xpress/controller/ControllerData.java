@@ -1,10 +1,12 @@
 package org.ricone.api.xpress.controller;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.ricone.config.ConfigService;
 import org.ricone.config.model.App;
 import org.ricone.security.jwt.Application;
 import org.ricone.util.Util;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -51,8 +53,17 @@ public class ControllerData {
         super();
         this.request = request;
         this.response = response;
-        this.pageable = pageable;
+        this.pageable = getPaging(pageable);
         this.application = (Application) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    }
+
+    private Pageable getPaging(Pageable pageable) {
+        if(NumberUtils.isDigits(getHeader("page")) && NumberUtils.isDigits(getHeader("size"))) {
+            int page = Integer.parseInt(getHeader("page"));
+            int size = Integer.parseInt(getHeader("size"));
+            return PageRequest.of(page, size, null);
+        }
+        return pageable;
     }
 
 

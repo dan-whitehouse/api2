@@ -79,6 +79,7 @@ public class ErrorController {
     @ExceptionHandler(ConfigException.class)
     @ResponseStatus(value = HttpStatus.SERVICE_UNAVAILABLE)
     private Error configError(HttpServletRequest request, HttpServletResponse response, Exception ex) {
+        ex.printStackTrace();
         return new Error(request.getRequestURL().toString(), 503, "Service Unavailable", ex.getMessage());
     }
 }

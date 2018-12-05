@@ -30,7 +30,6 @@ import java.util.List;
 @ComponentScan(basePackages = {"org.ricone"})
 @EntityScan( basePackages = {"org.ricone.api.core.model"} )
 public class Init {
-
 	public static void main(String[] args) throws Exception {
 		SpringApplication.run(Init.class, args);
 	}

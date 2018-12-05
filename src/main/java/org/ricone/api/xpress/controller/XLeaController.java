@@ -22,7 +22,6 @@ public class XLeaController extends BaseController {
 	@Autowired
 	private XLeaService service;
 
-
 	@ResponseBody
 	@GetMapping(value = "/requests/xLeas/{id}")
 	@PreAuthorize("hasAuthority('get:/requests/xLeas')")

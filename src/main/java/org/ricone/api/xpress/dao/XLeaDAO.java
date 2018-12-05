@@ -10,31 +10,33 @@ public interface XLeaDAO {
 	LeaWrapper findByRefId(ControllerData metadata, String refId);
 	LeaWrapper findByLocalId(ControllerData metadata, String localId);
 	List<LeaWrapper> findAll(ControllerData metadata);
-	List<LeaWrapper> findAllBySchool(ControllerData metadata, String refId);
-	List<LeaWrapper> findAllByCalendar(ControllerData metadata, String refId);
-	List<LeaWrapper> findAllByCourse(ControllerData metadata, String refId);
-	List<LeaWrapper> findAllByRoster(ControllerData metadata, String refId);
-	List<LeaWrapper> findAllByStaff(ControllerData metadata, String refId);
-	List<LeaWrapper> findAllByStudent(ControllerData metadata, String refId);
-	List<LeaWrapper> findAllByContact(ControllerData metadata, String refId);
+	List<LeaWrapper> findAllBySchoolRefId(ControllerData metadata, String refId);
+	List<LeaWrapper> findAllByCalendarRefId(ControllerData metadata, String refId);
+	List<LeaWrapper> findAllByCourseRefId(ControllerData metadata, String refId);
+	List<LeaWrapper> findAllByRosterRefId(ControllerData metadata, String refId);
+	List<LeaWrapper> findAllByStaffRefId(ControllerData metadata, String refId);
+	List<LeaWrapper> findAllByStudentRefId(ControllerData metadata, String refId);
+	List<LeaWrapper> findAllByContactRefId(ControllerData metadata, String refId);
 
 	/* Greatest School Year */
-	Integer greatestSchoolYearForAll(ControllerData metaData);
-	Integer greatestSchoolYearForAllBySchool(ControllerData metaData, String refId);
-	Integer greatestSchoolYearForAllByCalendar(ControllerData metaData, String refId);
-	Integer greatestSchoolYearForAllByCourse(ControllerData metaData, String refId);
-	Integer greatestSchoolYearForAllByRoster(ControllerData metaData, String refId);
-	Integer greatestSchoolYearForAllByStaff(ControllerData metaData, String refId);
-	Integer greatestSchoolYearForAllByStudent(ControllerData metaData, String refId);
-	Integer greatestSchoolYearForAllByContact(ControllerData metaData, String refId);
+	Integer greatestSchoolYearByRefId(ControllerData metadata, String refId);
+	Integer greatestSchoolYearByLocalId(ControllerData metadata, String localId);
+	Integer greatestSchoolYearAll(ControllerData metadata);
+	Integer greatestSchoolYearAllBySchoolRefId(ControllerData metadata, String refId);
+	Integer greatestSchoolYearAllByCalendarRefId(ControllerData metadata, String refId);
+	Integer greatestSchoolYearAllByCourseRefId(ControllerData metadata, String refId);
+	Integer greatestSchoolYearAllByRosterRefId(ControllerData metadata, String refId);
+	Integer greatestSchoolYearAllByStaffRefId(ControllerData metadata, String refId);
+	Integer greatestSchoolYearAllByStudentRefId(ControllerData metadata, String refId);
+	Integer greatestSchoolYearAllByContactRefId(ControllerData metadata, String refId);
 
 	/* Counts */
-	Integer countAll(ControllerData metaData);
-	Integer countAllBySchool(ControllerData metaData, String refId);
-	Integer countAllByCalendar(ControllerData metaData, String refId);
-	Integer countAllByCourse(ControllerData metaData, String refId);
-	Integer countAllByRoster(ControllerData metaData, String refId);
-	Integer countAllByStaff(ControllerData metaData, String refId);
-	Integer countAllByStudent(ControllerData metaData, String refId);
-	Integer countAllByContact(ControllerData metaData, String refId);
+	int countAll(ControllerData metaData);
+	int countAllBySchoolRefId(ControllerData metadata, String refId);
+	int countAllByCalendarRefId(ControllerData metadata, String refId);
+	int countAllByCourseRefId(ControllerData metadata, String refId);
+	int countAllByRosterRefId(ControllerData metadata, String refId);
+	int countAllByStaffRefId(ControllerData metadata, String refId);
+	int countAllByStudentRefId(ControllerData metadata, String refId);
+	int countAllByContactRefId(ControllerData metadata, String refId);
 }

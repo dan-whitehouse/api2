@@ -50,7 +50,7 @@ public class XLeaServiceImp implements XLeaService {
 
     @Override
     public XLeasResponse findAllBySchool(ControllerData metadata, String refId) throws Exception {
-        List<LeaWrapper> instance = dao.findAllBySchool(metadata, refId);
+        List<LeaWrapper> instance = dao.findAllBySchoolRefId(metadata, refId);
         if(CollectionUtils.isEmpty(instance)) {
             throw new NoContentException();
         }
@@ -59,7 +59,7 @@ public class XLeaServiceImp implements XLeaService {
 
     @Override
     public XLeasResponse findAllByCalendar(ControllerData metadata, String refId) throws Exception {
-        List<LeaWrapper> instance = dao.findAllByCalendar(metadata, refId);
+        List<LeaWrapper> instance = dao.findAllByCalendarRefId(metadata, refId);
         if(CollectionUtils.isEmpty(instance)) {
             throw new NoContentException();
         }
@@ -68,7 +68,7 @@ public class XLeaServiceImp implements XLeaService {
 
     @Override
     public XLeasResponse findAllByCourse(ControllerData metadata, String refId) throws Exception {
-        List<LeaWrapper> instance = dao.findAllByCourse(metadata, refId);
+        List<LeaWrapper> instance = dao.findAllByCourseRefId(metadata, refId);
         if(CollectionUtils.isEmpty(instance)) {
             throw new NoContentException();
         }
@@ -77,7 +77,7 @@ public class XLeaServiceImp implements XLeaService {
 
     @Override
     public XLeasResponse findAllByRoster(ControllerData metadata, String refId) throws Exception {
-        List<LeaWrapper> instance = dao.findAllByRoster(metadata, refId);
+        List<LeaWrapper> instance = dao.findAllByRosterRefId(metadata, refId);
         if(CollectionUtils.isEmpty(instance)) {
             throw new NoContentException();
         }
@@ -86,7 +86,7 @@ public class XLeaServiceImp implements XLeaService {
 
     @Override
     public XLeasResponse findAllByStaff(ControllerData metadata, String refId) throws Exception {
-        List<LeaWrapper> instance = dao.findAllByStaff(metadata, refId);
+        List<LeaWrapper> instance = dao.findAllByStaffRefId(metadata, refId);
         if(CollectionUtils.isEmpty(instance)) {
             throw new NoContentException();
         }
@@ -95,7 +95,7 @@ public class XLeaServiceImp implements XLeaService {
 
     @Override
     public XLeasResponse findAllByStudent(ControllerData metadata, String refId) throws Exception {
-        List<LeaWrapper> instance = dao.findAllByStudent(metadata, refId);
+        List<LeaWrapper> instance = dao.findAllByStudentRefId(metadata, refId);
         if(CollectionUtils.isEmpty(instance)) {
             throw new NoContentException();
         }
@@ -104,7 +104,7 @@ public class XLeaServiceImp implements XLeaService {
 
     @Override
     public XLeasResponse findAllByContact(ControllerData metadata, String refId) throws Exception {
-        List<LeaWrapper> instance = dao.findAllByContact(metadata, refId);
+        List<LeaWrapper> instance = dao.findAllByContactRefId(metadata, refId);
         if(CollectionUtils.isEmpty(instance)) {
             throw new NoContentException();
         }

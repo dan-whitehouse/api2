@@ -1,9 +1,7 @@
 package org.ricone.api.xpress.dao;
 
 import org.hibernate.Hibernate;
-import org.ricone.api.core.model.Lea;
-import org.ricone.api.core.model.LeaTelephone;
-import org.ricone.api.core.model.School;
+import org.ricone.api.core.model.*;
 import org.ricone.api.core.model.wrapper.LeaWrapper;
 import org.ricone.api.xpress.controller.ControllerData;
 import org.springframework.stereotype.Repository;
@@ -12,10 +10,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.criteria.*;
-import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 @SuppressWarnings({"unchecked", "unused", "RedundantTypeArguments"})
@@ -28,12 +23,70 @@ public class XLeaDAOImp extends BaseDAO implements XLeaDAO {
 
     @Override
     public LeaWrapper findByRefId(ControllerData metadata, String refId) {
-        return null;
+        final CriteriaBuilder cb = em.getCriteriaBuilder();
+        final CriteriaQuery<LeaWrapper> select = cb.createQuery(LeaWrapper.class);
+        final Root<Lea> from = select.from(Lea.class);
+        final SetJoin<Lea, LeaTelephone> leaTelephones = (SetJoin<Lea, LeaTelephone>) from.<Lea, LeaTelephone>join(JOIN_LEA_TELEPHONES, JoinType.LEFT);
+
+        Predicate schoolYearEquals;
+        if(metadata.hasSchoolYear()) {
+            schoolYearEquals = cb.equal(from.get(SCHOOL_YEAR_KEY), metadata.getSchoolYear());
+            metadata.getResponse().addHeader("SchoolYear", metadata.getSchoolYear());
+        }
+        else {
+            Integer schoolYear = greatestSchoolYearByRefId(metadata, refId);
+            schoolYearEquals = cb.equal(from.get(SCHOOL_YEAR_KEY), schoolYear);
+            metadata.getResponse().addHeader("SchoolYear", String.valueOf(schoolYear));
+        }
+
+        select.distinct(true);
+        select.select(cb.construct(LeaWrapper.class, from.get(ControllerData.LEA_LOCAL_ID), from));
+        select.where(
+            cb.and(
+                schoolYearEquals,
+                cb.equal(from.get(PRIMARY_KEY), refId),
+                from.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+            )
+        );
+
+        Query q = em.createQuery(select);
+        LeaWrapper instance = (LeaWrapper) q.getSingleResult();
+        initialize(instance);
+        return instance;
     }
 
     @Override
     public LeaWrapper findByLocalId(ControllerData metadata, String localId) {
-        return null;
+        final CriteriaBuilder cb = em.getCriteriaBuilder();
+        final CriteriaQuery<LeaWrapper> select = cb.createQuery(LeaWrapper.class);
+        final Root<Lea> from = select.from(Lea.class);
+        final SetJoin<Lea, LeaTelephone> leaTelephones = (SetJoin<Lea, LeaTelephone>) from.<Lea, LeaTelephone>join(JOIN_LEA_TELEPHONES, JoinType.LEFT);
+
+        Predicate schoolYearEquals;
+        if(metadata.hasSchoolYear()) {
+            schoolYearEquals = cb.equal(from.get(SCHOOL_YEAR_KEY), metadata.getSchoolYear());
+            metadata.getResponse().addHeader(ControllerData.SCHOOL_YEAR_KEY, metadata.getSchoolYear());
+        }
+        else {
+            Integer schoolYear = greatestSchoolYearByLocalId(metadata, localId);
+            schoolYearEquals = cb.equal(from.get(SCHOOL_YEAR_KEY), schoolYear);
+            metadata.getResponse().addHeader(ControllerData.SCHOOL_YEAR_KEY, String.valueOf(schoolYear));
+        }
+
+        select.distinct(true);
+        select.select(cb.construct(LeaWrapper.class, from.get(ControllerData.LEA_LOCAL_ID), from));
+        select.where(
+            cb.and(
+                schoolYearEquals,
+                cb.equal(from.get(LOCAL_ID_KEY), localId),
+                from.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+            )
+        );
+
+        Query q = em.createQuery(select);
+        LeaWrapper instance = (LeaWrapper) q.getSingleResult();
+        initialize(instance);
+        return instance;
     }
 
     @Override
@@ -46,12 +99,12 @@ public class XLeaDAOImp extends BaseDAO implements XLeaDAO {
         Predicate schoolYearEquals;
         if(metadata.hasSchoolYear()) {
             schoolYearEquals = cb.equal(from.get(SCHOOL_YEAR_KEY), metadata.getSchoolYear());
-            metadata.getResponse().addHeader("SchoolYear", metadata.getSchoolYear());
+            metadata.getResponse().addHeader(ControllerData.SCHOOL_YEAR_KEY, metadata.getSchoolYear());
         }
         else {
-            Integer schoolYear = greatestSchoolYearForAll(metadata);
+            Integer schoolYear = greatestSchoolYearAll(metadata);
             schoolYearEquals = cb.equal(from.get(SCHOOL_YEAR_KEY), schoolYear);
-            metadata.getResponse().addHeader("SchoolYear", String.valueOf(schoolYear));
+            metadata.getResponse().addHeader(ControllerData.SCHOOL_YEAR_KEY, String.valueOf(schoolYear));
         }
 
         select.distinct(true);
@@ -65,9 +118,9 @@ public class XLeaDAOImp extends BaseDAO implements XLeaDAO {
         select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
         Query q = em.createQuery(select);
-        if(metadata.getPaging().isPaged()) {
-            q.setFirstResult(metadata.getPaging().getPageNumber() * metadata.getPaging().getPageSize());
-            q.setMaxResults(metadata.getPaging().getPageSize());
+        if(metadata.getPaging2().isPaged()) {
+            q.setFirstResult(metadata.getPaging2().getPageNumber() * metadata.getPaging2().getPageSize());
+            q.setMaxResults(metadata.getPaging2().getPageSize());
         }
         List<LeaWrapper> instance = q.getResultList();
         initialize(instance);
@@ -75,42 +128,306 @@ public class XLeaDAOImp extends BaseDAO implements XLeaDAO {
     }
 
     @Override
-    public List<LeaWrapper> findAllBySchool(ControllerData metadata, String refId) {
-        return null;
+    public List<LeaWrapper> findAllBySchoolRefId(ControllerData metadata, String refId) {
+        final CriteriaBuilder cb = em.getCriteriaBuilder();
+        final CriteriaQuery<LeaWrapper> select = cb.createQuery(LeaWrapper.class);
+        final Root<Lea> from = select.from(Lea.class);
+        final SetJoin<Lea, LeaTelephone> leaTelephones = (SetJoin<Lea, LeaTelephone>) from.<Lea, LeaTelephone>join(JOIN_LEA_TELEPHONES, JoinType.LEFT);
+        final SetJoin<Lea, School> schools = (SetJoin<Lea, School>) from.<Lea, School>join(JOIN_SCHOOLS, JoinType.LEFT);
+
+        Predicate schoolYearEquals;
+        if(metadata.hasSchoolYear()) {
+            schoolYearEquals = cb.equal(from.get(SCHOOL_YEAR_KEY), metadata.getSchoolYear());
+            metadata.getResponse().addHeader(ControllerData.SCHOOL_YEAR_KEY, metadata.getSchoolYear());
+        }
+        else {
+            Integer schoolYear = greatestSchoolYearAllBySchoolRefId(metadata, refId);
+            schoolYearEquals = cb.equal(from.get(SCHOOL_YEAR_KEY), schoolYear);
+            metadata.getResponse().addHeader(ControllerData.SCHOOL_YEAR_KEY, String.valueOf(schoolYear));
+        }
+
+        select.distinct(true);
+        select.select(cb.construct(LeaWrapper.class, from.get(ControllerData.LEA_LOCAL_ID), from));
+        select.where(
+            cb.and(
+                schoolYearEquals,
+                cb.equal(schools.get("schoolRefId"), refId),
+                from.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+            )
+        );
+        select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
+
+        Query q = em.createQuery(select);
+        if (metadata.getPaging().isPaged()) {
+            q.setFirstResult((metadata.getPaging().getPageNumber()-1) * metadata.getPaging().getPageSize());
+            q.setMaxResults(metadata.getPaging().getPageSize());
+        }
+
+        List<LeaWrapper> instance = q.getResultList();
+        initialize(instance);
+        return instance;
     }
 
     @Override
-    public List<LeaWrapper> findAllByCalendar(ControllerData metadata, String refId) {
-        return null;
+    public List<LeaWrapper> findAllByCalendarRefId(ControllerData metadata, String refId) {
+        final CriteriaBuilder cb = em.getCriteriaBuilder();
+        final CriteriaQuery<LeaWrapper> select = cb.createQuery(LeaWrapper.class);
+        final Root<Lea> from = select.from(Lea.class);
+        final SetJoin<Lea, LeaTelephone> leaTelephones = (SetJoin<Lea, LeaTelephone>) from.<Lea, LeaTelephone>join(JOIN_LEA_TELEPHONES, JoinType.LEFT);
+        final SetJoin<Lea, School> schools = (SetJoin<Lea, School>) from.<Lea, School>join(JOIN_SCHOOLS, JoinType.LEFT);
+        final SetJoin<School, SchoolCalendar> schoolCalendars = (SetJoin<School, SchoolCalendar>) schools.<School, SchoolCalendar>join(JOIN_SCHOOL_CALENDARS, JoinType.LEFT);
+
+        Predicate schoolYearEquals;
+        if(metadata.hasSchoolYear()) {
+            schoolYearEquals = cb.equal(from.get(SCHOOL_YEAR_KEY), metadata.getSchoolYear());
+            metadata.getResponse().addHeader(ControllerData.SCHOOL_YEAR_KEY, metadata.getSchoolYear());
+        }
+        else {
+            Integer schoolYear = greatestSchoolYearAllByCalendarRefId(metadata, refId);
+            schoolYearEquals = cb.equal(from.get(SCHOOL_YEAR_KEY), schoolYear);
+            metadata.getResponse().addHeader(ControllerData.SCHOOL_YEAR_KEY, String.valueOf(schoolYear));
+        }
+
+        select.distinct(true);
+        select.select(cb.construct(LeaWrapper.class, from.get(ControllerData.LEA_LOCAL_ID), from));
+        select.where(
+            cb.and(
+                schoolYearEquals,
+                cb.equal(schoolCalendars.get("schoolCalendarRefId"), refId),
+                from.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+            )
+        );
+        select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
+
+        Query q = em.createQuery(select);
+        if (metadata.getPaging().isPaged()) {
+            q.setFirstResult((metadata.getPaging().getPageNumber()-1) * metadata.getPaging().getPageSize());
+            q.setMaxResults(metadata.getPaging().getPageSize());
+        }
+
+        List<LeaWrapper> instance = q.getResultList();
+        initialize(instance);
+        return instance;
     }
 
     @Override
-    public List<LeaWrapper> findAllByCourse(ControllerData metadata, String refId) {
-        return null;
+    public List<LeaWrapper> findAllByCourseRefId(ControllerData metadata, String refId) {
+        final CriteriaBuilder cb = em.getCriteriaBuilder();
+        final CriteriaQuery<LeaWrapper> select = cb.createQuery(LeaWrapper.class);
+        final Root<Lea> from = select.from(Lea.class);
+        final SetJoin<Lea, LeaTelephone> leaTelephones = (SetJoin<Lea, LeaTelephone>) from.<Lea, LeaTelephone>join(JOIN_LEA_TELEPHONES, JoinType.LEFT);
+        final SetJoin<Lea, School> schools = (SetJoin<Lea, School>) from.<Lea, School>join(JOIN_SCHOOLS, JoinType.INNER);
+        final SetJoin<School, Course> courses = (SetJoin<School, Course>) schools.<School, Course>join(JOIN_COURSES, JoinType.INNER);
+
+        Predicate schoolYearEquals;
+        if(metadata.hasSchoolYear()) {
+            schoolYearEquals = cb.equal(from.get(SCHOOL_YEAR_KEY), metadata.getSchoolYear());
+            metadata.getResponse().addHeader(ControllerData.SCHOOL_YEAR_KEY, metadata.getSchoolYear());
+        }
+        else {
+            Integer schoolYear = greatestSchoolYearAllByCourseRefId(metadata, refId);
+            schoolYearEquals = cb.equal(from.get(SCHOOL_YEAR_KEY), schoolYear);
+            metadata.getResponse().addHeader(ControllerData.SCHOOL_YEAR_KEY, String.valueOf(schoolYear));
+        }
+
+        select.distinct(true);
+        select.select(cb.construct(LeaWrapper.class, from.get(ControllerData.LEA_LOCAL_ID), from));
+        select.where(
+            cb.and(
+                schoolYearEquals,
+                cb.equal(courses.get("courseRefId"), refId),
+                from.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+            )
+        );
+        select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
+
+        Query q = em.createQuery(select);
+        if (metadata.getPaging().isPaged()) {
+            q.setFirstResult((metadata.getPaging().getPageNumber()-1) * metadata.getPaging().getPageSize());
+            q.setMaxResults(metadata.getPaging().getPageSize());
+        }
+
+        List<LeaWrapper> instance = q.getResultList();
+        initialize(instance);
+        return instance;
     }
 
     @Override
-    public List<LeaWrapper> findAllByRoster(ControllerData metadata, String refId) {
-        return null;
+    public List<LeaWrapper> findAllByRosterRefId(ControllerData metadata, String refId) {
+        final CriteriaBuilder cb = em.getCriteriaBuilder();
+        final CriteriaQuery<LeaWrapper> select = cb.createQuery(LeaWrapper.class);
+        final Root<Lea> from = select.from(Lea.class);
+        final SetJoin<Lea, LeaTelephone> leaTelephones = (SetJoin<Lea, LeaTelephone>) from.<Lea, LeaTelephone>join(JOIN_LEA_TELEPHONES, JoinType.LEFT);
+        final SetJoin<Lea, School> schools = (SetJoin<Lea, School>) from.<Lea, School>join(JOIN_SCHOOLS, JoinType.INNER);
+        final SetJoin<School, Course> courses = (SetJoin<School, Course>) schools.<School, Course>join(JOIN_COURSES, JoinType.INNER);
+        final SetJoin<Course, CourseSection> courseSections = (SetJoin<Course, CourseSection>) courses.<Course, CourseSection>join(JOIN_COURSE_SECTIONS, JoinType.INNER);
+
+        Predicate schoolYearEquals;
+        if(metadata.hasSchoolYear()) {
+            schoolYearEquals = cb.equal(from.get(SCHOOL_YEAR_KEY), metadata.getSchoolYear());
+            metadata.getResponse().addHeader(ControllerData.SCHOOL_YEAR_KEY, metadata.getSchoolYear());
+        }
+        else {
+            Integer schoolYear = greatestSchoolYearAllByRosterRefId(metadata, refId);
+            schoolYearEquals = cb.equal(from.get(SCHOOL_YEAR_KEY), schoolYear);
+            metadata.getResponse().addHeader(ControllerData.SCHOOL_YEAR_KEY, String.valueOf(schoolYear));
+        }
+
+        select.distinct(true);
+        select.select(cb.construct(LeaWrapper.class, from.get(ControllerData.LEA_LOCAL_ID), from));
+        select.where(
+            cb.and(
+                schoolYearEquals,
+                cb.equal(courseSections.get("courseSectionRefId"), refId),
+                from.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+            )
+        );
+        select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
+
+        Query q = em.createQuery(select);
+        if (metadata.getPaging().isPaged()) {
+            q.setFirstResult((metadata.getPaging().getPageNumber()-1) * metadata.getPaging().getPageSize());
+            q.setMaxResults(metadata.getPaging().getPageSize());
+        }
+
+        List<LeaWrapper> instance = q.getResultList();
+        initialize(instance);
+        return instance;
     }
 
     @Override
-    public List<LeaWrapper> findAllByStaff(ControllerData metadata, String refId) {
-        return null;
+    public List<LeaWrapper> findAllByStaffRefId(ControllerData metadata, String refId) {
+        final CriteriaBuilder cb = em.getCriteriaBuilder();
+        final CriteriaQuery<LeaWrapper> select = cb.createQuery(LeaWrapper.class);
+        final Root<Lea> from = select.from(Lea.class);
+        final SetJoin<Lea, LeaTelephone> leaTelephones = (SetJoin<Lea, LeaTelephone>) from.<Lea, LeaTelephone>join(JOIN_LEA_TELEPHONES, JoinType.LEFT);
+        final SetJoin<Lea, School> schools = (SetJoin<Lea, School>) from.<Lea, School>join(JOIN_SCHOOLS, JoinType.INNER);
+        final SetJoin<School, StaffAssignment> staffAssignments = (SetJoin<School, StaffAssignment>) schools.<School, StaffAssignment>join(JOIN_STAFF_ASSIGNMENTS, JoinType.INNER);
+        final Join<StaffAssignment, Staff> staff = staffAssignments.join(JOIN_STAFF, JoinType.INNER);
+
+        Predicate schoolYearEquals;
+        if(metadata.hasSchoolYear()) {
+            schoolYearEquals = cb.equal(from.get(SCHOOL_YEAR_KEY), metadata.getSchoolYear());
+            metadata.getResponse().addHeader(ControllerData.SCHOOL_YEAR_KEY, metadata.getSchoolYear());
+        }
+        else {
+            Integer schoolYear = greatestSchoolYearAllByStaffRefId(metadata, refId);
+            schoolYearEquals = cb.equal(from.get(SCHOOL_YEAR_KEY), schoolYear);
+            metadata.getResponse().addHeader(ControllerData.SCHOOL_YEAR_KEY, String.valueOf(schoolYear));
+        }
+
+        select.distinct(true);
+        select.select(cb.construct(LeaWrapper.class, from.get(ControllerData.LEA_LOCAL_ID), from));
+        select.where(
+            cb.and(
+                schoolYearEquals,
+                cb.equal(staff.get("staffRefId"), refId),
+                from.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+            )
+        );
+        select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
+
+        Query q = em.createQuery(select);
+        if (metadata.getPaging().isPaged()) {
+            q.setFirstResult((metadata.getPaging().getPageNumber()-1) * metadata.getPaging().getPageSize());
+            q.setMaxResults(metadata.getPaging().getPageSize());
+        }
+
+        List<LeaWrapper> instance = q.getResultList();
+        initialize(instance);
+        return instance;
     }
 
     @Override
-    public List<LeaWrapper> findAllByStudent(ControllerData metadata, String refId) {
-        return null;
+    public List<LeaWrapper> findAllByStudentRefId(ControllerData metadata, String refId) {
+        final CriteriaBuilder cb = em.getCriteriaBuilder();
+        final CriteriaQuery<LeaWrapper> select = cb.createQuery(LeaWrapper.class);
+        final Root<Lea> from = select.from(Lea.class);
+        final SetJoin<Lea, LeaTelephone> leaTelephones = (SetJoin<Lea, LeaTelephone>) from.<Lea, LeaTelephone>join(JOIN_LEA_TELEPHONES, JoinType.LEFT);
+        final SetJoin<Lea, School> schools = (SetJoin<Lea, School>) from.<Lea, School>join(JOIN_SCHOOLS, JoinType.INNER);
+        final SetJoin<School, StudentEnrollment> studentEnrollments = (SetJoin<School, StudentEnrollment>) schools.<School, StudentEnrollment>join(JOIN_STUDENT_ENROLLMENTS, JoinType.INNER);
+        final Join<StudentEnrollment, Student> student = studentEnrollments.join(JOIN_STUDENT, JoinType.INNER);
+
+        Predicate schoolYearEquals;
+        if(metadata.hasSchoolYear()) {
+            schoolYearEquals = cb.equal(from.get(SCHOOL_YEAR_KEY), metadata.getSchoolYear());
+            metadata.getResponse().addHeader(ControllerData.SCHOOL_YEAR_KEY, metadata.getSchoolYear());
+        }
+        else {
+            Integer schoolYear = greatestSchoolYearAllByStudentRefId(metadata, refId);
+            schoolYearEquals = cb.equal(from.get(SCHOOL_YEAR_KEY), schoolYear);
+            metadata.getResponse().addHeader(ControllerData.SCHOOL_YEAR_KEY, String.valueOf(schoolYear));
+        }
+
+        select.distinct(true);
+        select.select(cb.construct(LeaWrapper.class, from.get(ControllerData.LEA_LOCAL_ID), from));
+        select.where(
+            cb.and(
+                schoolYearEquals,
+                cb.equal(student.get("studentRefId"), refId),
+                from.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+            )
+        );
+        select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
+
+        Query q = em.createQuery(select);
+        if (metadata.getPaging().isPaged()) {
+            q.setFirstResult((metadata.getPaging().getPageNumber()-1) * metadata.getPaging().getPageSize());
+            q.setMaxResults(metadata.getPaging().getPageSize());
+        }
+
+        List<LeaWrapper> instance = q.getResultList();
+        initialize(instance);
+        return instance;
     }
 
     @Override
-    public List<LeaWrapper> findAllByContact(ControllerData metadata, String refId) {
-        return new ArrayList<LeaWrapper>();
+    public List<LeaWrapper> findAllByContactRefId(ControllerData metadata, String refId) {
+        final CriteriaBuilder cb = em.getCriteriaBuilder();
+        final CriteriaQuery<LeaWrapper> select = cb.createQuery(LeaWrapper.class);
+        final Root<Lea> from = select.from(Lea.class);
+        final SetJoin<Lea, LeaTelephone> leaTelephones = (SetJoin<Lea, LeaTelephone>) from.<Lea, LeaTelephone>join(JOIN_LEA_TELEPHONES, JoinType.LEFT);
+        final SetJoin<Lea, School> schools = (SetJoin<Lea, School>) from.<Lea, School>join(JOIN_SCHOOLS, JoinType.INNER);
+        final SetJoin<School, StudentEnrollment> studentEnrollments = (SetJoin<School, StudentEnrollment>) schools.<School, StudentEnrollment>join(JOIN_STUDENT_ENROLLMENTS, JoinType.INNER);
+        final Join<StudentEnrollment, Student> student = studentEnrollments.join(JOIN_STUDENT, JoinType.INNER);
+        final SetJoin<Student, StudentContactRelationship> studentContactRelationships = (SetJoin<Student, StudentContactRelationship>) student.<Student, StudentContactRelationship>join(JOIN_STUDENT_CONTACT_RELATIONSHIPS, JoinType.INNER);
+        final Join<StudentContactRelationship, StudentContact> contact = studentContactRelationships.join(JOIN_STUDENT_CONTACT, JoinType.INNER);
+
+        Predicate schoolYearEquals;
+        if(metadata.hasSchoolYear()) {
+            schoolYearEquals = cb.equal(from.get(SCHOOL_YEAR_KEY), metadata.getSchoolYear());
+            metadata.getResponse().addHeader(ControllerData.SCHOOL_YEAR_KEY, metadata.getSchoolYear());
+        }
+        else {
+            Integer schoolYear = greatestSchoolYearAllByContactRefId(metadata, refId);
+            schoolYearEquals = cb.equal(from.get(SCHOOL_YEAR_KEY), schoolYear);
+            metadata.getResponse().addHeader(ControllerData.SCHOOL_YEAR_KEY, String.valueOf(schoolYear));
+        }
+
+        select.distinct(true);
+        select.select(cb.construct(LeaWrapper.class, from.get(ControllerData.LEA_LOCAL_ID), from));
+        select.where(
+            cb.and(
+                schoolYearEquals,
+                cb.equal(contact.get("studentContactRefId"), refId),
+                    from.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+            )
+        );
+        select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
+
+        Query q = em.createQuery(select);
+        if (metadata.getPaging().isPaged()) {
+            q.setFirstResult((metadata.getPaging().getPageNumber()-1) * metadata.getPaging().getPageSize());
+            q.setMaxResults(metadata.getPaging().getPageSize());
+        }
+
+        List<LeaWrapper> instance = q.getResultList();
+        initialize(instance);
+        return instance;
     }
 
     @Override
-    public Integer greatestSchoolYearForAll(ControllerData metaData) {
+    public Integer greatestSchoolYearByRefId(ControllerData metadata, String refId) {
         final CriteriaBuilder cb = em.getCriteriaBuilder();
         final CriteriaQuery<Integer> select = cb.createQuery(Integer.class);
         final Root<Lea> from = select.from(Lea.class);
@@ -119,85 +436,426 @@ public class XLeaDAOImp extends BaseDAO implements XLeaDAO {
         select.distinct(true);
         select.select(cb.greatest(from.<Integer>get(SCHOOL_YEAR_KEY)));
         select.where(
+            cb.and(
+                cb.equal(from.get(PRIMARY_KEY), refId),
+                from.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+            )
+        );
+        return em.createQuery(select).getSingleResult();
+    }
+
+    @Override
+    public Integer greatestSchoolYearByLocalId(ControllerData metaData, String localId) {
+        final CriteriaBuilder cb = em.getCriteriaBuilder();
+        final CriteriaQuery<Integer> select = cb.createQuery(Integer.class);
+        final Root<Lea> from = select.from(Lea.class);
+        final SetJoin<Lea, LeaTelephone> leaTelephones = (SetJoin<Lea, LeaTelephone>) from.<Lea, LeaTelephone>join(JOIN_LEA_TELEPHONES, JoinType.LEFT);
+
+        select.distinct(true);
+        select.select(cb.greatest(from.<Integer>get(SCHOOL_YEAR_KEY)));
+        select.where(
+            cb.and(
+                cb.equal(from.get(LOCAL_ID_KEY), localId),
                 from.get(ControllerData.LEA_LOCAL_ID).in(metaData.getApplication().getApp().getDistrictLocalIds())
+            )
+        );
+        return em.createQuery(select).getSingleResult();
+    }
+
+    @Override
+    public Integer greatestSchoolYearAll(ControllerData metaData) {
+        final CriteriaBuilder cb = em.getCriteriaBuilder();
+        final CriteriaQuery<Integer> select = cb.createQuery(Integer.class);
+        final Root<Lea> from = select.from(Lea.class);
+        final SetJoin<Lea, LeaTelephone> leaTelephones = (SetJoin<Lea, LeaTelephone>) from.<Lea, LeaTelephone>join(JOIN_LEA_TELEPHONES, JoinType.LEFT);
+
+        select.distinct(true);
+        select.select(cb.greatest(from.<Integer>get(SCHOOL_YEAR_KEY)));
+        select.where(
+            from.get(ControllerData.LEA_LOCAL_ID).in(metaData.getApplication().getApp().getDistrictLocalIds())
+        );
+        return em.createQuery(select).getSingleResult();
+    }
+
+    @Override
+    public Integer greatestSchoolYearAllBySchoolRefId(ControllerData metadata, String refId) {
+        final CriteriaBuilder cb = em.getCriteriaBuilder();
+        final CriteriaQuery<Integer> select = cb.createQuery(Integer.class);
+        final Root<Lea> from = select.from(Lea.class);
+        final SetJoin<Lea, LeaTelephone> leaTelephones = (SetJoin<Lea, LeaTelephone>) from.<Lea, LeaTelephone>join(JOIN_LEA_TELEPHONES, JoinType.LEFT);
+        final SetJoin<Lea, School> schools = (SetJoin<Lea, School>) from.<Lea, School>join(JOIN_SCHOOLS, JoinType.LEFT);
+
+        select.distinct(true);
+        select.select(cb.greatest(from.<Integer>get(SCHOOL_YEAR_KEY)));
+        select.where(
+            cb.and(
+                cb.equal(schools.get("schoolRefId"), refId),
+                from.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+            )
+        );
+        return em.createQuery(select).getSingleResult();
+    }
+
+    @Override
+    public Integer greatestSchoolYearAllByCalendarRefId(ControllerData metadata, String refId) {
+        final CriteriaBuilder cb = em.getCriteriaBuilder();
+        final CriteriaQuery<Integer> select = cb.createQuery(Integer.class);
+        final Root<Lea> from = select.from(Lea.class);
+        final SetJoin<Lea, LeaTelephone> leaTelephones = (SetJoin<Lea, LeaTelephone>) from.<Lea, LeaTelephone>join(JOIN_LEA_TELEPHONES, JoinType.LEFT);
+        final SetJoin<Lea, School> schools = (SetJoin<Lea, School>) from.<Lea, School>join(JOIN_SCHOOLS, JoinType.LEFT);
+        final SetJoin<School, SchoolCalendar> schoolCalendars = (SetJoin<School, SchoolCalendar>) schools.<School, SchoolCalendar>join(JOIN_SCHOOL_CALENDARS, JoinType.LEFT);
+
+        select.distinct(true);
+        select.select(cb.greatest(from.<Integer>get(SCHOOL_YEAR_KEY)));
+        select.where(
+            cb.and(
+                cb.equal(schoolCalendars.get("schoolCalendarRefId"), refId),
+                from.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+            )
+        );
+        return em.createQuery(select).getSingleResult();
+    }
+
+    @Override
+    public Integer greatestSchoolYearAllByCourseRefId(ControllerData metadata, String refId) {
+        final CriteriaBuilder cb = em.getCriteriaBuilder();
+        final CriteriaQuery<Integer> select = cb.createQuery(Integer.class);
+        final Root<Lea> from = select.from(Lea.class);
+        final SetJoin<Lea, LeaTelephone> leaTelephones = (SetJoin<Lea, LeaTelephone>) from.<Lea, LeaTelephone>join(JOIN_LEA_TELEPHONES, JoinType.LEFT);
+        final SetJoin<Lea, School> schools = (SetJoin<Lea, School>) from.<Lea, School>join(JOIN_SCHOOLS, JoinType.INNER);
+        final SetJoin<School, Course> courses = (SetJoin<School, Course>) schools.<School, Course>join(JOIN_COURSES, JoinType.INNER);
+
+        select.distinct(true);
+        select.select(cb.greatest(from.<Integer>get(SCHOOL_YEAR_KEY)));
+        select.where(
+            cb.and(
+                cb.equal(courses.get("courseRefId"), refId),
+                from.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+            )
+        );
+        return em.createQuery(select).getSingleResult();
+    }
+
+    @Override
+    public Integer greatestSchoolYearAllByRosterRefId(ControllerData metadata, String refId) {
+        final CriteriaBuilder cb = em.getCriteriaBuilder();
+        final CriteriaQuery<Integer> select = cb.createQuery(Integer.class);
+        final Root<Lea> from = select.from(Lea.class);
+        final SetJoin<Lea, LeaTelephone> leaTelephones = (SetJoin<Lea, LeaTelephone>) from.<Lea, LeaTelephone>join(JOIN_LEA_TELEPHONES, JoinType.LEFT);
+        final SetJoin<Lea, School> schools = (SetJoin<Lea, School>) from.<Lea, School>join(JOIN_SCHOOLS, JoinType.INNER);
+        final SetJoin<School, Course> courses = (SetJoin<School, Course>) schools.<School, Course>join(JOIN_COURSES, JoinType.INNER);
+        final SetJoin<Course, CourseSection> courseSections = (SetJoin<Course, CourseSection>) courses.<Course, CourseSection>join(JOIN_COURSE_SECTIONS, JoinType.INNER);
+
+        select.distinct(true);
+        select.select(cb.greatest(from.<Integer>get(SCHOOL_YEAR_KEY)));
+        select.where(
+            cb.and(
+                cb.equal(courseSections.get("courseSectionRefId"), refId),
+                from.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+            )
+        );
+        return em.createQuery(select).getSingleResult();
+    }
+
+    @Override
+    public Integer greatestSchoolYearAllByStaffRefId(ControllerData metadata, String refId) {
+        final CriteriaBuilder cb = em.getCriteriaBuilder();
+        final CriteriaQuery<Integer> select = cb.createQuery(Integer.class);
+        final Root<Lea> from = select.from(Lea.class);
+        final SetJoin<Lea, LeaTelephone> leaTelephones = (SetJoin<Lea, LeaTelephone>) from.<Lea, LeaTelephone>join(JOIN_LEA_TELEPHONES, JoinType.LEFT);
+        final SetJoin<Lea, School> schools = (SetJoin<Lea, School>) from.<Lea, School>join(JOIN_SCHOOLS, JoinType.INNER);
+        final SetJoin<School, StaffAssignment> staffAssignments = (SetJoin<School, StaffAssignment>) schools.<School, StaffAssignment>join(JOIN_STAFF_ASSIGNMENTS, JoinType.INNER);
+        final Join<StaffAssignment, Staff> staff = staffAssignments.join(JOIN_STAFF, JoinType.INNER);
+
+        select.distinct(true);
+        select.select(cb.greatest(from.<Integer>get(SCHOOL_YEAR_KEY)));
+        select.where(
+            cb.and(
+                cb.equal(staff.get("staffRefId"), refId),
+                from.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+            )
         );
 
         return em.createQuery(select).getSingleResult();
     }
 
     @Override
-    public Integer greatestSchoolYearForAllBySchool(ControllerData metaData, String refId) {
-        return null;
+    public Integer greatestSchoolYearAllByStudentRefId(ControllerData metadata, String refId) {
+        final CriteriaBuilder cb = em.getCriteriaBuilder();
+        final CriteriaQuery<Integer> select = cb.createQuery(Integer.class);
+        final Root<Lea> from = select.from(Lea.class);
+        final SetJoin<Lea, LeaTelephone> leaTelephones = (SetJoin<Lea, LeaTelephone>) from.<Lea, LeaTelephone>join(JOIN_LEA_TELEPHONES, JoinType.LEFT);
+        final SetJoin<Lea, School> schools = (SetJoin<Lea, School>) from.<Lea, School>join(JOIN_SCHOOLS, JoinType.INNER);
+        final SetJoin<School, StudentEnrollment> studentEnrollments = (SetJoin<School, StudentEnrollment>) schools.<School, StudentEnrollment>join(JOIN_STUDENT_ENROLLMENTS, JoinType.INNER);
+        final Join<StudentEnrollment, Student> student = studentEnrollments.join(JOIN_STUDENT, JoinType.INNER);
+
+        select.distinct(true);
+        select.select(cb.greatest(from.<Integer>get(SCHOOL_YEAR_KEY)));
+        select.where(
+            cb.and(
+                cb.equal(student.get("studentRefId"), refId),
+                from.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+            )
+        );
+        return em.createQuery(select).getSingleResult();
     }
 
     @Override
-    public Integer greatestSchoolYearForAllByCalendar(ControllerData metaData, String refId) {
-        return null;
+    public Integer greatestSchoolYearAllByContactRefId(ControllerData metadata, String refId) {
+        final CriteriaBuilder cb = em.getCriteriaBuilder();
+        final CriteriaQuery<Integer> select = cb.createQuery(Integer.class);
+        final Root<Lea> from = select.from(Lea.class);
+        final SetJoin<Lea, LeaTelephone> leaTelephones = (SetJoin<Lea, LeaTelephone>) from.<Lea, LeaTelephone>join(JOIN_LEA_TELEPHONES, JoinType.LEFT);
+        final SetJoin<Lea, School> schools = (SetJoin<Lea, School>) from.<Lea, School>join(JOIN_SCHOOLS, JoinType.INNER);
+        final SetJoin<School, StudentEnrollment> studentEnrollments = (SetJoin<School, StudentEnrollment>) schools.<School, StudentEnrollment>join(JOIN_STUDENT_ENROLLMENTS, JoinType.INNER);
+        final Join<StudentEnrollment, Student> student = studentEnrollments.join(JOIN_STUDENT, JoinType.INNER);
+        final SetJoin<Student, StudentContactRelationship> studentContactRelationships = (SetJoin<Student, StudentContactRelationship>) student.<Student, StudentContactRelationship>join(JOIN_STUDENT_CONTACT_RELATIONSHIPS, JoinType.INNER);
+        final Join<StudentContactRelationship, StudentContact> contact = studentContactRelationships.join(JOIN_STUDENT_CONTACT, JoinType.INNER);
+
+        select.distinct(true);
+        select.select(cb.greatest(from.<Integer>get(SCHOOL_YEAR_KEY)));
+        select.where(
+            cb.and(
+                cb.equal(contact.get("studentContactRefId"), refId),
+                from.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+            )
+        );
+        return em.createQuery(select).getSingleResult();
     }
 
     @Override
-    public Integer greatestSchoolYearForAllByCourse(ControllerData metaData, String refId) {
-        return null;
+    public int countAll(ControllerData metaData) {
+        final CriteriaBuilder cb = em.getCriteriaBuilder();
+        final CriteriaQuery<Long> select = cb.createQuery(Long.class);
+        final Root<Lea> from = select.from(Lea.class);
+        final SetJoin<Lea, LeaTelephone> leaTelephones = (SetJoin<Lea, LeaTelephone>) from.<Lea, LeaTelephone>join(JOIN_LEA_TELEPHONES, JoinType.LEFT);
+        final SetJoin<Lea, School> schools = (SetJoin<Lea, School>) from.<Lea, School>join(JOIN_SCHOOLS, JoinType.LEFT);
+
+        Predicate schoolYearEquals;
+        if(metaData.hasSchoolYear()) {
+            schoolYearEquals = cb.equal(from.get(SCHOOL_YEAR_KEY), metaData.getSchoolYear());
+        }
+        else {
+            schoolYearEquals = cb.equal(from.get(SCHOOL_YEAR_KEY), greatestSchoolYearAll(metaData));
+        }
+
+        select.distinct(true);
+        select.select(cb.countDistinct(from));
+        select.where (
+            cb.and (
+                schoolYearEquals,
+                from.get(ControllerData.LEA_LOCAL_ID).in(metaData.getApplication().getApp().getDistrictLocalIds())
+            )
+        );
+        return em.createQuery(select).getSingleResult().intValue();
     }
 
     @Override
-    public Integer greatestSchoolYearForAllByRoster(ControllerData metaData, String refId) {
-        return null;
+    public int countAllBySchoolRefId(ControllerData metadata, String refId) {
+        final CriteriaBuilder cb = em.getCriteriaBuilder();
+        final CriteriaQuery<Long> select = cb.createQuery(Long.class);
+        final Root<Lea> from = select.from(Lea.class);
+        final SetJoin<Lea, LeaTelephone> leaTelephones = (SetJoin<Lea, LeaTelephone>) from.<Lea, LeaTelephone>join(JOIN_LEA_TELEPHONES, JoinType.LEFT);
+        final SetJoin<Lea, School> schools = (SetJoin<Lea, School>) from.<Lea, School>join(JOIN_SCHOOLS, JoinType.LEFT);
+
+        Predicate schoolYearEquals;
+        if(metadata.hasSchoolYear()) {
+            schoolYearEquals = cb.equal(from.get(SCHOOL_YEAR_KEY), metadata.getSchoolYear());
+        }
+        else {
+            schoolYearEquals = cb.equal(from.get(SCHOOL_YEAR_KEY), greatestSchoolYearAllBySchoolRefId(metadata, refId));
+        }
+
+        select.distinct(true);
+        select.select(cb.countDistinct(from));
+        select.where (
+            cb.and (
+                schoolYearEquals,
+                cb.equal(schools.get("schoolRefId"), refId),
+                from.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+            )
+        );
+        return em.createQuery(select).getSingleResult().intValue();
     }
 
     @Override
-    public Integer greatestSchoolYearForAllByStaff(ControllerData metaData, String refId) {
-        return null;
+    public int countAllByCalendarRefId(ControllerData metadata, String refId) {
+        final CriteriaBuilder cb = em.getCriteriaBuilder();
+        final CriteriaQuery<Long> select = cb.createQuery(Long.class);
+        final Root<Lea> from = select.from(Lea.class);
+        final SetJoin<Lea, LeaTelephone> leaTelephones = (SetJoin<Lea, LeaTelephone>) from.<Lea, LeaTelephone>join(JOIN_LEA_TELEPHONES, JoinType.LEFT);
+        final SetJoin<Lea, School> schools = (SetJoin<Lea, School>) from.<Lea, School>join(JOIN_SCHOOLS, JoinType.LEFT);
+        final SetJoin<School, SchoolCalendar> schoolCalendars = (SetJoin<School, SchoolCalendar>) schools.<School, SchoolCalendar>join(JOIN_SCHOOL_CALENDARS, JoinType.LEFT);
+
+        Predicate schoolYearEquals;
+        if(metadata.hasSchoolYear()) {
+            schoolYearEquals = cb.equal(from.get(SCHOOL_YEAR_KEY), metadata.getSchoolYear());
+        }
+        else {
+            schoolYearEquals = cb.equal(from.get(SCHOOL_YEAR_KEY), greatestSchoolYearAllByCalendarRefId(metadata, refId));
+        }
+
+        select.distinct(true);
+        select.select(cb.countDistinct(from));
+        select.where (
+            cb.and (
+                schoolYearEquals,
+                cb.equal(schoolCalendars.get("schoolCalendarRefId"), refId),
+                from.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+            )
+        );
+        return em.createQuery(select).getSingleResult().intValue();
     }
 
     @Override
-    public Integer greatestSchoolYearForAllByStudent(ControllerData metaData, String refId) {
-        return null;
+    public int countAllByCourseRefId(ControllerData metadata, String refId) {
+        final CriteriaBuilder cb = em.getCriteriaBuilder();
+        final CriteriaQuery<Long> select = cb.createQuery(Long.class);
+        final Root<Lea> from = select.from(Lea.class);
+        final SetJoin<Lea, LeaTelephone> leaTelephones = (SetJoin<Lea, LeaTelephone>) from.<Lea, LeaTelephone>join(JOIN_LEA_TELEPHONES, JoinType.LEFT);
+        final SetJoin<Lea, School> schools = (SetJoin<Lea, School>) from.<Lea, School>join(JOIN_SCHOOLS, JoinType.INNER);
+        final SetJoin<School, Course> courses = (SetJoin<School, Course>) schools.<School, Course>join(JOIN_COURSES, JoinType.INNER);
+
+        Predicate schoolYearEquals;
+        if(metadata.hasSchoolYear()) {
+            schoolYearEquals = cb.equal(from.get(SCHOOL_YEAR_KEY), metadata.getSchoolYear());
+        }
+        else {
+            schoolYearEquals = cb.equal(from.get(SCHOOL_YEAR_KEY), greatestSchoolYearAllByCourseRefId(metadata, refId));
+        }
+
+        select.distinct(true);
+        select.select(cb.countDistinct(from));
+        select.where (
+            cb.and (
+                schoolYearEquals,
+                cb.equal(courses.get("courseRefId"), refId),
+                from.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+            )
+        );
+        return em.createQuery(select).getSingleResult().intValue();
     }
 
     @Override
-    public Integer greatestSchoolYearForAllByContact(ControllerData metaData, String refId) {
-        return null;
+    public int countAllByRosterRefId(ControllerData metadata, String refId) {
+        final CriteriaBuilder cb = em.getCriteriaBuilder();
+        final CriteriaQuery<Long> select = cb.createQuery(Long.class);
+        final Root<Lea> from = select.from(Lea.class);
+        final SetJoin<Lea, LeaTelephone> leaTelephones = (SetJoin<Lea, LeaTelephone>) from.<Lea, LeaTelephone>join(JOIN_LEA_TELEPHONES, JoinType.LEFT);
+        final SetJoin<Lea, School> schools = (SetJoin<Lea, School>) from.<Lea, School>join(JOIN_SCHOOLS, JoinType.INNER);
+        final SetJoin<School, Course> courses = (SetJoin<School, Course>) schools.<School, Course>join(JOIN_COURSES, JoinType.INNER);
+        final SetJoin<Course, CourseSection> courseSections = (SetJoin<Course, CourseSection>) courses.<Course, CourseSection>join(JOIN_COURSE_SECTIONS, JoinType.INNER);
+
+        Predicate schoolYearEquals;
+        if(metadata.hasSchoolYear()) {
+            schoolYearEquals = cb.equal(from.get(SCHOOL_YEAR_KEY), metadata.getSchoolYear());
+        }
+        else {
+            schoolYearEquals = cb.equal(from.get(SCHOOL_YEAR_KEY), greatestSchoolYearAllByRosterRefId(metadata, refId));
+        }
+
+        select.distinct(true);
+        select.select(cb.countDistinct(from));
+        select.where (
+            cb.and (
+                schoolYearEquals,
+                cb.equal(courseSections.get("courseSectionRefId"), refId),
+                from.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+            )
+        );
+        return em.createQuery(select).getSingleResult().intValue();
     }
 
     @Override
-    public Integer countAll(ControllerData metaData) {
-        return null;
+    public int countAllByStaffRefId(ControllerData metadata, String refId) {
+        final CriteriaBuilder cb = em.getCriteriaBuilder();
+        final CriteriaQuery<Long> select = cb.createQuery(Long.class);
+        final Root<Lea> from = select.from(Lea.class);
+        final SetJoin<Lea, LeaTelephone> leaTelephones = (SetJoin<Lea, LeaTelephone>) from.<Lea, LeaTelephone>join(JOIN_LEA_TELEPHONES, JoinType.LEFT);
+        final SetJoin<Lea, School> schools = (SetJoin<Lea, School>) from.<Lea, School>join(JOIN_SCHOOLS, JoinType.INNER);
+        final SetJoin<School, StaffAssignment> staffAssignments = (SetJoin<School, StaffAssignment>) schools.<School, StaffAssignment>join(JOIN_STAFF_ASSIGNMENTS, JoinType.INNER);
+        final Join<StaffAssignment, Staff> staff = staffAssignments.join(JOIN_STAFF, JoinType.INNER);
+
+        Predicate schoolYearEquals;
+        if(metadata.hasSchoolYear()) {
+            schoolYearEquals = cb.equal(from.get(SCHOOL_YEAR_KEY), metadata.getSchoolYear());
+        }
+        else {
+            schoolYearEquals = cb.equal(from.get(SCHOOL_YEAR_KEY), greatestSchoolYearAllByStaffRefId(metadata, refId));
+        }
+
+        select.distinct(true);
+        select.select(cb.countDistinct(from));
+        select.where (
+            cb.and (
+                schoolYearEquals,
+                cb.equal(staff.get("staffRefId"), refId),
+                from.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+            )
+        );
+        return em.createQuery(select).getSingleResult().intValue();
     }
 
     @Override
-    public Integer countAllBySchool(ControllerData metaData, String refId) {
-        return null;
+    public int countAllByStudentRefId(ControllerData metadata, String refId) {
+        final CriteriaBuilder cb = em.getCriteriaBuilder();
+        final CriteriaQuery<Long> select = cb.createQuery(Long.class);
+        final Root<Lea> from = select.from(Lea.class);
+        final SetJoin<Lea, LeaTelephone> leaTelephones = (SetJoin<Lea, LeaTelephone>) from.<Lea, LeaTelephone>join(JOIN_LEA_TELEPHONES, JoinType.LEFT);
+        final SetJoin<Lea, School> schools = (SetJoin<Lea, School>) from.<Lea, School>join(JOIN_SCHOOLS, JoinType.INNER);
+        final SetJoin<School, StudentEnrollment> studentEnrollments = (SetJoin<School, StudentEnrollment>) schools.<School, StudentEnrollment>join(JOIN_STUDENT_ENROLLMENTS, JoinType.INNER);
+        final Join<StudentEnrollment, Student> student = studentEnrollments.join(JOIN_STUDENT, JoinType.INNER);
+
+        Predicate schoolYearEquals;
+        if(metadata.hasSchoolYear()) {
+            schoolYearEquals = cb.equal(from.get(SCHOOL_YEAR_KEY), metadata.getSchoolYear());
+        }
+        else {
+            schoolYearEquals = cb.equal(from.get(SCHOOL_YEAR_KEY), greatestSchoolYearAllByStudentRefId(metadata, refId));
+        }
+
+        select.distinct(true);
+        select.select(cb.countDistinct(from));
+        select.where (
+            cb.and (
+                schoolYearEquals,
+                cb.equal(student.get("studentRefId"), refId),
+                from.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+            )
+        );
+        return em.createQuery(select).getSingleResult().intValue();
     }
 
     @Override
-    public Integer countAllByCalendar(ControllerData metaData, String refId) {
-        return null;
-    }
+    public int countAllByContactRefId(ControllerData metadata, String refId) {
+        final CriteriaBuilder cb = em.getCriteriaBuilder();
+        final CriteriaQuery<Long> select = cb.createQuery(Long.class);
+        final Root<Lea> from = select.from(Lea.class);
+        final SetJoin<Lea, LeaTelephone> leaTelephones = (SetJoin<Lea, LeaTelephone>) from.<Lea, LeaTelephone>join(JOIN_LEA_TELEPHONES, JoinType.LEFT);
+        final SetJoin<Lea, School> schools = (SetJoin<Lea, School>) from.<Lea, School>join(JOIN_SCHOOLS, JoinType.INNER);
+        final SetJoin<School, StudentEnrollment> studentEnrollments = (SetJoin<School, StudentEnrollment>) schools.<School, StudentEnrollment>join(JOIN_STUDENT_ENROLLMENTS, JoinType.INNER);
+        final Join<StudentEnrollment, Student> student = studentEnrollments.join(JOIN_STUDENT, JoinType.INNER);
+        final SetJoin<Student, StudentContactRelationship> studentContactRelationships = (SetJoin<Student, StudentContactRelationship>) student.<Student, StudentContactRelationship>join(JOIN_STUDENT_CONTACT_RELATIONSHIPS, JoinType.INNER);
+        final Join<StudentContactRelationship, StudentContact> contact = studentContactRelationships.join(JOIN_STUDENT_CONTACT, JoinType.INNER);
 
-    @Override
-    public Integer countAllByCourse(ControllerData metaData, String refId) {
-        return null;
-    }
+        Predicate schoolYearEquals;
+        if(metadata.hasSchoolYear()) {
+            schoolYearEquals = cb.equal(from.get(SCHOOL_YEAR_KEY), metadata.getSchoolYear());
+        }
+        else {
+            schoolYearEquals = cb.equal(from.get(SCHOOL_YEAR_KEY), greatestSchoolYearAllByContactRefId(metadata, refId));
+        }
 
-    @Override
-    public Integer countAllByRoster(ControllerData metaData, String refId) {
-        return null;
-    }
-
-    @Override
-    public Integer countAllByStaff(ControllerData metaData, String refId) {
-        return null;
-    }
-
-    @Override
-    public Integer countAllByStudent(ControllerData metaData, String refId) {
-        return null;
-    }
-
-    @Override
-    public Integer countAllByContact(ControllerData metaData, String refId) {
-        return null;
+        select.distinct(true);
+        select.select(cb.countDistinct(from));
+        select.where (
+            cb.and (
+                schoolYearEquals,
+                cb.equal(contact.get("studentContactRefId"), refId),
+                from.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+            )
+        );
+        return em.createQuery(select).getSingleResult().intValue();
     }
 
     /** Initialize **/

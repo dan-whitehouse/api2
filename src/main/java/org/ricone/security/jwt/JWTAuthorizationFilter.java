@@ -83,16 +83,9 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
     }
 
     private Collection<GrantedAuthority> getACLs(App app) {
-        List<PathPermission> pathPermissions = new ArrayList<>();
-        PathPermission pathPermission1 = new PathPermission("/requests/xLeas", true, true, true, true, true);
-        PathPermission pathPermission2 = new PathPermission("/requests/xSchools/{}/xLeas", false, false, false, false, false);
-        pathPermissions.add(pathPermission1);
-        pathPermissions.add(pathPermission2);
-
         Collection<GrantedAuthority> grantedAuthorities = new ArrayList<>();
 
-        //TODO: Once this is in config, change this so that it uses the list of PathPermission from app. I.e.: app.getPathPermissions()
-        pathPermissions.forEach(pathPermission -> {
+        FakePermissionsLoader.getPathPermissions().forEach(pathPermission -> {
             if(pathPermission.getGet()) {
                 grantedAuthorities.add(new SimpleGrantedAuthority("get:" + pathPermission.getPath()));
             }

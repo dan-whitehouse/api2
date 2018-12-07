@@ -1,7 +1,7 @@
-package org.ricone.api.xpress.dao;
+package org.ricone.api.xpress.requests.xLea;
 
 import org.ricone.api.core.model.wrapper.LeaWrapper;
-import org.ricone.api.xpress.controller.ControllerData;
+import org.ricone.api.xpress.component.ControllerData;
 
 import java.util.List;
 

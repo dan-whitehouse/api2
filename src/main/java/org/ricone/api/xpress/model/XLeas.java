@@ -9,7 +9,7 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"xLea"})
-@JsonRootName(value = "xLeas")
+@JsonRootName(value = "xLea")
 public class XLeas {
 	@JsonProperty("xLea")
 	@JacksonXmlElementWrapper(useWrapping = false)
@@ -36,6 +36,6 @@ public class XLeas {
 
 	@Override
 	public String toString() {
-		return "XLeas{" + "xLeas=" + xLeas + '}';
+		return "XLeas{" + "xLea=" + xLeas + '}';
 	}
 }

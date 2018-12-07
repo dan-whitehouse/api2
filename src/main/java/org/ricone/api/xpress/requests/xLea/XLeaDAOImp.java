@@ -1,9 +1,10 @@
-package org.ricone.api.xpress.dao;
+package org.ricone.api.xpress.requests.xLea;
 
 import org.hibernate.Hibernate;
 import org.ricone.api.core.model.*;
 import org.ricone.api.core.model.wrapper.LeaWrapper;
-import org.ricone.api.xpress.controller.ControllerData;
+import org.ricone.api.xpress.component.ControllerData;
+import org.ricone.api.xpress.component.BaseDAO;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;

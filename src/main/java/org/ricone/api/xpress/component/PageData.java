@@ -1,4 +1,4 @@
-package org.ricone.api.xpress.controller;
+package org.ricone.api.xpress.component;
 
 import org.apache.commons.lang3.math.NumberUtils;
 import org.ricone.error.exception.BadRequestException;

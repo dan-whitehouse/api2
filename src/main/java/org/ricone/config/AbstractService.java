@@ -15,14 +15,14 @@ public abstract class AbstractService {
     private HttpHeaders headers;
     private HttpEntity<?> entity;
 
-    public AbstractService() {
+    AbstractService() {
         rt = new RestTemplate();
         headers = new HttpHeaders();
         headers.set("Authorization", ConfigService.getInstance().getAccessToken());
         entity = new HttpEntity<>(headers);
     }
 
-    public RestTemplate restTemplate() {
+    RestTemplate restTemplate() {
         return rt;
     }
 

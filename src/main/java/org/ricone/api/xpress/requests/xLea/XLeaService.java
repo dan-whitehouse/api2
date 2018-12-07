@@ -1,6 +1,6 @@
-package org.ricone.api.xpress.service;
+package org.ricone.api.xpress.requests.xLea;
 
-import org.ricone.api.xpress.controller.ControllerData;
+import org.ricone.api.xpress.component.ControllerData;
 import org.ricone.api.xpress.model.XLeaResponse;
 import org.ricone.api.xpress.model.XLeasResponse;
 

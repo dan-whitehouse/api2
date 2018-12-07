@@ -1,4 +1,4 @@
-package org.ricone.api.xpress.dao;
+package org.ricone.api.xpress.component;
 
 public class BaseDAO {
     /* Joins */

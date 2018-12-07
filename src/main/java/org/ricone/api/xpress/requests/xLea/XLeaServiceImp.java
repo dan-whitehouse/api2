@@ -1,10 +1,8 @@
-package org.ricone.api.xpress.service;
+package org.ricone.api.xpress.requests.xLea;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.ricone.api.core.model.wrapper.LeaWrapper;
-import org.ricone.api.xpress.controller.ControllerData;
-import org.ricone.api.xpress.dao.XLeaDAO;
-import org.ricone.api.xpress.mapper.XLeaMapper;
+import org.ricone.api.xpress.component.ControllerData;
 import org.ricone.api.xpress.model.XLeaResponse;
 import org.ricone.api.xpress.model.XLeasResponse;
 import org.ricone.error.exception.NoContentException;

@@ -1,4 +1,4 @@
-package org.ricone.api.xpress.controller.advice;
+package org.ricone.api.xpress.requests.xLea;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.ricone.api.xpress.model.XLeasResponse;
@@ -13,7 +13,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 //https://stackoverflow.com/questions/44375435/spring-auto-add-x-total-count-header
 
 @ControllerAdvice
-public class XLeasControllerAdvice implements ResponseBodyAdvice<XLeasResponse> {
+public class XLeaControllerAdvice implements ResponseBodyAdvice<XLeasResponse> {
 
 	@Override
 	public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {

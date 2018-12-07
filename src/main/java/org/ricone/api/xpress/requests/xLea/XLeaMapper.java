@@ -1,4 +1,4 @@
-package org.ricone.api.xpress.mapper;
+package org.ricone.api.xpress.requests.xLea;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;

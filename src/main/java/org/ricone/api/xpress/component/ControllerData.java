@@ -1,20 +1,15 @@
-package org.ricone.api.xpress.controller;
+package org.ricone.api.xpress.component;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.math.NumberUtils;
-import org.ricone.config.ConfigService;
-import org.ricone.config.model.App;
 import org.ricone.error.exception.BadRequestException;
 import org.ricone.security.jwt.Application;
-import org.ricone.util.Util;
-import org.springframework.data.domain.PageRequest;
+import org.ricone.api.xpress.util.Util;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.security.Principal;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -50,7 +45,7 @@ public class ControllerData {
 	private Application application;
 
 
-	ControllerData(HttpServletRequest request, HttpServletResponse response, Pageable pageable) throws BadRequestException {
+	public ControllerData(HttpServletRequest request, HttpServletResponse response, Pageable pageable) throws BadRequestException {
 		super();
 		this.request = request;
 		this.response = response;

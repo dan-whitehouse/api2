@@ -10,43 +10,43 @@ import java.io.Serializable;
 @JsonPropertyOrder({"refId", "localId", "leaRefId", "stateProvinceId", "ncesId", "leaName", "addressaddressType", "addressline1", "addressline2", "addresscity", "addressstateProvince", "addresscountryCode", "addresspostalCode", "phoneNumberphoneNumberType", "phoneNumbernumber", "phoneNumberprimaryIndicator", "otherPhoneNumbersphoneNumberphoneNumberType", "otherPhoneNumbersphoneNumbernumber", "otherPhoneNumbersphoneNumberprimaryIndicator", "id"})
 public class XLeaFilter implements IFilter<XLeaFilter>, Serializable {
     @JsonProperty("refId")
-    private Boolean refId = false;
+    private Boolean refId;
     @JsonProperty("localId")
-    private Boolean localId = false;
+    private Boolean localId;
     @JsonProperty("leaRefId")
-    private Boolean leaRefId = false;
+    private Boolean leaRefId;
     @JsonProperty("stateProvinceId")
-    private Boolean stateProvinceId = false;
+    private Boolean stateProvinceId;
     @JsonProperty("ncesId")
-    private Boolean ncesId = false;
+    private Boolean ncesId;
     @JsonProperty("leaName")
-    private Boolean leaName = false;
+    private Boolean leaName;
     @JsonProperty("addressaddressType")
-    private Boolean addressaddressType = false;
+    private Boolean addressaddressType;
     @JsonProperty("addressline1")
-    private Boolean addressline1 = false;
+    private Boolean addressline1;
     @JsonProperty("addressline2")
-    private Boolean addressline2 = false;
+    private Boolean addressline2;
     @JsonProperty("addresscity")
-    private Boolean addresscity = false;
+    private Boolean addresscity;
     @JsonProperty("addressstateProvince")
-    private Boolean addressstateProvince = false;
+    private Boolean addressstateProvince;
     @JsonProperty("addresscountryCode")
-    private Boolean addresscountryCode = false;
+    private Boolean addresscountryCode;
     @JsonProperty("addresspostalCode")
-    private Boolean addresspostalCode = false;
+    private Boolean addresspostalCode;
     @JsonProperty("phoneNumberphoneNumberType")
-    private Boolean phoneNumberphoneNumberType = false;
+    private Boolean phoneNumberphoneNumberType;
     @JsonProperty("phoneNumbernumber")
-    private Boolean phoneNumbernumber = false;
+    private Boolean phoneNumbernumber;
     @JsonProperty("phoneNumberprimaryIndicator")
-    private Boolean phoneNumberprimaryIndicator = false;
+    private Boolean phoneNumberprimaryIndicator;
     @JsonProperty("otherPhoneNumbersphoneNumberphoneNumberType")
-    private Boolean otherPhoneNumbersphoneNumberphoneNumberType = false;
+    private Boolean otherPhoneNumbersphoneNumberphoneNumberType;
     @JsonProperty("otherPhoneNumbersphoneNumbernumber")
-    private Boolean otherPhoneNumbersphoneNumbernumber = false;
+    private Boolean otherPhoneNumbersphoneNumbernumber;
     @JsonProperty("otherPhoneNumbersphoneNumberprimaryIndicator")
-    private Boolean otherPhoneNumbersphoneNumberprimaryIndicator = false;
+    private Boolean otherPhoneNumbersphoneNumberprimaryIndicator;
     @JsonProperty("id")
     private Integer id;
     private final static long serialVersionUID = 8600227280515324823L;
@@ -55,6 +55,25 @@ public class XLeaFilter implements IFilter<XLeaFilter>, Serializable {
      * No args constructor for use in serialization
      */
     public XLeaFilter() {
+        refId = true;
+        localId = true;
+        leaRefId = true;
+        stateProvinceId = true;
+        ncesId = true;
+        leaName = true;
+        addressaddressType = true;
+        addressline1 = true;
+        addressline2 = true;
+        addresscity = true;
+        addressstateProvince = true;
+        addresscountryCode = true;
+        addresspostalCode = true;
+        phoneNumberphoneNumberType = true;
+        phoneNumbernumber = true;
+        phoneNumberprimaryIndicator = true;
+        otherPhoneNumbersphoneNumberphoneNumberType = true;
+        otherPhoneNumbersphoneNumbernumber = true;
+        otherPhoneNumbersphoneNumberprimaryIndicator = true;
     }
 
     /**

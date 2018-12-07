@@ -9,7 +9,7 @@ public class BaseController {
     public BaseController() {
     }
 
-    protected ControllerData getMetaData(HttpServletRequest request, HttpServletResponse response, Pageable pageRequest) throws Exception {
-        return new ControllerData(request, response, pageRequest);
+    protected ControllerData getMetaData(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        return new ControllerData(request, response);
     }
 }

@@ -10,14 +10,14 @@ import java.util.List;
 class FakePermissionsLoader {
 	static List<PathPermission> getPathPermissions() {
 		List<PathPermission> pathPermissions = new ArrayList<>();
-		PathPermission pathPermission1 = new PathPermission("/requests/xLea", true, true, false, true, true);
-		PathPermission pathPermission2 = new PathPermission("/requests/xSchools/{}/xLea", true, false, false, false, false);
-		PathPermission pathPermission3 = new PathPermission("/requests/xCalendars/{}/xLea", true, false, false, false, false);
-		PathPermission pathPermission4 = new PathPermission("/requests/xCourses/{}/xLea", true, false, false, false, false);
-		PathPermission pathPermission5 = new PathPermission("/requests/xRosters/{}/xLea", true, false, false, false, false);
-		PathPermission pathPermission6 = new PathPermission("/requests/xStaffs/{}/xLea", true, false, false, false, false);
-		PathPermission pathPermission7 = new PathPermission("/requests/xStudents/{}/xLea", true, false, false, false, false);
-		PathPermission pathPermission8 = new PathPermission("/requests/xContacts/{}/xLea", true, false, false, false, false);
+		PathPermission pathPermission1 = new PathPermission("/requests/xLeas", true, true, false, true, true);
+		PathPermission pathPermission2 = new PathPermission("/requests/xSchools/{}/xLeas", true, false, false, false, false);
+		PathPermission pathPermission3 = new PathPermission("/requests/xCalendars/{}/xLeas", true, false, false, false, false);
+		PathPermission pathPermission4 = new PathPermission("/requests/xCourses/{}/xLeas", true, false, false, false, false);
+		PathPermission pathPermission5 = new PathPermission("/requests/xRosters/{}/xLeas", true, false, false, false, false);
+		PathPermission pathPermission6 = new PathPermission("/requests/xStaffs/{}/xLeas", true, false, false, false, false);
+		PathPermission pathPermission7 = new PathPermission("/requests/xStudents/{}/xLeas", true, false, false, false, false);
+		PathPermission pathPermission8 = new PathPermission("/requests/xContacts/{}/xLeas", true, false, false, false, false);
 
 		pathPermissions.add(pathPermission1);
 		pathPermissions.add(pathPermission2);

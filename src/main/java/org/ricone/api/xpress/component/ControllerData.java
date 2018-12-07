@@ -45,7 +45,7 @@ public class ControllerData {
 	private Application application;
 
 
-	public ControllerData(HttpServletRequest request, HttpServletResponse response, Pageable pageable) throws BadRequestException {
+	public ControllerData(HttpServletRequest request, HttpServletResponse response) throws BadRequestException {
 		super();
 		this.request = request;
 		this.response = response;

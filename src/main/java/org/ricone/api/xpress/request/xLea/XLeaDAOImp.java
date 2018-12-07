@@ -1,4 +1,4 @@
-package org.ricone.api.xpress.requests.xLea;
+package org.ricone.api.xpress.request.xLea;
 
 import org.hibernate.Hibernate;
 import org.ricone.api.core.model.*;

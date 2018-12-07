@@ -8,6 +8,7 @@ import org.ricone.config.cache.AppCache;
 import org.ricone.config.model.App;
 import org.ricone.config.model.District;
 import org.ricone.security.PropertiesLoader;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;

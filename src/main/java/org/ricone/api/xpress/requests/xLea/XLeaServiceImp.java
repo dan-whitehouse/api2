@@ -18,6 +18,7 @@ import java.util.List;
 public class XLeaServiceImp implements XLeaService {
     @Autowired private XLeaDAO dao;
     @Autowired private XLeaMapper mapper;
+    @Autowired private XLeaFilterer filterer;
 
     @Override
     public XLeaResponse findByRefId(ControllerData metadata, String refId) throws Exception {
@@ -25,7 +26,7 @@ public class XLeaServiceImp implements XLeaService {
         if(instance == null) {
             throw new NotFoundException();
         }
-        return mapper.convert(instance);
+        return filterer.apply(mapper.convert(instance), metadata);
     }
 
     @Override
@@ -34,7 +35,7 @@ public class XLeaServiceImp implements XLeaService {
         if(instance == null) {
             throw new NotFoundException();
         }
-        return mapper.convert(instance);
+        return filterer.apply(mapper.convert(instance), metadata);
     }
 
     @Override
@@ -43,7 +44,7 @@ public class XLeaServiceImp implements XLeaService {
         if(CollectionUtils.isEmpty(instance)) {
             throw new NoContentException();
         }
-        return mapper.convert(instance);
+        return filterer.apply(mapper.convert(instance), metadata);
     }
 
     @Override

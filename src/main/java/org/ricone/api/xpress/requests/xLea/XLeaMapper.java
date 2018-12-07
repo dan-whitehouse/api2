@@ -42,6 +42,7 @@ public class XLeaMapper {
 
     public XLea map(Lea instance, String districtId) {
         XLea xLea = new XLea();
+        xLea.setDistrictId(districtId); // Required By Wrapper
         xLea.setRefId(instance.getLeaRefId());
         xLea.setLeaName(instance.getLeaName());
         xLea.setLocalId(instance.getLeaId());

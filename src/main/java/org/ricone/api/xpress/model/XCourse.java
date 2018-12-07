@@ -17,7 +17,7 @@ import java.util.stream.Stream;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"@refId", "schoolRefId", "schoolCourseId", "leaCourseId", "otherIds", "courseTitle", "description", "subject", "applicableEducationLevels", "scedCourseCode", "scedCourseLevelCode", "scedCourseSubjectAreaCode", "metadata"})
 @JsonRootName(value = "xCourse")
-public class XCourse {
+public class XCourse extends XWrapper {
 	@JsonProperty("@refId")
 	@JacksonXmlProperty(localName = "refId", isAttribute = true)
 	private String refId;

@@ -118,9 +118,9 @@ public class XLeaDAOImp extends BaseDAO implements XLeaDAO {
         select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
         Query q = em.createQuery(select);
-        if(metadata.getPaging2().isPaged()) {
-            q.setFirstResult(metadata.getPaging2().getPageNumber() * metadata.getPaging2().getPageSize());
-            q.setMaxResults(metadata.getPaging2().getPageSize());
+        if(metadata.getPaging().isPaged()) {
+            q.setFirstResult(metadata.getPaging().getPageNumber() * metadata.getPaging().getPageSize());
+            q.setMaxResults(metadata.getPaging().getPageSize());
         }
         List<LeaWrapper> instance = q.getResultList();
         initialize(instance);

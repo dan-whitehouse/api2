@@ -6,11 +6,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 class PageData {
     private Pageable pageable;
 
-    PageData(HttpServletRequest request) throws BadRequestException {
+    PageData(HttpServletRequest request, HttpServletResponse response) throws BadRequestException {
         if(isPagingHeader(request)) {
             pageable = createPagableFromHeaders(request);
         }

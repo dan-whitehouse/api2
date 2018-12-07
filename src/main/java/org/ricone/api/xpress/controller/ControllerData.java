@@ -46,7 +46,6 @@ public class ControllerData {
 	private HttpServletRequest request;
 	private HttpServletResponse response;
 	private Pageable pageable;
-	private Pageable pageable2;
 	private String providerId;
 	private Application application;
 
@@ -55,32 +54,9 @@ public class ControllerData {
 		super();
 		this.request = request;
 		this.response = response;
-		this.pageable = getPaging(pageable);
-
-		this.pageable2 = new PageData(request).getPageable();
+		this.pageable = new PageData(request, response).getPageable();
 		this.application = (Application) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 	}
-
-	private Pageable getPaging(Pageable pageable) throws BadRequestException {
-		Pageable paging = pageable;
-		if(NumberUtils.isDigits(getHeader("page")) && NumberUtils.isDigits(getHeader("size"))) {
-			int page = Integer.parseInt(getHeader("page"));
-			int size = Integer.parseInt(getHeader("size"));
-			if(page < 1) {
-				//If it is, the server will throw 500, and say that the Page index must not be less than zero!
-				throw new BadRequestException("Page index must not be less than one!");
-			}
-			paging = PageRequest.of(page-1, size, null);
-		}
-
-		if(pageable.isPaged()) {
-			response.setHeader("X-Page",  String.valueOf(paging.getPageNumber()+1));
-			response.setHeader("X-Size", String.valueOf(paging.getPageSize()));
-		}
-
-		return paging;
-	}
-
 
 	// Custom Methods - Headers
 	public String getHeader(String header) {
@@ -166,13 +142,6 @@ public class ControllerData {
 	}
 
 	public Pageable getPaging() {
-		System.out.println(pageable);
 		return pageable;
 	}
-
-	public Pageable getPaging2() {
-		System.out.println(pageable2);
-		return pageable2;
-	}
-
 }

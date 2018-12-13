@@ -5,6 +5,8 @@ import org.ricone.api.core.model.*;
 import org.ricone.api.core.model.wrapper.LeaWrapper;
 import org.ricone.api.xpress.component.ControllerData;
 import org.ricone.api.xpress.component.BaseDAO;
+import org.ricone.error.exception.NotFoundException;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -23,7 +25,7 @@ public class XLeaDAOImp extends BaseDAO implements XLeaDAO {
     private final String BEDS_ID_KEY = "leaSeaId";
 
     @Override
-    public LeaWrapper findByRefId(ControllerData metadata, String refId) {
+    public LeaWrapper findByRefId(ControllerData metadata, String refId) throws NotFoundException {
         final CriteriaBuilder cb = em.getCriteriaBuilder();
         final CriteriaQuery<LeaWrapper> select = cb.createQuery(LeaWrapper.class);
         final Root<Lea> from = select.from(Lea.class);
@@ -52,6 +54,9 @@ public class XLeaDAOImp extends BaseDAO implements XLeaDAO {
 
         Query q = em.createQuery(select);
         LeaWrapper instance = (LeaWrapper) q.getSingleResult();
+        if(instance == null) {
+            throw new NotFoundException();
+        }
         initialize(instance);
         return instance;
     }

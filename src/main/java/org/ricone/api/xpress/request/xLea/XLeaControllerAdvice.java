@@ -10,6 +10,8 @@ import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
+import java.util.Objects;
+
 //https://stackoverflow.com/questions/44375435/spring-auto-add-x-total-count-header
 
 @ControllerAdvice
@@ -23,8 +25,10 @@ public class XLeaControllerAdvice implements ResponseBodyAdvice<XLeasResponse> {
 
 	@Override
 	public XLeasResponse beforeBodyWrite(XLeasResponse body, MethodParameter returnType, MediaType selectedContentType, Class<? extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
-		if(CollectionUtils.isNotEmpty(body.getXLeas().getXLeas())) {
-			response.getHeaders().add("X-Total-Count", String.valueOf(body.getXLeas().getXLeas().size()));
+		if(body != null && body.getXLeas() != null) {
+			if(CollectionUtils.isNotEmpty(body.getXLeas().getXLeas())) {
+				response.getHeaders().add("X-Total-Count", String.valueOf(body.getXLeas().getXLeas().size()));
+			}
 		}
 		return body;
 	}

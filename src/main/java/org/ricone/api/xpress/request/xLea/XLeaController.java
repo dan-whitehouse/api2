@@ -1,13 +1,13 @@
 package org.ricone.api.xpress.request.xLea;
 
 import org.apache.commons.lang3.StringUtils;
+import org.ricone.api.xpress.component.acl.XLeasACL;
 import org.ricone.api.xpress.component.BaseController;
 import org.ricone.api.xpress.model.XLeaResponse;
 import org.ricone.api.xpress.model.XLeasResponse;
 import org.ricone.api.xpress.util.Util;
 import org.ricone.error.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -23,8 +23,9 @@ public class XLeaController extends BaseController {
 
 	@ResponseBody
 	@GetMapping(value = "/requests/xLeas/{id}")
-	@PreAuthorize("hasAuthority('get:/requests/xLeas')")
+	@XLeasACL.Get.ById
 	public XLeaResponse getXLeaById(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "id") String id) throws Exception {
+
 		if(Util.isRefId(id)) {
 			return service.findByRefId(getMetaData(request, response), id);
 		}
@@ -36,56 +37,56 @@ public class XLeaController extends BaseController {
 
 	@ResponseBody
 	@GetMapping(value = "/requests/xLeas")
-	@PreAuthorize("hasAuthority('get:/requests/xLeas')")
+	@XLeasACL.Get.All
 	public XLeasResponse getXLeas(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		return service.findAll(getMetaData(request, response));
 	}
 
 	@ResponseBody
 	@GetMapping(value = "/requests/xSchools/{refId}/xLeas")
-	@PreAuthorize("hasAuthority('get:/requests/xSchools/{}/xLeas')")
+	@XLeasACL.Get.ByXSchools
 	public XLeasResponse getXLeasByXSchool(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "refId") String refId) throws Exception {
 		return service.findAllBySchool(getMetaData(request, response), refId);
 	}
 
 	@ResponseBody
 	@GetMapping(value = "/requests/xCalendars/{refId}/xLeas")
-	@PreAuthorize("hasAuthority('get:/requests/xCalendars/{}/xLeas')")
+	@XLeasACL.Get.ByXCalendars
 	public XLeasResponse getXLeasByXCalendar(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "refId") String refId) throws Exception {
 		return service.findAllByCalendar(getMetaData(request, response), refId);
 	}
 
 	@ResponseBody
 	@GetMapping(value = "/requests/xCourses/{refId}/xLeas")
-	@PreAuthorize("hasAuthority('get:/requests/xCourses/{}/xLeas')")
+	@XLeasACL.Get.ByXCourses
 	public XLeasResponse getXLeasByXCourse(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "refId") String refId) throws Exception {
 		return service.findAllByCourse(getMetaData(request, response), refId);
 	}
 
 	@ResponseBody
 	@GetMapping(value = "/requests/xRosters/{refId}/xLea")
-	@PreAuthorize("hasAuthority('get:/requests/xRosters/{}/xLea')")
+	@XLeasACL.Get.ByXRosters
 	public XLeasResponse getXLeasByXRoster(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "refId") String refId) throws Exception {
 		return service.findAllByRoster(getMetaData(request, response), refId);
 	}
 
 	@ResponseBody
 	@GetMapping(value = "/requests/xStaffs/{refId}/xLeas")
-	@PreAuthorize("hasAuthority('get:/requests/xStaffs/{}/xLeas')")
+	@XLeasACL.Get.ByXStaffs
 	public XLeasResponse getXLeasByXStaff(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "refId") String refId) throws Exception {
 		return service.findAllByStaff(getMetaData(request, response), refId);
 	}
 
 	@ResponseBody
 	@GetMapping(value = "/requests/xStudents/{refId}/xLeas")
-	@PreAuthorize("hasAuthority('get:/requests/xStudents/{}/xLeas')")
+	@XLeasACL.Get.ByXStudents
 	public XLeasResponse getXLeasByXStudent(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "refId") String refId) throws Exception {
 		return service.findAllByStudent(getMetaData(request, response), refId);
 	}
 
 	@ResponseBody
 	@GetMapping(value = "/requests/xContacts/{refId}/xLeas")
-	@PreAuthorize("hasAuthority('get:/requests/xContacts/{}/xLeas')")
+	@XLeasACL.Get.ByXContacts
 	public XLeasResponse getXLeasByXContact(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "refId") String refId) throws Exception {
 		return service.findAllByContact(getMetaData(request, response), refId);
 	}

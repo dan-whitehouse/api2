@@ -87,4 +87,16 @@ public class EnrollmentController {
 
 		return enrollmentsResponse;
 	}
+
+	@ResponseBody
+	@GetMapping(value = "/ims/oneroster/v1p1/schools/{id}/enrollments")
+	public EnrollmentsResponse getEnrollmentsForSchool(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "id") String id) throws Exception {
+		return null;
+	}
+
+	@ResponseBody
+	@GetMapping(value = "/ims/oneroster/v1p1/schools/{schoolId}/classes/{classId}/enrollments")
+	public EnrollmentsResponse getEnrollmentsForClassInSchool(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "schoolId") String schoolId, @PathVariable(value = "classId") String classId) throws Exception {
+		return null;
+	}
 }

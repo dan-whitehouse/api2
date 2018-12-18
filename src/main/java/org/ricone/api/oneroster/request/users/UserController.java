@@ -1,6 +1,8 @@
 package org.ricone.api.oneroster.request.users;
 
 import org.ricone.api.oneroster.model.*;
+import org.ricone.api.xpress.component.BaseController;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -12,7 +14,9 @@ import java.time.Instant;
 import java.util.UUID;
 
 @RestController
-public class UserController {
+public class UserController extends BaseController {
+	@Autowired
+	private UserService service;
 
 	@ResponseBody
 	@GetMapping(value = "/ims/oneroster/v1p1/users/{id}")
@@ -91,48 +95,61 @@ public class UserController {
 	@ResponseBody
 	@GetMapping(value = "/ims/oneroster/v1p1/students/{id}")
 	public UserResponse getStudent(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "id") String id) throws Exception {
-		return null;
+		return service.getStudent(null, id);
 	}
 
 	@ResponseBody
 	@GetMapping(value = "/ims/oneroster/v1p1/students")
 	public UsersResponse getAllStudents(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		return null;
+		return service.getAllStudents(getMetaData(request, response));
 	}
 
 	@ResponseBody
 	@GetMapping(value = "/ims/oneroster/v1p1/schools/{id}/students")
 	public UsersResponse getStudentsForSchool(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "id") String id) throws Exception {
-		return null;
+		return service.getStudentsForSchool(null, id);
 	}
 
 	@ResponseBody
 	@GetMapping(value = "/ims/oneroster/v1p1/classes/{id}/students")
 	public UsersResponse getStudentsForClass(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "id") String id) throws Exception {
-		return null;
+		return service.getStudentsForClass(null, id);
+	}
+
+	@ResponseBody
+	@GetMapping(value = "/ims/oneroster/v1p1/schools/{schoolId}/classes/{classId}/students")
+	public UsersResponse getStudentsForClassInSchool(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "schoolId") String schoolId, @PathVariable(value = "classId") String classId) throws Exception {
+		return service.getStudentsForClassInSchool(null, schoolId, classId);
 	}
 
 	@ResponseBody
 	@GetMapping(value = "/ims/oneroster/v1p1/teachers/{id}")
 	public UserResponse getTeacher(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "id") String id) throws Exception {
-		return null;
+		return service.getTeacher(null, id);
 	}
 
 	@ResponseBody
 	@GetMapping(value = "/ims/oneroster/v1p1/teachers")
 	public UsersResponse getAllTeachers(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		return null;
+		return service.getAllTeachers(null);
 	}
 
 	@ResponseBody
 	@GetMapping(value = "/ims/oneroster/v1p1/schools/{id}/teachers")
 	public UsersResponse getTeachersForSchool(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "id") String id) throws Exception {
-		return null;
+		return service.getTeachersForSchool(null, id);
 	}
 
 	@ResponseBody
 	@GetMapping(value = "/ims/oneroster/v1p1/classes/{id}/teachers")
 	public UsersResponse getTeachersForClass(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "id") String id) throws Exception {
-		return null;
+		return service.getTeachersForClass(null, id);
+	}
+
+	@ResponseBody
+	@GetMapping(value = "/ims/oneroster/v1p1/schools/{schoolId}/classes/{classId}/teachers")
+	public UsersResponse getTeachersForClassInSchool(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "schoolId") String schoolId, @PathVariable(value = "classId") String classId) throws Exception {
+		return service.getTeachersForClassInSchool(null, schoolId, classId);
 	}
 }
+

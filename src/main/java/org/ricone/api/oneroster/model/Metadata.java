@@ -1,10 +1,10 @@
 package org.ricone.api.oneroster.model;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.*;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"ims.classification", "ims.boarding", "http://www.nbrs.org"})
@@ -15,6 +15,8 @@ public class Metadata implements Serializable {
 	private String imsBoarding;
 	@JsonProperty("http://www.nbrs.org")
 	private String httpWwwNbrsOrg;
+	@JsonIgnore
+	private Map<String, Object> additionalProperties = new HashMap<>();
 	private final static long serialVersionUID = -210985162537038327L;
 
 	/**
@@ -65,4 +67,13 @@ public class Metadata implements Serializable {
 		this.httpWwwNbrsOrg = httpWwwNbrsOrg;
 	}
 
+	@JsonAnyGetter
+	public Map<String, Object> getAdditionalProperties() {
+		return this.additionalProperties;
+	}
+
+	@JsonAnySetter
+	public void setAdditionalProperty(String name, Object value) {
+		this.additionalProperties.put(name, value);
+	}
 }

@@ -1,7 +1,7 @@
 package org.ricone.security;
 
 import org.apache.commons.lang3.StringUtils;
-import org.ricone.error.exception.ConfigException;
+import org.ricone.api.xpress.error.exception.ConfigException;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;

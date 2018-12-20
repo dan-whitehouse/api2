@@ -1,7 +1,6 @@
 package org.ricone.config;
 
 import org.ricone.config.model.*;
-import org.ricone.error.exception.ConfigException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpMethod;

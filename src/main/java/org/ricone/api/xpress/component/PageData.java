@@ -1,7 +1,7 @@
 package org.ricone.api.xpress.component;
 
 import org.apache.commons.lang3.math.NumberUtils;
-import org.ricone.error.exception.BadRequestException;
+import org.ricone.api.xpress.error.exception.BadRequestException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 

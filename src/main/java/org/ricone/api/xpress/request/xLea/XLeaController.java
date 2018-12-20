@@ -6,7 +6,7 @@ import org.ricone.api.xpress.component.BaseController;
 import org.ricone.api.xpress.model.XLeaResponse;
 import org.ricone.api.xpress.model.XLeasResponse;
 import org.ricone.api.xpress.util.Util;
-import org.ricone.error.exception.NotFoundException;
+import org.ricone.api.xpress.error.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

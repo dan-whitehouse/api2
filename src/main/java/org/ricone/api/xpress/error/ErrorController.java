@@ -1,7 +1,6 @@
-package org.ricone.error;
+package org.ricone.api.xpress.error;
 
-import org.ricone.error.Error;
-import org.ricone.error.exception.*;
+import org.ricone.api.xpress.error.exception.*;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;

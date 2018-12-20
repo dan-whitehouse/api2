@@ -5,8 +5,8 @@ import org.ricone.api.core.model.wrapper.LeaWrapper;
 import org.ricone.api.xpress.component.ControllerData;
 import org.ricone.api.xpress.model.XLeaResponse;
 import org.ricone.api.xpress.model.XLeasResponse;
-import org.ricone.error.exception.NoContentException;
-import org.ricone.error.exception.NotFoundException;
+import org.ricone.api.xpress.error.exception.NoContentException;
+import org.ricone.api.xpress.error.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

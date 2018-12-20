@@ -1,6 +1,6 @@
 package org.ricone.error;
 
-import org.ricone.error.exception.NotFoundException;
+import org.ricone.api.xpress.error.exception.NotFoundException;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;

@@ -21,81 +21,19 @@ public class UserController extends BaseController {
 	@ResponseBody
 	@GetMapping(value = "/ims/oneroster/v1p1/users/{id}")
 	public UserResponse getUser(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "id") String id) throws Exception {
-		User user = new User();
-		user.setSourcedId(UUID.randomUUID().toString());
-		user.setStatus(StatusType.active);
-		user.setDateLastModified(Instant.now().toString());
-
-		user.setUsername("dwhitehouse");
-
-		user.getUserIds().add(new UserId("localId", "123456"));
-		user.getUserIds().add(new UserId("stateId", "785412369"));
-
-		user.setEnabledUser("true");
-		user.setGivenName("Daniel");
-		user.setFamilyName("Whitehouse");
-		user.setMiddleName("David");
-		user.setRole(RoleType.student);
-		user.setIdentifier(UUID.randomUUID().toString());
-		user.setEmail("daniel.whitehouse@neric.org");
-		user.setSms("518-810-3880");
-		user.setPhone("518-810-3880");
-		//user.setAgents();
-		user.getGrades().add("12");
-		user.setPassword("NunYahDamBiznass");
-
-		UserResponse userResponse = new UserResponse();
-		userResponse.setUser(user);
-
-		return userResponse;
+		return service.getUser(getMetaData(request, response), id);
 	}
 
 	@ResponseBody
 	@GetMapping(value = "/ims/oneroster/v1p1/users")
 	public UsersResponse getAllUsers(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		User user = new User();
-		user.setSourcedId(UUID.randomUUID().toString());
-		user.setStatus(StatusType.active);
-		user.setDateLastModified(Instant.now().toString());
-
-		user.setUsername("dwhitehouse");
-
-		user.getUserIds().add(new UserId("localId", "123456"));
-		user.getUserIds().add(new UserId("stateId", "785412369"));
-
-		user.setEnabledUser("true");
-		user.setGivenName("Daniel");
-		user.setFamilyName("Whitehouse");
-		user.setMiddleName("David");
-		user.setRole(RoleType.student);
-		user.setIdentifier(UUID.randomUUID().toString());
-		user.setEmail("daniel.whitehouse@neric.org");
-		user.setSms("518-810-3880");
-		user.setPhone("518-810-3880");
-		//user.setAgents();
-
-		GUIDRef guidRef = new GUIDRef();
-		guidRef.setHref("http://localhost:8080/ims/oneroster/v1p1/orgs/");
-		guidRef.setSourcedId(UUID.randomUUID().toString());
-		guidRef.setType(GUIDType.org);
-
-		user.getOrgs().add(guidRef);
-
-
-
-		user.getGrades().add("12");
-		user.setPassword("NunYahDamBiznass");
-
-		UsersResponse usersResponse = new UsersResponse();
-		usersResponse.getUsers().add(user);
-
-		return usersResponse;
+		return service.getAllUsers(getMetaData(request, response));
 	}
 
 	@ResponseBody
 	@GetMapping(value = "/ims/oneroster/v1p1/students/{id}")
 	public UserResponse getStudent(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "id") String id) throws Exception {
-		return service.getStudent(null, id);
+		return service.getStudent(getMetaData(request, response), id);
 	}
 
 	@ResponseBody
@@ -107,49 +45,49 @@ public class UserController extends BaseController {
 	@ResponseBody
 	@GetMapping(value = "/ims/oneroster/v1p1/schools/{id}/students")
 	public UsersResponse getStudentsForSchool(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "id") String id) throws Exception {
-		return service.getStudentsForSchool(null, id);
+		return service.getStudentsForSchool(getMetaData(request, response), id);
 	}
 
 	@ResponseBody
 	@GetMapping(value = "/ims/oneroster/v1p1/classes/{id}/students")
 	public UsersResponse getStudentsForClass(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "id") String id) throws Exception {
-		return service.getStudentsForClass(null, id);
+		return service.getStudentsForClass(getMetaData(request, response), id);
 	}
 
 	@ResponseBody
 	@GetMapping(value = "/ims/oneroster/v1p1/schools/{schoolId}/classes/{classId}/students")
 	public UsersResponse getStudentsForClassInSchool(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "schoolId") String schoolId, @PathVariable(value = "classId") String classId) throws Exception {
-		return service.getStudentsForClassInSchool(null, schoolId, classId);
+		return service.getStudentsForClassInSchool(getMetaData(request, response), schoolId, classId);
 	}
 
 	@ResponseBody
 	@GetMapping(value = "/ims/oneroster/v1p1/teachers/{id}")
 	public UserResponse getTeacher(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "id") String id) throws Exception {
-		return service.getTeacher(null, id);
+		return service.getTeacher(getMetaData(request, response), id);
 	}
 
 	@ResponseBody
 	@GetMapping(value = "/ims/oneroster/v1p1/teachers")
 	public UsersResponse getAllTeachers(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		return service.getAllTeachers(null);
+		return service.getAllTeachers(getMetaData(request, response));
 	}
 
 	@ResponseBody
 	@GetMapping(value = "/ims/oneroster/v1p1/schools/{id}/teachers")
 	public UsersResponse getTeachersForSchool(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "id") String id) throws Exception {
-		return service.getTeachersForSchool(null, id);
+		return service.getTeachersForSchool(getMetaData(request, response), id);
 	}
 
 	@ResponseBody
 	@GetMapping(value = "/ims/oneroster/v1p1/classes/{id}/teachers")
 	public UsersResponse getTeachersForClass(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "id") String id) throws Exception {
-		return service.getTeachersForClass(null, id);
+		return service.getTeachersForClass(getMetaData(request, response), id);
 	}
 
 	@ResponseBody
 	@GetMapping(value = "/ims/oneroster/v1p1/schools/{schoolId}/classes/{classId}/teachers")
 	public UsersResponse getTeachersForClassInSchool(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "schoolId") String schoolId, @PathVariable(value = "classId") String classId) throws Exception {
-		return service.getTeachersForClassInSchool(null, schoolId, classId);
+		return service.getTeachersForClassInSchool(getMetaData(request, response), schoolId, classId);
 	}
 }
 

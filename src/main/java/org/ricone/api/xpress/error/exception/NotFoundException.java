@@ -1,4 +1,4 @@
-package org.ricone.error.exception;
+package org.ricone.api.xpress.error.exception;
 
 public class NotFoundException extends Exception {
     private static final long serialVersionUID = 1997753363232807009L;

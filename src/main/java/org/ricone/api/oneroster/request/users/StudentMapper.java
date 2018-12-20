@@ -14,7 +14,6 @@ import java.util.*;
 
 @Component
 public class StudentMapper {
-
     public StudentMapper() {
     }
 
@@ -33,9 +32,12 @@ public class StudentMapper {
     }
 
     UserResponse convert(StudentWrapper wrapper) {
-        UserResponse response = new UserResponse();
-        response.setUser(map(wrapper.getStudent(), wrapper.getDistrictId()));
-        return response;
+        if(wrapper != null) {
+            UserResponse response = new UserResponse();
+            response.setUser(map(wrapper.getStudent(), wrapper.getDistrictId()));
+            return response;
+        }
+        return null;
     }
 
     private User map(Student instance, String districtId) {

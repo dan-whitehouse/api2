@@ -1,4 +1,4 @@
-package org.ricone.error;
+package org.ricone.api.xpress.error;
 
 public class Error {
     private String url;

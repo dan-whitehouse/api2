@@ -1,4 +1,4 @@
-package org.ricone.api.oneroster.model;
+package org.ricone.api.oneroster.error;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -6,13 +6,13 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import java.io.Serializable;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 @JsonPropertyOrder({"imsx_codeMajor", "imsx_severity", "imsx_messageRefIdentifier", "imsx_operationRefIdentifier", "imsx_description", "imsx_codeMinor"})
 public class StatusInfoSet implements Serializable {
 	@JsonProperty("imsx_codeMajor")
-	private String imsxCodeMajor;
+	private CodeMajor imsxCodeMajor;
 	@JsonProperty("imsx_severity")
-	private String imsxSeverity;
+	private Severity imsxSeverity;
 	@JsonProperty("imsx_messageRefIdentifier")
 	private String imsxMessageRefIdentifier;
 	@JsonProperty("imsx_operationRefIdentifier")
@@ -20,7 +20,7 @@ public class StatusInfoSet implements Serializable {
 	@JsonProperty("imsx_description")
 	private String imsxDescription;
 	@JsonProperty("imsx_codeMinor")
-	private String imsxCodeMinor;
+	private CodeMinor imsxCodeMinor;
 	private final static long serialVersionUID = 1931034646494144369L;
 
 	/**
@@ -37,7 +37,7 @@ public class StatusInfoSet implements Serializable {
 	 * @param imsxOperationRefIdentifier
 	 * @param imsxCodeMajor
 	 */
-	public StatusInfoSet(String imsxCodeMajor, String imsxSeverity, String imsxMessageRefIdentifier, String imsxOperationRefIdentifier, String imsxDescription, String imsxCodeMinor) {
+	public StatusInfoSet(CodeMajor imsxCodeMajor, Severity imsxSeverity, String imsxMessageRefIdentifier, String imsxOperationRefIdentifier, String imsxDescription, CodeMinor imsxCodeMinor) {
 		super();
 		this.imsxCodeMajor = imsxCodeMajor;
 		this.imsxSeverity = imsxSeverity;
@@ -48,22 +48,22 @@ public class StatusInfoSet implements Serializable {
 	}
 
 	@JsonProperty("imsx_codeMajor")
-	public String getImsxCodeMajor() {
+	public CodeMajor getImsxCodeMajor() {
 		return imsxCodeMajor;
 	}
 
 	@JsonProperty("imsx_codeMajor")
-	public void setImsxCodeMajor(String imsxCodeMajor) {
+	public void setImsxCodeMajor(CodeMajor imsxCodeMajor) {
 		this.imsxCodeMajor = imsxCodeMajor;
 	}
 
 	@JsonProperty("imsx_severity")
-	public String getImsxSeverity() {
+	public Severity getImsxSeverity() {
 		return imsxSeverity;
 	}
 
 	@JsonProperty("imsx_severity")
-	public void setImsxSeverity(String imsxSeverity) {
+	public void setImsxSeverity(Severity imsxSeverity) {
 		this.imsxSeverity = imsxSeverity;
 	}
 
@@ -98,12 +98,12 @@ public class StatusInfoSet implements Serializable {
 	}
 
 	@JsonProperty("imsx_codeMinor")
-	public String getImsxCodeMinor() {
+	public CodeMinor getImsxCodeMinor() {
 		return imsxCodeMinor;
 	}
 
 	@JsonProperty("imsx_codeMinor")
-	public void setImsxCodeMinor(String imsxCodeMinor) {
+	public void setImsxCodeMinor(CodeMinor imsxCodeMinor) {
 		this.imsxCodeMinor = imsxCodeMinor;
 	}
 }

@@ -86,6 +86,38 @@ public class XRosterFilter implements IFilter<XRosterFilter>, Serializable {
      * No args constructor for use in serialization
      */
     public XRosterFilter() {
+        refId = true;
+        courseRefId = true;
+        courseTitle = true;
+        sectionRefId = true;
+        subject = true;
+        schoolRefId = true;
+        schoolSectionId = true;
+        schoolYear = true;
+        meetingTimessessionCode = true;
+        meetingTimesschoolCalendarRefId = true;
+        meetingTimesmeetingTimeTableDay = true;
+        meetingTimesmeetingTimeclassMeetingDaysbellScheduleDay = true;
+        meetingTimesmeetingTimetimeTablePeriod = true;
+        meetingTimesmeetingTimeroomNumber = true;
+        meetingTimesmeetingTimeclassBeginningTime = true;
+        meetingTimesmeetingTimeclassEndingTime = true;
+        studentsstudentReferencerefID = true;
+        studentsstudentReferencelocalId = true;
+        studentsstudentReferencegivenName = true;
+        studentsstudentReferencefamilyName = true;
+        primaryStaffstaffPersonReferencerefId = true;
+        primaryStaffstaffPersonReferencelocalId = true;
+        primaryStaffstaffPersonReferencegivenName = true;
+        primaryStaffstaffPersonReferencefamilyName = true;
+        primaryStaffteacherOfRecord = true;
+        primaryStaffpercentResponsible = true;
+        otherStaffsotherStaffstaffPersonReferencerefId = true;
+        otherStaffsotherStaffstaffPersonReferencelocalId = true;
+        otherStaffsotherStaffstaffPersonReferencegivenName = true;
+        otherStaffsotherStaffstaffPersonReferencefamilyName = true;
+        otherStaffsotherStaffteacherOfRecord = true;
+        otherStaffsotherStaffpercentResponsible = true;
     }
 
     /**

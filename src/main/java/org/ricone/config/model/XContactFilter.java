@@ -110,6 +110,52 @@ public class XContactFilter implements IFilter<XContactFilter>, Serializable {
      * No args constructor for use in serialization
      */
     public XContactFilter() {
+        refId = true;
+        nametype = true;
+        nameprefix = true;
+        namefamilyName = true;
+        namegivenName = true;
+        namemiddleName = true;
+        namesuffix = true;
+        otherNamesnametype = true;
+        otherNamesnameprefix = true;
+        otherNamesnamefamilyName = true;
+        otherNamesnamegivenName = true;
+        otherNamesnamemiddleName = true;
+        otherNamesnamesuffix = true;
+        localId = true;
+        loginId = true;
+        otherIdsotherIdtype = true;
+        otherIdsotherIdid = true;
+        addressaddressType = true;
+        addressline1 = true;
+        addressline2 = true;
+        addresscity = true;
+        addressstateProvince = true;
+        addresspostalCode = true;
+        addresscountryCode = true;
+        phoneNumberphoneNumberType = true;
+        phoneNumbernumber = true;
+        phoneNumberprimaryIndicator = true;
+        otherPhoneNumbersphoneNumberphoneNumberType = true;
+        otherPhoneNumbersphoneNumbernumber = true;
+        otherPhoneNumbersphoneNumberprimaryIndicator = true;
+        emailemailType = true;
+        emailemailAddress = true;
+        otherEmailsemailemailType = true;
+        otherEmailsemailemailAddress = true;
+        sex = true;
+        employerType = true;
+        relationshipsrelationshipstudentRefId = true;
+        relationshipsrelationshiprelationshipCode = true;
+        relationshipsrelationshiprestrictions = true;
+        relationshipsrelationshiplivesWith = true;
+        relationshipsrelationshipprimaryContactIndicator = true;
+        relationshipsrelationshipemergencyContactIndicator = true;
+        relationshipsrelationshipfinancialResponsibilityIndicator = true;
+        relationshipsrelationshipcustodialIndicator = true;
+        relationshipsrelationshipcommunicationsIndicator = true;
+        relationshipsrelationshipcontactSequence = true;
     }
 
     /**

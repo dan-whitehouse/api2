@@ -19,6 +19,12 @@ class FakePermissionsLoader {
 		PathPermission pathPermission7 = new PathPermission("/requests/xStudents/{}/xLeas", true, false, false, false, false);
 		PathPermission pathPermission8 = new PathPermission("/requests/xContacts/{}/xLeas", true, false, false, false, false);
 
+		PathPermission pathPermission9 = new PathPermission("/requests/xSchools", true, true, false, true, true);
+
+		PathPermission pathPermission10 = new PathPermission("/requests/xCalendars", true, true, false, true, true);
+
+		PathPermission pathPermission11 = new PathPermission("/requests/xCourses", true, true, false, true, true);
+
 		pathPermissions.add(pathPermission1);
 		pathPermissions.add(pathPermission2);
 		pathPermissions.add(pathPermission3);
@@ -27,7 +33,9 @@ class FakePermissionsLoader {
 		pathPermissions.add(pathPermission6);
 		pathPermissions.add(pathPermission7);
 		pathPermissions.add(pathPermission8);
-
+		pathPermissions.add(pathPermission9);
+		pathPermissions.add(pathPermission10);
+		pathPermissions.add(pathPermission11);
 		return pathPermissions;
 	}
 }

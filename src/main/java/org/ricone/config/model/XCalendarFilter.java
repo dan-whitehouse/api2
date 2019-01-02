@@ -40,6 +40,17 @@ public class XCalendarFilter implements IFilter<XCalendarFilter>, Serializable {
      * No args constructor for use in serialization
      */
     public XCalendarFilter() {
+        refId = true;
+        schoolRefId = true;
+        schoolYear = true;
+        sessionssessionListsessionType = true;
+        sessionssessionListsessionCode = true;
+        sessionssessionListdescription = true;
+        sessionssessionListmarkingTerm = true;
+        sessionssessionListschedulingTerm = true;
+        sessionssessionListlinkedSessionCode = true;
+        sessionssessionListstartDate = true;
+        sessionssessionListendDate = true;
     }
 
     /**

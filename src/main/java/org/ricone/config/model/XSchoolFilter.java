@@ -60,6 +60,27 @@ public class XSchoolFilter implements IFilter<XSchoolFilter>, Serializable {
      * No args constructor for use in serialization
      */
     public XSchoolFilter() {
+        refId = true;
+        leaRefId = true;
+        localId = true;
+        stateProvinceId = true;
+        otherIdsotherIdtype = true;
+        otherIdsotherIdid = true;
+        schoolName = true;
+        gradeLevels = true;
+        addressaddressType = true;
+        addressline1 = true;
+        addressline2 = true;
+        addresscity = true;
+        addressstateProvince = true;
+        addresscountryCode = true;
+        addresspostalCode = true;
+        phoneNumberphoneNumberType = true;
+        phoneNumbernumber = true;
+        phoneNumberprimaryIndicator = true;
+        otherPhoneNumbersphoneNumberphoneNumberType = true;
+        otherPhoneNumbersphoneNumbernumber = true;
+        otherPhoneNumbersphoneNumberprimaryIndicator = true;
     }
 
     /**

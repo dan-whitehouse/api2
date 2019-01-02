@@ -63,7 +63,7 @@ public class XLeaFilterer {
 		}
 
 		// Address
-		if (instance.getAddress() != null) {
+		if (instance.getAddress() != null && !instance.getAddress().isEmptyObject()) {
 			if (!filter.getAddressaddressType()) {
 				instance.getAddress().setAddressType(null);
 			}
@@ -93,7 +93,7 @@ public class XLeaFilterer {
 		}
 
 		// Primary Phone Number
-		if (instance.getPhoneNumber() != null) {
+		if (instance.getPhoneNumber() != null && !instance.getPhoneNumber().isEmptyObject()) {
 			if (!filter.getPhoneNumbernumber()) {
 				instance.getPhoneNumber().setNumber(null);
 			}
@@ -112,26 +112,16 @@ public class XLeaFilterer {
 
 		// Other Phone Numbers
 		if (instance.getOtherPhoneNumbers() != null) {
-			Iterator<PhoneNumber> iterator = instance.getOtherPhoneNumbers().getPhoneNumber().iterator();
-			while (iterator.hasNext()) {
-				PhoneNumber i = iterator.next();
-				if (!filter.getOtherPhoneNumbersphoneNumbernumber()) {
+			for (PhoneNumber i : instance.getOtherPhoneNumbers().getPhoneNumber()) {
+				if(!filter.getOtherPhoneNumbersphoneNumbernumber()) {
 					i.setNumber(null);
 				}
-				if (!filter.getOtherPhoneNumbersphoneNumberphoneNumberType()) {
+				if(!filter.getOtherPhoneNumbersphoneNumberphoneNumberType()) {
 					i.setPhoneNumberType(null);
 				}
-				if (!filter.getOtherPhoneNumbersphoneNumberprimaryIndicator()) {
+				if(!filter.getOtherPhoneNumbersphoneNumberprimaryIndicator()) {
 					i.setPrimaryIndicator(null);
 				}
-
-				// Remove object from list if empty
-				if (i.isEmptyObject()) {
-					iterator.remove();
-				}
-			}
-			if (CollectionUtils.isEmpty(instance.getOtherPhoneNumbers().getPhoneNumber())) {
-				instance.setOtherPhoneNumbers(null);
 			}
 		}
 		return instance;

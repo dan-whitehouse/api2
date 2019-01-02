@@ -28,7 +28,6 @@ public class XLeaController extends BaseController {
 	@ResponseBody @GetMapping(value = "/requests/xLeas/{id}")
 	@ApiOperation(value = "Return xLea by refId or localId", tags = {"xLeas"})
 	public XLeaResponse getXLeaById(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "id") String id) throws Exception {
-
 		if(Util.isRefId(id)) {
 			return service.findByRefId(getMetaData(request, response), id);
 		}
@@ -45,49 +44,49 @@ public class XLeaController extends BaseController {
 		return service.findAll(getMetaData(request, response));
 	}
 
-	@XLeasACL.Get.ByXSchools
+	@XLeasACL.Get.ByXSchool
 	@ResponseBody @GetMapping(value = "/requests/xSchools/{refId}/xLeas")
 	@ApiOperation(value = "Return all xLeas by xSchool refId", tags = {"xLeas"})
 	public XLeasResponse getXLeasByXSchool(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "refId") String refId) throws Exception {
 		return service.findAllBySchool(getMetaData(request, response), refId);
 	}
 
-	@XLeasACL.Get.ByXCalendars
+	@XLeasACL.Get.ByXCalendar
 	@ResponseBody @GetMapping(value = "/requests/xCalendars/{refId}/xLeas")
 	@ApiOperation(value = "Return all xLeas by xCalendar refId", tags = {"xLeas"})
 	public XLeasResponse getXLeasByXCalendar(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "refId") String refId) throws Exception {
 		return service.findAllByCalendar(getMetaData(request, response), refId);
 	}
 
-	@XLeasACL.Get.ByXCourses
+	@XLeasACL.Get.ByXCourse
 	@ResponseBody @GetMapping(value = "/requests/xCourses/{refId}/xLeas")
 	@ApiOperation(value = "Return all xLeas by xCourse refId", tags = {"xLeas"})
 	public XLeasResponse getXLeasByXCourse(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "refId") String refId) throws Exception {
 		return service.findAllByCourse(getMetaData(request, response), refId);
 	}
 
-	@XLeasACL.Get.ByXRosters
+	@XLeasACL.Get.ByXRoster
 	@ResponseBody @GetMapping(value = "/requests/xRosters/{refId}/xLea")
 	@ApiOperation(value = "Return all xLeas by xRoster refId", tags = {"xLeas"})
 	public XLeasResponse getXLeasByXRoster(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "refId") String refId) throws Exception {
 		return service.findAllByRoster(getMetaData(request, response), refId);
 	}
 
-	@XLeasACL.Get.ByXStaffs
+	@XLeasACL.Get.ByXStaff
 	@ResponseBody @GetMapping(value = "/requests/xStaffs/{refId}/xLeas")
 	@ApiOperation(value = "Return all xLeas by xStaff refId", tags = {"xLeas"})
 	public XLeasResponse getXLeasByXStaff(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "refId") String refId) throws Exception {
 		return service.findAllByStaff(getMetaData(request, response), refId);
 	}
 
-	@XLeasACL.Get.ByXStudents
+	@XLeasACL.Get.ByXStudent
 	@ResponseBody @GetMapping(value = "/requests/xStudents/{refId}/xLeas")
 	@ApiOperation(value = "Return all xLeas by xStudent refId", tags = {"xLeas"})
 	public XLeasResponse getXLeasByXStudent(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "refId") String refId) throws Exception {
 		return service.findAllByStudent(getMetaData(request, response), refId);
 	}
 
-	@XLeasACL.Get.ByXContacts
+	@XLeasACL.Get.ByXContact
 	@ResponseBody @GetMapping(value = "/requests/xContacts/{refId}/xLeas")
 	@ApiOperation(value = "Return all xLeas by xContact refId", tags = {"xLeas"})
 	public XLeasResponse getXLeasByXContact(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "refId") String refId) throws Exception {

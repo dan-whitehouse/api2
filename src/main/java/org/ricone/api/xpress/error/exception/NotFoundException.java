@@ -4,7 +4,7 @@ public class NotFoundException extends Exception {
     private static final long serialVersionUID = 1997753363232807009L;
 
     public NotFoundException() {
-        super();
+        super("Data doesn't appear to exist, or it can't be found...");
     }
 
     public NotFoundException(String message) {

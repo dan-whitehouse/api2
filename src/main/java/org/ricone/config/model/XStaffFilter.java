@@ -60,6 +60,27 @@ public class XStaffFilter implements IFilter<XStaffFilter>, Serializable {
      * No args constructor for use in serialization
      */
     public XStaffFilter() {
+        refId = true;
+        nametype = true;
+        nameprefix = true;
+        namefamilyName = true;
+        namegivenName = true;
+        namemiddleName = true;
+        namesuffix = true;
+        localId = true;
+        stateProvinceId = true;
+        loginId = true;
+        otherIdsotherIdtype = true;
+        otherIdsotherIdid = true;
+        sex = true;
+        emailemailType = true;
+        emailemailAddress = true;
+        primaryAssignmentleaRefId = true;
+        primaryAssignmentschoolRefId = true;
+        primaryAssignmentjobFunction = true;
+        otherAssignmentsstaffPersonAssignmentleaRefId = true;
+        otherAssignmentsstaffPersonAssignmentschoolRefId = true;
+        otherAssignmentsstaffPersonAssignmentjobFunction = true;
     }
 
     /**

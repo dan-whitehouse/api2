@@ -44,6 +44,19 @@ public class XCourseFilter implements IFilter<XCourseFilter>, Serializable {
      * No args constructor for use in serialization
      */
     public XCourseFilter() {
+        refId = true;
+        schoolRefId = true;
+        schoolCourseId = true;
+        leaCourseId = true;
+        otherIdsotherIdtype = true;
+        otherIdsotherIdid = true;
+        courseTitle = true;
+        description = true;
+        subject = true;
+        scedCourseCode = true;
+        scedCourseLevelCode = true;
+        scedCourseSubjectAreaCode = true;
+        applicableEducationLevelsapplicableEducationLevel = true;
     }
 
     /**

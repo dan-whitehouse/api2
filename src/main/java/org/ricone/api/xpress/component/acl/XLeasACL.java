@@ -23,37 +23,37 @@ public @interface XLeasACL {
 		@Target(ElementType.METHOD)
 		@Retention(RetentionPolicy.RUNTIME)
 		@PreAuthorize("hasAuthority('get:/requests/xSchools/{}/xLeas')")
-		@interface ByXSchools { }
+		@interface ByXSchool { }
 
 		@Target(ElementType.METHOD)
 		@Retention(RetentionPolicy.RUNTIME)
 		@PreAuthorize("hasAuthority('get:/requests/xCalendars/{}/xLeas')")
-		@interface ByXCalendars { }
+		@interface ByXCalendar { }
 
 		@Target(ElementType.METHOD)
 		@Retention(RetentionPolicy.RUNTIME)
 		@PreAuthorize("hasAuthority('get:/requests/xCourses/{}/xLeas')")
-		@interface ByXCourses { }
+		@interface ByXCourse { }
 
 		@Target(ElementType.METHOD)
 		@Retention(RetentionPolicy.RUNTIME)
 		@PreAuthorize("hasAuthority('get:/requests/xRosters/{}/xLea')")
-		@interface ByXRosters { }
+		@interface ByXRoster { }
 
 		@Target(ElementType.METHOD)
 		@Retention(RetentionPolicy.RUNTIME)
 		@PreAuthorize("hasAuthority('get:/requests/xStaffs/{}/xLeas')")
-		@interface ByXStaffs { }
+		@interface ByXStaff { }
 
 		@Target(ElementType.METHOD)
 		@Retention(RetentionPolicy.RUNTIME)
 		@PreAuthorize("hasAuthority('get:/requests/xStudents/{}/xLeas')")
-		@interface ByXStudents { }
+		@interface ByXStudent { }
 
 		@Target(ElementType.METHOD)
 		@Retention(RetentionPolicy.RUNTIME)
 		@PreAuthorize("hasAuthority('get:/requests/xContacts/{}/xLeas')")
-		@interface ByXContacts { }
+		@interface ByXContact { }
 	}
 
 	@interface Post {
@@ -70,37 +70,37 @@ public @interface XLeasACL {
 		@Target(ElementType.METHOD)
 		@Retention(RetentionPolicy.RUNTIME)
 		@PreAuthorize("hasAuthority('post:/requests/xSchools/{}/xLeas')")
-		@interface ByXSchools { }
+		@interface ByXSchool { }
 
 		@Target(ElementType.METHOD)
 		@Retention(RetentionPolicy.RUNTIME)
 		@PreAuthorize("hasAuthority('post:/requests/xCalendars/{}/xLeas')")
-		@interface ByXCalendars { }
+		@interface ByXCalendar { }
 
 		@Target(ElementType.METHOD)
 		@Retention(RetentionPolicy.RUNTIME)
 		@PreAuthorize("hasAuthority('get:/requests/xCourses/{}/xLeas')")
-		@interface ByXCourses { }
+		@interface ByXCourse { }
 
 		@Target(ElementType.METHOD)
 		@Retention(RetentionPolicy.RUNTIME)
 		@PreAuthorize("hasAuthority('post:/requests/xRosters/{}/xLea')")
-		@interface ByXRosters { }
+		@interface ByXRoster { }
 
 		@Target(ElementType.METHOD)
 		@Retention(RetentionPolicy.RUNTIME)
 		@PreAuthorize("hasAuthority('post:/requests/xStaffs/{}/xLeas')")
-		@interface ByXStaffs { }
+		@interface ByXStaff { }
 
 		@Target(ElementType.METHOD)
 		@Retention(RetentionPolicy.RUNTIME)
 		@PreAuthorize("hasAuthority('post:/requests/xStudents/{}/xLeas')")
-		@interface ByXStudents { }
+		@interface ByXStudent { }
 
 		@Target(ElementType.METHOD)
 		@Retention(RetentionPolicy.RUNTIME)
 		@PreAuthorize("hasAuthority('post:/requests/xContacts/{}/xLeas')")
-		@interface ByXContacts { }
+		@interface ByXContact { }
 	}
 
 	@interface Put {
@@ -117,37 +117,37 @@ public @interface XLeasACL {
 		@Target(ElementType.METHOD)
 		@Retention(RetentionPolicy.RUNTIME)
 		@PreAuthorize("hasAuthority('put:/requests/xSchools/{}/xLeas')")
-		@interface ByXSchools { }
+		@interface ByXSchool { }
 
 		@Target(ElementType.METHOD)
 		@Retention(RetentionPolicy.RUNTIME)
 		@PreAuthorize("hasAuthority('put:/requests/xCalendars/{}/xLeas')")
-		@interface ByXCalendars { }
+		@interface ByXCalendar { }
 
 		@Target(ElementType.METHOD)
 		@Retention(RetentionPolicy.RUNTIME)
 		@PreAuthorize("hasAuthority('put:/requests/xCourses/{}/xLeas')")
-		@interface ByXCourses { }
+		@interface ByXCourse { }
 
 		@Target(ElementType.METHOD)
 		@Retention(RetentionPolicy.RUNTIME)
 		@PreAuthorize("hasAuthority('put:/requests/xRosters/{}/xLea')")
-		@interface ByXRosters { }
+		@interface ByXRoster { }
 
 		@Target(ElementType.METHOD)
 		@Retention(RetentionPolicy.RUNTIME)
 		@PreAuthorize("hasAuthority('put:/requests/xStaffs/{}/xLeas')")
-		@interface ByXStaffs { }
+		@interface ByXStaff { }
 
 		@Target(ElementType.METHOD)
 		@Retention(RetentionPolicy.RUNTIME)
 		@PreAuthorize("hasAuthority('put:/requests/xStudents/{}/xLeas')")
-		@interface ByXStudents { }
+		@interface ByXStudent { }
 
 		@Target(ElementType.METHOD)
 		@Retention(RetentionPolicy.RUNTIME)
 		@PreAuthorize("hasAuthority('put:/requests/xContacts/{}/xLeas')")
-		@interface ByXContacts { }
+		@interface ByXContact { }
 	}
 
 	@interface Delete {
@@ -164,37 +164,37 @@ public @interface XLeasACL {
 		@Target(ElementType.METHOD)
 		@Retention(RetentionPolicy.RUNTIME)
 		@PreAuthorize("hasAuthority('delete:/requests/xSchools/{}/xLeas')")
-		@interface ByXSchools { }
+		@interface ByXSchool { }
 
 		@Target(ElementType.METHOD)
 		@Retention(RetentionPolicy.RUNTIME)
 		@PreAuthorize("hasAuthority('delete:/requests/xCalendars/{}/xLeas')")
-		@interface ByXCalendars { }
+		@interface ByXCalendar { }
 
 		@Target(ElementType.METHOD)
 		@Retention(RetentionPolicy.RUNTIME)
 		@PreAuthorize("hasAuthority('delete:/requests/xCourses/{}/xLeas')")
-		@interface ByXCourses { }
+		@interface ByXCourse { }
 
 		@Target(ElementType.METHOD)
 		@Retention(RetentionPolicy.RUNTIME)
 		@PreAuthorize("hasAuthority('delete:/requests/xRosters/{}/xLea')")
-		@interface ByXRosters { }
+		@interface ByXRoster { }
 
 		@Target(ElementType.METHOD)
 		@Retention(RetentionPolicy.RUNTIME)
 		@PreAuthorize("hasAuthority('delete:/requests/xStaffs/{}/xLeas')")
-		@interface ByXStaffs { }
+		@interface ByXStaff { }
 
 		@Target(ElementType.METHOD)
 		@Retention(RetentionPolicy.RUNTIME)
 		@PreAuthorize("hasAuthority('delete:/requests/xStudents/{}/xLeas')")
-		@interface ByXStudents { }
+		@interface ByXStudent { }
 
 		@Target(ElementType.METHOD)
 		@Retention(RetentionPolicy.RUNTIME)
 		@PreAuthorize("hasAuthority('delete:/requests/xContacts/{}/xLeas')")
-		@interface ByXContacts { }
+		@interface ByXContact { }
 	}
 
 	@interface Head {
@@ -211,36 +211,36 @@ public @interface XLeasACL {
 		@Target(ElementType.METHOD)
 		@Retention(RetentionPolicy.RUNTIME)
 		@PreAuthorize("hasAuthority('head:/requests/xSchools/{}/xLeas')")
-		@interface ByXSchools { }
+		@interface ByXSchool { }
 
 		@Target(ElementType.METHOD)
 		@Retention(RetentionPolicy.RUNTIME)
 		@PreAuthorize("hasAuthority('head:/requests/xCalendars/{}/xLeas')")
-		@interface ByXCalendars { }
+		@interface ByXCalendar { }
 
 		@Target(ElementType.METHOD)
 		@Retention(RetentionPolicy.RUNTIME)
 		@PreAuthorize("hasAuthority('head:/requests/xCourses/{}/xLeas')")
-		@interface ByXCourses { }
+		@interface ByXCourse { }
 
 		@Target(ElementType.METHOD)
 		@Retention(RetentionPolicy.RUNTIME)
 		@PreAuthorize("hasAuthority('head:/requests/xRosters/{}/xLea')")
-		@interface ByXRosters { }
+		@interface ByXRoster { }
 
 		@Target(ElementType.METHOD)
 		@Retention(RetentionPolicy.RUNTIME)
 		@PreAuthorize("hasAuthority('head:/requests/xStaffs/{}/xLeas')")
-		@interface ByXStaffs { }
+		@interface ByXStaff { }
 
 		@Target(ElementType.METHOD)
 		@Retention(RetentionPolicy.RUNTIME)
 		@PreAuthorize("hasAuthority('head:/requests/xStudents/{}/xLeas')")
-		@interface ByXStudents { }
+		@interface ByXStudent { }
 
 		@Target(ElementType.METHOD)
 		@Retention(RetentionPolicy.RUNTIME)
 		@PreAuthorize("hasAuthority('head:/requests/xContacts/{}/xLeas')")
-		@interface ByXContacts { }
+		@interface ByXContact { }
 	}
 }

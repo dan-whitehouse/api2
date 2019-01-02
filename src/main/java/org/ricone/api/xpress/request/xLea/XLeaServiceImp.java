@@ -3,10 +3,10 @@ package org.ricone.api.xpress.request.xLea;
 import org.apache.commons.collections4.CollectionUtils;
 import org.ricone.api.core.model.wrapper.LeaWrapper;
 import org.ricone.api.xpress.component.ControllerData;
-import org.ricone.api.xpress.model.XLeaResponse;
-import org.ricone.api.xpress.model.XLeasResponse;
 import org.ricone.api.xpress.error.exception.NoContentException;
 import org.ricone.api.xpress.error.exception.NotFoundException;
+import org.ricone.api.xpress.model.XLeaResponse;
+import org.ricone.api.xpress.model.XLeasResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -53,7 +53,7 @@ public class XLeaServiceImp implements XLeaService {
         if(CollectionUtils.isEmpty(instance)) {
             throw new NoContentException();
         }
-        return mapper.convert(instance);
+        return filterer.apply(mapper.convert(instance), metadata);
     }
 
     @Override
@@ -62,7 +62,7 @@ public class XLeaServiceImp implements XLeaService {
         if(CollectionUtils.isEmpty(instance)) {
             throw new NoContentException();
         }
-        return mapper.convert(instance);
+        return filterer.apply(mapper.convert(instance), metadata);
     }
 
     @Override
@@ -71,7 +71,7 @@ public class XLeaServiceImp implements XLeaService {
         if(CollectionUtils.isEmpty(instance)) {
             throw new NoContentException();
         }
-        return mapper.convert(instance);
+        return filterer.apply(mapper.convert(instance), metadata);
     }
 
     @Override
@@ -80,7 +80,7 @@ public class XLeaServiceImp implements XLeaService {
         if(CollectionUtils.isEmpty(instance)) {
             throw new NoContentException();
         }
-        return mapper.convert(instance);
+        return filterer.apply(mapper.convert(instance), metadata);
     }
 
     @Override
@@ -89,7 +89,7 @@ public class XLeaServiceImp implements XLeaService {
         if(CollectionUtils.isEmpty(instance)) {
             throw new NoContentException();
         }
-        return mapper.convert(instance);
+        return filterer.apply(mapper.convert(instance), metadata);
     }
 
     @Override
@@ -98,7 +98,7 @@ public class XLeaServiceImp implements XLeaService {
         if(CollectionUtils.isEmpty(instance)) {
             throw new NoContentException();
         }
-        return mapper.convert(instance);
+        return filterer.apply(mapper.convert(instance), metadata);
     }
 
     @Override
@@ -107,6 +107,6 @@ public class XLeaServiceImp implements XLeaService {
         if(CollectionUtils.isEmpty(instance)) {
             throw new NoContentException();
         }
-        return mapper.convert(instance);
+        return filterer.apply(mapper.convert(instance), metadata);
     }
 }

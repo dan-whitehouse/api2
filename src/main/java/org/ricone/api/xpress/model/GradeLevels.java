@@ -7,10 +7,7 @@
 
 package org.ricone.api.xpress.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +37,11 @@ public class GradeLevels {
 	@JsonProperty("gradeLevel")
 	public void setGradeLevel(List<String> gradeLevel) {
 		this.gradeLevel = gradeLevel;
+	}
+
+	@JsonIgnore
+	public boolean isEmptyObject() {
+		return gradeLevel.isEmpty();
 	}
 
 	@Override

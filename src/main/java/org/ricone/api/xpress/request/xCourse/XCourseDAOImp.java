@@ -107,7 +107,7 @@ public class XCourseDAOImp extends BaseDAO implements XCourseDAO {
 			q.setMaxResults(metadata.getPaging().getPageSize());
 
 			//If Paging - Set ControllerData PagingInfo Total Objects
-			//metadata.getPaging().setTotalObjects(countAll(em, metadata));
+			metadata.getPaging().setTotalObjects(countAll(metadata));
 		}
 
 		List<CourseWrapper> instance = q.getResultList();
@@ -153,7 +153,7 @@ public class XCourseDAOImp extends BaseDAO implements XCourseDAO {
 			q.setMaxResults(metadata.getPaging().getPageSize());
 
 			//If Paging - Set ControllerData PagingInfo Total Objects
-			//metadata.getPaging().setTotalObjects(countAllByLeaRefId(em, metadata, refId));
+			metadata.getPaging().setTotalObjects(countAllByLeaRefId(metadata, refId));
 		}
 
 		List<CourseWrapper> instance = q.getResultList();
@@ -199,7 +199,7 @@ public class XCourseDAOImp extends BaseDAO implements XCourseDAO {
 			q.setMaxResults(metadata.getPaging().getPageSize());
 
 			//If Paging - Set ControllerData PagingInfo Total Objects
-			//metadata.getPaging().setTotalObjects(countAllBySchoolRefId(em, metadata, refId));
+			metadata.getPaging().setTotalObjects(countAllBySchoolRefId(metadata, refId));
 		}
 
 		List<CourseWrapper> instance = q.getResultList();
@@ -246,7 +246,7 @@ public class XCourseDAOImp extends BaseDAO implements XCourseDAO {
 			q.setMaxResults(metadata.getPaging().getPageSize());
 
 			//If Paging - Set ControllerData PagingInfo Total Objects
-			//metadata.getPaging().setTotalObjects(countAllByRosterRefId(em, metadata, refId));
+			metadata.getPaging().setTotalObjects(countAllByRosterRefId(metadata, refId));
 		}
 
 		List<CourseWrapper> instance = q.getResultList();

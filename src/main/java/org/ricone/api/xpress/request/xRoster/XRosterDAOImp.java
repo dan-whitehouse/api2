@@ -5,11 +5,9 @@ import org.apache.logging.log4j.Logger;
 import org.hibernate.Hibernate;
 import org.ricone.api.core.model.*;
 import org.ricone.api.core.model.wrapper.CourseSectionWrapper;
-import org.ricone.api.core.model.wrapper.SchoolWrapper;
 import org.ricone.api.xpress.component.BaseDAO;
 import org.ricone.api.xpress.component.ControllerData;
 import org.ricone.api.xpress.error.exception.NotFoundException;
-import org.ricone.api.xpress.request.xSchool.XSchoolDAO;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -105,7 +103,7 @@ public class XRosterDAOImp extends BaseDAO implements XRosterDAO {
 			q.setMaxResults(metadata.getPaging().getPageSize());
 
 			//If Paging - Set ControllerData PagingInfo Total Objects
-			//metadata.getPaging().setTotalObjects(countAll(em, metadata));
+			metadata.getPaging().setTotalObjects(countAll(metadata));
 		}
 
 		List<CourseSectionWrapper> instance = q.getResultList();
@@ -150,7 +148,7 @@ public class XRosterDAOImp extends BaseDAO implements XRosterDAO {
 			q.setMaxResults(metadata.getPaging().getPageSize());
 
 			//If Paging - Set ControllerData PagingInfo Total Objects
-			//metadata.getPaging().setTotalObjects(countAllByLeaRefId(em, metadata, refId));
+			metadata.getPaging().setTotalObjects(countAllByLeaRefId(metadata, refId));
 		}
 
 		List<CourseSectionWrapper> instance = q.getResultList();
@@ -195,7 +193,7 @@ public class XRosterDAOImp extends BaseDAO implements XRosterDAO {
 			q.setMaxResults(metadata.getPaging().getPageSize());
 
 			//If Paging - Set ControllerData PagingInfo Total Objects
-			//metadata.getPaging().setTotalObjects(countAllBySchoolRefId(em, metadata, refId));
+			metadata.getPaging().setTotalObjects(countAllBySchoolRefId(metadata, refId));
 		}
 
 		List<CourseSectionWrapper> instance = q.getResultList();
@@ -240,7 +238,7 @@ public class XRosterDAOImp extends BaseDAO implements XRosterDAO {
 			q.setMaxResults(metadata.getPaging().getPageSize());
 
 			//If Paging - Set ControllerData PagingInfo Total Objects
-			//metadata.getPaging().setTotalObjects(countAllByCourseRefId(em, metadata, refId));
+			metadata.getPaging().setTotalObjects(countAllByCourseRefId(metadata, refId));
 		}
 
 		List<CourseSectionWrapper> instance = q.getResultList();
@@ -288,7 +286,7 @@ public class XRosterDAOImp extends BaseDAO implements XRosterDAO {
 			q.setMaxResults(metadata.getPaging().getPageSize());
 
 			//If Paging - Set ControllerData PagingInfo Total Objects
-			//metadata.getPaging().setTotalObjects(countAllByStaffRefId(em, metadata, refId));
+			metadata.getPaging().setTotalObjects(countAllByStaffRefId(metadata, refId));
 		}
 
 		List<CourseSectionWrapper> instance = q.getResultList();
@@ -336,7 +334,7 @@ public class XRosterDAOImp extends BaseDAO implements XRosterDAO {
 			q.setMaxResults(metadata.getPaging().getPageSize());
 
 			//If Paging - Set ControllerData PagingInfo Total Objects
-			//metadata.getPaging().setTotalObjects(countAllByStudentRefId(em, metadata, refId));
+			metadata.getPaging().setTotalObjects(countAllByStudentRefId(metadata, refId));
 		}
 
 		List<CourseSectionWrapper> instance = q.getResultList();

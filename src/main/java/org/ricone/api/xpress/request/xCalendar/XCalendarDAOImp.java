@@ -105,7 +105,7 @@ public class XCalendarDAOImp extends BaseDAO implements XCalendarDAO {
 			q.setMaxResults(metadata.getPaging().getPageSize());
 
 			//If Paging - Set ControllerData PagingInfo Total Objects
-			//metadata.getPaging().setTotalObjects(countAll(metadata));
+			metadata.getPaging().setTotalObjects(countAll(metadata));
 		}
 
 		List<SchoolCalendarWrapper> instance = q.getResultList();
@@ -150,7 +150,7 @@ public class XCalendarDAOImp extends BaseDAO implements XCalendarDAO {
 			q.setMaxResults(metadata.getPaging().getPageSize());
 
 			//If Paging - Set ControllerData PagingInfo Total Objects
-			//metadata.getPaging().setTotalObjects(countAllByLeaRefId(em, metadata, refId));
+			metadata.getPaging().setTotalObjects(countAllByLeaRefId(metadata, refId));
 		}
 
 		List<SchoolCalendarWrapper> instance = q.getResultList();
@@ -195,7 +195,7 @@ public class XCalendarDAOImp extends BaseDAO implements XCalendarDAO {
 			q.setMaxResults(metadata.getPaging().getPageSize());
 
 			//If Paging - Set ControllerData PagingInfo Total Objects
-			//metadata.getPaging().setTotalObjects(countAllBySchoolRefId(metadata, refId));
+			metadata.getPaging().setTotalObjects(countAllBySchoolRefId(metadata, refId));
 		}
 
 		List<SchoolCalendarWrapper> instance = q.getResultList();

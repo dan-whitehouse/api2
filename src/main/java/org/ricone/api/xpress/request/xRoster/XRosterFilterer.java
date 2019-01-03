@@ -67,52 +67,57 @@ public class XRosterFilterer {
         }
 
         //Meeting Times
-        for (MeetingTime i : instance.getMeetingTimes().getMeetingTime()) {
-            if(!filter.getMeetingTimesmeetingTimeroomNumber()) {
-                i.setRoomNumber(null);
-            }
-            if(!filter.getMeetingTimessessionCode()) {
-                i.setSessionCode(null);
-            }
-            if(!filter.getMeetingTimesmeetingTimeTableDay()) {
-                i.setTimeTableDay(null);
-            }
-            if(!filter.getMeetingTimesmeetingTimetimeTablePeriod()) {
-                i.setTimeTablePeriod(null);
-            }
-            if(!filter.getMeetingTimesmeetingTimeclassBeginningTime()) {
-                i.setClassBeginningTime(null);
-            }
-            if(!filter.getMeetingTimesmeetingTimeclassEndingTime()) {
-                i.setClassEndingTime(null);
-            }
-
-            //Class Meeting Days
-            if(i.getClassMeetingDays() != null) {
-                if(!filter.getMeetingTimesmeetingTimeclassMeetingDaysbellScheduleDay()) {
-                    i.getClassMeetingDays().setBellScheduleDay(null);
+        if(instance.getMeetingTimes() != null) {
+            for (MeetingTime i : instance.getMeetingTimes().getMeetingTime()) {
+                if(!filter.getMeetingTimesmeetingTimeroomNumber()) {
+                    i.setRoomNumber(null);
                 }
-            }
+                if(!filter.getMeetingTimessessionCode()) {
+                    i.setSessionCode(null);
+                }
+                if(!filter.getMeetingTimesmeetingTimeTableDay()) {
+                    i.setTimeTableDay(null);
+                }
+                if(!filter.getMeetingTimesmeetingTimetimeTablePeriod()) {
+                    i.setTimeTablePeriod(null);
+                }
+                if(!filter.getMeetingTimesmeetingTimeclassBeginningTime()) {
+                    i.setClassBeginningTime(null);
+                }
+                if(!filter.getMeetingTimesmeetingTimeclassEndingTime()) {
+                    i.setClassEndingTime(null);
+                }
 
-            //Calendar
-            if(!filter.getMeetingTimesschoolCalendarRefId()) {
-                i.setSchoolCalendarRefId(null);
+                //Class Meeting Days
+                if(i.getClassMeetingDays() != null) {
+                    if(!filter.getMeetingTimesmeetingTimeclassMeetingDaysbellScheduleDay()) {
+                        i.getClassMeetingDays().setBellScheduleDay(null);
+                    }
+                }
+
+                //Calendar
+                if(!filter.getMeetingTimesschoolCalendarRefId()) {
+                    i.setSchoolCalendarRefId(null);
+                }
             }
         }
 
+
         //Students
-        for (StudentReference i : instance.getStudents().getStudentReference()) {
-            if(!filter.getStudentsstudentReferencerefID()) {
-                i.setRefId(null);
-            }
-            if(!filter.getStudentsstudentReferencelocalId()) {
-                i.setLocalId(null);
-            }
-            if(!filter.getStudentsstudentReferencegivenName()) {
-                i.setGivenName(null);
-            }
-            if(!filter.getStudentsstudentReferencefamilyName()) {
-                i.setFamilyName(null);
+        if(instance.getStudents() != null) {
+            for (StudentReference i : instance.getStudents().getStudentReference()) {
+                if(!filter.getStudentsstudentReferencerefID()) {
+                    i.setRefId(null);
+                }
+                if(!filter.getStudentsstudentReferencelocalId()) {
+                    i.setLocalId(null);
+                }
+                if(!filter.getStudentsstudentReferencegivenName()) {
+                    i.setGivenName(null);
+                }
+                if(!filter.getStudentsstudentReferencefamilyName()) {
+                    i.setFamilyName(null);
+                }
             }
         }
 
@@ -146,26 +151,28 @@ public class XRosterFilterer {
         }
 
         //Other Staffs
-        for (OtherStaff i : instance.getOtherStaffs().getOtherStaff()) {
-            if(i.getStaffPersonReference() != null) {
-                if(!filter.getPrimaryStaffstaffPersonReferencerefId()) {
-                    i.getStaffPersonReference().setRefId(null);
+        if(instance.getOtherStaffs() != null) {
+            for (OtherStaff i : instance.getOtherStaffs().getOtherStaff()) {
+                if(i.getStaffPersonReference() != null) {
+                    if(!filter.getPrimaryStaffstaffPersonReferencerefId()) {
+                        i.getStaffPersonReference().setRefId(null);
+                    }
+                    if(!filter.getPrimaryStaffstaffPersonReferencelocalId()) {
+                        i.getStaffPersonReference().setLocalId(null);
+                    }
+                    if(!filter.getPrimaryStaffstaffPersonReferencegivenName()) {
+                        i.getStaffPersonReference().setGivenName(null);
+                    }
+                    if(!filter.getPrimaryStaffstaffPersonReferencefamilyName()) {
+                        i.getStaffPersonReference().setFamilyName(null);
+                    }
                 }
-                if(!filter.getPrimaryStaffstaffPersonReferencelocalId()) {
-                    i.getStaffPersonReference().setLocalId(null);
+                if(!filter.getPrimaryStaffpercentResponsible()) {
+                    i.setPercentResponsible(null);
                 }
-                if(!filter.getPrimaryStaffstaffPersonReferencegivenName()) {
-                    i.getStaffPersonReference().setGivenName(null);
+                if(!filter.getPrimaryStaffteacherOfRecord()) {
+                    i.setTeacherOfRecord(null);
                 }
-                if(!filter.getPrimaryStaffstaffPersonReferencefamilyName()) {
-                    i.getStaffPersonReference().setFamilyName(null);
-                }
-            }
-            if(!filter.getPrimaryStaffpercentResponsible()) {
-                i.setPercentResponsible(null);
-            }
-            if(!filter.getPrimaryStaffteacherOfRecord()) {
-                i.setTeacherOfRecord(null);
             }
         }
         return instance;

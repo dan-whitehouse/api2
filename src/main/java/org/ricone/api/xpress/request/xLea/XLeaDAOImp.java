@@ -130,8 +130,11 @@ public class XLeaDAOImp extends BaseDAO implements XLeaDAO {
 
 		Query q = em.createQuery(select);
 		if(metadata.getPaging().isPaged()) {
-			q.setFirstResult(metadata.getPaging().getPageNumber() * metadata.getPaging().getPageSize());
+			q.setFirstResult((metadata.getPaging().getPageNumber() - 1) * metadata.getPaging().getPageSize());
 			q.setMaxResults(metadata.getPaging().getPageSize());
+
+			//Set ControllerData Paging Total Objects - Headers will no be included
+			metadata.getPaging().setTotalObjects(countAll(metadata));
 		}
 		List<LeaWrapper> instance = q.getResultList();
 		initialize(instance);
@@ -172,6 +175,9 @@ public class XLeaDAOImp extends BaseDAO implements XLeaDAO {
 		if (metadata.getPaging().isPaged()) {
 			q.setFirstResult((metadata.getPaging().getPageNumber()-1) * metadata.getPaging().getPageSize());
 			q.setMaxResults(metadata.getPaging().getPageSize());
+
+			//Set ControllerData Paging Total Objects - Headers will no be included
+			metadata.getPaging().setTotalObjects(countAllBySchoolRefId(metadata, refId));
 		}
 
 		List<LeaWrapper> instance = q.getResultList();
@@ -214,6 +220,9 @@ public class XLeaDAOImp extends BaseDAO implements XLeaDAO {
 		if (metadata.getPaging().isPaged()) {
 			q.setFirstResult((metadata.getPaging().getPageNumber()-1) * metadata.getPaging().getPageSize());
 			q.setMaxResults(metadata.getPaging().getPageSize());
+
+			//Set ControllerData Paging Total Objects - Headers will no be included
+			metadata.getPaging().setTotalObjects(countAllByCalendarRefId(metadata, refId));
 		}
 
 		List<LeaWrapper> instance = q.getResultList();
@@ -256,6 +265,9 @@ public class XLeaDAOImp extends BaseDAO implements XLeaDAO {
 		if (metadata.getPaging().isPaged()) {
 			q.setFirstResult((metadata.getPaging().getPageNumber()-1) * metadata.getPaging().getPageSize());
 			q.setMaxResults(metadata.getPaging().getPageSize());
+
+			//Set ControllerData Paging Total Objects - Headers will no be included
+			metadata.getPaging().setTotalObjects(countAllByCourseRefId(metadata, refId));
 		}
 
 		List<LeaWrapper> instance = q.getResultList();
@@ -299,6 +311,9 @@ public class XLeaDAOImp extends BaseDAO implements XLeaDAO {
 		if (metadata.getPaging().isPaged()) {
 			q.setFirstResult((metadata.getPaging().getPageNumber()-1) * metadata.getPaging().getPageSize());
 			q.setMaxResults(metadata.getPaging().getPageSize());
+
+			//Set ControllerData Paging Total Objects - Headers will no be included
+			metadata.getPaging().setTotalObjects(countAllByRosterRefId(metadata, refId));
 		}
 
 		List<LeaWrapper> instance = q.getResultList();
@@ -342,6 +357,9 @@ public class XLeaDAOImp extends BaseDAO implements XLeaDAO {
 		if (metadata.getPaging().isPaged()) {
 			q.setFirstResult((metadata.getPaging().getPageNumber()-1) * metadata.getPaging().getPageSize());
 			q.setMaxResults(metadata.getPaging().getPageSize());
+
+			//Set ControllerData Paging Total Objects - Headers will no be included
+			metadata.getPaging().setTotalObjects(countAllByStaffRefId(metadata, refId));
 		}
 
 		List<LeaWrapper> instance = q.getResultList();
@@ -385,6 +403,9 @@ public class XLeaDAOImp extends BaseDAO implements XLeaDAO {
 		if (metadata.getPaging().isPaged()) {
 			q.setFirstResult((metadata.getPaging().getPageNumber()-1) * metadata.getPaging().getPageSize());
 			q.setMaxResults(metadata.getPaging().getPageSize());
+
+			//Set ControllerData Paging Total Objects - Headers will no be included
+			metadata.getPaging().setTotalObjects(countAllByStudentRefId(metadata, refId));
 		}
 
 		List<LeaWrapper> instance = q.getResultList();
@@ -430,6 +451,9 @@ public class XLeaDAOImp extends BaseDAO implements XLeaDAO {
 		if (metadata.getPaging().isPaged()) {
 			q.setFirstResult((metadata.getPaging().getPageNumber()-1) * metadata.getPaging().getPageSize());
 			q.setMaxResults(metadata.getPaging().getPageSize());
+
+			//Set ControllerData Paging Total Objects - Headers will no be included
+			metadata.getPaging().setTotalObjects(countAllByContactRefId(metadata, refId));
 		}
 
 		List<LeaWrapper> instance = q.getResultList();

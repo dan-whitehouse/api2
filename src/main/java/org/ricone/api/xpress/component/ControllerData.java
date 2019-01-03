@@ -1,11 +1,11 @@
 package org.ricone.api.xpress.component;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.ricone.api.xpress.error.exception.BadRequestException;
 import org.ricone.security.jwt.Application;
 import org.ricone.api.xpress.util.Util;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,8 +23,9 @@ import java.util.Date;
 
 @SuppressWarnings({"unused", "FieldCanBeLocal"})
 public class ControllerData {
+	private Logger logger = LogManager.getLogger(ControllerData.class);
 	public static final String LEA_LOCAL_ID = "leaId";
-	public static final String SCHOOL_YEAR_KEY = "schoolYear";
+	public static final String SCHOOL_YEAR_KEY = "SchoolYear";
 	private final String CHANGES_SINCE_MARKER = "changesSinceMarker";
 	private final String AUPP_CREATE = "createUsers";
 	private final String AUPP_GET = "getUsers";
@@ -40,7 +41,7 @@ public class ControllerData {
 	/* MetaData Vars */
 	private HttpServletRequest request;
 	private HttpServletResponse response;
-	private Pageable pageable;
+	private PagingData pageable;
 	private String providerId;
 	private Application application;
 
@@ -49,7 +50,7 @@ public class ControllerData {
 		super();
 		this.request = request;
 		this.response = response;
-		this.pageable = new PageData(request, response).getPageable();
+		this.pageable = new PagingData(request, response);
 		this.application = (Application) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 	}
 
@@ -103,15 +104,6 @@ public class ControllerData {
 	public String getSchoolYear() {
 		return request.getHeader(SCHOOL_YEAR_KEY);
 	}
-
-	public boolean hasSortAndOrderBy() {
-		return pageable.getSort() != null;
-	}
-
-	public Sort getSort() {
-		return pageable.getSort();
-	}
-
 	// Custom Methods - Basic_Single & Basic_Multi App
 
 
@@ -136,7 +128,7 @@ public class ControllerData {
 		return application;
 	}
 
-	public Pageable getPaging() {
+	public PagingData getPaging() {
 		return pageable;
 	}
 }

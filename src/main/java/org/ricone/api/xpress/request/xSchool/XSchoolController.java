@@ -34,7 +34,7 @@ public class XSchoolController extends BaseController {
 		else if(StringUtils.equalsIgnoreCase(request.getHeader("idType"), "local")) {
 			return service.findByLocalId(getMetaData(request, response), id);
 		}
-		throw new NotFoundException("Id: " + id + " is not a valid refId. You may be missing the 'idType' header.");
+		throw new NotFoundException("Id: " + id + " is not a valid refId. You may be missing the 'IdType' header.");
 	}
 
 	@XSchoolsACL.Get.All

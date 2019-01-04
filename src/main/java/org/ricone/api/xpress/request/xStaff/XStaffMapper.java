@@ -1,6 +1,7 @@
 package org.ricone.api.xpress.request.xStaff;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.BooleanUtils;
 import org.hibernate.MappingException;
 import org.ricone.api.core.model.Staff;
 import org.ricone.api.core.model.StaffAssignment;
@@ -64,7 +65,7 @@ public class XStaffMapper {
 
             //Email
             for (StaffEmail staffEmail : instance.getStaffEmails()) {
-                if(staffEmail.getPrimaryEmailAddressIndicator() != null && staffEmail.getPrimaryEmailAddressIndicator()) {
+                if(BooleanUtils.isTrue(staffEmail.getPrimaryEmailAddressIndicator())) {
                     Email email = mapEmail(staffEmail);
                     if(email != null) {
                         xStaff.setEmail(email);
@@ -100,7 +101,7 @@ public class XStaffMapper {
             //Assignments
             List<StaffPersonAssignment> assignmentList = new ArrayList<>();
             for (StaffAssignment assignment : instance.getStaffAssignments()) {
-                if(assignment.getPrimaryAssignment()) {
+                if(BooleanUtils.isTrue(assignment.getPrimaryAssignment())) {
                     PrimaryAssignment primaryAssignment = mapPrimaryAssignment(assignment);
                     if(primaryAssignment != null) {
                         xStaff.setPrimaryAssignment(primaryAssignment);

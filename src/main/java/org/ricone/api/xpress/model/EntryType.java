@@ -7,16 +7,16 @@
 
 package org.ricone.api.xpress.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.*;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 @JsonPropertyOrder({"code", "otherCode"})
 public class EntryType {
 
@@ -53,6 +53,11 @@ public class EntryType {
 	@JsonProperty("otherCode")
 	public void setOtherCode(List<OtherCode> otherCode) {
 		this.otherCode = otherCode;
+	}
+
+	@JsonIgnore
+	public boolean isEmptyObject() {
+		return Stream.of(code, otherCode).allMatch(Objects::isNull) || (StringUtils.isBlank(code) && otherCode.isEmpty());
 	}
 
 	@Override

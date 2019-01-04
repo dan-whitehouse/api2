@@ -99,26 +99,4 @@ public @interface XCalendarsACL {
 		@interface ByXSchool { }
 
 	}
-
-	@interface Head {
-		@Target(ElementType.METHOD)
-		@Retention(RetentionPolicy.RUNTIME)
-		@PreAuthorize("hasAuthority('head:/requests/xSchools')")
-		@interface ById { }
-
-		@Target(ElementType.METHOD)
-		@Retention(RetentionPolicy.RUNTIME)
-		@PreAuthorize("hasAuthority('head:/requests/xSchools')")
-		@interface All { }
-
-		@Target(ElementType.METHOD)
-		@Retention(RetentionPolicy.RUNTIME)
-		@PreAuthorize("hasAuthority('head:/requests/xLeas/{}/xSchools')")
-		@interface ByXLea { }
-
-		@Target(ElementType.METHOD)
-		@Retention(RetentionPolicy.RUNTIME)
-		@PreAuthorize("hasAuthority('head:/requests/xSchools/{}/xSchools')")
-		@interface ByXSchool { }
-	}
 }

@@ -99,9 +99,6 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
             if(pathPermission.getDelete()) {
                 grantedAuthorities.add(new SimpleGrantedAuthority("delete:" + pathPermission.getPath()));
             }
-            if(pathPermission.getHead()) {
-                grantedAuthorities.add(new SimpleGrantedAuthority("head:" + pathPermission.getPath()));
-            }
         });
         return grantedAuthorities;
     }

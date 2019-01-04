@@ -67,7 +67,6 @@ public class XCourseDAOImp extends BaseDAO implements XCourseDAO {
 		}
 		catch(NoResultException ignored) { }
 		return null;
-
 	}
 
 	@Override
@@ -382,8 +381,6 @@ public class XCourseDAOImp extends BaseDAO implements XCourseDAO {
 				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 			)
 		);
-		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
-
 		return em.createQuery(select).getSingleResult().intValue();
 	}
 
@@ -414,8 +411,6 @@ public class XCourseDAOImp extends BaseDAO implements XCourseDAO {
 				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 			)
 		);
-		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
-
 		return em.createQuery(select).getSingleResult().intValue();
 	}
 

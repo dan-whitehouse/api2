@@ -156,41 +156,4 @@ public @interface XStaffsACL {
 		@PreAuthorize("hasAuthority('delete:/requests/xStudents/{}/xStaffs')")
 		@interface ByXStudent { }
 	}
-
-	@interface Head {
-		@Target(ElementType.METHOD)
-		@Retention(RetentionPolicy.RUNTIME)
-		@PreAuthorize("hasAuthority('head:/requests/xStaffs')")
-		@interface ById { }
-
-		@Target(ElementType.METHOD)
-		@Retention(RetentionPolicy.RUNTIME)
-		@PreAuthorize("hasAuthority('head:/requests/xStaffs')")
-		@interface All { }
-
-		@Target(ElementType.METHOD)
-		@Retention(RetentionPolicy.RUNTIME)
-		@PreAuthorize("hasAuthority('head:/requests/xLeas/{}/xStaffs')")
-		@interface ByXLea { }
-
-		@Target(ElementType.METHOD)
-		@Retention(RetentionPolicy.RUNTIME)
-		@PreAuthorize("hasAuthority('head:/requests/xSchools/{}/xStaffs')")
-		@interface ByXSchool { }
-
-		@Target(ElementType.METHOD)
-		@Retention(RetentionPolicy.RUNTIME)
-		@PreAuthorize("hasAuthority('head:/requests/xCourses/{}/xStaffs')")
-		@interface ByXCourse { }
-
-		@Target(ElementType.METHOD)
-		@Retention(RetentionPolicy.RUNTIME)
-		@PreAuthorize("hasAuthority('head:/requests/xRosters/{}/xStaffs')")
-		@interface ByXRoster { }
-
-		@Target(ElementType.METHOD)
-		@Retention(RetentionPolicy.RUNTIME)
-		@PreAuthorize("hasAuthority('head:/requests/xStudents/{}/xStaffs')")
-		@interface ByXStudent { }
-	}
 }

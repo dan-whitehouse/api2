@@ -10,25 +10,38 @@ import java.util.List;
 class FakePermissionsLoader {
 	static List<PathPermission> getPathPermissions() {
 		return List.of(
-				new PathPermission("/requests/xLeas", true, true, false, true, true),
-				new PathPermission("/requests/xSchools/{}/xLeas", true, false, false, false, false),
-				new PathPermission("/requests/xSchools/{}/xLeas", true, false, false, false, false),
-				new PathPermission("/requests/xCalendars/{}/xLeas", true, false, false, false, false),
-				new PathPermission("/requests/xCourses/{}/xLeas", true, false, false, false, false),
-				new PathPermission("/requests/xRosters/{}/xLeas", true, false, false, false, false),
-				new PathPermission("/requests/xStaffs/{}/xLeas", true, false, false, false, false),
-				new PathPermission("/requests/xStudents/{}/xLeas", true, false, false, false, false),
-				new PathPermission("/requests/xContacts/{}/xLeas", true, false, false, false, false),
+				//Leas
+				new PathPermission("/requests/xLeas", true, true, false, true),
+				new PathPermission("/requests/xSchools/{}/xLeas", true, false, false, false),
+				new PathPermission("/requests/xSchools/{}/xLeas", true, false, false, false),
+				new PathPermission("/requests/xCalendars/{}/xLeas", true, false, false, false),
+				new PathPermission("/requests/xCourses/{}/xLeas", true, false, false, false),
+				new PathPermission("/requests/xRosters/{}/xLeas", true, false, false, false),
+				new PathPermission("/requests/xStaffs/{}/xLeas", true, false, false, false),
+				new PathPermission("/requests/xStudents/{}/xLeas", true, false, false, false),
+				new PathPermission("/requests/xContacts/{}/xLeas", true, false, false, false),
 
-				new PathPermission("/requests/xSchools", true, true, false, true, true),
+				//Schools
+				new PathPermission("/requests/xSchools", true, true, false, true),
 
-				new PathPermission("/requests/xCalendars", true, true, false, true, true),
+				//Calendars
+				new PathPermission("/requests/xCalendars", true, true, false, true),
 
-				new PathPermission("/requests/xCourses", true, true, false, true, true),
+				//Courses
+				new PathPermission("/requests/xCourses", true, true, false, true),
 
-				new PathPermission("/requests/xRosters", true, true, false, true, true),
+				//Rosters
+				new PathPermission("/requests/xRosters", true, true, false, true),
 
-				new PathPermission("/requests/xStaffs", true, true, false, true, true)
+				//Staffs
+				new PathPermission("/requests/xStaffs", true, true, false, true),
+				new PathPermission("/requests/xSchools/{}/xStaffs", true, true, false, true),
+
+				//Students
+				new PathPermission("/requests/xStudents", true, true, false, true),
+
+				//Contacts
+				new PathPermission("/requests/xContacts", true, true, false, true)
 		);
 	}
 }

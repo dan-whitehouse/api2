@@ -68,7 +68,7 @@ public class XSchoolMapper {
         for (SchoolTelephone telephone : instance.getSchoolTelephones()) {
             PhoneNumber phone = mapPhone(telephone);
             if(phone != null) {
-                if(telephone.getPrimaryTelephoneNumberIndicator()) {
+                if(BooleanUtils.isTrue(telephone.getPrimaryTelephoneNumberIndicator())) {
                     xSchool.setPhoneNumber(phone);
                 }
                 else {

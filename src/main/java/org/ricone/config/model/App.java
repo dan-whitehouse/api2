@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.BooleanUtils;
 import org.ricone.api.core.model.Lea;
 import org.ricone.api.core.model.School;
 import org.ricone.security.jwt.PathPermission;
@@ -208,6 +209,11 @@ public class App implements Serializable {
     @JsonProperty("includeExitedStudents")
     public void setIncludeExitedStudents(String includeExitedStudents) {
         this.includeExitedStudents = includeExitedStudents;
+    }
+
+    @JsonIgnore
+    public boolean includeExitedStudents() {
+        return BooleanUtils.toBoolean(includeExitedStudents);
     }
 
     @JsonProperty("providerSecret")

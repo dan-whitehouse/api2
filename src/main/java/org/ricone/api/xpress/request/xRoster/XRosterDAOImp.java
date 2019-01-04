@@ -25,7 +25,6 @@ public class XRosterDAOImp extends BaseDAO implements XRosterDAO {
 	private final String PRIMARY_KEY = "courseSectionRefId";
 	private final String SCHOOL_YEAR_KEY = "courseSectionSchoolYear";
 
-
 	@Override
 	public CourseSectionWrapper findByRefId(ControllerData metadata, String refId) throws NotFoundException {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -64,7 +63,6 @@ public class XRosterDAOImp extends BaseDAO implements XRosterDAO {
 		}
 		catch(NoResultException ignored) { }
 		return null;
-
 	}
 
 	@Override

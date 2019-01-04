@@ -22,8 +22,6 @@ public class PathPermission implements Serializable {
     private Boolean put;
     @JsonProperty("delete")
     private Boolean delete;
-    @JsonProperty("head")
-    private Boolean head;
     private final static long serialVersionUID = 8122198094551476636L;
 
     /**
@@ -32,13 +30,12 @@ public class PathPermission implements Serializable {
     public PathPermission() {
     }
 
-    public PathPermission(String path, Boolean get, Boolean post, Boolean put, Boolean delete, Boolean head) {
+    public PathPermission(String path, Boolean get, Boolean post, Boolean put, Boolean delete) {
         this.path = path;
         this.get = get;
         this.post = post;
         this.put = put;
         this.delete = delete;
-        this.head = head;
     }
 
     @JsonProperty("app_id")
@@ -101,14 +98,8 @@ public class PathPermission implements Serializable {
         this.delete = delete;
     }
 
-    @JsonProperty("head")
-    public Boolean getHead() {
-        return head;
+    @Override
+    public String toString() {
+        return "PathPermission{" + "appId='" + appId + '\'' + ", path='" + path + '\'' + ", get=" + get + ", post=" + post + ", put=" + put + ", delete=" + delete + '}';
     }
-
-    @JsonProperty("head")
-    public void setHead(Boolean head) {
-        this.head = head;
-    }
-
 }

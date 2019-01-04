@@ -69,7 +69,6 @@ public class XStaffDAOImp extends BaseDAO implements XStaffDAO {
 		}
 		catch(NoResultException ignored) { }
 		return null;
-
 	}
 
 	@Override

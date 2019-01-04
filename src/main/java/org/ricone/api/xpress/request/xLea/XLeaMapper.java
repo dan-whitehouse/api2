@@ -61,7 +61,7 @@ public class XLeaMapper {
         for (LeaTelephone telephone : instance.getLeaTelephones()) {
             PhoneNumber phone = mapPhone(telephone);
             if(phone != null) {
-                if(telephone.getPrimaryTelephoneNumberIndicator()) {
+                if(BooleanUtils.isTrue(telephone.getPrimaryTelephoneNumberIndicator())) {
                     xLea.setPhoneNumber(phone);
                 }
                 else {

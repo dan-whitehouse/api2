@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiOperation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ricone.api.xpress.component.BaseController;
+import org.ricone.api.xpress.component.ISO8601;
 import org.ricone.api.xpress.component.acl.XStaffsACL;
 import org.ricone.api.xpress.error.exception.NotFoundException;
 import org.ricone.api.xpress.model.XStaffResponse;
@@ -12,13 +13,11 @@ import org.ricone.api.xpress.model.XStaffsResponse;
 import org.ricone.api.xpress.util.ControllerUtil;
 import org.ricone.api.xpress.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
-import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -60,8 +59,9 @@ public class XStaffController extends BaseController {
 	@XStaffsACL.Get.ByXSchool
 	@ResponseBody @GetMapping(value = "/requests/xSchools/{refId}/xStaffs")
 	@ApiOperation(value = "Return all xStaffs by xSchool refId", tags = {"xStaffs"})
-	public XStaffsResponse getXStaffsByXSchool(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "refId") String refId, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Optional<LocalDateTime> changesSinceMarker) throws Exception {
+	public XStaffsResponse getXStaffsByXSchool(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "refId") String refId, @RequestParam @ISO8601 Optional<LocalDateTime> changesSinceMarker) throws Exception {
 		if(changesSinceMarker.isPresent()) {
+			logger.debug("THIS LOOKS LIKE A DATE: " + changesSinceMarker.get());
 			//Todo: Create service for getting AUPP
 		}
 		return service.findAllBySchool(getMetaData(request, response), refId);

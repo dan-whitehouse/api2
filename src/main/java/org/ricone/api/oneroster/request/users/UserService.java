@@ -3,8 +3,6 @@ package org.ricone.api.oneroster.request.users;
 import org.ricone.api.oneroster.model.UserResponse;
 import org.ricone.api.oneroster.model.UsersResponse;
 import org.ricone.api.xpress.component.ControllerData;
-import org.ricone.api.xpress.model.XLeaResponse;
-import org.ricone.api.xpress.model.XLeasResponse;
 
 public interface UserService {
 	UserResponse getUser(ControllerData metadata, String refId) throws Exception;

@@ -16,9 +16,9 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.List;
 
-@Service
 @Transactional
-public class CourseServiceImp implements CourseService {
+@Service("OneRoster:Courses:CourseService")
+class CourseServiceImp implements CourseService {
 	@Autowired private CourseDAO dao;
 	@Autowired private CourseMapper mapper;
 

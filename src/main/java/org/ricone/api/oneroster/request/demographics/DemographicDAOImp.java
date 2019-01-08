@@ -16,9 +16,9 @@ import javax.persistence.Query;
 import javax.persistence.criteria.*;
 import java.util.List;
 
-@Repository
+@Repository("OneRoster:Demographics:DemographicDAO")
 @SuppressWarnings({"unchecked", "unused"})
-public class DemographicDAOImp extends BaseDAO implements DemographicDAO {
+class DemographicDAOImp extends BaseDAO implements DemographicDAO {
 	@PersistenceContext private EntityManager em;
 	private Logger logger = LogManager.getLogger(DemographicDAOImp.class);
 	private final String PRIMARY_KEY = "studentRefId";
@@ -27,7 +27,6 @@ public class DemographicDAOImp extends BaseDAO implements DemographicDAO {
 
 	@Override
 	public StudentWrapper getDemographic(ControllerData metadata, String refId) {
-
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<StudentWrapper> select = cb.createQuery(StudentWrapper.class);
 		final Root<Student> from = select.from(Student.class);
@@ -81,7 +80,6 @@ public class DemographicDAOImp extends BaseDAO implements DemographicDAO {
             //If Paging - Set MetaData PagingInfo Total Objects
             metaData.getPaging().setTotalObjects(countAll(em, metaData));
         }*/
-
 
 		List<StudentWrapper> instance = q.getResultList();
 		initialize(instance);

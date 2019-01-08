@@ -5,14 +5,15 @@ import org.ricone.api.core.model.StudentCourseSection;
 import org.ricone.api.core.model.wrapper.StaffCourseSectionWrapper;
 import org.ricone.api.core.model.wrapper.StudentWrapper;
 import org.ricone.api.oneroster.model.*;
+import org.ricone.api.oneroster.util.MappingUtil;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
-public class TeacherMapper {
-    public TeacherMapper() {
+@Component("OneRoster:Enrollments:TeacherMapper")
+class TeacherMapper {
+    TeacherMapper() {
     }
 
     EnrollmentsResponse convert(List<StaffCourseSectionWrapper> instance) {
@@ -49,24 +50,9 @@ public class TeacherMapper {
         metadata.getAdditionalProperties().put("ricone.districtId", districtId);
         enrollment.setMetadata(metadata);
 
-        GUIDRef guidRefStudent = new GUIDRef();
-        guidRefStudent.setHref("http://localhost:8080/ims/oneroster/v1p1/students/");
-        guidRefStudent.setSourcedId(instance.getStaff().getStaffRefId());
-        guidRefStudent.setType(GUIDType.teacher);
-
-        GUIDRef guidRefClass = new GUIDRef();
-        guidRefClass.setHref("http://localhost:8080/ims/oneroster/v1p1/classes/");
-        guidRefClass.setSourcedId(instance.getCourseSection().getCourseSectionRefId());
-        guidRefClass.setType(GUIDType.clazz);
-
-        GUIDRef guidRefSchool = new GUIDRef();
-        guidRefSchool.setHref("http://localhost:8080/ims/oneroster/v1p1/schools/");
-        guidRefSchool.setSourcedId(instance.getCourseSection().getCourse().getSchool().getSchoolRefId());
-        guidRefSchool.setType(GUIDType.org);
-
-        enrollment.setUser(guidRefStudent);
-        enrollment.setClass_(guidRefClass);
-        enrollment.setSchool(guidRefSchool);
+        enrollment.setUser(MappingUtil.buildGUIDRef("students", instance.getStaff().getStaffRefId(), GUIDType.teacher));
+        enrollment.setClass_(MappingUtil.buildGUIDRef("classes", instance.getStaff().getStaffRefId(), GUIDType.clazz));
+        enrollment.setSchool(MappingUtil.buildGUIDRef("schools", instance.getStaff().getStaffRefId(), GUIDType.org));
         enrollment.setRole(RoleType.teacher);
         enrollment.setPrimary(instance.getTeacherOfRecord());
         enrollment.setBeginDate(null);

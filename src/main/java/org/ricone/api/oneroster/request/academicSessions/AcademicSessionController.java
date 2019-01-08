@@ -14,11 +14,10 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-public class AcademicSessionController {
-
+class AcademicSessionController {
 	@ResponseBody
 	@GetMapping(value = "/ims/oneroster/v1p1/academicSessions/{id}")
-	public AcademicSessionResponse getAcademicSession(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "id") String id) throws Exception {
+	AcademicSessionResponse getAcademicSession(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "id") String id) throws Exception {
 
 		AcademicSession academicSession = new AcademicSession();
 		academicSession.setTitle("Test");
@@ -32,7 +31,7 @@ public class AcademicSessionController {
 
 	@ResponseBody
 	@GetMapping(value = "/ims/oneroster/v1p1/academicSessions")
-	public AcademicSessionsResponse getAllAcademicSessions(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	AcademicSessionsResponse getAllAcademicSessions(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		AcademicSession academicSession1 = new AcademicSession();
 		academicSession1.setSourcedId(UUID.randomUUID().toString());
 		academicSession1.setStatus(StatusType.active);
@@ -74,31 +73,31 @@ public class AcademicSessionController {
 
 	@ResponseBody
 	@GetMapping(value = "/ims/oneroster/v1p1/terms/{id}")
-	public AcademicSessionResponse getTerm(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "id") String id) throws Exception {
+	AcademicSessionResponse getTerm(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "id") String id) throws Exception {
 		return null;
 	}
 
 	@ResponseBody
 	@GetMapping(value = "/ims/oneroster/v1p1/terms")
-	public AcademicSessionsResponse getAllTerms(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	AcademicSessionsResponse getAllTerms(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		return null;
 	}
 
 	@ResponseBody
 	@GetMapping(value = "/ims/oneroster/v1p1/gradingPeriods/{id}")
-	public AcademicSessionResponse getGradingPeriod(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "id") String id) throws Exception {
+	AcademicSessionResponse getGradingPeriod(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "id") String id) throws Exception {
 		return null;
 	}
 
 	@ResponseBody
 	@GetMapping(value = "/ims/oneroster/v1p1/gradingPeriods")
-	public AcademicSessionsResponse getAllGradingPeriods(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	AcademicSessionsResponse getAllGradingPeriods(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		return null;
 	}
 
 	@ResponseBody
 	@GetMapping(value = "/ims/oneroster/v1p1/terms/{id}/gradingPeriods")
-	public AcademicSessionsResponse getGradingPeriodsForTerm(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "id") String id) throws Exception {
+	AcademicSessionsResponse getGradingPeriodsForTerm(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "id") String id) throws Exception {
 		return null;
 	}
 }

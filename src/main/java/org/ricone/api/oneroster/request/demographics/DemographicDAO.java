@@ -5,8 +5,7 @@ import org.ricone.api.xpress.component.ControllerData;
 
 import java.util.List;
 
-public interface DemographicDAO {
-	/* Find */
+interface DemographicDAO {
 	StudentWrapper getDemographic(ControllerData metadata, String refId);
 
 	List<StudentWrapper> getAllDemographics(ControllerData metadata);

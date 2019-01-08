@@ -7,14 +7,15 @@ import org.ricone.api.core.model.wrapper.LeaWrapper;
 import org.ricone.api.core.model.wrapper.StudentWrapper;
 import org.ricone.api.oneroster.model.*;
 import org.ricone.api.oneroster.model.Metadata;
+import org.ricone.api.oneroster.util.MappingUtil;
 import org.ricone.api.xpress.model.*;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
 
-@Component
-public class StudentMapper {
-    public StudentMapper() {
+@Component("OneRoster:Users:StudentMapper")
+class StudentMapper {
+    StudentMapper() {
     }
 
     UsersResponse convert(List<StudentWrapper> instance) {
@@ -65,35 +66,28 @@ public class StudentMapper {
         //Orgs
         if(CollectionUtils.isNotEmpty(instance.getStudentEnrollments())) {
             instance.getStudentEnrollments().forEach(studentEnrollment -> {
-                String hrefSchool = "http://localhost:8080/ims/oneroster/v1p1/schools/" + studentEnrollment.getSchool().getSchoolRefId();
-                user.getOrgs().add(new GUIDRef(hrefSchool, studentEnrollment.getSchool().getSchoolRefId(), GUIDType.org));
-
-                String hrefLea = "http://localhost:8080/ims/oneroster/v1p1/orgs/" + studentEnrollment.getSchool().getLea().getLeaRefId();
-                user.getOrgs().add(new GUIDRef(hrefLea, studentEnrollment.getSchool().getLea().getLeaRefId(), GUIDType.org));
+                user.getOrgs().add(MappingUtil.buildGUIDRef("schools", studentEnrollment.getSchool().getSchoolRefId(), GUIDType.org));
+                user.getOrgs().add(MappingUtil.buildGUIDRef("orgs", studentEnrollment.getSchool().getLea().getLeaRefId(), GUIDType.org));
 
                 //Grades
                 user.getGrades().add(studentEnrollment.getCurrentGradeLevel());
             });
         }
 
-
         //Agents - ie: Contacts
         if(CollectionUtils.isNotEmpty(instance.getStudentEmails())) {
             instance.getStudentContactRelationships().forEach(studentContactRelationship -> {
                 if(studentContactRelationship.getStudentContact() != null) {
-                    String href = "http://localhost:8080/ims/oneroster/v1p1/users/" + studentContactRelationship.getStudentContact().getStudentContactRefId();
-                    user.getAgents().add(new GUIDRef(href, studentContactRelationship.getStudentContact().getStudentContactRefId(), GUIDType.user));
+                    user.getAgents().add(MappingUtil.buildGUIDRef("users", studentContactRelationship.getStudentContact().getStudentContactRefId(), GUIDType.user));
                 }
             });
         }
-
 
         //Email
         if(CollectionUtils.isNotEmpty(instance.getStudentEmails())) {
             Optional<StudentEmail> primaryEmail = instance.getStudentEmails().stream().filter(StudentEmail::getPrimaryEmailAddressIndicator).findFirst();
             primaryEmail.ifPresent(studentEmail -> user.setEmail(studentEmail.getEmailAddress()));
         }
-
 
         //Phone
         if(CollectionUtils.isNotEmpty(instance.getStudentTelephones())) {

@@ -16,9 +16,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-@Component
-public class DemographicMapper {
-    public DemographicMapper() {
+@Component("OneRoster:Demographics:DemographicMapper")
+class DemographicMapper {
+    DemographicMapper() {
     }
 
     DemographicsResponse convert(List<StudentWrapper> instance) {
@@ -86,7 +86,7 @@ public class DemographicMapper {
         return demographic;
     }
 
-    public static boolean containsRaceCode(Set<StudentRace> list, String raceCode) {
+    private static boolean containsRaceCode(Set<StudentRace> list, String raceCode) {
         for (StudentRace object : list) {
             if (StringUtils.equalsIgnoreCase(object.getRaceCode(), raceCode)) {
                 return true;

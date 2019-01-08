@@ -1,15 +1,10 @@
 package org.ricone.api.oneroster.request.enrollments;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.ricone.api.core.model.StudentCourseSection;
-import org.ricone.api.core.model.wrapper.StudentCourseSectionWrapper;
-import org.ricone.api.core.model.wrapper.StudentWrapper;
 import org.ricone.api.oneroster.error.exception.UnknownObjectException;
-import org.ricone.api.oneroster.model.*;
-import org.ricone.api.oneroster.request.demographics.DemographicDAO;
-import org.ricone.api.oneroster.request.demographics.DemographicMapper;
-import org.ricone.api.oneroster.request.demographics.DemographicService;
-
+import org.ricone.api.oneroster.model.Base;
+import org.ricone.api.oneroster.model.EnrollmentResponse;
+import org.ricone.api.oneroster.model.EnrollmentsResponse;
 import org.ricone.api.xpress.component.ControllerData;
 import org.ricone.api.xpress.error.exception.NoContentException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +12,10 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.Comparator;
-import java.util.List;
 
-@Service
 @Transactional
-public class EnrollmentServiceImp implements EnrollmentService {
+@Service("OneRoster:Enrollments:EnrollmentService")
+class EnrollmentServiceImp implements EnrollmentService {
 	@Autowired private StudentDAO studentDAO;
 	@Autowired private StudentMapper studentMapper;
 	@Autowired private TeacherDAO teacherDAO;
@@ -38,6 +32,7 @@ public class EnrollmentServiceImp implements EnrollmentService {
 		if(teacherResponse != null) {
 			return teacherResponse;
 		}
+
 		throw new UnknownObjectException();
 	}
 
@@ -70,7 +65,7 @@ public class EnrollmentServiceImp implements EnrollmentService {
 	}
 
 	@Override
-	public EnrollmentsResponse getEnrollmentsForClassInSchool(ControllerData metadata, String refId) throws Exception {
+	public EnrollmentsResponse getEnrollmentsForClassInSchool(ControllerData metadata, String schoolId, String classId) throws Exception {
 		return null;
 	}
 }

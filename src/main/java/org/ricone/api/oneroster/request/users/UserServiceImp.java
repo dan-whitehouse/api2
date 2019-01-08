@@ -14,9 +14,9 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.Comparator;
 
-@Service
 @Transactional
-public class UserServiceImp implements UserService {
+@Service("OneRoster:Users:UserService")
+class UserServiceImp implements UserService {
 	@Autowired private StudentDAO studentDAO;
 	@Autowired private TeacherDAO teacherDAO;
 	@Autowired private ContactDAO contactDAO;

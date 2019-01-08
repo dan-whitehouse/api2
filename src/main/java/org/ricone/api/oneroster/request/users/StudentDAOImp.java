@@ -16,9 +16,9 @@ import javax.persistence.Query;
 import javax.persistence.criteria.*;
 import java.util.List;
 
-@Repository
+@Repository("OneRoster:Users:StudentDAO")
 @SuppressWarnings({"unchecked", "unused"})
-public class StudentDAOImp extends BaseDAO implements StudentDAO {
+class StudentDAOImp extends BaseDAO implements StudentDAO {
 	@PersistenceContext private EntityManager em;
 	private Logger logger = LogManager.getLogger(StudentDAOImp.class);
 	private final String PRIMARY_KEY = "studentRefId";
@@ -27,7 +27,6 @@ public class StudentDAOImp extends BaseDAO implements StudentDAO {
 
 	@Override
 	public StudentWrapper getStudent(ControllerData metadata, String refId) {
-
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<StudentWrapper> select = cb.createQuery(StudentWrapper.class);
 		final Root<Student> from = select.from(Student.class);
@@ -90,17 +89,115 @@ public class StudentDAOImp extends BaseDAO implements StudentDAO {
 
 	@Override
 	public List<StudentWrapper> getStudentsForSchool(ControllerData metadata, String refId) {
-		return null;
+		final CriteriaBuilder cb = em.getCriteriaBuilder();
+		final CriteriaQuery<StudentWrapper> select = cb.createQuery(StudentWrapper.class);
+		final Root<Student> from = select.from(Student.class);
+		final SetJoin<Student, StudentEnrollment> studentEnrollments = (SetJoin<Student, StudentEnrollment>) from.<Student, StudentEnrollment>join(JOIN_STUDENT_ENROLLMENTS, JoinType.LEFT);
+		final SetJoin<StudentEnrollment, EntryExitCode> entryExitCodes = (SetJoin<StudentEnrollment, EntryExitCode>) studentEnrollments.<StudentEnrollment, EntryExitCode>join(JOIN_ENTRY_EXIT_CODES, JoinType.LEFT);
+		final Join<StudentEnrollment, School> school = studentEnrollments.join(JOIN_SCHOOL, JoinType.LEFT);
+		final Join<School, Lea> lea = school.join(JOIN_LEA, JoinType.LEFT);
+
+		select.distinct(true);
+		select.select(cb.construct(StudentWrapper.class, lea.get(ControllerData.LEA_LOCAL_ID), from));
+		select.where(
+			cb.and(
+				cb.equal(school.get("schoolRefId"), refId),
+				cb.equal(from.get(SCHOOL_YEAR_KEY), "2019"),
+				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			)
+		);
+		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
+
+		Query q = em.createQuery(select);
+        /*if (metaData.getPaging().isPaged()) {
+            q.setFirstResult((metaData.getPaging().getPageNumber()-1) * metaData.getPaging().getPageSize());
+            q.setMaxResults(metaData.getPaging().getPageSize());
+
+            //If Paging - Set MetaData PagingInfo Total Objects
+            metaData.getPaging().setTotalObjects(countAll(em, metaData));
+        }*/
+
+
+		List<StudentWrapper> instance = q.getResultList();
+		initialize(instance);
+		return instance;
 	}
 
 	@Override
 	public List<StudentWrapper> getStudentsForClass(ControllerData metadata, String refId) {
-		return null;
+		final CriteriaBuilder cb = em.getCriteriaBuilder();
+		final CriteriaQuery<StudentWrapper> select = cb.createQuery(StudentWrapper.class);
+		final Root<Student> from = select.from(Student.class);
+		final SetJoin<Student, StudentCourseSection> studentCourseSections = (SetJoin<Student, StudentCourseSection>) from.<Student, StudentCourseSection>join(JOIN_STUDENT_COURSE_SECTIONS, JoinType.LEFT);
+		final Join<StudentCourseSection, CourseSection> courseSection = studentCourseSections.join(JOIN_COURSE_SECTION, JoinType.LEFT);
+		final SetJoin<Student, StudentEnrollment> studentEnrollments = (SetJoin<Student, StudentEnrollment>) from.<Student, StudentEnrollment>join(JOIN_STUDENT_ENROLLMENTS, JoinType.LEFT);
+		final SetJoin<StudentEnrollment, EntryExitCode> entryExitCodes = (SetJoin<StudentEnrollment, EntryExitCode>) studentEnrollments.<StudentEnrollment, EntryExitCode>join(JOIN_ENTRY_EXIT_CODES, JoinType.LEFT);
+		final Join<StudentEnrollment, School> school = studentEnrollments.join(JOIN_SCHOOL, JoinType.LEFT);
+		final Join<School, Lea> lea = school.join(JOIN_LEA, JoinType.LEFT);
+
+		select.distinct(true);
+		select.select(cb.construct(StudentWrapper.class, lea.get(ControllerData.LEA_LOCAL_ID), from));
+		select.where(
+			cb.and(
+				cb.equal(courseSection.get("courseSectionRefId"), refId),
+				cb.equal(from.get(SCHOOL_YEAR_KEY), "2019"),
+				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			)
+		);
+		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
+
+		Query q = em.createQuery(select);
+        /*if (metaData.getPaging().isPaged()) {
+            q.setFirstResult((metaData.getPaging().getPageNumber()-1) * metaData.getPaging().getPageSize());
+            q.setMaxResults(metaData.getPaging().getPageSize());
+
+            //If Paging - Set MetaData PagingInfo Total Objects
+            metaData.getPaging().setTotalObjects(countAll(em, metaData));
+        }*/
+
+
+		List<StudentWrapper> instance = q.getResultList();
+		initialize(instance);
+		return instance;
 	}
 
 	@Override
 	public List<StudentWrapper> getStudentsForClassInSchool(ControllerData metadata, String refId, String classRefId) {
-		return null;
+		final CriteriaBuilder cb = em.getCriteriaBuilder();
+		final CriteriaQuery<StudentWrapper> select = cb.createQuery(StudentWrapper.class);
+		final Root<Student> from = select.from(Student.class);
+		final SetJoin<Student, StudentCourseSection> studentCourseSections = (SetJoin<Student, StudentCourseSection>) from.<Student, StudentCourseSection>join(JOIN_STUDENT_COURSE_SECTIONS, JoinType.LEFT);
+		final Join<StudentCourseSection, CourseSection> courseSection = studentCourseSections.join(JOIN_COURSE_SECTION, JoinType.LEFT);
+		final SetJoin<Student, StudentEnrollment> studentEnrollments = (SetJoin<Student, StudentEnrollment>) from.<Student, StudentEnrollment>join(JOIN_STUDENT_ENROLLMENTS, JoinType.LEFT);
+		final SetJoin<StudentEnrollment, EntryExitCode> entryExitCodes = (SetJoin<StudentEnrollment, EntryExitCode>) studentEnrollments.<StudentEnrollment, EntryExitCode>join(JOIN_ENTRY_EXIT_CODES, JoinType.LEFT);
+		final Join<StudentEnrollment, School> school = studentEnrollments.join(JOIN_SCHOOL, JoinType.LEFT);
+		final Join<School, Lea> lea = school.join(JOIN_LEA, JoinType.LEFT);
+
+		select.distinct(true);
+		select.select(cb.construct(StudentWrapper.class, lea.get(ControllerData.LEA_LOCAL_ID), from));
+		select.where(
+			cb.and(
+				cb.equal(school.get("schoolRefId"), refId),
+				cb.equal(courseSection.get("courseSectionRefId"), classRefId),
+				cb.equal(from.get(SCHOOL_YEAR_KEY), "2019"),
+				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			)
+		);
+		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
+
+		Query q = em.createQuery(select);
+        /*if (metaData.getPaging().isPaged()) {
+            q.setFirstResult((metaData.getPaging().getPageNumber()-1) * metaData.getPaging().getPageSize());
+            q.setMaxResults(metaData.getPaging().getPageSize());
+
+            //If Paging - Set MetaData PagingInfo Total Objects
+            metaData.getPaging().setTotalObjects(countAll(em, metaData));
+        }*/
+
+
+		List<StudentWrapper> instance = q.getResultList();
+		initialize(instance);
+		return instance;
 	}
 
 	/** Initialize **/

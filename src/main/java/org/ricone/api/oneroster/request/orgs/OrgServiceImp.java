@@ -17,9 +17,9 @@ import javax.transaction.Transactional;
 import java.util.Comparator;
 import java.util.List;
 
-@Service
 @Transactional
-public class OrgServiceImp implements OrgService {
+@Service("OneRoster:Orgs:OrgService")
+class OrgServiceImp implements OrgService {
 	@Autowired private DistrictDAO districtDAO;
 	@Autowired private SchoolDAO schoolDAO;
 	@Autowired private DistrictMapper districtMapper;

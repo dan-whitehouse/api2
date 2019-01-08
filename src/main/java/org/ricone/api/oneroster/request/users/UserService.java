@@ -4,7 +4,7 @@ import org.ricone.api.oneroster.model.UserResponse;
 import org.ricone.api.oneroster.model.UsersResponse;
 import org.ricone.api.xpress.component.ControllerData;
 
-public interface UserService {
+interface UserService {
 	UserResponse getUser(ControllerData metadata, String refId) throws Exception;
 
 	UsersResponse getAllUsers(ControllerData metadata) throws Exception;

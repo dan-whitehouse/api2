@@ -5,7 +5,7 @@ import org.ricone.api.xpress.component.ControllerData;
 
 import java.util.List;
 
-public interface StudentDAO {
+interface StudentDAO {
 	/* Find */
 	StudentWrapper getStudent(ControllerData metadata, String refId);
 

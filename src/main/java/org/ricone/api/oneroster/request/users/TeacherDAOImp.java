@@ -16,9 +16,9 @@ import javax.persistence.Query;
 import javax.persistence.criteria.*;
 import java.util.List;
 
-@Repository
+@Repository("OneRoster:Users:TeacherDAO")
 @SuppressWarnings({"unchecked", "unused"})
-public class TeacherDAOImp extends BaseDAO implements TeacherDAO {
+class TeacherDAOImp extends BaseDAO implements TeacherDAO {
 	@PersistenceContext private EntityManager em;
 	private Logger logger = LogManager.getLogger(StudentDAOImp.class);
 	private final String PRIMARY_KEY = "staffRefId";
@@ -85,17 +85,94 @@ public class TeacherDAOImp extends BaseDAO implements TeacherDAO {
 
 	@Override
 	public List<StaffWrapper> getTeachersForSchool(ControllerData metadata, String refId) {
-		return null;
+		final CriteriaBuilder cb = em.getCriteriaBuilder();
+		final CriteriaQuery<StaffWrapper> select = cb.createQuery(StaffWrapper.class);
+		final Root<Staff> from = select.from(Staff.class);
+		final SetJoin<Staff, StaffIdentifier> staffIdentifiers = (SetJoin<Staff, StaffIdentifier>) from.<Staff, StaffIdentifier>join(JOIN_STAFF_IDENTIFIERS, JoinType.LEFT);
+		final SetJoin<Staff, StaffEmail> staffEmails = (SetJoin<Staff, StaffEmail>) from.<Staff, StaffEmail>join(JOIN_STAFF_EMAILS, JoinType.LEFT);
+		final SetJoin<Staff, StaffAssignment> staffAssignments = (SetJoin<Staff, StaffAssignment>) from.<Staff, StaffAssignment>join(JOIN_STAFF_ASSIGNMENTS, JoinType.LEFT);
+		final Join<StaffAssignment, School> school = staffAssignments.join(JOIN_SCHOOL, JoinType.LEFT);
+		final Join<School, Lea> lea = school.join(JOIN_LEA, JoinType.LEFT);
+
+		select.distinct(true);
+		select.select(cb.construct(StaffWrapper.class, lea.get(ControllerData.LEA_LOCAL_ID), from));
+		select.where(
+			cb.and(
+				cb.equal(school.get("schoolRefId"), refId),
+				cb.equal(from.get(SCHOOL_YEAR_KEY), "2019"),
+				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			)
+		);
+		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
+
+		Query q = em.createQuery(select);
+
+		List<StaffWrapper> instance = q.getResultList();
+		initialize(instance);
+		return instance;
 	}
 
 	@Override
 	public List<StaffWrapper> getTeachersForClass(ControllerData metadata, String refId) {
-		return null;
+		final CriteriaBuilder cb = em.getCriteriaBuilder();
+		final CriteriaQuery<StaffWrapper> select = cb.createQuery(StaffWrapper.class);
+		final Root<Staff> from = select.from(Staff.class);
+		final SetJoin<Staff, StaffCourseSection> staffCourseSections = (SetJoin<Staff, StaffCourseSection>) from.<Staff, StaffCourseSection>join(JOIN_STAFF_COURSE_SECTIONS, JoinType.LEFT);
+		final Join<StaffCourseSection, CourseSection> courseSection = staffCourseSections.join(JOIN_COURSE_SECTION, JoinType.LEFT);
+		final SetJoin<Staff, StaffIdentifier> staffIdentifiers = (SetJoin<Staff, StaffIdentifier>) from.<Staff, StaffIdentifier>join(JOIN_STAFF_IDENTIFIERS, JoinType.LEFT);
+		final SetJoin<Staff, StaffEmail> staffEmails = (SetJoin<Staff, StaffEmail>) from.<Staff, StaffEmail>join(JOIN_STAFF_EMAILS, JoinType.LEFT);
+		final SetJoin<Staff, StaffAssignment> staffAssignments = (SetJoin<Staff, StaffAssignment>) from.<Staff, StaffAssignment>join(JOIN_STAFF_ASSIGNMENTS, JoinType.LEFT);
+		final Join<StaffAssignment, School> school = staffAssignments.join(JOIN_SCHOOL, JoinType.LEFT);
+		final Join<School, Lea> lea = school.join(JOIN_LEA, JoinType.LEFT);
+
+		select.distinct(true);
+		select.select(cb.construct(StaffWrapper.class, lea.get(ControllerData.LEA_LOCAL_ID), from));
+		select.where(
+			cb.and(
+				cb.equal(courseSection.get("courseSectionRefId"), refId),
+				cb.equal(from.get(SCHOOL_YEAR_KEY), "2019"),
+				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			)
+		);
+		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
+
+		Query q = em.createQuery(select);
+
+		List<StaffWrapper> instance = q.getResultList();
+		initialize(instance);
+		return instance;
 	}
 
 	@Override
 	public List<StaffWrapper> getTeachersForClassInSchool(ControllerData metadata, String schoolRefId, String classRefId) {
-		return null;
+		final CriteriaBuilder cb = em.getCriteriaBuilder();
+		final CriteriaQuery<StaffWrapper> select = cb.createQuery(StaffWrapper.class);
+		final Root<Staff> from = select.from(Staff.class);
+		final SetJoin<Staff, StaffCourseSection> staffCourseSections = (SetJoin<Staff, StaffCourseSection>) from.<Staff, StaffCourseSection>join(JOIN_STAFF_COURSE_SECTIONS, JoinType.LEFT);
+		final Join<StaffCourseSection, CourseSection> courseSection = staffCourseSections.join(JOIN_COURSE_SECTION, JoinType.LEFT);
+		final SetJoin<Staff, StaffIdentifier> staffIdentifiers = (SetJoin<Staff, StaffIdentifier>) from.<Staff, StaffIdentifier>join(JOIN_STAFF_IDENTIFIERS, JoinType.LEFT);
+		final SetJoin<Staff, StaffEmail> staffEmails = (SetJoin<Staff, StaffEmail>) from.<Staff, StaffEmail>join(JOIN_STAFF_EMAILS, JoinType.LEFT);
+		final SetJoin<Staff, StaffAssignment> staffAssignments = (SetJoin<Staff, StaffAssignment>) from.<Staff, StaffAssignment>join(JOIN_STAFF_ASSIGNMENTS, JoinType.LEFT);
+		final Join<StaffAssignment, School> school = staffAssignments.join(JOIN_SCHOOL, JoinType.LEFT);
+		final Join<School, Lea> lea = school.join(JOIN_LEA, JoinType.LEFT);
+
+		select.distinct(true);
+		select.select(cb.construct(StaffWrapper.class, lea.get(ControllerData.LEA_LOCAL_ID), from));
+		select.where(
+			cb.and(
+				cb.equal(school.get("schoolRefId"), schoolRefId),
+				cb.equal(courseSection.get("courseSectionRefId"), classRefId),
+				cb.equal(from.get(SCHOOL_YEAR_KEY), "2019"),
+				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			)
+		);
+		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
+
+		Query q = em.createQuery(select);
+
+		List<StaffWrapper> instance = q.getResultList();
+		initialize(instance);
+		return instance;
 	}
 
 	/** Initialize **/

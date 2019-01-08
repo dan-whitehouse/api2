@@ -5,15 +5,16 @@ import org.ricone.api.core.model.*;
 import org.ricone.api.core.model.wrapper.StaffWrapper;
 import org.ricone.api.core.model.wrapper.StudentWrapper;
 import org.ricone.api.oneroster.model.*;
+import org.ricone.api.oneroster.util.MappingUtil;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@Component
-public class TeacherMapper {
-	public TeacherMapper() {
+@Component("OneRoster:Users:TeacherMapper")
+class TeacherMapper {
+	TeacherMapper() {
 	}
 
 	UsersResponse convert(List<StaffWrapper> instance) {
@@ -64,11 +65,8 @@ public class TeacherMapper {
 		//Orgs
 		if(CollectionUtils.isNotEmpty(instance.getStaffAssignments())) {
 			instance.getStaffAssignments().forEach(sa -> {
-				String hrefSchool = "http://localhost:8080/ims/oneroster/v1p1/schools/" + sa.getSchool().getSchoolRefId();
-				user.getOrgs().add(new GUIDRef(hrefSchool, sa.getSchool().getSchoolRefId(), GUIDType.org));
-
-				String hrefLea = "http://localhost:8080/ims/oneroster/v1p1/orgs/" + sa.getSchool().getLea().getLeaRefId();
-				user.getOrgs().add(new GUIDRef(hrefLea, sa.getSchool().getLea().getLeaRefId(), GUIDType.org));
+				user.getOrgs().add(MappingUtil.buildGUIDRef("schools", sa.getSchool().getSchoolRefId(), GUIDType.org));
+				user.getOrgs().add(MappingUtil.buildGUIDRef("orgs", sa.getSchool().getLea().getLeaRefId(), GUIDType.org));
 			});
 		}
 

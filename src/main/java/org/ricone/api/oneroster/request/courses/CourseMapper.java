@@ -7,6 +7,7 @@ import org.ricone.api.core.model.Lea;
 import org.ricone.api.core.model.wrapper.CourseWrapper;
 import org.ricone.api.core.model.wrapper.LeaWrapper;
 import org.ricone.api.oneroster.model.*;
+import org.ricone.api.oneroster.util.MappingUtil;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -14,9 +15,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-@Component
-public class CourseMapper {
-    public CourseMapper() {
+@Component("OneRoster:Courses:CourseMapper")
+class CourseMapper {
+    CourseMapper() {
     }
 
     CoursesResponse convert(List<CourseWrapper> instance) {
@@ -67,13 +68,10 @@ public class CourseMapper {
         course.getSubjectCodes().add(instance.getSubjectCode());
 
         //School Year - AcademicSession Ref
-        String href1 = "http://localhost:8080/ims/oneroster/v1p1/academicSessions/" + instance.getSchool().getSchoolRefId();
-        course.setSchoolYear(new GUIDRef(href1, instance.getSchool().getSchoolRefId(), GUIDType.academicSession)); //TODO - Not Correct
+        course.setSchoolYear(MappingUtil.buildGUIDRef("academicSessions", instance.getSchool().getSchoolRefId(), GUIDType.academicSession)); //TODO - Not Correct
 
         //Org - School
-        String href2 = "http://localhost:8080/ims/oneroster/v1p1/schools/" + instance.getSchool().getSchoolRefId();
-        course.setOrg(new GUIDRef(href2, instance.getSchool().getSchoolRefId(), GUIDType.org));
-
+        course.setOrg(MappingUtil.buildGUIDRef("schools", instance.getSchool().getSchoolRefId(), GUIDType.org));
 
         return course;
     }

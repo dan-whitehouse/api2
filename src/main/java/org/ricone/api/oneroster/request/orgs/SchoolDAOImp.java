@@ -18,9 +18,9 @@ import javax.persistence.Query;
 import javax.persistence.criteria.*;
 import java.util.List;
 
-@Repository
+@Repository("OneRoster:Orgs:SchoolDAO")
 @SuppressWarnings({"unchecked", "unused", "RedundantTypeArguments"})
-public class SchoolDAOImp extends BaseDAO implements SchoolDAO {
+class SchoolDAOImp extends BaseDAO implements SchoolDAO {
 	@PersistenceContext private EntityManager em;
 	private Logger logger = LogManager.getLogger(SchoolDAOImp.class);
 	private final String PRIMARY_KEY = "schoolRefId";

@@ -15,9 +15,9 @@ import javax.persistence.Query;
 import javax.persistence.criteria.*;
 import java.util.List;
 
-@Repository
+@Repository("OneRoster:Users:ContactDAO")
 @SuppressWarnings({"unchecked", "unused", "RedundantTypeArguments"})
-public class ContactDAOImp extends BaseDAO implements ContactDAO {
+class ContactDAOImp extends BaseDAO implements ContactDAO {
 	@PersistenceContext private EntityManager em;
 	private final String PRIMARY_KEY = "studentContactRefId";
 	private final String SCHOOL_YEAR_KEY = "studentContactSchoolYear";

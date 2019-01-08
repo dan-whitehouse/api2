@@ -5,8 +5,7 @@ import org.ricone.api.xpress.component.ControllerData;
 
 import java.util.List;
 
-public interface TeacherDAO {
-	/* Find */
+interface TeacherDAO {
 	StaffWrapper getTeacher(ControllerData metadata, String refId);
 
 	List<StaffWrapper> getAllTeachers(ControllerData metadata);

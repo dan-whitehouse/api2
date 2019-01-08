@@ -8,15 +8,16 @@ import org.ricone.api.core.model.StudentTelephone;
 import org.ricone.api.core.model.wrapper.LeaWrapper;
 import org.ricone.api.core.model.wrapper.StudentWrapper;
 import org.ricone.api.oneroster.model.*;
+import org.ricone.api.oneroster.util.MappingUtil;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@Component
-public class DistrictMapper {
-    public DistrictMapper() {
+@Component("OneRoster:Orgs:DistrictMapper")
+class DistrictMapper {
+    DistrictMapper() {
     }
 
     OrgsResponse convert(List<LeaWrapper> instance) {
@@ -60,8 +61,7 @@ public class DistrictMapper {
         //Children - Schools
         if(CollectionUtils.isNotEmpty(instance.getSchools())) {
             instance.getSchools().forEach(school -> {
-                String href = "http://localhost:8080/ims/oneroster/v1p1/schools/" + school.getSchoolRefId();
-                org.getChildren().add(new GUIDRef(href, school.getSchoolRefId(), GUIDType.org));
+                org.getChildren().add(MappingUtil.buildGUIDRef("schools", school.getSchoolRefId(), GUIDType.org));
             });
         }
         return org;

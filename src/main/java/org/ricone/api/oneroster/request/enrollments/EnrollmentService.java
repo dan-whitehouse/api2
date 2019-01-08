@@ -6,12 +6,12 @@ import org.ricone.api.oneroster.model.UserResponse;
 import org.ricone.api.oneroster.model.UsersResponse;
 import org.ricone.api.xpress.component.ControllerData;
 
-public interface EnrollmentService {
+interface EnrollmentService {
 	EnrollmentResponse getEnrollment(ControllerData metadata, String refId) throws Exception;
 
 	EnrollmentsResponse getAllEnrollments(ControllerData metadata) throws Exception;
 
 	EnrollmentsResponse getEnrollmentsForSchool(ControllerData metadata, String refId) throws Exception;
 
-	EnrollmentsResponse getEnrollmentsForClassInSchool(ControllerData metadata, String refId) throws Exception;
+	EnrollmentsResponse getEnrollmentsForClassInSchool(ControllerData metadata, String schoolId, String classId) throws Exception;
 }

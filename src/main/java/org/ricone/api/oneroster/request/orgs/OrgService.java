@@ -6,7 +6,7 @@ import org.ricone.api.oneroster.model.UserResponse;
 import org.ricone.api.oneroster.model.UsersResponse;
 import org.ricone.api.xpress.component.ControllerData;
 
-public interface OrgService {
+interface OrgService {
 	OrgResponse getOrg(ControllerData metadata, String refId) throws Exception;
 
 	OrgsResponse getAllOrgs(ControllerData metadata) throws Exception;

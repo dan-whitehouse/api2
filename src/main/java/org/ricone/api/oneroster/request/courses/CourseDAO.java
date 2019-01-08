@@ -6,7 +6,7 @@ import org.ricone.api.xpress.component.ControllerData;
 
 import java.util.List;
 
-public interface CourseDAO {
+interface CourseDAO {
 	CourseWrapper getCourse(ControllerData metadata, String refId) throws Exception;
 
 	List<CourseWrapper> getAllCourses(ControllerData metadata) throws Exception;

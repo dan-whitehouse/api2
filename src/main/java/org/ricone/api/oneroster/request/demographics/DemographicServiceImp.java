@@ -13,9 +13,9 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.List;
 
-@Service
 @Transactional
-public class DemographicServiceImp implements DemographicService {
+@Service("OneRoster:Demographics:DemographicService")
+class DemographicServiceImp implements DemographicService {
 	@Autowired private DemographicDAO dao;
 	@Autowired private DemographicMapper mapper;
 

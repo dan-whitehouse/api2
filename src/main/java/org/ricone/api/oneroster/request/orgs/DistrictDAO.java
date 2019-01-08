@@ -7,7 +7,7 @@ import org.ricone.api.xpress.component.ControllerData;
 
 import java.util.List;
 
-public interface DistrictDAO {
+interface DistrictDAO {
 	LeaWrapper getDistrict(ControllerData metadata, String refId) throws Exception;
 
 	List<LeaWrapper> getAllDistricts(ControllerData metadata) throws Exception;

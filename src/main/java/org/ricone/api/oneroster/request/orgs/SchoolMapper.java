@@ -8,6 +8,7 @@ import org.ricone.api.core.model.SchoolIdentifier;
 import org.ricone.api.core.model.wrapper.LeaWrapper;
 import org.ricone.api.core.model.wrapper.SchoolWrapper;
 import org.ricone.api.oneroster.model.*;
+import org.ricone.api.oneroster.util.MappingUtil;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -15,9 +16,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-@Component
-public class SchoolMapper {
-    public SchoolMapper() {
+@Component("OneRoster:Orgs:SchoolMapper")
+class SchoolMapper {
+    SchoolMapper() {
     }
 
     OrgsResponse convert(List<SchoolWrapper> instance) {
@@ -59,8 +60,7 @@ public class SchoolMapper {
         org.setIdentifier(mapIdentifier(instance.getSchoolIdentifiers()));
 
         //Parent - District/Lea
-        String href = "http://localhost:8080/ims/oneroster/v1p1/orgs/" + instance.getLea().getLeaRefId();
-        org.setParent(new GUIDRef(href, instance.getLea().getLeaRefId(), GUIDType.org));
+        org.setParent(MappingUtil.buildGUIDRef("orgs", instance.getLea().getLeaRefId(), GUIDType.org));
 
         return org;
     }

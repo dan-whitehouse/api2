@@ -6,6 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.ricone.api.core.model.*;
 import org.ricone.api.core.model.wrapper.StudentContactWrapper;
 import org.ricone.api.oneroster.model.*;
+import org.ricone.api.oneroster.util.MappingUtil;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -13,9 +14,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-@Component
-public class ContactMapper {
-    public ContactMapper() {
+@Component("OneRoster:Users:ContactMapper")
+class ContactMapper {
+    ContactMapper() {
     }
 
     UsersResponse convert(List<StudentContactWrapper> instance) {
@@ -75,26 +76,20 @@ public class ContactMapper {
             });
         }*/
 
-
-
-
         //Agents - ie: Contacts
         if(CollectionUtils.isNotEmpty(instance.getStudentContactRelationships())) {
             instance.getStudentContactRelationships().forEach(scr -> {
                 if(scr.getStudent() != null) {
-                    String href = "http://localhost:8080/ims/oneroster/v1p1/students/" + scr.getStudent().getStudentRefId();
-                    user.getAgents().add(new GUIDRef(href, scr.getStudent().getStudentRefId(), GUIDType.user));
+                    user.getAgents().add(MappingUtil.buildGUIDRef("students", scr.getStudent().getStudentRefId(), GUIDType.user));
                 }
             });
         }
-
 
         //Email
         if(CollectionUtils.isNotEmpty(instance.getStudentContactEmails())) {
             Optional<StudentContactEmail> primaryEmail = instance.getStudentContactEmails().stream().filter(email -> BooleanUtils.isTrue(email.getPrimaryEmailAddressIndicator())).findFirst();
             primaryEmail.ifPresent(studentEmail -> user.setEmail(studentEmail.getEmailAddress()));
         }
-
 
         //Phone
         if(CollectionUtils.isNotEmpty(instance.getStudentContactTelephones())) {
@@ -113,6 +108,7 @@ public class ContactMapper {
     }
 
     private RoleType getRoleTypeFromRelationships(Set<StudentContactRelationship> studentContactRelationships) {
+        //TODO - This isn't completely correct.
         int parent;
         int guardian;
 

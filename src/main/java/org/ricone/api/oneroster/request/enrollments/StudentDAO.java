@@ -7,13 +7,12 @@ import org.ricone.api.xpress.component.ControllerData;
 
 import java.util.List;
 
-public interface StudentDAO {
-	/* Find */
+interface StudentDAO {
 	StudentCourseSectionWrapper getEnrollment(ControllerData metadata, String refId);
 
 	List<StudentCourseSectionWrapper> getAllEnrollments(ControllerData metadata);
 
 	List<StudentCourseSectionWrapper> getEnrollmentsForSchool(ControllerData metadata, String refId);
 
-	List<StudentCourseSectionWrapper> getEnrollmentsForClassInSchool(ControllerData metadata, String refId);
+	List<StudentCourseSectionWrapper> getEnrollmentsForClassInSchool(ControllerData metadata, String schoolId, String classId);
 }

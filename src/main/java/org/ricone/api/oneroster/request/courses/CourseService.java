@@ -6,7 +6,7 @@ import org.ricone.api.oneroster.model.OrgResponse;
 import org.ricone.api.oneroster.model.OrgsResponse;
 import org.ricone.api.xpress.component.ControllerData;
 
-public interface CourseService {
+interface CourseService {
 	CourseResponse getCourse(ControllerData metadata, String refId) throws Exception;
 
 	CoursesResponse getAllCourses(ControllerData metadata) throws Exception;

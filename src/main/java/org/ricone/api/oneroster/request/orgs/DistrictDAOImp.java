@@ -16,9 +16,9 @@ import javax.persistence.Query;
 import javax.persistence.criteria.*;
 import java.util.List;
 
-@Repository
+@Repository("OneRoster:Orgs:DistrictDAO")
 @SuppressWarnings({"unchecked", "unused", "RedundantTypeArguments"})
-public class DistrictDAOImp extends BaseDAO implements DistrictDAO {
+class DistrictDAOImp extends BaseDAO implements DistrictDAO {
 	@PersistenceContext private EntityManager em;
 	private final String PRIMARY_KEY = "leaRefId";
 	private final String SCHOOL_YEAR_KEY = "leaSchoolYear";

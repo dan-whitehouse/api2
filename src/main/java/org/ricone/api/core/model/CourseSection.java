@@ -18,12 +18,10 @@ public class CourseSection implements java.io.Serializable {
 	private static final long serialVersionUID = 2424737254871734955L;
 	
 	@Column(name = "CourseSectionRefId", unique = true, nullable = false, length = 64)
-	@Id
-    private String courseSectionRefId;
+	@Id private String courseSectionRefId;
 	
 	@Column(name = "CourseSectionSchoolYear", nullable = false, length = 6)
-	@Id
-    private Integer courseSectionSchoolYear;
+	@Id private Integer courseSectionSchoolYear;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumns({

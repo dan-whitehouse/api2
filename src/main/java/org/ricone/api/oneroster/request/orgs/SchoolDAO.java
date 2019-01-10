@@ -1,7 +1,7 @@
 package org.ricone.api.oneroster.request.orgs;
 
 import org.ricone.api.core.model.wrapper.SchoolWrapper;
-import org.ricone.api.xpress.component.ControllerData;
+import org.ricone.api.oneroster.component.ControllerData;
 
 import java.util.List;
 

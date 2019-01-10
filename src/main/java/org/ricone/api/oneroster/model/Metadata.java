@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.*;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -16,7 +17,7 @@ public class Metadata implements Serializable {
 	@JsonProperty("http://www.nbrs.org")
 	private String httpWwwNbrsOrg;
 	@JsonIgnore
-	private Map<String, Object> additionalProperties = new HashMap<>();
+	private LinkedHashMap<String, Object> additionalProperties = new LinkedHashMap<>();
 	private final static long serialVersionUID = -210985162537038327L;
 
 	/**

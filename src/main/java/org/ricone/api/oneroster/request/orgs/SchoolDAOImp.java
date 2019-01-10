@@ -6,9 +6,7 @@ import org.hibernate.Hibernate;
 import org.ricone.api.core.model.*;
 import org.ricone.api.core.model.wrapper.SchoolWrapper;
 import org.ricone.api.xpress.component.BaseDAO;
-import org.ricone.api.xpress.component.ControllerData;
-import org.ricone.api.xpress.error.exception.NotFoundException;
-import org.ricone.api.xpress.request.xSchool.XSchoolDAO;
+import org.ricone.api.oneroster.component.ControllerData;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -81,13 +79,10 @@ class SchoolDAOImp extends BaseDAO implements SchoolDAO {
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
 		Query q = em.createQuery(select);
-		/*if (metadata.getPaging().isPaged()) {
-			q.setFirstResult((metadata.getPaging().getPageNumber()-1) * metadata.getPaging().getPageSize());
-			q.setMaxResults(metadata.getPaging().getPageSize());
-
-			//Set ControllerData Paging Total Objects - Headers will no be included
-			metadata.getPaging().setTotalObjects(countAll(metadata));
-		}*/
+		if(metadata.getPaging().isPaged()) {
+			q.setFirstResult(metadata.getPaging().getOffset());
+			q.setMaxResults(metadata.getPaging().getLimit());
+		}
 
 		List<SchoolWrapper> instance = q.getResultList();
 		initialize(instance);

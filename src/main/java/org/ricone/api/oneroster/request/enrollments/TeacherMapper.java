@@ -44,20 +44,31 @@ class TeacherMapper {
         enrollment.setSourcedId(instance.getStaffCourseSectionRefId());
         enrollment.setStatus(StatusType.active);
         enrollment.setDateLastModified(null);
+        enrollment.setMetadata(mapMetadata(instance, districtId));
 
-        Metadata metadata = new Metadata();
-        metadata.getAdditionalProperties().put("ricone.schoolYear", instance.getStaffCourseSectionSchoolYear());
-        metadata.getAdditionalProperties().put("ricone.districtId", districtId);
-        enrollment.setMetadata(metadata);
-
-        enrollment.setUser(MappingUtil.buildGUIDRef("students", instance.getStaff().getStaffRefId(), GUIDType.teacher));
-        enrollment.setClass_(MappingUtil.buildGUIDRef("classes", instance.getStaff().getStaffRefId(), GUIDType.clazz));
-        enrollment.setSchool(MappingUtil.buildGUIDRef("schools", instance.getStaff().getStaffRefId(), GUIDType.org));
         enrollment.setRole(RoleType.teacher);
         enrollment.setPrimary(instance.getTeacherOfRecord());
         enrollment.setBeginDate(null);
         enrollment.setEndDate(null);
 
+        if(instance.getStaff() != null) {
+            enrollment.setUser(MappingUtil.buildGUIDRef("students", instance.getStaff().getStaffRefId(), GUIDType.teacher));
+        }
+
+        if(instance.getCourseSection() != null) {
+            enrollment.setClass_(MappingUtil.buildGUIDRef("classes", instance.getCourseSection().getCourseSectionRefId(), GUIDType.clazz));
+
+            if(instance.getCourseSection().getCourse() != null && instance.getCourseSection().getCourse().getSchool() != null) {
+                enrollment.setSchool(MappingUtil.buildGUIDRef("schools", instance.getCourseSection().getCourse().getSchool().getSchoolRefId(), GUIDType.org));
+            }
+        }
         return enrollment;
+    }
+
+    private Metadata mapMetadata(StaffCourseSection instance, String districtId) {
+        Metadata metadata = new Metadata();
+        metadata.getAdditionalProperties().put("ricone.schoolYear", instance.getStaffCourseSectionSchoolYear());
+        metadata.getAdditionalProperties().put("ricone.districtId", districtId);
+        return metadata;
     }
 }

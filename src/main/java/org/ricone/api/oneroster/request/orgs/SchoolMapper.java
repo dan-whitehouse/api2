@@ -49,20 +49,43 @@ class SchoolMapper {
         org.setSourcedId(instance.getSchoolRefId());
         org.setStatus(StatusType.active);
         org.setDateLastModified(null);
-
-        Metadata metadata = new Metadata();
-        metadata.getAdditionalProperties().put("ricone.schoolYear", instance.getSchoolSchoolYear());
-        metadata.getAdditionalProperties().put("ricone.districtId", districtId);
-        org.setMetadata(metadata);
+        org.setMetadata(mapMetadata(instance, districtId));
 
         org.setType(OrgType.school);
         org.setName(instance.getSchoolName());
-        org.setIdentifier(mapIdentifier(instance.getSchoolIdentifiers()));
+        org.setIdentifier(mapIdentifier(instance.getSchoolIdentifiers())); //TODO: Recommended we use the NCES Id
 
         //Parent - District/Lea
-        org.setParent(MappingUtil.buildGUIDRef("orgs", instance.getLea().getLeaRefId(), GUIDType.org));
-
+        if(instance.getLea() != null) {
+            org.setParent(MappingUtil.buildGUIDRef("orgs", instance.getLea().getLeaRefId(), GUIDType.org));
+        }
         return org;
+    }
+
+    private Metadata mapMetadata(School instance, String districtId) {
+        Metadata metadata = new Metadata();
+        metadata.getAdditionalProperties().put("ricone.schoolYear", instance.getSchoolSchoolYear());
+        metadata.getAdditionalProperties().put("ricone.districtId", districtId);
+
+        if(StringUtils.isNotBlank(instance.getStreetNumberAndName())) {
+            metadata.getAdditionalProperties().put("address1", instance.getStreetNumberAndName());
+        }
+        if(StringUtils.isNotBlank(instance.getLine2())) {
+            metadata.getAdditionalProperties().put("address2", instance.getLine2());
+        }
+        if(StringUtils.isNotBlank(instance.getCity())) {
+            metadata.getAdditionalProperties().put("city", instance.getCity());
+        }
+        if(StringUtils.isNotBlank(instance.getStateCode())) {
+            metadata.getAdditionalProperties().put("state", instance.getStateCode());
+        }
+        if(StringUtils.isNotBlank(instance.getPostalCode())) {
+            metadata.getAdditionalProperties().put("postCode", instance.getPostalCode());
+        }
+        if(StringUtils.isNotBlank(instance.getCountryCode())) {
+            metadata.getAdditionalProperties().put("country", instance.getCountryCode());
+        }
+        return metadata;
     }
 
     private String mapIdentifier(Set<SchoolIdentifier> schoolIdentifiers) {

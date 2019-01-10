@@ -74,8 +74,8 @@ class StudentDAOImp extends BaseDAO implements StudentDAO {
 
 		Query q = em.createQuery(select);
         /*if (metaData.getPaging().isPaged()) {
-            q.setFirstResult((metaData.getPaging().getPageNumber()-1) * metaData.getPaging().getPageSize());
-            q.setMaxResults(metaData.getPaging().getPageSize());
+            q.setFirstResult((metaData.getPaging().getOffset()-1) * metaData.getPaging().getLimit());
+            q.setMaxResults(metaData.getPaging().getLimit());
 
             //If Paging - Set MetaData PagingInfo Total Objects
             metaData.getPaging().setTotalObjects(countAll(em, metaData));
@@ -110,8 +110,8 @@ class StudentDAOImp extends BaseDAO implements StudentDAO {
 
 		Query q = em.createQuery(select);
         /*if (metaData.getPaging().isPaged()) {
-            q.setFirstResult((metaData.getPaging().getPageNumber()-1) * metaData.getPaging().getPageSize());
-            q.setMaxResults(metaData.getPaging().getPageSize());
+            q.setFirstResult((metaData.getPaging().getOffset()-1) * metaData.getPaging().getLimit());
+            q.setMaxResults(metaData.getPaging().getLimit());
 
             //If Paging - Set MetaData PagingInfo Total Objects
             metaData.getPaging().setTotalObjects(countAll(em, metaData));
@@ -148,8 +148,8 @@ class StudentDAOImp extends BaseDAO implements StudentDAO {
 
 		Query q = em.createQuery(select);
         /*if (metaData.getPaging().isPaged()) {
-            q.setFirstResult((metaData.getPaging().getPageNumber()-1) * metaData.getPaging().getPageSize());
-            q.setMaxResults(metaData.getPaging().getPageSize());
+            q.setFirstResult((metaData.getPaging().getOffset()-1) * metaData.getPaging().getLimit());
+            q.setMaxResults(metaData.getPaging().getLimit());
 
             //If Paging - Set MetaData PagingInfo Total Objects
             metaData.getPaging().setTotalObjects(countAll(em, metaData));
@@ -187,8 +187,8 @@ class StudentDAOImp extends BaseDAO implements StudentDAO {
 
 		Query q = em.createQuery(select);
         /*if (metaData.getPaging().isPaged()) {
-            q.setFirstResult((metaData.getPaging().getPageNumber()-1) * metaData.getPaging().getPageSize());
-            q.setMaxResults(metaData.getPaging().getPageSize());
+            q.setFirstResult((metaData.getPaging().getOffset()-1) * metaData.getPaging().getLimit());
+            q.setMaxResults(metaData.getPaging().getLimit());
 
             //If Paging - Set MetaData PagingInfo Total Objects
             metaData.getPaging().setTotalObjects(countAll(em, metaData));

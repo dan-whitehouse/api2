@@ -1,4 +1,4 @@
-package org.ricone.api.xpress.component;
+package org.ricone.api.oneroster.component;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

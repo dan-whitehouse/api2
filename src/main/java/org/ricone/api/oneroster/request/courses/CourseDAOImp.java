@@ -45,7 +45,6 @@ class CourseDAOImp extends BaseDAO implements CourseDAO {
 				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 			)
 		);
-		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
 		Query q = em.createQuery(select);
 		try {
@@ -79,8 +78,8 @@ class CourseDAOImp extends BaseDAO implements CourseDAO {
 
 		Query q = em.createQuery(select);
 		/*if (metadata.getPaging().isPaged()) {
-			q.setFirstResult((metadata.getPaging().getPageNumber()-1) * metadata.getPaging().getPageSize());
-			q.setMaxResults(metadata.getPaging().getPageSize());
+			q.setFirstResult((metadata.getPaging().getOffset()-1) * metadata.getPaging().getLimit());
+			q.setMaxResults(metadata.getPaging().getLimit());
 
 			//If Paging - Set ControllerData PagingInfo Total Objects
 			metadata.getPaging().setTotalObjects(countAll(metadata));
@@ -114,8 +113,8 @@ class CourseDAOImp extends BaseDAO implements CourseDAO {
 
 		Query q = em.createQuery(select);
 		/*if (metadata.getPaging().isPaged()) {
-			q.setFirstResult((metadata.getPaging().getPageNumber()-1) * metadata.getPaging().getPageSize());
-			q.setMaxResults(metadata.getPaging().getPageSize());
+			q.setFirstResult((metadata.getPaging().getOffset()-1) * metadata.getPaging().getLimit());
+			q.setMaxResults(metadata.getPaging().getLimit());
 
 			//If Paging - Set ControllerData PagingInfo Total Objects
 			metadata.getPaging().setTotalObjects(countAllBySchoolRefId(metadata, refId));

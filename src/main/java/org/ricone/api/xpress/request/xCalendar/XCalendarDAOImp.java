@@ -57,7 +57,6 @@ public class XCalendarDAOImp extends BaseDAO implements XCalendarDAO {
 				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 			)
 		);
-		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
 		Query q = em.createQuery(select);
 		try {

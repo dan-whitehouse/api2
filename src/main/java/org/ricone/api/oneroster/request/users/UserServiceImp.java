@@ -45,26 +45,26 @@ class UserServiceImp implements UserService {
 
 	@Override
 	public UsersResponse getAllUsers(ControllerData metadata) throws Exception {
-		UsersResponse usersResponse = new UsersResponse();
+		UsersResponse response = new UsersResponse();
 		UsersResponse studentsResponse = studentMapper.convert(studentDAO.getAllStudents(metadata));
 		UsersResponse teachersResponse = teacherMapper.convert(teacherDAO.getAllTeachers(metadata));
 		UsersResponse contactsResponse = contactMapper.convert(contactDAO.getAllContacts(metadata));
 
 		if(CollectionUtils.isNotEmpty(studentsResponse.getUsers())) {
-			usersResponse.getUsers().addAll(studentsResponse.getUsers());
+			response.getUsers().addAll(studentsResponse.getUsers());
 		}
 
 		if(CollectionUtils.isNotEmpty(teachersResponse.getUsers())) {
-			usersResponse.getUsers().addAll(teachersResponse.getUsers());
+			response.getUsers().addAll(teachersResponse.getUsers());
 		}
 
 		if(CollectionUtils.isNotEmpty(contactsResponse.getUsers())) {
-			usersResponse.getUsers().addAll(contactsResponse.getUsers());
+			response.getUsers().addAll(contactsResponse.getUsers());
 		}
 
 		//Sort On RefId
-		usersResponse.getUsers().sort(Comparator.comparing(Base::getSourcedId));
-		return usersResponse;
+		response.getUsers().sort(Comparator.comparing(Base::getSourcedId));
+		return response;
 	}
 
 	@Override

@@ -3,16 +3,15 @@ package org.ricone.api.oneroster.request.classes;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Hibernate;
-import org.ricone.api.core.model.Course;
-import org.ricone.api.core.model.CourseSection;
-import org.ricone.api.core.model.Lea;
-import org.ricone.api.core.model.School;
+import org.ricone.api.core.model.*;
 import org.ricone.api.core.model.wrapper.CourseSectionWrapper;
+import org.ricone.api.core.model.wrapper.CourseWrapper;
 import org.ricone.api.xpress.component.BaseDAO;
 import org.ricone.api.xpress.component.ControllerData;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.criteria.*;
@@ -28,6 +27,30 @@ class ClassDAOImp extends BaseDAO implements ClassDAO {
 
 	@Override
 	public CourseSectionWrapper getClass(ControllerData metadata, String refId) throws Exception {
+		final CriteriaBuilder cb = em.getCriteriaBuilder();
+		final CriteriaQuery<CourseSectionWrapper> select = cb.createQuery(CourseSectionWrapper.class);
+		final Root<CourseSection> from = select.from(CourseSection.class);
+		final Join<CourseSection, Course> course = from.join(JOIN_COURSE, JoinType.LEFT);
+		final Join<Course, School> school = course.join(JOIN_SCHOOL, JoinType.LEFT);
+		final Join<School, Lea> lea = school.join(JOIN_LEA, JoinType.LEFT);
+
+		select.distinct(true);
+		select.select(cb.construct(CourseSectionWrapper.class, lea.get(ControllerData.LEA_LOCAL_ID), from));
+		select.where(
+			cb.and(
+				cb.equal(from.get(PRIMARY_KEY), refId),
+				cb.equal(from.get(SCHOOL_YEAR_KEY), "2019"),
+				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			)
+		);
+
+		Query q = em.createQuery(select);
+		try {
+			CourseSectionWrapper instance = (CourseSectionWrapper) q.getSingleResult();
+			initialize(instance);
+			return instance;
+		}
+		catch(NoResultException ignored) { }
 		return null;
 	}
 
@@ -52,8 +75,8 @@ class ClassDAOImp extends BaseDAO implements ClassDAO {
 
 		Query q = em.createQuery(select);
 		/*if (metadata.getPaging().isPaged()) {
-			q.setFirstResult((metadata.getPaging().getPageNumber()-1) * metadata.getPaging().getPageSize());
-			q.setMaxResults(metadata.getPaging().getPageSize());
+			q.setFirstResult((metadata.getPaging().getOffset()-1) * metadata.getPaging().getLimit());
+			q.setMaxResults(metadata.getPaging().getLimit());
 
 			//If Paging - Set ControllerData PagingInfo Total Objects
 			metadata.getPaging().setTotalObjects(countAll(metadata));
@@ -71,27 +94,186 @@ class ClassDAOImp extends BaseDAO implements ClassDAO {
 
 	@Override
 	public List<CourseSectionWrapper> getClassesForCourse(ControllerData metadata, String refId) throws Exception {
-		return null;
-	}
+		final CriteriaBuilder cb = em.getCriteriaBuilder();
+		final CriteriaQuery<CourseSectionWrapper> select = cb.createQuery(CourseSectionWrapper.class);
+		final Root<CourseSection> from = select.from(CourseSection.class);
+		final Join<CourseSection, Course> course = from.join(JOIN_COURSE, JoinType.LEFT);
+		final Join<Course, School> school = course.join(JOIN_SCHOOL, JoinType.LEFT);
+		final Join<School, Lea> lea = school.join(JOIN_LEA, JoinType.LEFT);
 
-	@Override
-	public List<CourseSectionWrapper> getClassesForStudent(ControllerData metadata, String refId) throws Exception {
-		return null;
-	}
+		select.distinct(true);
+		select.select(cb.construct(CourseSectionWrapper.class, lea.get(ControllerData.LEA_LOCAL_ID), from));
+		select.where(
+			cb.and(
+				cb.equal(course.get("courseRefId"), refId),
+				cb.equal(from.get(SCHOOL_YEAR_KEY), "2019"),
+				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			)
+		);
+		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
-	@Override
-	public List<CourseSectionWrapper> getClassesForTeacher(ControllerData metadata, String refId) throws Exception {
-		return null;
+		Query q = em.createQuery(select);
+		/*if (metadata.getPaging().isPaged()) {
+			q.setFirstResult((metadata.getPaging().getOffset()-1) * metadata.getPaging().getLimit());
+			q.setMaxResults(metadata.getPaging().getLimit());
+
+			//If Paging - Set ControllerData PagingInfo Total Objects
+			metadata.getPaging().setTotalObjects(countAll(metadata));
+		}*/
+
+		List<CourseSectionWrapper> instance = q.getResultList();
+		initialize(instance);
+		return instance;
 	}
 
 	@Override
 	public List<CourseSectionWrapper> getClassesForSchool(ControllerData metadata, String refId) throws Exception {
-		return null;
+		final CriteriaBuilder cb = em.getCriteriaBuilder();
+		final CriteriaQuery<CourseSectionWrapper> select = cb.createQuery(CourseSectionWrapper.class);
+		final Root<CourseSection> from = select.from(CourseSection.class);
+		final Join<CourseSection, Course> course = from.join(JOIN_COURSE, JoinType.LEFT);
+		final Join<Course, School> school = course.join(JOIN_SCHOOL, JoinType.LEFT);
+		final Join<School, Lea> lea = school.join(JOIN_LEA, JoinType.LEFT);
+
+		select.distinct(true);
+		select.select(cb.construct(CourseSectionWrapper.class, lea.get(ControllerData.LEA_LOCAL_ID), from));
+		select.where(
+				cb.and(
+						cb.equal(school.get("schoolRefId"), refId),
+						cb.equal(from.get(SCHOOL_YEAR_KEY), "2019"),
+						lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+				)
+		);
+		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
+
+		Query q = em.createQuery(select);
+		/*if (metadata.getPaging().isPaged()) {
+			q.setFirstResult((metadata.getPaging().getOffset()-1) * metadata.getPaging().getLimit());
+			q.setMaxResults(metadata.getPaging().getLimit());
+
+			//If Paging - Set ControllerData PagingInfo Total Objects
+			metadata.getPaging().setTotalObjects(countAll(metadata));
+		}*/
+
+		List<CourseSectionWrapper> instance = q.getResultList();
+		initialize(instance);
+		return instance;
+	}
+
+	@Override
+	public List<CourseSectionWrapper> getClassesForStudent(ControllerData metadata, String refId) throws Exception {
+		final CriteriaBuilder cb = em.getCriteriaBuilder();
+		final CriteriaQuery<CourseSectionWrapper> select = cb.createQuery(CourseSectionWrapper.class);
+		final Root<CourseSection> from = select.from(CourseSection.class);
+		final Join<CourseSection, StudentCourseSection> studentCourseSection = from.join(JOIN_STUDENT_COURSE_SECTIONS, JoinType.LEFT);
+		final Join<StudentCourseSection, Student> student = studentCourseSection.join(JOIN_STUDENT, JoinType.LEFT);
+		final Join<CourseSection, Course> course = from.join(JOIN_COURSE, JoinType.LEFT);
+		final Join<Course, School> school = course.join(JOIN_SCHOOL, JoinType.LEFT);
+		final Join<School, Lea> lea = school.join(JOIN_LEA, JoinType.LEFT);
+
+		select.distinct(true);
+		select.select(cb.construct(CourseSectionWrapper.class, lea.get(ControllerData.LEA_LOCAL_ID), from));
+		select.where(
+			cb.and(
+				cb.equal(student.get("studentRefId"), refId),
+				cb.equal(from.get(SCHOOL_YEAR_KEY), "2019"),
+				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			)
+		);
+		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
+
+		Query q = em.createQuery(select);
+		/*if (metadata.getPaging().isPaged()) {
+			q.setFirstResult((metadata.getPaging().getOffset()-1) * metadata.getPaging().getLimit());
+			q.setMaxResults(metadata.getPaging().getLimit());
+
+			//If Paging - Set ControllerData PagingInfo Total Objects
+			metadata.getPaging().setTotalObjects(countAll(metadata));
+		}*/
+
+		List<CourseSectionWrapper> instance = q.getResultList();
+		initialize(instance);
+		return instance;
+	}
+
+	@Override
+	public List<CourseSectionWrapper> getClassesForTeacher(ControllerData metadata, String refId) throws Exception {
+		final CriteriaBuilder cb = em.getCriteriaBuilder();
+		final CriteriaQuery<CourseSectionWrapper> select = cb.createQuery(CourseSectionWrapper.class);
+		final Root<CourseSection> from = select.from(CourseSection.class);
+		final Join<CourseSection, StaffCourseSection> staffCourseSection = from.join(JOIN_STUDENT_COURSE_SECTIONS, JoinType.LEFT);
+		final Join<StaffCourseSection, Staff> staff = staffCourseSection.join(JOIN_STAFF, JoinType.LEFT);
+		final Join<CourseSection, Course> course = from.join(JOIN_COURSE, JoinType.LEFT);
+		final Join<Course, School> school = course.join(JOIN_SCHOOL, JoinType.LEFT);
+		final Join<School, Lea> lea = school.join(JOIN_LEA, JoinType.LEFT);
+
+		select.distinct(true);
+		select.select(cb.construct(CourseSectionWrapper.class, lea.get(ControllerData.LEA_LOCAL_ID), from));
+		select.where(
+			cb.and(
+				cb.equal(staff.get("staffRefId"), refId),
+				cb.equal(from.get(SCHOOL_YEAR_KEY), "2019"),
+				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			)
+		);
+		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
+
+		Query q = em.createQuery(select);
+		/*if (metadata.getPaging().isPaged()) {
+			q.setFirstResult((metadata.getPaging().getOffset()-1) * metadata.getPaging().getLimit());
+			q.setMaxResults(metadata.getPaging().getLimit());
+
+			//If Paging - Set ControllerData PagingInfo Total Objects
+			metadata.getPaging().setTotalObjects(countAll(metadata));
+		}*/
+
+		List<CourseSectionWrapper> instance = q.getResultList();
+		initialize(instance);
+		return instance;
 	}
 
 	@Override
 	public List<CourseSectionWrapper> getClassesForUser(ControllerData metadata, String refId) throws Exception {
-		return null;
+		final CriteriaBuilder cb = em.getCriteriaBuilder();
+		final CriteriaQuery<CourseSectionWrapper> select = cb.createQuery(CourseSectionWrapper.class);
+		final Root<CourseSection> from = select.from(CourseSection.class);
+
+		final Join<CourseSection, StudentCourseSection> studentCourseSection = from.join(JOIN_STUDENT_COURSE_SECTIONS, JoinType.LEFT);
+		final Join<StudentCourseSection, Student> student = studentCourseSection.join(JOIN_STUDENT, JoinType.LEFT);
+
+		final Join<CourseSection, StaffCourseSection> staffCourseSection = from.join(JOIN_STUDENT_COURSE_SECTIONS, JoinType.LEFT);
+		final Join<StaffCourseSection, Staff> staff = staffCourseSection.join(JOIN_STAFF, JoinType.LEFT);
+
+		final Join<CourseSection, Course> course = from.join(JOIN_COURSE, JoinType.LEFT);
+		final Join<Course, School> school = course.join(JOIN_SCHOOL, JoinType.LEFT);
+		final Join<School, Lea> lea = school.join(JOIN_LEA, JoinType.LEFT);
+
+		select.distinct(true);
+		select.select(cb.construct(CourseSectionWrapper.class, lea.get(ControllerData.LEA_LOCAL_ID), from));
+		select.where(
+			cb.and(
+				cb.or( //TODO - IDK if this works...
+					cb.equal(student.get("studentRefId"), refId),
+					cb.equal(staff.get("staffRefId"), refId)
+				),
+				cb.equal(from.get(SCHOOL_YEAR_KEY), "2019"),
+				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			)
+		);
+		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
+
+		Query q = em.createQuery(select);
+		/*if (metadata.getPaging().isPaged()) {
+			q.setFirstResult((metadata.getPaging().getOffset()-1) * metadata.getPaging().getLimit());
+			q.setMaxResults(metadata.getPaging().getLimit());
+
+			//If Paging - Set ControllerData PagingInfo Total Objects
+			metadata.getPaging().setTotalObjects(countAll(metadata));
+		}*/
+
+		List<CourseSectionWrapper> instance = q.getResultList();
+		initialize(instance);
+		return instance;
 	}
 
 	/** Initialize **/

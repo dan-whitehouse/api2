@@ -46,11 +46,7 @@ class StudentMapper {
         user.setSourcedId(instance.getStudentRefId());
         user.setStatus(StatusType.active);
         user.setDateLastModified(null);
-
-        Metadata metadata = new Metadata();
-        metadata.getAdditionalProperties().put("ricone.schoolYear", instance.getStudentSchoolYear());
-        metadata.getAdditionalProperties().put("ricone.districtId", districtId);
-        user.setMetadata(metadata);
+        user.setMetadata(mapMetadata(instance, districtId));
 
         user.setRole(RoleType.student);
         user.setGivenName(instance.getFirstName());
@@ -65,12 +61,32 @@ class StudentMapper {
 
         //Orgs
         if(CollectionUtils.isNotEmpty(instance.getStudentEnrollments())) {
-            instance.getStudentEnrollments().forEach(studentEnrollment -> {
-                user.getOrgs().add(MappingUtil.buildGUIDRef("schools", studentEnrollment.getSchool().getSchoolRefId(), GUIDType.org));
-                user.getOrgs().add(MappingUtil.buildGUIDRef("orgs", studentEnrollment.getSchool().getLea().getLeaRefId(), GUIDType.org));
+            Set<String> gradeLevels = new HashSet<>();
+            Set<String> schools = new HashSet<>();
+            Set<String> districts = new HashSet<>();
 
-                //Grades
-                user.getGrades().add(studentEnrollment.getCurrentGradeLevel());
+            instance.getStudentEnrollments().forEach(studentEnrollment -> {
+                gradeLevels.add(studentEnrollment.getCurrentGradeLevel());
+
+                if(studentEnrollment.getSchool() != null) {
+                    schools.add(studentEnrollment.getSchool().getSchoolRefId());
+
+                    if(studentEnrollment.getSchool().getLea() != null) {
+                        districts.add(studentEnrollment.getSchool().getLea().getLeaRefId());
+                    }
+                }
+            });
+
+            schools.forEach(schoolRefId -> {
+                user.getOrgs().add(MappingUtil.buildGUIDRef("schools", schoolRefId, GUIDType.org));
+            });
+
+            districts.forEach(districtRefId -> {
+                user.getOrgs().add(MappingUtil.buildGUIDRef("orgs", districtRefId, GUIDType.org));
+            });
+
+            gradeLevels.forEach(gradeLevel -> {
+                user.getGrades().add(gradeLevel);
             });
         }
 
@@ -98,10 +114,17 @@ class StudentMapper {
             smsPhone.ifPresent(studentTelephone -> user.setSms(studentTelephone.getTelephoneNumber()));
         }
 
-        //Identifiers
+        //UserIds
         if(CollectionUtils.isNotEmpty(instance.getStudentIdentifiers())) {
             instance.getStudentIdentifiers().forEach(si -> user.getUserIds().add(new UserId(si.getIdentificationSystemCode(), si.getStudentId())));
         }
         return user;
+    }
+
+    private Metadata mapMetadata(Student instance, String districtId) {
+        Metadata metadata = new Metadata();
+        metadata.getAdditionalProperties().put("ricone.schoolYear", instance.getStudentSchoolYear());
+        metadata.getAdditionalProperties().put("ricone.districtId", districtId);
+        return metadata;
     }
 }

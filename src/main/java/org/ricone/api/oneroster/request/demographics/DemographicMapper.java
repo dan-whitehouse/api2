@@ -49,11 +49,7 @@ class DemographicMapper {
         demographic.setSourcedId(instance.getStudentRefId());
         demographic.setStatus(StatusType.active);
         demographic.setDateLastModified(null);
-
-        Metadata metadata = new Metadata();
-        metadata.getAdditionalProperties().put("ricone.schoolYear", instance.getStudentSchoolYear());
-        metadata.getAdditionalProperties().put("ricone.districtId", districtId);
-        demographic.setMetadata(metadata);
+        demographic.setMetadata(mapMetadata(instance, districtId));
 
         //Birthdate
         if(instance.getBirthdate() != null) {
@@ -84,6 +80,13 @@ class DemographicMapper {
         demographic.setPublicSchoolResidenceStatus(null);
 
         return demographic;
+    }
+
+    private Metadata mapMetadata(Student instance, String districtId) {
+        Metadata metadata = new Metadata();
+        metadata.getAdditionalProperties().put("ricone.schoolYear", instance.getStudentSchoolYear());
+        metadata.getAdditionalProperties().put("ricone.districtId", districtId);
+        return metadata;
     }
 
     private static boolean containsRaceCode(Set<StudentRace> list, String raceCode) {

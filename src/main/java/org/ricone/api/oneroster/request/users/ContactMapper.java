@@ -9,10 +9,7 @@ import org.ricone.api.oneroster.model.*;
 import org.ricone.api.oneroster.util.MappingUtil;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Component("OneRoster:Users:ContactMapper")
 class ContactMapper {
@@ -47,14 +44,9 @@ class ContactMapper {
         user.setSourcedId(instance.getStudentContactRefId());
         user.setStatus(StatusType.active);
         user.setDateLastModified(null);
-
-        Metadata metadata = new Metadata();
-        metadata.getAdditionalProperties().put("ricone.schoolYear", instance.getStudentContactSchoolYear());
-        metadata.getAdditionalProperties().put("ricone.districtId", districtId);
-        user.setMetadata(metadata);
+        user.setMetadata(mapMetadata(instance, districtId));
 
         user.setRole(getRoleTypeFromRelationships(instance.getStudentContactRelationships()));
-
         user.setGivenName(instance.getFirstName());
         user.setFamilyName(instance.getLastName());
         user.setMiddleName(instance.getMiddleName());
@@ -66,15 +58,32 @@ class ContactMapper {
         //user.setEnabledUser();
 
         //Orgs
-        /*if(CollectionUtils.isNotEmpty(instance.getStudentEnrollments())) {
-            instance.getStudentEnrollments().forEach(studentEnrollment -> {
-                String hrefSchool = "http://localhost:8080/ims/oneroster/v1p1/schools/" + studentEnrollment.getSchool().getSchoolRefId();
-                user.getOrgs().add(new GUIDRef(hrefSchool, studentEnrollment.getSchool().getSchoolRefId(), GUIDType.org));
+        if(CollectionUtils.isNotEmpty(instance.getStudentContactRelationships())) {
+            Set<String> schools = new HashSet<>();
+            Set<String> districts = new HashSet<>();
 
-                String hrefLea = "http://localhost:8080/ims/oneroster/v1p1/orgs/" + studentEnrollment.getSchool().getLea().getLeaRefId();
-                user.getOrgs().add(new GUIDRef(hrefLea, studentEnrollment.getSchool().getLea().getLeaRefId(), GUIDType.org));
+            instance.getStudentContactRelationships().forEach(studentContactRelationship -> {
+                if(studentContactRelationship.getStudent() != null) {
+                    studentContactRelationship.getStudent().getStudentEnrollments().forEach(studentEnrollment -> {
+                        if(studentEnrollment.getSchool() != null) {
+                            schools.add(studentEnrollment.getSchool().getSchoolRefId());
+
+                            if(studentEnrollment.getSchool().getLea() != null) {
+                                districts.add(studentEnrollment.getSchool().getLea().getLeaRefId());
+                            }
+                        }
+                    });
+                }
             });
-        }*/
+
+            schools.forEach(schoolRefId -> {
+                user.getOrgs().add(MappingUtil.buildGUIDRef("schools", schoolRefId, GUIDType.org));
+            });
+
+            districts.forEach(districtRefId -> {
+                user.getOrgs().add(MappingUtil.buildGUIDRef("orgs", districtRefId, GUIDType.org));
+            });
+        }
 
         //Agents - ie: Contacts
         if(CollectionUtils.isNotEmpty(instance.getStudentContactRelationships())) {
@@ -100,11 +109,18 @@ class ContactMapper {
             smsPhone.ifPresent(telephone -> user.setSms(telephone.getTelephoneNumber()));
         }
 
-        //Identifiers
+        //UserIds
         if(CollectionUtils.isNotEmpty(instance.getStudentContactIdentifiers())) {
             instance.getStudentContactIdentifiers().forEach(si -> user.getUserIds().add(new UserId(si.getIdentificationSystemCode(), si.getStudentContactId())));
         }
         return user;
+    }
+
+    private Metadata mapMetadata(StudentContact instance, String districtId) {
+        Metadata metadata = new Metadata();
+        metadata.getAdditionalProperties().put("ricone.schoolYear", instance.getStudentContactSchoolYear());
+        metadata.getAdditionalProperties().put("ricone.districtId", districtId);
+        return metadata;
     }
 
     private RoleType getRoleTypeFromRelationships(Set<StudentContactRelationship> studentContactRelationships) {

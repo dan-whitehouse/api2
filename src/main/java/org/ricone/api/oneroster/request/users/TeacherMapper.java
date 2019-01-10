@@ -8,9 +8,7 @@ import org.ricone.api.oneroster.model.*;
 import org.ricone.api.oneroster.util.MappingUtil;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Component("OneRoster:Users:TeacherMapper")
 class TeacherMapper {
@@ -45,11 +43,7 @@ class TeacherMapper {
 		user.setSourcedId(instance.getStaffRefId());
 		user.setStatus(StatusType.active);
 		user.setDateLastModified(null);
-
-		Metadata metadata = new Metadata();
-		metadata.getAdditionalProperties().put("ricone.schoolYear", instance.getStaffSchoolYear());
-		metadata.getAdditionalProperties().put("ricone.districtId", districtId);
-		user.setMetadata(metadata);
+		user.setMetadata(mapMetadata(instance, districtId));
 
 		user.setRole(RoleType.teacher);
 		user.setGivenName(instance.getFirstName());
@@ -64,9 +58,25 @@ class TeacherMapper {
 
 		//Orgs
 		if(CollectionUtils.isNotEmpty(instance.getStaffAssignments())) {
+			Set<String> schools = new HashSet<>();
+			Set<String> districts = new HashSet<>();
+
 			instance.getStaffAssignments().forEach(sa -> {
-				user.getOrgs().add(MappingUtil.buildGUIDRef("schools", sa.getSchool().getSchoolRefId(), GUIDType.org));
-				user.getOrgs().add(MappingUtil.buildGUIDRef("orgs", sa.getSchool().getLea().getLeaRefId(), GUIDType.org));
+				if(sa.getSchool() != null) {
+					schools.add(sa.getSchool().getSchoolRefId());
+
+					if(sa.getSchool().getLea() != null) {
+						districts.add(sa.getSchool().getLea().getLeaRefId());
+					}
+				}
+			});
+
+			schools.forEach(schoolRefId -> {
+				user.getOrgs().add(MappingUtil.buildGUIDRef("schools", schoolRefId, GUIDType.org));
+			});
+
+			districts.forEach(districtRefId -> {
+				user.getOrgs().add(MappingUtil.buildGUIDRef("orgs", districtRefId, GUIDType.org));
 			});
 		}
 
@@ -76,11 +86,18 @@ class TeacherMapper {
 
 		//Phone
 
-		//Identifiers
+		//UserIds
 		instance.getStaffIdentifiers().forEach(staffIdentifier -> {
 			user.getUserIds().add(new UserId(staffIdentifier.getIdentificationSystemCode(), staffIdentifier.getStaffId()));
 		});
 
 		return user;
+	}
+
+	private Metadata mapMetadata(Staff instance, String districtId) {
+		Metadata metadata = new Metadata();
+		metadata.getAdditionalProperties().put("ricone.schoolYear", instance.getStaffSchoolYear());
+		metadata.getAdditionalProperties().put("ricone.districtId", districtId);
+		return metadata;
 	}
 }

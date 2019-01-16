@@ -8,9 +8,7 @@ import org.ricone.api.core.model.Lea;
 
 import javax.persistence.*;
 
-@Entity
-@Immutable
-@Table(name = "orgview")
+@Immutable @Entity @Table(name = "orgview")
 @Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 public class OrgView implements java.io.Serializable {
 	private static final long serialVersionUID = -2620417938122940193L;

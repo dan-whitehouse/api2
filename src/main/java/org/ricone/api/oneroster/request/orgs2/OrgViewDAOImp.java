@@ -25,7 +25,6 @@ class OrgViewDAOImp extends BaseDAO implements OrgViewDAO {
 	private final String PRIMARY_KEY = "leaRefId";
 	private final String SCHOOL_YEAR_KEY = "leaSchoolYear";
 
-
 	@Override
 	public OrgView getOrg(ControllerData metadata, String refId) throws Exception {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();

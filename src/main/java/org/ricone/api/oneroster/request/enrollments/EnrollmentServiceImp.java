@@ -5,7 +5,7 @@ import org.ricone.api.oneroster.error.exception.UnknownObjectException;
 import org.ricone.api.oneroster.model.Base;
 import org.ricone.api.oneroster.model.EnrollmentResponse;
 import org.ricone.api.oneroster.model.EnrollmentsResponse;
-import org.ricone.api.xpress.component.ControllerData;
+import org.ricone.api.oneroster.component.ControllerData;
 import org.ricone.api.xpress.error.exception.NoContentException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

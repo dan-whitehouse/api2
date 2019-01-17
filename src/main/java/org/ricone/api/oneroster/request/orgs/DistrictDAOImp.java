@@ -72,6 +72,7 @@ class DistrictDAOImp extends BaseDAO implements DistrictDAO {
 			q.setFirstResult(metadata.getPaging().getOffset());
 			q.setMaxResults(metadata.getPaging().getLimit());
 		}
+
 		List<LeaWrapper> instance = q.getResultList();
 		initialize(instance);
 		return instance;

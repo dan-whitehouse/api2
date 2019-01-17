@@ -6,7 +6,7 @@ import org.hibernate.Hibernate;
 import org.ricone.api.core.model.*;
 import org.ricone.api.core.model.wrapper.StudentWrapper;
 import org.ricone.api.xpress.component.BaseDAO;
-import org.ricone.api.xpress.component.ControllerData;
+import org.ricone.api.oneroster.component.ControllerData;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -73,13 +73,10 @@ class DemographicDAOImp extends BaseDAO implements DemographicDAO {
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
 		Query q = em.createQuery(select);
-        /*if (metaData.getPaging().isPaged()) {
-            q.setFirstResult((metaData.getPaging().getOffset()-1) * metaData.getPaging().getLimit());
-            q.setMaxResults(metaData.getPaging().getLimit());
-
-            //If Paging - Set MetaData PagingInfo Total Objects
-            metaData.getPaging().setTotalObjects(countAll(em, metaData));
-        }*/
+		if(metadata.getPaging().isPaged()) {
+			q.setFirstResult(metadata.getPaging().getOffset());
+			q.setMaxResults(metadata.getPaging().getLimit());
+		}
 
 		List<StudentWrapper> instance = q.getResultList();
 		initialize(instance);

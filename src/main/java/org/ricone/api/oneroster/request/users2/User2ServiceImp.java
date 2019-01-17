@@ -74,8 +74,8 @@ class User2ServiceImp implements User2Service {
 	}
 
 	@Override
-	public UsersResponse getStudentsForClassInSchool(ControllerData metadata, String refId, String classRefId) throws Exception {
-		List<UserView> instance = dao.getStudentsForClassInSchool(metadata, refId, classRefId);
+	public UsersResponse getStudentsForClassInSchool(ControllerData metadata, String schoolId, String classId) throws Exception {
+		List<UserView> instance = dao.getStudentsForClassInSchool(metadata, schoolId, classId);
 		if(CollectionUtils.isEmpty(instance)) {
 			throw new NoContentException();
 		}

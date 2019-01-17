@@ -2,9 +2,7 @@ package org.ricone.api.oneroster.request.academicSessions;
 
 import org.ricone.api.oneroster.model.AcademicSessionResponse;
 import org.ricone.api.oneroster.model.AcademicSessionsResponse;
-import org.ricone.api.oneroster.model.ClassResponse;
-import org.ricone.api.oneroster.model.ClassesResponse;
-import org.ricone.api.xpress.component.ControllerData;
+import org.ricone.api.oneroster.component.ControllerData;
 
 interface AcademicSessionService {
 	AcademicSessionResponse getAcademicSession(ControllerData metadata, String refId) throws Exception;

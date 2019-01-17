@@ -7,11 +7,9 @@ import org.ricone.api.core.model.Lea;
 import org.ricone.api.core.model.School;
 import org.ricone.api.core.model.SchoolCalendar;
 import org.ricone.api.core.model.SchoolCalendarSession;
-import org.ricone.api.core.model.wrapper.CourseSectionWrapper;
 import org.ricone.api.core.model.wrapper.SchoolCalendarSessionWrapper;
-import org.ricone.api.core.model.wrapper.SchoolCalendarWrapper;
 import org.ricone.api.xpress.component.BaseDAO;
-import org.ricone.api.xpress.component.ControllerData;
+import org.ricone.api.oneroster.component.ControllerData;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -78,13 +76,10 @@ class TermDAOImp extends BaseDAO implements TermDAO {
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
 		Query q = em.createQuery(select);
-		/*if (metadata.getPaging().isPaged()) {
-			q.setFirstResult((metadata.getPaging().getOffset()-1) * metadata.getPaging().getLimit());
+		if(metadata.getPaging().isPaged()) {
+			q.setFirstResult(metadata.getPaging().getOffset());
 			q.setMaxResults(metadata.getPaging().getLimit());
-
-			//If Paging - Set ControllerData PagingInfo Total Objects
-			metadata.getPaging().setTotalObjects(countAll(metadata));
-		}*/
+		}
 
 		List<SchoolCalendarSessionWrapper> instance = q.getResultList();
 		initialize(instance);

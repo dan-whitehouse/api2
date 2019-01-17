@@ -1,11 +1,11 @@
 package org.ricone.api.oneroster.request.demographics;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.ricone.api.core.model.wrapper.CourseWrapper;
 import org.ricone.api.core.model.wrapper.StudentWrapper;
 import org.ricone.api.oneroster.error.exception.UnknownObjectException;
-import org.ricone.api.oneroster.model.*;
-import org.ricone.api.xpress.component.ControllerData;
+import org.ricone.api.oneroster.model.DemographicResponse;
+import org.ricone.api.oneroster.model.DemographicsResponse;
+import org.ricone.api.oneroster.component.ControllerData;
 import org.ricone.api.xpress.error.exception.NoContentException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

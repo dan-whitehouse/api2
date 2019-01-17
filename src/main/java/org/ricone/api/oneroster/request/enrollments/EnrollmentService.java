@@ -2,9 +2,7 @@ package org.ricone.api.oneroster.request.enrollments;
 
 import org.ricone.api.oneroster.model.EnrollmentResponse;
 import org.ricone.api.oneroster.model.EnrollmentsResponse;
-import org.ricone.api.oneroster.model.UserResponse;
-import org.ricone.api.oneroster.model.UsersResponse;
-import org.ricone.api.xpress.component.ControllerData;
+import org.ricone.api.oneroster.component.ControllerData;
 
 interface EnrollmentService {
 	EnrollmentResponse getEnrollment(ControllerData metadata, String refId) throws Exception;

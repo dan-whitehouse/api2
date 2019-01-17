@@ -2,7 +2,7 @@ package org.ricone.api.oneroster.request.classes;
 
 import org.ricone.api.oneroster.model.ClassResponse;
 import org.ricone.api.oneroster.model.ClassesResponse;
-import org.ricone.api.xpress.component.BaseController;
+import org.ricone.api.oneroster.component.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

@@ -5,9 +5,8 @@ import org.apache.logging.log4j.Logger;
 import org.hibernate.Hibernate;
 import org.ricone.api.core.model.*;
 import org.ricone.api.core.model.wrapper.CourseSectionWrapper;
-import org.ricone.api.core.model.wrapper.CourseWrapper;
+import org.ricone.api.oneroster.component.ControllerData;
 import org.ricone.api.xpress.component.BaseDAO;
-import org.ricone.api.xpress.component.ControllerData;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -74,13 +73,10 @@ class ClassDAOImp extends BaseDAO implements ClassDAO {
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
 		Query q = em.createQuery(select);
-		/*if (metadata.getPaging().isPaged()) {
-			q.setFirstResult((metadata.getPaging().getOffset()-1) * metadata.getPaging().getLimit());
+		if(metadata.getPaging().isPaged()) {
+			q.setFirstResult(metadata.getPaging().getOffset());
 			q.setMaxResults(metadata.getPaging().getLimit());
-
-			//If Paging - Set ControllerData PagingInfo Total Objects
-			metadata.getPaging().setTotalObjects(countAll(metadata));
-		}*/
+		}
 
 		List<CourseSectionWrapper> instance = q.getResultList();
 		initialize(instance);
@@ -113,13 +109,10 @@ class ClassDAOImp extends BaseDAO implements ClassDAO {
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
 		Query q = em.createQuery(select);
-		/*if (metadata.getPaging().isPaged()) {
-			q.setFirstResult((metadata.getPaging().getOffset()-1) * metadata.getPaging().getLimit());
+		if(metadata.getPaging().isPaged()) {
+			q.setFirstResult(metadata.getPaging().getOffset());
 			q.setMaxResults(metadata.getPaging().getLimit());
-
-			//If Paging - Set ControllerData PagingInfo Total Objects
-			metadata.getPaging().setTotalObjects(countAll(metadata));
-		}*/
+		}
 
 		List<CourseSectionWrapper> instance = q.getResultList();
 		initialize(instance);
@@ -147,13 +140,10 @@ class ClassDAOImp extends BaseDAO implements ClassDAO {
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
 		Query q = em.createQuery(select);
-		/*if (metadata.getPaging().isPaged()) {
-			q.setFirstResult((metadata.getPaging().getOffset()-1) * metadata.getPaging().getLimit());
+		if(metadata.getPaging().isPaged()) {
+			q.setFirstResult(metadata.getPaging().getOffset());
 			q.setMaxResults(metadata.getPaging().getLimit());
-
-			//If Paging - Set ControllerData PagingInfo Total Objects
-			metadata.getPaging().setTotalObjects(countAll(metadata));
-		}*/
+		}
 
 		List<CourseSectionWrapper> instance = q.getResultList();
 		initialize(instance);
@@ -183,13 +173,10 @@ class ClassDAOImp extends BaseDAO implements ClassDAO {
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
 		Query q = em.createQuery(select);
-		/*if (metadata.getPaging().isPaged()) {
-			q.setFirstResult((metadata.getPaging().getOffset()-1) * metadata.getPaging().getLimit());
+		if(metadata.getPaging().isPaged()) {
+			q.setFirstResult(metadata.getPaging().getOffset());
 			q.setMaxResults(metadata.getPaging().getLimit());
-
-			//If Paging - Set ControllerData PagingInfo Total Objects
-			metadata.getPaging().setTotalObjects(countAll(metadata));
-		}*/
+		}
 
 		List<CourseSectionWrapper> instance = q.getResultList();
 		initialize(instance);
@@ -219,13 +206,10 @@ class ClassDAOImp extends BaseDAO implements ClassDAO {
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
 		Query q = em.createQuery(select);
-		/*if (metadata.getPaging().isPaged()) {
-			q.setFirstResult((metadata.getPaging().getOffset()-1) * metadata.getPaging().getLimit());
+		if(metadata.getPaging().isPaged()) {
+			q.setFirstResult(metadata.getPaging().getOffset());
 			q.setMaxResults(metadata.getPaging().getLimit());
-
-			//If Paging - Set ControllerData PagingInfo Total Objects
-			metadata.getPaging().setTotalObjects(countAll(metadata));
-		}*/
+		}
 
 		List<CourseSectionWrapper> instance = q.getResultList();
 		initialize(instance);
@@ -263,13 +247,10 @@ class ClassDAOImp extends BaseDAO implements ClassDAO {
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
 		Query q = em.createQuery(select);
-		/*if (metadata.getPaging().isPaged()) {
-			q.setFirstResult((metadata.getPaging().getOffset()-1) * metadata.getPaging().getLimit());
+		if(metadata.getPaging().isPaged()) {
+			q.setFirstResult(metadata.getPaging().getOffset());
 			q.setMaxResults(metadata.getPaging().getLimit());
-
-			//If Paging - Set ControllerData PagingInfo Total Objects
-			metadata.getPaging().setTotalObjects(countAll(metadata));
-		}*/
+		}
 
 		List<CourseSectionWrapper> instance = q.getResultList();
 		initialize(instance);

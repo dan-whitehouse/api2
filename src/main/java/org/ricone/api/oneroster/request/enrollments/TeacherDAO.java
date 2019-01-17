@@ -1,8 +1,7 @@
 package org.ricone.api.oneroster.request.enrollments;
 
 import org.ricone.api.core.model.wrapper.StaffCourseSectionWrapper;
-import org.ricone.api.core.model.wrapper.StudentCourseSectionWrapper;
-import org.ricone.api.xpress.component.ControllerData;
+import org.ricone.api.oneroster.component.ControllerData;
 
 import java.util.List;
 

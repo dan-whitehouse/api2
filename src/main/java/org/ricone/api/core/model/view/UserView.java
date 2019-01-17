@@ -63,10 +63,14 @@ public class UserView implements Serializable {
 	@Fetch(FetchMode.SELECT) @BatchSize(size = 20)
 	private Set<UserAgentView> userAgents = new HashSet<>(0);
 
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "userView")
+	@Fetch(FetchMode.SELECT) @BatchSize(size = 20)
+	private Set<UserClassView> userClasses = new HashSet<>(0);
+
 	public UserView() {
 	}
 
-	public UserView(String sourceId, Integer sourceSchoolYear, String role, Boolean enabledUser, String givenName, String familyName, String middleName, String identifier, String email, String phone, String sms, Set<UserIdentifierView> userIds, Set<UserOrgView> userOrgs, Set<UserAgentView> userAgents) {
+	public UserView(String sourceId, Integer sourceSchoolYear, String role, Boolean enabledUser, String givenName, String familyName, String middleName, String identifier, String email, String phone, String sms, Set<UserIdentifierView> userIds, Set<UserOrgView> userOrgs, Set<UserAgentView> userAgents, Set<UserClassView> userClasses) {
 		this.sourceId = sourceId;
 		this.sourceSchoolYear = sourceSchoolYear;
 		this.role = role;
@@ -81,6 +85,7 @@ public class UserView implements Serializable {
 		this.userIds = userIds;
 		this.userOrgs = userOrgs;
 		this.userAgents = userAgents;
+		this.userClasses = userClasses;
 	}
 
 	public String getSourceId() {

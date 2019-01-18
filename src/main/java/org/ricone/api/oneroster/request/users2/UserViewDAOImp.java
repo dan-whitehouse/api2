@@ -51,28 +51,34 @@ class UserViewDAOImp extends BaseDAO implements UserViewDAO {
 
 	@Override
 	public List<UserView> getAllUsers(ControllerData metadata) {
-		final CriteriaBuilder cb = em.getCriteriaBuilder();
-		final CriteriaQuery<UserView> select = cb.createQuery(UserView.class);
-		final Root<UserView> from = select.from(UserView.class);
+		try {
+			final CriteriaBuilder cb = em.getCriteriaBuilder();
+			final CriteriaQuery<UserView> select = cb.createQuery(UserView.class);
+			final Root<UserView> from = select.from(UserView.class);
 
-		select.distinct(true);
-		select.select(from);
-		select.where(
-			cb.and(
-				cb.equal(from.get(SCHOOL_YEAR_KEY), 2019)//,
-				//lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
-			)
-		);
-		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
+			select.distinct(true);
+			select.select(from);
+			select.where(
+					cb.and(
+							cb.equal(from.get(SCHOOL_YEAR_KEY), 2019)//,
+							//lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+					)
+			);
+			select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
 
-		Query q = em.createQuery(select);
-		if(metadata.getPaging().isPaged()) {
-			q.setFirstResult(metadata.getPaging().getOffset());
-			q.setMaxResults(metadata.getPaging().getLimit());
+			Query q = em.createQuery(select);
+			if(metadata.getPaging().isPaged()) {
+				q.setFirstResult(metadata.getPaging().getOffset());
+				q.setMaxResults(metadata.getPaging().getLimit());
+			}
+
+			List<UserView> instance = q.getResultList();
+			return instance;
 		}
-
-		List<UserView> instance = q.getResultList();
-		return instance;
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	@Override

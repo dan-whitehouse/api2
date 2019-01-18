@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @JsonPropertyOrder({"sourcedId", "status", "dateLastModified", "metadata", "role", "primary", "user", "class", "school", "beginDate", "endDate"})
@@ -21,9 +22,9 @@ public class Enrollment extends Base implements Serializable {
 	@JsonProperty("school")
 	private GUIDRef school;
 	@JsonProperty("beginDate")
-	private String beginDate;
+	private LocalDate beginDate;
 	@JsonProperty("endDate")
-	private String endDate;
+	private LocalDate endDate;
 	private final static long serialVersionUID = -471764017962444775L;
 
 	/**
@@ -41,7 +42,7 @@ public class Enrollment extends Base implements Serializable {
 	 * @param beginDate
 	 * @param user
 	 */
-	public Enrollment(RoleType role, Boolean primary, GUIDRef user, GUIDRef _class, GUIDRef school, String beginDate, String endDate) {
+	public Enrollment(RoleType role, Boolean primary, GUIDRef user, GUIDRef _class, GUIDRef school, LocalDate beginDate, LocalDate endDate) {
 		super();
 		this.role = role;
 		this.primary = primary;
@@ -103,22 +104,22 @@ public class Enrollment extends Base implements Serializable {
 	}
 
 	@JsonProperty("beginDate")
-	public String getBeginDate() {
+	public LocalDate getBeginDate() {
 		return beginDate;
 	}
 
 	@JsonProperty("beginDate")
-	public void setBeginDate(String beginDate) {
+	public void setBeginDate(LocalDate beginDate) {
 		this.beginDate = beginDate;
 	}
 
 	@JsonProperty("endDate")
-	public String getEndDate() {
+	public LocalDate getEndDate() {
 		return endDate;
 	}
 
 	@JsonProperty("endDate")
-	public void setEndDate(String endDate) {
+	public void setEndDate(LocalDate endDate) {
 		this.endDate = endDate;
 	}
 

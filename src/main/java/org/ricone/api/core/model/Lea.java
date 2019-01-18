@@ -19,12 +19,10 @@ public class Lea implements java.io.Serializable {
 	private static final long serialVersionUID = -2620417938122940193L;
 
 	@Column(name = "LEARefId", unique = true, nullable = false, length = 64)
-	@Id
-    private String leaRefId;
+	@Id private String leaRefId;
 
 	@Column(name = "LEASchoolYear", nullable = false, length = 6)
-	@Id
-    private Integer leaSchoolYear;
+	@Id private Integer leaSchoolYear;
 
 	@Column(name = "LEAId", length = 30)
 	private String leaId;

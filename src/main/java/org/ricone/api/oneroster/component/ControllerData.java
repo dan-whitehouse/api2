@@ -22,22 +22,25 @@ public class ControllerData {
 	private Logger logger = LogManager.getLogger(ControllerData.class);
 	public static final String LEA_LOCAL_ID = "leaId";
 	public static final String SCHOOL_YEAR_KEY = "SchoolYear";
-	private final String SORT = "sort";
-	private final String ORDER_BY = "orderBy";
 
 	/* MetaData Vars */
 	private HttpServletRequest request;
 	private HttpServletResponse response;
 	private PagingData pageable;
+	private SortingData sortable;
+	private FieldSelectionData fieldSelection;
+	private FilteringData filterable;
 	private String providerId;
 	private Application application;
-
 
 	public ControllerData(HttpServletRequest request, HttpServletResponse response) throws BadRequestException {
 		super();
 		this.request = request;
 		this.response = response;
 		this.pageable = new PagingData(request, response);
+		this.sortable = new SortingData(request);
+		this.fieldSelection = new FieldSelectionData(request);
+		this.filterable = new FilteringData(request);
 		this.application = (Application) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 	}
 
@@ -87,5 +90,13 @@ public class ControllerData {
 
 	public PagingData getPaging() {
 		return pageable;
+	}
+
+	public SortingData getSorting() { return sortable; }
+
+	public FieldSelectionData getFieldSelection() { return fieldSelection; }
+
+	public FilteringData getFiltering() {
+		return filterable;
 	}
 }

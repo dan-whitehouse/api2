@@ -4,7 +4,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Hibernate;
 import org.ricone.api.core.model.Lea;
-import org.ricone.api.core.model.School;
 import org.ricone.api.core.model.view.OrgView;
 import org.ricone.api.oneroster.component.ControllerData;
 import org.ricone.api.xpress.component.BaseDAO;
@@ -64,8 +63,16 @@ class OrgViewDAOImp extends BaseDAO implements OrgViewDAO {
 				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 			)
 		);
-		select.orderBy(cb.asc(from.get("sourceId")));
 
+		//Sorting & Ordering
+		if(metadata.getSorting().isSorted()) {
+			select.orderBy(metadata.getSorting().getOrder(cb, from, OrgView.class));
+		}
+		else {
+			select.orderBy(cb.asc(from.get("sourceId")));
+		}
+
+		//Paging
 		Query q = em.createQuery(select);
 		if(metadata.getPaging().isPaged()) {
 			q.setFirstResult(metadata.getPaging().getOffset());

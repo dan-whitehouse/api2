@@ -7,9 +7,8 @@ import org.ricone.api.core.model.Lea;
 import org.ricone.api.core.model.School;
 import org.ricone.api.core.model.SchoolCalendar;
 import org.ricone.api.core.model.SchoolCalendarSession;
-import org.ricone.api.core.model.wrapper.SchoolCalendarSessionWrapper;
 import org.ricone.api.core.model.wrapper.SchoolCalendarWrapper;
-import org.ricone.api.xpress.component.BaseDAO;
+import org.ricone.api.oneroster.component.BaseDAO;
 import org.ricone.api.oneroster.component.ControllerData;
 import org.springframework.stereotype.Repository;
 

@@ -3,6 +3,7 @@ package org.ricone.api.oneroster.model;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import org.ricone.api.oneroster.component.BaseResponse;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -10,10 +11,9 @@ import java.util.List;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"orgs"})
-public class OrgsResponse implements Serializable {
-
+public class OrgsResponse extends BaseResponse implements Serializable {
 	@JsonProperty("orgs")
-	private List<Org> orgs = new ArrayList<Org>();
+	private List<Org> orgs = new ArrayList<>();
 	private final static long serialVersionUID = -5609856877368582544L;
 
 	/**
@@ -39,5 +39,4 @@ public class OrgsResponse implements Serializable {
 	public void setOrgs(List<Org> orgs) {
 		this.orgs = orgs;
 	}
-
 }

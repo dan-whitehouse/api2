@@ -23,7 +23,7 @@ class Org2ServiceImp implements Org2Service {
 
 	@Override
 	public OrgResponse getOrg(ControllerData metadata, String refId) throws Exception {
-		OrgResponse response = fieldSelector.apply(mapper.convert(dao.getOrg(metadata, refId)), metadata);
+		OrgResponse response = fieldSelector.apply(mapper.convert(dao.getOrg(metadata, refId), metadata), metadata);
 		if(response != null) {
 			return response;
 		}
@@ -36,12 +36,12 @@ class Org2ServiceImp implements Org2Service {
 		if(CollectionUtils.isEmpty(instance)) {
 			throw new NoContentException();
 		}
-		return fieldSelector.apply(mapper.convert(instance), metadata);
+		return fieldSelector.apply(mapper.convert(instance, metadata), metadata);
 	}
 
 	@Override
 	public OrgResponse getSchool(ControllerData metadata, String refId) throws Exception {
-		OrgResponse response = mapper.convert(dao.getSchool(metadata, refId));
+		OrgResponse response = mapper.convert(dao.getSchool(metadata, refId), metadata);
 		if(response != null) {
 			return response;
 		}
@@ -54,6 +54,6 @@ class Org2ServiceImp implements Org2Service {
 		if(CollectionUtils.isEmpty(instance)) {
 			throw new NoContentException();
 		}
-		return mapper.convert(instance);
+		return mapper.convert(instance, metadata);
 	}
 }

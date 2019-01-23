@@ -5,7 +5,7 @@ import org.apache.logging.log4j.Logger;
 import org.hibernate.Hibernate;
 import org.ricone.api.core.model.*;
 import org.ricone.api.core.model.wrapper.CourseWrapper;
-import org.ricone.api.xpress.component.BaseDAO;
+import org.ricone.api.oneroster.component.BaseDAO;
 import org.ricone.api.oneroster.component.ControllerData;
 import org.springframework.stereotype.Repository;
 

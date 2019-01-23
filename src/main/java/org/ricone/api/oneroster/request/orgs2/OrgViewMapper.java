@@ -7,6 +7,7 @@ import org.apache.logging.log4j.Logger;
 import org.ricone.api.core.model.Lea;
 import org.ricone.api.core.model.view.OrgView;
 import org.ricone.api.core.model.wrapper.LeaWrapper;
+import org.ricone.api.oneroster.component.ControllerData;
 import org.ricone.api.oneroster.model.*;
 import org.ricone.api.oneroster.util.MappingUtil;
 import org.springframework.stereotype.Component;
@@ -21,7 +22,7 @@ class OrgViewMapper {
     OrgViewMapper() {
     }
 
-    OrgsResponse convert(List<OrgView> instance) {
+    OrgsResponse convert(List<OrgView> instance, ControllerData metadata) {
         List<Org> list = new ArrayList<>();
         for (OrgView wrapper : instance) {
             Org org = map(wrapper, wrapper.getLea().getLeaId());
@@ -32,10 +33,11 @@ class OrgViewMapper {
 
         OrgsResponse response = new OrgsResponse();
         response.setOrgs(list);
+        response.setStatusInfoSets(mapErrors(metadata));
         return response;
     }
 
-    OrgResponse convert(OrgView wrapper) {
+    OrgResponse convert(OrgView wrapper, ControllerData metadata) {
         if(wrapper != null) {
             OrgResponse response = new OrgResponse();
             response.setOrg(map(wrapper, wrapper.getLea().getLeaId()));
@@ -92,6 +94,19 @@ class OrgViewMapper {
             metadata.getAdditionalProperties().put("country", instance.getCountry());
         }
         return metadata;
+    }
+
+    private List<StatusInfoSet> mapErrors(ControllerData metadata) {
+        logger.debug("I GO HERE!!");
+        List<StatusInfoSet> statusInfoSets = new ArrayList<>();
+        if(metadata.getSorting().isSorted() && !metadata.getSorting().isValidField(OrgView.class)) {
+            StatusInfoSet sortError = new StatusInfoSet();
+            sortError.setImsxCodeMajor(CodeMajor.success);
+            sortError.setImsxCodeMinor(CodeMinor.invalid_sort_field);
+            sortError.setImsxSeverity(Severity.warning);
+            statusInfoSets.add(sortError);
+        }
+        return statusInfoSets;
     }
 
 }

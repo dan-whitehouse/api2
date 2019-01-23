@@ -6,7 +6,7 @@ import org.ricone.api.core.model.view.UserClassView;
 import org.ricone.api.core.model.view.UserOrgView;
 import org.ricone.api.core.model.view.UserView;
 import org.ricone.api.oneroster.component.ControllerData;
-import org.ricone.api.xpress.component.BaseDAO;
+import org.ricone.api.oneroster.component.BaseDAO;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -14,6 +14,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.criteria.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository("OneRoster:Users2:UserViewDAO")
@@ -56,15 +57,15 @@ class UserViewDAOImp extends BaseDAO implements UserViewDAO {
 			final CriteriaQuery<UserView> select = cb.createQuery(UserView.class);
 			final Root<UserView> from = select.from(UserView.class);
 
-			select.distinct(true);
-			select.select(from);
-			select.where(
-					cb.and(
-							cb.equal(from.get(SCHOOL_YEAR_KEY), 2019)//,
-							//lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
-					)
+			//Method Specific Predicate
+			final Predicate methodSpecificPredicate = cb.and(
+				cb.equal(from.get(SCHOOL_YEAR_KEY), 2019)
 			);
-			select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
+
+			select.distinct(false);
+			select.select(from);
+			select.where(buildWhereClause(metadata, cb, from, methodSpecificPredicate));
+			select.orderBy(buildOrderByClause(metadata, cb, from));
 
 			Query q = em.createQuery(select);
 			if(metadata.getPaging().isPaged()) {
@@ -138,7 +139,7 @@ class UserViewDAOImp extends BaseDAO implements UserViewDAO {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<UserView> select = cb.createQuery(UserView.class);
 		final Root<UserView> from = select.from(UserView.class);
-		final SetJoin<UserView, UserOrgView> userOrgs = (SetJoin<UserView, UserOrgView>) from.<UserView, UserOrgView>join("userOrgs", JoinType.LEFT);
+		final SetJoin<UserView, UserOrgView> userOrgs = (SetJoin<UserView, UserOrgView>) from.<UserView, UserOrgView>join(JOIN_USER_ORGS, JoinType.LEFT);
 		select.distinct(true);
 		select.select(from);
 		select.where(
@@ -169,7 +170,7 @@ class UserViewDAOImp extends BaseDAO implements UserViewDAO {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<UserView> select = cb.createQuery(UserView.class);
 		final Root<UserView> from = select.from(UserView.class);
-		final SetJoin<UserView, UserClassView> userClasses = (SetJoin<UserView, UserClassView>) from.<UserView, UserClassView>join("userClasses", JoinType.LEFT);
+		final SetJoin<UserView, UserClassView> userClasses = (SetJoin<UserView, UserClassView>) from.<UserView, UserClassView>join(JOIN_USER_CLASSES, JoinType.LEFT);
 		select.distinct(true);
 		select.select(from);
 		select.where(
@@ -197,7 +198,7 @@ class UserViewDAOImp extends BaseDAO implements UserViewDAO {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<UserView> select = cb.createQuery(UserView.class);
 		final Root<UserView> from = select.from(UserView.class);
-		final SetJoin<UserView, UserClassView> userClasses = (SetJoin<UserView, UserClassView>) from.<UserView, UserClassView>join("userClasses", JoinType.LEFT);
+		final SetJoin<UserView, UserClassView> userClasses = (SetJoin<UserView, UserClassView>) from.<UserView, UserClassView>join(JOIN_USER_CLASSES, JoinType.LEFT);
 		select.distinct(true);
 		select.select(from);
 		select.where(
@@ -278,7 +279,7 @@ class UserViewDAOImp extends BaseDAO implements UserViewDAO {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<UserView> select = cb.createQuery(UserView.class);
 		final Root<UserView> from = select.from(UserView.class);
-		final SetJoin<UserView, UserOrgView> userOrgs = (SetJoin<UserView, UserOrgView>) from.<UserView, UserOrgView>join("userOrgs", JoinType.LEFT);
+		final SetJoin<UserView, UserOrgView> userOrgs = (SetJoin<UserView, UserOrgView>) from.<UserView, UserOrgView>join(JOIN_USER_ORGS, JoinType.LEFT);
 		select.distinct(true);
 		select.select(from);
 		select.where(
@@ -309,7 +310,7 @@ class UserViewDAOImp extends BaseDAO implements UserViewDAO {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<UserView> select = cb.createQuery(UserView.class);
 		final Root<UserView> from = select.from(UserView.class);
-		final SetJoin<UserView, UserClassView> userClasses = (SetJoin<UserView, UserClassView>) from.<UserView, UserClassView>join("userClasses", JoinType.LEFT);
+		final SetJoin<UserView, UserClassView> userClasses = (SetJoin<UserView, UserClassView>) from.<UserView, UserClassView>join(JOIN_USER_CLASSES, JoinType.LEFT);
 		select.distinct(true);
 		select.select(from);
 		select.where(
@@ -337,7 +338,7 @@ class UserViewDAOImp extends BaseDAO implements UserViewDAO {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<UserView> select = cb.createQuery(UserView.class);
 		final Root<UserView> from = select.from(UserView.class);
-		final SetJoin<UserView, UserClassView> userClasses = (SetJoin<UserView, UserClassView>) from.<UserView, UserClassView>join("userClasses", JoinType.LEFT);
+		final SetJoin<UserView, UserClassView> userClasses = (SetJoin<UserView, UserClassView>) from.<UserView, UserClassView>join(JOIN_USER_CLASSES, JoinType.LEFT);
 		select.distinct(true);
 		select.select(from);
 		select.where(
@@ -411,5 +412,26 @@ class UserViewDAOImp extends BaseDAO implements UserViewDAO {
 
 		List<UserView> instance = q.getResultList();
 		return instance;
+	}
+
+	private Predicate[] buildWhereClause(ControllerData metadata, CriteriaBuilder cb, Root from, Predicate methodSpecificPredicate) {
+		final List<Predicate> predicates = new ArrayList<>();
+		if(metadata.getFiltering().hasFiltering()) {
+			predicates.add(methodSpecificPredicate);
+			predicates.add(metadata.getFiltering().getFiltering(cb, from));
+		}
+		else {
+			predicates.add(methodSpecificPredicate);
+		}
+		return predicates.toArray(new Predicate[0]);
+	}
+
+	private Order buildOrderByClause(ControllerData metadata, CriteriaBuilder cb, Root from) {
+		if(metadata.getSorting().isSorted()) {
+			return metadata.getSorting().getOrder(cb, from, UserView.class);
+		}
+		else {
+			return cb.asc(from.get(PRIMARY_KEY));
+		}
 	}
 }

@@ -6,7 +6,7 @@ import org.hibernate.Hibernate;
 import org.ricone.api.core.model.view.EnrollmentView;
 import org.ricone.api.core.model.wrapper.StudentCourseSectionWrapper;
 import org.ricone.api.oneroster.component.ControllerData;
-import org.ricone.api.xpress.component.BaseDAO;
+import org.ricone.api.oneroster.component.BaseDAO;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;

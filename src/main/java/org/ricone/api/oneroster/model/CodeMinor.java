@@ -1,4 +1,4 @@
-package org.ricone.api.oneroster.error;
+package org.ricone.api.oneroster.model;
 
 public enum CodeMinor {
 	full_success,

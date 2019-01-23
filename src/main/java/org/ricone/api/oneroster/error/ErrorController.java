@@ -1,7 +1,10 @@
 package org.ricone.api.oneroster.error;
 
 import org.ricone.api.oneroster.error.exception.UnknownObjectException;
-import org.ricone.api.xpress.error.exception.*;
+import org.ricone.api.oneroster.model.CodeMajor;
+import org.ricone.api.oneroster.model.CodeMinor;
+import org.ricone.api.oneroster.model.Severity;
+import org.ricone.api.oneroster.model.StatusInfoSet;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 

@@ -70,9 +70,12 @@ public class SortingData {
 		}
 	}
 
-	private boolean isValidField(Class<?> clazz) {
-		Field[] fields = clazz.getDeclaredFields();
-		List<String> actualFieldNames = getFieldNames(fields);
+	public boolean isValidField(Class<?> clazz) {
+		final List<String> actualFieldNames = new ArrayList<>();
+		final Field[] baseFields = clazz.getSuperclass().getDeclaredFields(); //Base: sourcedId, status, metadata, dateLastModified
+		final Field[] fields = clazz.getDeclaredFields(); //?: Whatever class is passed in, this will always extend Base.
+		actualFieldNames.addAll(getFieldNames(baseFields));
+		actualFieldNames.addAll(getFieldNames(fields));
 		return actualFieldNames.contains(sort);
 	}
 

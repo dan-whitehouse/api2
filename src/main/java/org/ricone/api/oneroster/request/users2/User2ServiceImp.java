@@ -18,10 +18,11 @@ import java.util.List;
 class User2ServiceImp implements User2Service {
 	@Autowired private UserViewDAO dao;
 	@Autowired private User2Mapper mapper;
+	@Autowired private UserFieldSelector fieldSelector;
 
 	@Override
 	public UserResponse getUser(ControllerData metadata, String refId) throws Exception {
-		UserResponse studentResponse = mapper.convert(dao.getStudent(metadata, refId));
+		UserResponse studentResponse = fieldSelector.apply(mapper.convert(dao.getStudent(metadata, refId)), metadata);
 		if(studentResponse != null) {
 			return studentResponse;
 		}
@@ -34,12 +35,12 @@ class User2ServiceImp implements User2Service {
 		if(CollectionUtils.isEmpty(instance)) {
 			throw new NoContentException();
 		}
-		return mapper.convert(instance);
+		return fieldSelector.apply(mapper.convert(instance), metadata);
 	}
 
 	@Override
 	public UserResponse getStudent(ControllerData metadata, String refId) throws Exception {
-		UserResponse studentResponse = mapper.convert(dao.getStudent(metadata, refId));
+		UserResponse studentResponse = fieldSelector.apply(mapper.convert(dao.getStudent(metadata, refId)), metadata);
 		if(studentResponse != null) {
 			return studentResponse;
 		}
@@ -52,7 +53,7 @@ class User2ServiceImp implements User2Service {
 		if(CollectionUtils.isEmpty(instance)) {
 			throw new NoContentException();
 		}
-		return mapper.convert(instance);
+		return fieldSelector.apply(mapper.convert(instance), metadata);
 	}
 
 	@Override
@@ -61,7 +62,7 @@ class User2ServiceImp implements User2Service {
 		if(CollectionUtils.isEmpty(instance)) {
 			throw new NoContentException();
 		}
-		return mapper.convert(instance);
+		return fieldSelector.apply(mapper.convert(instance), metadata);
 	}
 
 	@Override
@@ -70,7 +71,7 @@ class User2ServiceImp implements User2Service {
 		if(CollectionUtils.isEmpty(instance)) {
 			throw new NoContentException();
 		}
-		return mapper.convert(instance);
+		return fieldSelector.apply(mapper.convert(instance), metadata);
 	}
 
 	@Override
@@ -79,12 +80,12 @@ class User2ServiceImp implements User2Service {
 		if(CollectionUtils.isEmpty(instance)) {
 			throw new NoContentException();
 		}
-		return mapper.convert(instance);
+		return fieldSelector.apply(mapper.convert(instance), metadata);
 	}
 
 	@Override
 	public UserResponse getTeacher(ControllerData metadata, String refId) throws Exception {
-		UserResponse studentResponse = mapper.convert(dao.getTeacher(metadata, refId));
+		UserResponse studentResponse = fieldSelector.apply(mapper.convert(dao.getTeacher(metadata, refId)), metadata);
 		if(studentResponse != null) {
 			return studentResponse;
 		}
@@ -97,7 +98,7 @@ class User2ServiceImp implements User2Service {
 		if(CollectionUtils.isEmpty(instance)) {
 			throw new NoContentException();
 		}
-		return mapper.convert(instance);
+		return fieldSelector.apply(mapper.convert(instance), metadata);
 	}
 
 	@Override
@@ -106,7 +107,7 @@ class User2ServiceImp implements User2Service {
 		if(CollectionUtils.isEmpty(instance)) {
 			throw new NoContentException();
 		}
-		return mapper.convert(instance);
+		return fieldSelector.apply(mapper.convert(instance), metadata);
 	}
 
 	@Override
@@ -115,7 +116,7 @@ class User2ServiceImp implements User2Service {
 		if(CollectionUtils.isEmpty(instance)) {
 			throw new NoContentException();
 		}
-		return mapper.convert(instance);
+		return fieldSelector.apply(mapper.convert(instance), metadata);
 	}
 
 	@Override
@@ -124,6 +125,6 @@ class User2ServiceImp implements User2Service {
 		if(CollectionUtils.isEmpty(instance)) {
 			throw new NoContentException();
 		}
-		return mapper.convert(instance);
+		return fieldSelector.apply(mapper.convert(instance), metadata);
 	}
 }

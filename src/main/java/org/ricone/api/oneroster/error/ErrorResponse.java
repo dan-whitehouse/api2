@@ -3,7 +3,7 @@ package org.ricone.api.oneroster.error;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import org.ricone.api.oneroster.error.StatusInfoSet;
+import org.ricone.api.oneroster.model.StatusInfoSet;
 
 import java.io.Serializable;
 import java.util.ArrayList;

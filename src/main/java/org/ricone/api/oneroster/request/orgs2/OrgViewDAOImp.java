@@ -6,7 +6,7 @@ import org.hibernate.Hibernate;
 import org.ricone.api.core.model.Lea;
 import org.ricone.api.core.model.view.OrgView;
 import org.ricone.api.oneroster.component.ControllerData;
-import org.ricone.api.xpress.component.BaseDAO;
+import org.ricone.api.oneroster.component.BaseDAO;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -14,6 +14,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.criteria.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository("OneRoster:Orgs2:SchoolDAO")
@@ -55,22 +56,16 @@ class OrgViewDAOImp extends BaseDAO implements OrgViewDAO {
 		final Root<OrgView> from = select.from(OrgView.class);
 		final Join<OrgView, Lea> lea = from.join(JOIN_LEA, JoinType.LEFT);
 
-		select.distinct(false);
-		select.select(from);
-		select.where(
-			cb.and(
-				cb.equal(lea.get(SCHOOL_YEAR_KEY), 2019),
-				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
-			)
+		//Method Specific Predicate
+		final Predicate methodSpecificPredicate = cb.and(
+			cb.equal(lea.get(SCHOOL_YEAR_KEY), 2019),
+			lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 		);
 
-		//Sorting & Ordering
-		if(metadata.getSorting().isSorted()) {
-			select.orderBy(metadata.getSorting().getOrder(cb, from, OrgView.class));
-		}
-		else {
-			select.orderBy(cb.asc(from.get("sourceId")));
-		}
+		select.distinct(false);
+		select.select(from);
+		select.where(buildWhereClause(metadata, cb, from, methodSpecificPredicate));
+		select.orderBy(buildOrderByClause(metadata, cb, from));
 
 		//Paging
 		Query q = em.createQuery(select);
@@ -145,5 +140,26 @@ class OrgViewDAOImp extends BaseDAO implements OrgViewDAO {
 			Hibernate.initialize(wrapper.getLea());
 			wrapper.getLea().getSchools().forEach(Hibernate::initialize);
 		});
+	}
+
+	private Predicate[] buildWhereClause(ControllerData metadata, CriteriaBuilder cb, Root from, Predicate methodSpecificPredicate) {
+		final List<Predicate> predicates = new ArrayList<>();
+		if(metadata.getFiltering().hasFiltering()) {
+			predicates.add(methodSpecificPredicate);
+			predicates.add(metadata.getFiltering().getFiltering(cb, from));
+		}
+		else {
+			predicates.add(methodSpecificPredicate);
+		}
+		return predicates.toArray(new Predicate[0]);
+	}
+
+	private Order buildOrderByClause(ControllerData metadata, CriteriaBuilder cb, Root from) {
+		if(metadata.getSorting().isSorted()) {
+			return metadata.getSorting().getOrder(cb, from, OrgView.class);
+		}
+		else {
+			return cb.asc(from.get("sourceId"));
+		}
 	}
 }

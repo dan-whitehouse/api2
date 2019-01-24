@@ -3,7 +3,6 @@ package org.ricone.api.oneroster.model;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import org.ricone.api.oneroster.component.BaseResponse;
 
 import java.io.Serializable;
 import java.util.ArrayList;

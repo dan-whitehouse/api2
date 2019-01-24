@@ -51,8 +51,8 @@ public class SortingData {
 		return orderBy.equalsIgnoreCase("desc");
 	}
 
-	public Order getOrder(CriteriaBuilder cb, Root from, Class<?> rootClass) {
-		if(isSorted() && isValidField(rootClass)) {
+	public Order getSortOrder(CriteriaBuilder cb, Root from) {
+		if(isSorted() && isValidField(from.getJavaType())) {
 			Path sortBy = from.get(sort);
 
 			if(isOrdered()) {
@@ -66,11 +66,11 @@ public class SortingData {
 			return cb.asc(sortBy);
 		}
 		else {
-			return cb.asc(from.get("sourceId"));
+			return cb.asc(from.get("sourcedId"));
 		}
 	}
 
-	public boolean isValidField(Class<?> clazz) {
+	boolean isValidField(Class<?> clazz) {
 		final List<String> actualFieldNames = new ArrayList<>();
 		final Field[] baseFields = clazz.getSuperclass().getDeclaredFields(); //Base: sourcedId, status, metadata, dateLastModified
 		final Field[] fields = clazz.getDeclaredFields(); //?: Whatever class is passed in, this will always extend Base.

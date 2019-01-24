@@ -10,10 +10,12 @@ import org.ricone.api.oneroster.component.BaseDAO;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.List;
 
@@ -22,11 +24,30 @@ import java.util.List;
 class EnrollmentDAOImp extends BaseDAO implements EnrollmentDAO {
 	@PersistenceContext private EntityManager em;
 	private Logger logger = LogManager.getLogger(EnrollmentDAOImp.class);
-	private final String PRIMARY_KEY = "userClassId";
-	private final String SCHOOL_YEAR_KEY = "userClassSchoolYear";
+
 
 	@Override
 	public EnrollmentView getEnrollment(ControllerData metadata, String refId) {
+		final CriteriaBuilder cb = em.getCriteriaBuilder();
+		final CriteriaQuery<EnrollmentView> select = cb.createQuery(EnrollmentView.class);
+		final Root<EnrollmentView> from = select.from(EnrollmentView.class);
+
+		//Method Specific Predicate
+		final Predicate methodSpecificPredicate = cb.and(
+			cb.equal(from.get(PRIMARY_KEY), refId),
+			cb.equal(from.get(SCHOOL_YEAR_KEY), "2019")
+		);
+
+		select.distinct(true);
+		select.select(from);
+		select.where(getWhereClause(metadata, cb, from, methodSpecificPredicate));
+
+		Query q = em.createQuery(select);
+		try {
+			EnrollmentView instance = (EnrollmentView) q.getSingleResult();
+			return instance;
+		}
+		catch(NoResultException ignored) { }
 		return null;
 	}
 
@@ -36,15 +57,15 @@ class EnrollmentDAOImp extends BaseDAO implements EnrollmentDAO {
 		final CriteriaQuery<EnrollmentView> select = cb.createQuery(EnrollmentView.class);
 		final Root<EnrollmentView> from = select.from(EnrollmentView.class);
 
+		//Method Specific Predicate
+		final Predicate methodSpecificPredicate = cb.and(
+			cb.equal(from.get(SCHOOL_YEAR_KEY), "2019")
+		);
+
 		select.distinct(true);
 		select.select(from);
-		select.where(
-			cb.and(
-				cb.equal(from.get(SCHOOL_YEAR_KEY), "2019")
-				//lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
-			)
-		);
-		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
+		select.where(getWhereClause(metadata, cb, from, methodSpecificPredicate));
+		select.orderBy(getSortOrder(metadata, cb, from));
 
 		Query q = em.createQuery(select);
 		if(metadata.getPaging().isPaged()) {
@@ -53,7 +74,6 @@ class EnrollmentDAOImp extends BaseDAO implements EnrollmentDAO {
 		}
 
 		List<EnrollmentView> instance = q.getResultList();
-		//initialize(instance);
 		return instance;
 	}
 

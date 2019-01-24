@@ -41,7 +41,7 @@ public class FieldSelectionData {
 		return getInvalidFields(clazz).size() == 0;
 	}
 
-	public List<String> getInvalidFields(Class<?> clazz) {
+	List<String> getInvalidFields(Class<?> clazz) {
 		final List<String> actualFieldNames = new ArrayList<>();
 		final Field[] baseFields = clazz.getSuperclass().getDeclaredFields(); //Base: sourcedId, status, metadata, dateLastModified
 		final Field[] fields = clazz.getDeclaredFields(); //?: Whatever class is passed in, this will always extend Base.

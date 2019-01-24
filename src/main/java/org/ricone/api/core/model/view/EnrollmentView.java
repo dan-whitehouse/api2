@@ -16,11 +16,11 @@ import java.time.LocalDate;
 public class EnrollmentView implements Serializable {
 	private static final long serialVersionUID = -1680434938122940174L;
 
-	@Column(name = "UserClassId")
-	@Id private String userClassId;
+	@Column(name = "SourcedId")
+	@Id private String sourcedId;
 
-	@Column(name = "UserClassSchoolYear")
-	@Id private Integer userClassSchoolYear;
+	@Column(name = "SourcedSchoolYear")
+	@Id private Integer sourcedSchoolYear;
 
 	@Column(name = "UserId")
 	private String userId;
@@ -55,9 +55,9 @@ public class EnrollmentView implements Serializable {
 	public EnrollmentView() {
 	}
 
-	public EnrollmentView(String userClassId, Integer userClassSchoolYear, String userId, Integer userSchoolYear, String role, String classId, Integer classSchoolYear, Boolean primary, LocalDate beginDate, LocalDate endDate, String orgId, Integer orgSchoolYear) {
-		this.userClassId = userClassId;
-		this.userClassSchoolYear = userClassSchoolYear;
+	public EnrollmentView(String sourcedId, Integer sourcedSchoolYear, String userId, Integer userSchoolYear, String role, String classId, Integer classSchoolYear, Boolean primary, LocalDate beginDate, LocalDate endDate, String orgId, Integer orgSchoolYear) {
+		this.sourcedId = sourcedId;
+		this.sourcedSchoolYear = sourcedSchoolYear;
 		this.userId = userId;
 		this.userSchoolYear = userSchoolYear;
 		this.role = role;
@@ -70,20 +70,20 @@ public class EnrollmentView implements Serializable {
 		this.orgSchoolYear = orgSchoolYear;
 	}
 
-	public String getUserClassId() {
-		return userClassId;
+	public String getSourcedId() {
+		return sourcedId;
 	}
 
-	public void setUserClassId(String userClassId) {
-		this.userClassId = userClassId;
+	public void setSourcedId(String sourcedId) {
+		this.sourcedId = sourcedId;
 	}
 
-	public Integer getUserClassSchoolYear() {
-		return userClassSchoolYear;
+	public Integer getSourcedSchoolYear() {
+		return sourcedSchoolYear;
 	}
 
-	public void setUserClassSchoolYear(Integer userClassSchoolYear) {
-		this.userClassSchoolYear = userClassSchoolYear;
+	public void setSourcedSchoolYear(Integer sourcedSchoolYear) {
+		this.sourcedSchoolYear = sourcedSchoolYear;
 	}
 
 	public String getUserId() {

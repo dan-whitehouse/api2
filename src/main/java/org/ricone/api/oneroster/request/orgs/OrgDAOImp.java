@@ -64,8 +64,8 @@ class OrgDAOImp extends BaseDAO implements OrgDAO {
 
 		select.distinct(false);
 		select.select(from);
-		select.where(buildWhereClause(metadata, cb, from, methodSpecificPredicate));
-		select.orderBy(buildOrderByClause(metadata, cb, from));
+		select.where(getWhereClause(metadata, cb, from, methodSpecificPredicate));
+		select.orderBy(getSortOrder(metadata, cb, from));
 
 		//Paging
 		Query q = em.createQuery(select);
@@ -110,15 +110,15 @@ class OrgDAOImp extends BaseDAO implements OrgDAO {
 		final CriteriaQuery<OrgView> select = cb.createQuery(OrgView.class);
 		final Root<OrgView> from = select.from(OrgView.class);
 
+		final Predicate methodSpecificPredicate = cb.and(
+			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
+			cb.equal(from.get("type"), "school")
+		);
+
 		select.distinct(true);
 		select.select(from);
-		select.where(
-			cb.and(
-				cb.equal(from.get(SCHOOL_YEAR_KEY), "2019"),
-				cb.equal(from.get("type"), "school")
-			)
-		);
-		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
+		select.where(getWhereClause(metadata, cb, from, methodSpecificPredicate));
+		select.orderBy(getSortOrder(metadata, cb, from));
 
 		Query q = em.createQuery(select);
 		if(metadata.getPaging().isPaged()) {
@@ -140,26 +140,5 @@ class OrgDAOImp extends BaseDAO implements OrgDAO {
 			Hibernate.initialize(wrapper.getLea());
 			wrapper.getLea().getSchools().forEach(Hibernate::initialize);
 		});
-	}
-
-	private Predicate[] buildWhereClause(ControllerData metadata, CriteriaBuilder cb, Root from, Predicate methodSpecificPredicate) {
-		final List<Predicate> predicates = new ArrayList<>();
-		if(metadata.getFiltering().isFiltered()) {
-			predicates.add(methodSpecificPredicate);
-			predicates.add(metadata.getFiltering().getFiltering(cb, from));
-		}
-		else {
-			predicates.add(methodSpecificPredicate);
-		}
-		return predicates.toArray(new Predicate[0]);
-	}
-
-	private Order buildOrderByClause(ControllerData metadata, CriteriaBuilder cb, Root from) {
-		if(metadata.getSorting().isSorted()) {
-			return metadata.getSorting().getOrder(cb, from, OrgView.class);
-		}
-		else {
-			return cb.asc(from.get("sourceId"));
-		}
 	}
 }

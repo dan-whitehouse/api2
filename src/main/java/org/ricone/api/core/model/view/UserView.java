@@ -18,11 +18,11 @@ import java.util.Set;
 public class UserView implements Serializable {
 	private static final long serialVersionUID = -2620417938122940193L;
 
-	@Column(name = "SourceId")
-	@Id private String sourceId;
+	@Column(name = "SourcedId")
+	@Id private String sourcedId;
 
-	@Column(name = "SourceSchoolYear")
-	@Id private Integer sourceSchoolYear;
+	@Column(name = "SourcedSchoolYear")
+	@Id private Integer sourcedSchoolYear;
 
 	@Column(name = "Role")
 	@Id private String role;
@@ -70,9 +70,9 @@ public class UserView implements Serializable {
 	public UserView() {
 	}
 
-	public UserView(String sourceId, Integer sourceSchoolYear, String role, Boolean enabledUser, String givenName, String familyName, String middleName, String identifier, String email, String phone, String sms, Set<UserIdentifierView> userIds, Set<UserOrgView> userOrgs, Set<UserAgentView> userAgents, Set<UserClassView> userClasses) {
-		this.sourceId = sourceId;
-		this.sourceSchoolYear = sourceSchoolYear;
+	public UserView(String sourcedId, Integer sourcedSchoolYear, String role, Boolean enabledUser, String givenName, String familyName, String middleName, String identifier, String email, String phone, String sms, Set<UserIdentifierView> userIds, Set<UserOrgView> userOrgs, Set<UserAgentView> userAgents, Set<UserClassView> userClasses) {
+		this.sourcedId = sourcedId;
+		this.sourcedSchoolYear = sourcedSchoolYear;
 		this.role = role;
 		this.enabledUser = enabledUser;
 		this.givenName = givenName;
@@ -88,20 +88,20 @@ public class UserView implements Serializable {
 		this.userClasses = userClasses;
 	}
 
-	public String getSourceId() {
-		return sourceId;
+	public String getSourcedId() {
+		return sourcedId;
 	}
 
-	public void setSourceId(String sourceId) {
-		this.sourceId = sourceId;
+	public void setSourcedId(String sourcedId) {
+		this.sourcedId = sourcedId;
 	}
 
-	public Integer getSourceSchoolYear() {
-		return sourceSchoolYear;
+	public Integer getSourcedSchoolYear() {
+		return sourcedSchoolYear;
 	}
 
-	public void setSourceSchoolYear(Integer sourceSchoolYear) {
-		this.sourceSchoolYear = sourceSchoolYear;
+	public void setSourcedSchoolYear(Integer sourcedSchoolYear) {
+		this.sourcedSchoolYear = sourcedSchoolYear;
 	}
 
 	public String getRole() {
@@ -198,5 +198,13 @@ public class UserView implements Serializable {
 
 	public void setUserAgents(Set<UserAgentView> userAgents) {
 		this.userAgents = userAgents;
+	}
+
+	public Set<UserClassView> getUserClasses() {
+		return userClasses;
+	}
+
+	public void setUserClasses(Set<UserClassView> userClasses) {
+		this.userClasses = userClasses;
 	}
 }

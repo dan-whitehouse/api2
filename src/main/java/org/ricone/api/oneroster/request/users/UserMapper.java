@@ -40,7 +40,7 @@ class UserMapper {
 
     private User map(UserView instance, String districtId) {
         User user = new User();
-        user.setSourcedId(instance.getSourceId());
+        user.setSourcedId(instance.getSourcedId());
         user.setStatus(StatusType.active);
         user.setDateLastModified(null);
         user.setMetadata(mapMetadata(instance, districtId));
@@ -99,7 +99,7 @@ class UserMapper {
 
     private Metadata mapMetadata(UserView instance, String districtId) {
         Metadata metadata = new Metadata();
-        metadata.getAdditionalProperties().put("ricone.schoolYear", instance.getSourceSchoolYear());
+        metadata.getAdditionalProperties().put("ricone.schoolYear", instance.getSourcedSchoolYear());
         metadata.getAdditionalProperties().put("ricone.districtId", districtId);
         return metadata;
     }

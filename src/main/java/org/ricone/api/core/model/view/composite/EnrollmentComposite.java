@@ -9,15 +9,15 @@ import java.io.Serializable;
 public class EnrollmentComposite implements Serializable {
     private static final long serialVersionUID = -6727456278122460145L;
 
-    private String userClassId;
-    private Integer userClassSchoolYear;
+    private String sourcedId;
+    private Integer sourcedSchoolYear;
 
     public EnrollmentComposite() {
     }
 
-    public EnrollmentComposite(String userClassId, Integer userClassSchoolYear) {
-        this.userClassId = userClassId;
-        this.userClassSchoolYear = userClassSchoolYear;
+    public EnrollmentComposite(String sourcedId, Integer sourcedSchoolYear) {
+        this.sourcedId = sourcedId;
+        this.sourcedSchoolYear = sourcedSchoolYear;
     }
 
     @Override
@@ -27,14 +27,14 @@ public class EnrollmentComposite implements Serializable {
 
         EnrollmentComposite that = (EnrollmentComposite) o;
 
-        if(userClassId != null ? !userClassId.equals(that.userClassId) : that.userClassId != null) return false;
-        return userClassSchoolYear != null ? userClassSchoolYear.equals(that.userClassSchoolYear) : that.userClassSchoolYear == null;
+        if(sourcedId != null ? !sourcedId.equals(that.sourcedId) : that.sourcedId != null) return false;
+        return sourcedSchoolYear != null ? sourcedSchoolYear.equals(that.sourcedSchoolYear) : that.sourcedSchoolYear == null;
     }
 
     @Override
     public int hashCode() {
-        int result = userClassId != null ? userClassId.hashCode() : 0;
-        result = 31 * result + (userClassSchoolYear != null ? userClassSchoolYear.hashCode() : 0);
+        int result = sourcedId != null ? sourcedId.hashCode() : 0;
+        result = 31 * result + (sourcedSchoolYear != null ? sourcedSchoolYear.hashCode() : 0);
         return result;
     }
 }

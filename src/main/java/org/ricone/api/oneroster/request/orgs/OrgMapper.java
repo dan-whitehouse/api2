@@ -5,6 +5,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ricone.api.core.model.view.OrgView;
+import org.ricone.api.oneroster.component.BaseMapper;
 import org.ricone.api.oneroster.component.ControllerData;
 import org.ricone.api.oneroster.model.*;
 import org.ricone.api.oneroster.util.MappingUtil;
@@ -14,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component("OneRoster:Orgs:OrgMapper")
-class OrgMapper {
+class OrgMapper extends BaseMapper {
     private Logger logger = LogManager.getLogger(OrgMapper.class);
 
     OrgMapper() {
@@ -31,7 +32,7 @@ class OrgMapper {
 
         OrgsResponse response = new OrgsResponse();
         response.setOrgs(list);
-        response.setStatusInfoSets(mapErrors(metadata));
+        response.setStatusInfoSets(mapErrors(metadata, OrgView.class, Org.class));
         return response;
     }
 
@@ -39,6 +40,7 @@ class OrgMapper {
         if(wrapper != null) {
             OrgResponse response = new OrgResponse();
             response.setOrg(map(wrapper, wrapper.getLea().getLeaId()));
+            response.setStatusInfoSets(mapErrors(metadata, OrgView.class, Org.class));
             return response;
         }
         return null;
@@ -58,12 +60,12 @@ class OrgMapper {
         if(org.getType().equals(OrgType.district)) {
             if(instance.getLea() != null && CollectionUtils.isNotEmpty(instance.getLea().getSchools())) {
                 instance.getLea().getSchools().forEach(school -> {
-                    org.getChildren().add(MappingUtil.buildGUIDRef("schools2", school.getSchoolRefId(), GUIDType.org));
+                    org.getChildren().add(MappingUtil.buildGUIDRef("schools", school.getSchoolRefId(), GUIDType.org));
                 });
             }
         }
         else {
-            org.setParent(MappingUtil.buildGUIDRef("orgs2", instance.getLea().getLeaRefId(), GUIDType.org));
+            org.setParent(MappingUtil.buildGUIDRef("orgs", instance.getLea().getLeaRefId(), GUIDType.org));
         }
         return org;
     }
@@ -93,29 +95,4 @@ class OrgMapper {
         }
         return metadata;
     }
-
-    private List<StatusInfoSet> mapErrors(ControllerData metadata) {
-        List<StatusInfoSet> statusInfoSets = new ArrayList<>();
-
-        if(metadata.getSorting().isSorted() && !metadata.getSorting().isValidField(OrgView.class)) {
-            StatusInfoSet sortError = new StatusInfoSet();
-            sortError.setImsxCodeMajor(CodeMajor.success);
-            sortError.setImsxCodeMinor(CodeMinor.invalid_sort_field);
-            sortError.setImsxSeverity(Severity.warning);
-            sortError.setImsxDescription("The field used in the sort parameter doesn't exist.");
-            statusInfoSets.add(sortError);
-        }
-
-        if(metadata.getFieldSelection().hasFieldSelection() && !metadata.getFieldSelection().isValidFieldSelection(Org.class)) {
-            StatusInfoSet sortError = new StatusInfoSet();
-            sortError.setImsxCodeMajor(CodeMajor.success);
-            sortError.setImsxCodeMinor(CodeMinor.invalid_selection_field);
-            sortError.setImsxSeverity(Severity.warning);
-            sortError.setImsxDescription("One or more of the fields " + metadata.getFieldSelection().getInvalidFields(Org.class) + " included in the fields parameter doesn't exist.");
-            statusInfoSets.add(sortError);
-        }
-
-        return statusInfoSets;
-    }
-
 }

@@ -4,12 +4,12 @@ package org.ricone.api.core.model.view;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Immutable;
-import org.ricone.api.core.model.view.composite.UserOrgComposite;
+import org.ricone.api.core.model.view.composite.UserClassComposite;
 
 import javax.persistence.*;
 import java.io.Serializable;
 
-@IdClass(UserOrgComposite.class)
+@IdClass(UserClassComposite.class)
 @Immutable @Entity @Table(name = "userclassview")
 @Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 public class UserClassView implements Serializable {
@@ -29,9 +29,9 @@ public class UserClassView implements Serializable {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumns({
-			@JoinColumn(name="SourceId", referencedColumnName="sourceId", nullable = false),
-			@JoinColumn(name="SourceSchoolYear", referencedColumnName="sourceSchoolYear", nullable = false),
-			@JoinColumn(name="SourceRole", referencedColumnName="role", nullable = false)
+			@JoinColumn(name="SourcedId", referencedColumnName="sourcedId", nullable = false),
+			@JoinColumn(name="SourcedSchoolYear", referencedColumnName="sourcedSchoolYear", nullable = false),
+			@JoinColumn(name="SourcedRole", referencedColumnName="role", nullable = false)
 	})
 	private UserView userView;
 

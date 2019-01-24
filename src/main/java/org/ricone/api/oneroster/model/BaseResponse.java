@@ -1,4 +1,4 @@
-package org.ricone.api.oneroster.component;
+package org.ricone.api.oneroster.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;

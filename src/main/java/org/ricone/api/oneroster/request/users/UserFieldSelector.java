@@ -33,7 +33,7 @@ public class UserFieldSelector extends BaseFieldSelector<User> {
 	UserResponse apply(UserResponse response, ControllerData metadata) {
 		if(metadata.getFieldSelection().hasFieldSelection() && metadata.getFieldSelection().isValidFieldSelection(User.class)) {
 			selectBaseFields(response.getUser(), metadata);
-			if (response.getUser() != null) {
+			if (response.getUser() == null) {
 				return null;
 			}
 		}

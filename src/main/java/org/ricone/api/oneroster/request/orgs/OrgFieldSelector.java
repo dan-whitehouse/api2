@@ -35,7 +35,7 @@ public class OrgFieldSelector extends BaseFieldSelector<Org> {
 	OrgResponse apply(OrgResponse response, ControllerData metadata) {
 		if(metadata.getFieldSelection().hasFieldSelection() && metadata.getFieldSelection().isValidFieldSelection(Org.class)) {
 			selectBaseFields(response.getOrg(), metadata);
-			if (response.getOrg() != null) {
+			if (response.getOrg() == null) {
 				return null;
 			}
 		}

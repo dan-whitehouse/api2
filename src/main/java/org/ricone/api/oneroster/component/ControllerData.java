@@ -3,7 +3,6 @@ package org.ricone.api.oneroster.component;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ricone.api.xpress.error.exception.BadRequestException;
 import org.ricone.api.xpress.util.Util;
 import org.ricone.security.jwt.Application;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -33,7 +32,7 @@ public class ControllerData {
 	private String providerId;
 	private Application application;
 
-	public ControllerData(HttpServletRequest request, HttpServletResponse response) throws BadRequestException {
+	public ControllerData(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		super();
 		this.request = request;
 		this.response = response;

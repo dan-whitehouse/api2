@@ -1,12 +1,10 @@
-package org.ricone.api.oneroster.request.orgs2;
+package org.ricone.api.oneroster.request.orgs;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ricone.api.core.model.Lea;
 import org.ricone.api.core.model.view.OrgView;
-import org.ricone.api.core.model.wrapper.LeaWrapper;
 import org.ricone.api.oneroster.component.ControllerData;
 import org.ricone.api.oneroster.model.*;
 import org.ricone.api.oneroster.util.MappingUtil;
@@ -15,11 +13,11 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 
-@Component("OneRoster:Orgs2:DistrictMapper")
-class OrgViewMapper {
-    private Logger logger = LogManager.getLogger(OrgViewMapper.class);
+@Component("OneRoster:Orgs:OrgMapper")
+class OrgMapper {
+    private Logger logger = LogManager.getLogger(OrgMapper.class);
 
-    OrgViewMapper() {
+    OrgMapper() {
     }
 
     OrgsResponse convert(List<OrgView> instance, ControllerData metadata) {
@@ -97,15 +95,26 @@ class OrgViewMapper {
     }
 
     private List<StatusInfoSet> mapErrors(ControllerData metadata) {
-        logger.debug("I GO HERE!!");
         List<StatusInfoSet> statusInfoSets = new ArrayList<>();
+
         if(metadata.getSorting().isSorted() && !metadata.getSorting().isValidField(OrgView.class)) {
             StatusInfoSet sortError = new StatusInfoSet();
             sortError.setImsxCodeMajor(CodeMajor.success);
             sortError.setImsxCodeMinor(CodeMinor.invalid_sort_field);
             sortError.setImsxSeverity(Severity.warning);
+            sortError.setImsxDescription("The field used in the sort parameter doesn't exist.");
             statusInfoSets.add(sortError);
         }
+
+        if(metadata.getFieldSelection().hasFieldSelection() && !metadata.getFieldSelection().isValidFieldSelection(Org.class)) {
+            StatusInfoSet sortError = new StatusInfoSet();
+            sortError.setImsxCodeMajor(CodeMajor.success);
+            sortError.setImsxCodeMinor(CodeMinor.invalid_selection_field);
+            sortError.setImsxSeverity(Severity.warning);
+            sortError.setImsxDescription("One or more of the fields " + metadata.getFieldSelection().getInvalidFields(Org.class) + " included in the fields parameter doesn't exist.");
+            statusInfoSets.add(sortError);
+        }
+
         return statusInfoSets;
     }
 

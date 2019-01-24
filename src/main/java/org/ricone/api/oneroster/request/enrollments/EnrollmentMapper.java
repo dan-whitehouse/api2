@@ -1,8 +1,6 @@
-package org.ricone.api.oneroster.request.enrollments2;
+package org.ricone.api.oneroster.request.enrollments;
 
-import org.ricone.api.core.model.StaffCourseSection;
 import org.ricone.api.core.model.view.EnrollmentView;
-import org.ricone.api.core.model.wrapper.StaffCourseSectionWrapper;
 import org.ricone.api.oneroster.model.*;
 import org.ricone.api.oneroster.util.MappingUtil;
 import org.springframework.stereotype.Component;
@@ -10,7 +8,7 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 
-@Component("OneRoster:Enrollments2:EnrollmentMapper")
+@Component("OneRoster:Enrollments:EnrollmentMapper")
 class EnrollmentMapper {
     EnrollmentMapper() {
     }

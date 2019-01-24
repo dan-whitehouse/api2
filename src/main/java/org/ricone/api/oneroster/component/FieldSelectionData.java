@@ -4,15 +4,10 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ricone.api.oneroster.model.Base;
+import org.ricone.api.oneroster.error.exception.BlankFieldSelectionException;
 import org.ricone.api.xpress.error.exception.BadRequestException;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.Order;
-import javax.persistence.criteria.Path;
-import javax.persistence.criteria.Root;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Field;
 import java.util.*;
 
@@ -21,8 +16,12 @@ public class FieldSelectionData {
 	private final String FIELDS = "fields";
 	private Set<String> fields = null;
 
-	FieldSelectionData(HttpServletRequest request) throws BadRequestException {
-		if(StringUtils.isNotBlank(request.getParameter(FIELDS))) {
+	FieldSelectionData(HttpServletRequest request) throws Exception {
+		if(request.getParameter(FIELDS) != null) {
+			if(StringUtils.isEmpty(request.getParameter(FIELDS))) {
+				throw new BlankFieldSelectionException();
+			}
+
 			String[] fieldSegments = StringUtils.split(StringUtils.deleteWhitespace(request.getParameter(FIELDS)), ",");
 			if(fieldSegments != null) {
 				fields = new HashSet<>(Arrays.asList(fieldSegments));
@@ -30,15 +29,19 @@ public class FieldSelectionData {
 		}
 	}
 
-	public boolean hasFieldSelection(Class<?> clazz) {
-		return CollectionUtils.isNotEmpty(fields) && areAllFieldsValid(clazz);
-	}
-
 	public Set<String> getFields() {
 		return fields;
 	}
 
-	private boolean areAllFieldsValid(Class<?> clazz) {
+	public boolean hasFieldSelection() {
+		return CollectionUtils.isNotEmpty(fields);
+	}
+
+	public boolean isValidFieldSelection(Class<?> clazz) {
+		return getInvalidFields(clazz).size() == 0;
+	}
+
+	public List<String> getInvalidFields(Class<?> clazz) {
 		final List<String> actualFieldNames = new ArrayList<>();
 		final Field[] baseFields = clazz.getSuperclass().getDeclaredFields(); //Base: sourcedId, status, metadata, dateLastModified
 		final Field[] fields = clazz.getDeclaredFields(); //?: Whatever class is passed in, this will always extend Base.
@@ -47,7 +50,7 @@ public class FieldSelectionData {
 
 		List<String> inputFields = new ArrayList<>(this.fields);
 		inputFields.removeAll(actualFieldNames);
-		return inputFields.size() == 0;
+		return inputFields;
 	}
 
 	private static List<String> getFieldNames(Field[] fields) {

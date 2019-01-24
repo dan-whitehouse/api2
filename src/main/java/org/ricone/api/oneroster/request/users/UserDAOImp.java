@@ -1,4 +1,4 @@
-package org.ricone.api.oneroster.request.users2;
+package org.ricone.api.oneroster.request.users;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -17,11 +17,11 @@ import javax.persistence.criteria.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Repository("OneRoster:Users2:UserViewDAO")
+@Repository("OneRoster:Users:UserDAO")
 @SuppressWarnings({"unchecked", "unused", "RedundantTypeArguments"})
-class UserViewDAOImp extends BaseDAO implements UserViewDAO {
+class UserDAOImp extends BaseDAO implements UserDAO {
 	@PersistenceContext private EntityManager em;
-	private Logger logger = LogManager.getLogger(UserViewDAOImp.class);
+	private Logger logger = LogManager.getLogger(UserDAOImp.class);
 	private final String PRIMARY_KEY = "sourceId";
 	private final String SCHOOL_YEAR_KEY = "sourceSchoolYear";
 	private final String ROLE = "role";
@@ -416,7 +416,7 @@ class UserViewDAOImp extends BaseDAO implements UserViewDAO {
 
 	private Predicate[] buildWhereClause(ControllerData metadata, CriteriaBuilder cb, Root from, Predicate methodSpecificPredicate) {
 		final List<Predicate> predicates = new ArrayList<>();
-		if(metadata.getFiltering().hasFiltering()) {
+		if(metadata.getFiltering().isFiltered()) {
 			predicates.add(methodSpecificPredicate);
 			predicates.add(metadata.getFiltering().getFiltering(cb, from));
 		}

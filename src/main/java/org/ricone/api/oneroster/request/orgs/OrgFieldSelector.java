@@ -1,4 +1,4 @@
-package org.ricone.api.oneroster.request.orgs2;
+package org.ricone.api.oneroster.request.orgs;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.ricone.api.oneroster.component.BaseFieldSelector;
@@ -14,13 +14,13 @@ import org.springframework.stereotype.Component;
  * @since 2019-01-22
  */
 
-@Component
+@Component("OneRoster:Orgs:OrgFieldSelector")
 public class OrgFieldSelector extends BaseFieldSelector<Org> {
 	public OrgFieldSelector() {
 	}
 
 	OrgsResponse apply(OrgsResponse response, ControllerData metadata) {
-		if(metadata.getFieldSelection().hasFieldSelection(Org.class)) {
+		if(metadata.getFieldSelection().hasFieldSelection() && metadata.getFieldSelection().isValidFieldSelection(Org.class)) {
 			for (Org org : response.getOrgs()) {
 				selectBaseFields(org, metadata);
 			}
@@ -33,7 +33,7 @@ public class OrgFieldSelector extends BaseFieldSelector<Org> {
 	}
 
 	OrgResponse apply(OrgResponse response, ControllerData metadata) {
-		if(metadata.getFieldSelection().hasFieldSelection(Org.class)) {
+		if(metadata.getFieldSelection().hasFieldSelection() && metadata.getFieldSelection().isValidFieldSelection(Org.class)) {
 			selectBaseFields(response.getOrg(), metadata);
 			if (response.getOrg() != null) {
 				return null;

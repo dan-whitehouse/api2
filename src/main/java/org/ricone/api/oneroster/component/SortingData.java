@@ -21,7 +21,7 @@ public class SortingData {
 	private String sort = null;
 	private String orderBy = null;
 
-	SortingData(HttpServletRequest request) throws BadRequestException {
+	SortingData(HttpServletRequest request) throws Exception {
 
 		if(StringUtils.isNotBlank(request.getParameter(SORT))) {
 			sort = request.getParameter(SORT);

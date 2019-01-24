@@ -17,7 +17,7 @@ public class PagingData {
 	private Integer offset = null;
 	private Integer limit = null;
 
-	PagingData(HttpServletRequest request, HttpServletResponse response) throws BadRequestException {
+	PagingData(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		this.response = response;
 
 		if(NumberUtils.isDigits(request.getParameter(OFFSET))) {

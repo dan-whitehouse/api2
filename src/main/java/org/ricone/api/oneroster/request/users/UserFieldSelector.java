@@ -1,4 +1,4 @@
-package org.ricone.api.oneroster.request.users2;
+package org.ricone.api.oneroster.request.users;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.ricone.api.oneroster.component.BaseFieldSelector;
@@ -12,13 +12,13 @@ import org.springframework.stereotype.Component;
  * @since 2019-01-22
  */
 
-@Component
+@Component("OneRoster:Users:UserFieldSelector")
 public class UserFieldSelector extends BaseFieldSelector<User> {
 	public UserFieldSelector() {
 	}
 
 	UsersResponse apply(UsersResponse response, ControllerData metadata) {
-		if(metadata.getFieldSelection().hasFieldSelection(User.class)) {
+		if(metadata.getFieldSelection().hasFieldSelection() && metadata.getFieldSelection().isValidFieldSelection(User.class)) {
 			for (User user : response.getUsers()) {
 				selectBaseFields(user, metadata);
 			}
@@ -31,7 +31,7 @@ public class UserFieldSelector extends BaseFieldSelector<User> {
 	}
 
 	UserResponse apply(UserResponse response, ControllerData metadata) {
-		if(metadata.getFieldSelection().hasFieldSelection(User.class)) {
+		if(metadata.getFieldSelection().hasFieldSelection() && metadata.getFieldSelection().isValidFieldSelection(User.class)) {
 			selectBaseFields(response.getUser(), metadata);
 			if (response.getUser() != null) {
 				return null;

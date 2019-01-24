@@ -1,8 +1,7 @@
 package org.ricone.api.oneroster.request.orgs;
 
-import org.apache.commons.collections4.CollectionUtils;
+import org.ricone.api.oneroster.model.DemographicsResponse;
 import org.ricone.api.oneroster.model.OrgsResponse;
-import org.ricone.api.xpress.model.XCalendarsResponse;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;

@@ -1,4 +1,4 @@
-package org.ricone.api.oneroster.request.users2;
+package org.ricone.api.oneroster.request.users;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
@@ -10,9 +10,9 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 
-@Component("OneRoster:Users2:StudentMapper")
-class User2Mapper {
-    User2Mapper() {
+@Component("OneRoster:Users:UserMapper")
+class UserMapper {
+    UserMapper() {
     }
 
     UsersResponse convert(List<UserView> instance) {

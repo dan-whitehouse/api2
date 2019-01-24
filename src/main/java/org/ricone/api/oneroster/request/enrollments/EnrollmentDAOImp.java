@@ -1,4 +1,4 @@
-package org.ricone.api.oneroster.request.enrollments2;
+package org.ricone.api.oneroster.request.enrollments;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -17,7 +17,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.util.List;
 
-@Repository("OneRoster:Enrollments2:StudentDAO")
+@Repository("OneRoster:Enrollments:EnrollmentDAO")
 @SuppressWarnings({"unchecked", "unused"})
 class EnrollmentDAOImp extends BaseDAO implements EnrollmentDAO {
 	@PersistenceContext private EntityManager em;

@@ -26,14 +26,14 @@ public class FilteringData {
 	private String filter = null;
 	private List<Predicate> predicates;
 
-	FilteringData(HttpServletRequest request) throws BadRequestException {
+	FilteringData(HttpServletRequest request) throws Exception {
 		if(StringUtils.isNotBlank(request.getParameter(FILTER))) {
 			filter = request.getParameter(FILTER);
 			predicates = new ArrayList<>();
 		}
 	}
 
-	public boolean hasFiltering() {
+	public boolean isFiltered() {
 		return StringUtils.isNotBlank(filter);
 	}
 

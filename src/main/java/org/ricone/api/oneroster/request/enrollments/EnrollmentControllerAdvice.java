@@ -1,6 +1,7 @@
 package org.ricone.api.oneroster.request.enrollments;
 
 import org.ricone.api.oneroster.model.EnrollmentsResponse;
+import org.ricone.api.oneroster.model.OrgsResponse;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;

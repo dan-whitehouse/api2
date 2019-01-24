@@ -1,11 +1,11 @@
-package org.ricone.api.oneroster.request.users2;
+package org.ricone.api.oneroster.request.users;
 
 import org.ricone.api.core.model.view.UserView;
 import org.ricone.api.oneroster.component.ControllerData;
 
 import java.util.List;
 
-interface UserViewDAO {
+interface UserDAO {
 	/* Find */
 	UserView getUser(ControllerData metadata, String refId);
 

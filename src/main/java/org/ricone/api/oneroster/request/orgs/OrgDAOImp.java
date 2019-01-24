@@ -1,4 +1,4 @@
-package org.ricone.api.oneroster.request.orgs2;
+package org.ricone.api.oneroster.request.orgs;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -17,11 +17,11 @@ import javax.persistence.criteria.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Repository("OneRoster:Orgs2:SchoolDAO")
+@Repository("OneRoster:Orgs:OrgDAO")
 @SuppressWarnings({"unchecked", "unused", "RedundantTypeArguments"})
-class OrgViewDAOImp extends BaseDAO implements OrgViewDAO {
+class OrgDAOImp extends BaseDAO implements OrgDAO {
 	@PersistenceContext private EntityManager em;
-	private Logger logger = LogManager.getLogger(OrgViewDAOImp.class);
+	private Logger logger = LogManager.getLogger(OrgDAOImp.class);
 	private final String PRIMARY_KEY = "leaRefId";
 	private final String SCHOOL_YEAR_KEY = "leaSchoolYear";
 
@@ -144,7 +144,7 @@ class OrgViewDAOImp extends BaseDAO implements OrgViewDAO {
 
 	private Predicate[] buildWhereClause(ControllerData metadata, CriteriaBuilder cb, Root from, Predicate methodSpecificPredicate) {
 		final List<Predicate> predicates = new ArrayList<>();
-		if(metadata.getFiltering().hasFiltering()) {
+		if(metadata.getFiltering().isFiltered()) {
 			predicates.add(methodSpecificPredicate);
 			predicates.add(metadata.getFiltering().getFiltering(cb, from));
 		}

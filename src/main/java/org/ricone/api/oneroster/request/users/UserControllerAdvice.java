@@ -1,6 +1,5 @@
 package org.ricone.api.oneroster.request.users;
 
-import org.ricone.api.oneroster.model.OrgsResponse;
 import org.ricone.api.oneroster.model.UsersResponse;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;

@@ -6,6 +6,7 @@ public enum CodeMinor {
 	invalid_data,
 	unauthorized,
 	invalid_sort_field,
+	invalid_blank_selection_field,
 	invalid_filter_field,
 	invalid_selection_field
 }

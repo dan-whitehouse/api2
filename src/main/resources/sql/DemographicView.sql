@@ -10,7 +10,12 @@ CREATE VIEW DemographicView AS
 		case when sr_black.raceCode is null then false else true end as BlackOrAfricanAmerican,
 		case when sr_islander.raceCode is null then false else true end as NativeHawaiianOrOtherPacificIslander,
 		case when sr_white.raceCode is null then false else true end as White,
-		s.HispanicLatinoEthnicity as HispanicOrLatinoEthnicity
+        null as DemographicRaceTwoOrMoreRaces,
+		s.HispanicLatinoEthnicity as HispanicOrLatinoEthnicity,
+        s.CountryOfBirth as CountryOfBirthCode,
+        null as StateOfBirthAbbreviation,
+        null as CityOfBirth,
+        null as PublicSchoolResidenceStatus
 	from Student as s
 	left join studentrace as sr_native
 		on s.StudentRefId = sr_native.StudentRefId 
@@ -38,5 +43,3 @@ CREATE VIEW DemographicView AS
 		and sr_white.RaceCode = 'White'
  )       
 order by SourcedId, SourcedSchoolYear;	
-        
-	

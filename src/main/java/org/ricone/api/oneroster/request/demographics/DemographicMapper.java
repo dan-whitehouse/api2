@@ -7,6 +7,7 @@ import org.ricone.api.core.model.Student;
 import org.ricone.api.core.model.StudentEmail;
 import org.ricone.api.core.model.StudentRace;
 import org.ricone.api.core.model.StudentTelephone;
+import org.ricone.api.core.model.view.DemographicView;
 import org.ricone.api.core.model.wrapper.StudentWrapper;
 import org.ricone.api.oneroster.model.*;
 import org.springframework.stereotype.Component;
@@ -21,10 +22,10 @@ class DemographicMapper {
     DemographicMapper() {
     }
 
-    DemographicsResponse convert(List<StudentWrapper> instance) {
+    DemographicsResponse convert(List<DemographicView> instance) {
         List<Demographic> list = new ArrayList<>();
-        for (StudentWrapper wrapper : instance) {
-            Demographic demographic = map(wrapper.getStudent(), wrapper.getDistrictId());
+        for (DemographicView wrapper : instance) {
+            Demographic demographic = map(wrapper, null);
             if(demographic != null) {
                 list.add(demographic);
             }
@@ -35,66 +36,52 @@ class DemographicMapper {
         return response;
     }
 
-    DemographicResponse convert(StudentWrapper wrapper) {
+    DemographicResponse convert(DemographicView wrapper) {
         if(wrapper != null) {
             DemographicResponse response = new DemographicResponse();
-            response.setDemographics(map(wrapper.getStudent(), wrapper.getDistrictId()));
+            response.setDemographics(map(wrapper, null));
             return response;
         }
         return null;
     }
 
-    private Demographic map(Student instance, String districtId) {
+    private Demographic map(DemographicView instance, String districtId) {
         Demographic demographic = new Demographic();
-        demographic.setSourcedId(instance.getStudentRefId());
+        demographic.setSourcedId(instance.getSourcedId());
         demographic.setStatus(StatusType.active);
         demographic.setDateLastModified(null);
         demographic.setMetadata(mapMetadata(instance, districtId));
 
         //Birthdate
-        if(instance.getBirthdate() != null) {
-            demographic.setBirthDate(instance.getBirthdate().toString());
+        if(instance.getBirthDate() != null) {
+            demographic.setBirthDate(instance.getBirthDate().toString());
         }
 
         //Sex
-        if(StringUtils.equalsIgnoreCase(instance.getSexCode(), "Male")) {
-            demographic.setSex(Gender.male);
-        }
-        else if(StringUtils.equalsIgnoreCase(instance.getSexCode(), "Female")) {
-            demographic.setSex(Gender.female);
-        }
+        demographic.setSex(Gender.valueOf(StringUtils.lowerCase(instance.getSex())));
 
         //Races
-        demographic.setAsian(BooleanUtils.toStringTrueFalse(containsRaceCode(instance.getStudentRaces(), "Asian")));
-        demographic.setBlackOrAfricanAmerican(BooleanUtils.toStringTrueFalse(containsRaceCode(instance.getStudentRaces(), "Black or African American")));
-        demographic.setWhite(BooleanUtils.toStringTrueFalse(containsRaceCode(instance.getStudentRaces(), "White")));
-        demographic.setAmericanIndianOrAlaskaNative(BooleanUtils.toStringTrueFalse(containsRaceCode(instance.getStudentRaces(), "American Indian or Alaska Native")));
-        demographic.setNativeHawaiianOrOtherPacificIslander(BooleanUtils.toStringTrueFalse(containsRaceCode(instance.getStudentRaces(), "Native Hawaiian or Other Pacific Islander")));
-        demographic.setDemographicRaceTwoOrMoreRaces(null);
-        demographic.setHispanicOrLatinoEthnicity(BooleanUtils.toStringTrueFalse(instance.getHispanicLatinoEthnicity()));
+        demographic.setAsian(BooleanUtils.toStringTrueFalse(instance.getAsian()));
+        demographic.setBlackOrAfricanAmerican(BooleanUtils.toStringTrueFalse(instance.getBlackOrAfricanAmerican()));
+        demographic.setWhite(BooleanUtils.toStringTrueFalse(instance.getWhite()));
+        demographic.setAmericanIndianOrAlaskaNative(BooleanUtils.toStringTrueFalse(instance.getAmericanIndianOrAlaskaNative()));
+        demographic.setNativeHawaiianOrOtherPacificIslander(BooleanUtils.toStringTrueFalse(instance.getNativeHawaiianOrOtherPacificIslander()));
+        demographic.setDemographicRaceTwoOrMoreRaces(BooleanUtils.toStringTrueFalse(instance.getDemographicRaceTwoOrMoreRaces()));
+        demographic.setHispanicOrLatinoEthnicity(BooleanUtils.toStringTrueFalse(instance.getHispanicOrLatinoEthnicity()));
 
         //Of Birth
-        demographic.setCountryOfBirthCode(instance.getCountryOfBirth());
-        demographic.setStateOfBirthAbbreviation(null);
-        demographic.setCityOfBirth(null);
-        demographic.setPublicSchoolResidenceStatus(null);
+        demographic.setCountryOfBirthCode(instance.getCountryOfBirthCode());
+        demographic.setStateOfBirthAbbreviation(instance.getStateOfBirthAbbreviation());
+        demographic.setCityOfBirth(instance.getCityOfBirth());
+        demographic.setPublicSchoolResidenceStatus(instance.getPublicSchoolResidenceStatus());
 
         return demographic;
     }
 
-    private Metadata mapMetadata(Student instance, String districtId) {
+    private Metadata mapMetadata(DemographicView instance, String districtId) {
         Metadata metadata = new Metadata();
-        metadata.getAdditionalProperties().put("ricone.schoolYear", instance.getStudentSchoolYear());
+        metadata.getAdditionalProperties().put("ricone.schoolYear", instance.getSourcedSchoolYear());
         metadata.getAdditionalProperties().put("ricone.districtId", districtId);
         return metadata;
-    }
-
-    private static boolean containsRaceCode(Set<StudentRace> list, String raceCode) {
-        for (StudentRace object : list) {
-            if (StringUtils.equalsIgnoreCase(object.getRaceCode(), raceCode)) {
-                return true;
-            }
-        }
-        return false;
     }
 }

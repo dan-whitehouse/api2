@@ -1,6 +1,7 @@
 package org.ricone.api.oneroster.request.demographics;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.ricone.api.core.model.view.DemographicView;
 import org.ricone.api.core.model.wrapper.StudentWrapper;
 import org.ricone.api.oneroster.error.exception.UnknownObjectException;
 import org.ricone.api.oneroster.model.DemographicResponse;
@@ -30,7 +31,7 @@ class DemographicServiceImp implements DemographicService {
 
 	@Override
 	public DemographicsResponse getAllDemographics(ControllerData metadata) throws Exception {
-		List<StudentWrapper> instance = dao.getAllDemographics(metadata);
+		List<DemographicView> instance = dao.getAllDemographics(metadata);
 		if(CollectionUtils.isEmpty(instance)) {
 			throw new NoContentException();
 		}

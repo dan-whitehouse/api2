@@ -25,6 +25,8 @@ public class BaseDAO {
     /* Joins - Core - Views */
     protected final String JOIN_USER_ORGS = "userOrgs";
     protected final String JOIN_USER_CLASSES = "userClasses";
+    protected final String JOIN_CLASS_TERMS = "terms";
+    protected final String JOIN_CLASS_USERS = "users";
 
     protected Predicate[] getWhereClause(ControllerData metadata, CriteriaBuilder cb, Root from, Predicate methodSpecificPredicate) {
         final List<Predicate> predicates = new ArrayList<>();

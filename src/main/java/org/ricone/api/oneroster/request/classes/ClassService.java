@@ -1,8 +1,8 @@
 package org.ricone.api.oneroster.request.classes;
 
+import org.ricone.api.oneroster.component.ControllerData;
 import org.ricone.api.oneroster.model.ClassResponse;
 import org.ricone.api.oneroster.model.ClassesResponse;
-import org.ricone.api.oneroster.component.ControllerData;
 
 interface ClassService {
 	ClassResponse getClass(ControllerData metadata, String refId) throws Exception;

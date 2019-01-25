@@ -1,8 +1,8 @@
 package org.ricone.api.oneroster.request.classes;
 
+import org.ricone.api.oneroster.component.BaseController;
 import org.ricone.api.oneroster.model.ClassResponse;
 import org.ricone.api.oneroster.model.ClassesResponse;
-import org.ricone.api.oneroster.component.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@RestController
+@RestController("OneRoster:Classes:ClassController")
 class ClassController extends BaseController {
 	@Autowired
 	private ClassService service;

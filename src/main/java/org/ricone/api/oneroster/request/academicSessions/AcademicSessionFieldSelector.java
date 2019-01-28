@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
  * @since 2019-01-28
  */
 
-@Component("OneRoster:Users:UserFieldSelector")
+@Component("OneRoster:AcademicSessions:AcademicSessionFieldSelector")
 public class AcademicSessionFieldSelector extends BaseFieldSelector<AcademicSession> {
 	public AcademicSessionFieldSelector() {
 	}
@@ -56,6 +56,9 @@ public class AcademicSessionFieldSelector extends BaseFieldSelector<AcademicSess
 		}
 		if(!CollectionUtils.containsAny(metaData.getFieldSelection().getFields(), "endDate")) {
 			instance.setEndDate(null);
+		}
+		if(!CollectionUtils.containsAny(metaData.getFieldSelection().getFields(), "parent")) {
+			instance.setParent(null);
 		}
 	}
 }

@@ -17,7 +17,9 @@ CREATE VIEW AcademicSessionView AS
 			from schoolcalendarsession as sub
 			where sub.SchoolCalendarRefId = schc.SchoolCalendarRefId
 			and sub.SchoolCalendarSchoolYear = schc.SchoolCalendarSchoolYear
-		) as EndDate
+		) as EndDate,
+        null as AcademicSessionId,
+        null as AcademicSessionSchoolYear
 	from schoolcalendar as schc
 )
 union all
@@ -26,14 +28,15 @@ union all
 		schcs.SchoolCalendarSessionRefId, 
 		schcs.SchoolCalendarSessionSchoolYear,
 		schcs.Description,
-		'term',
+		case when LOWER(schcs.SessionTypeCode) = 'semester' then 'semester' else 'term' end as Type, #TODO - Maybe a case statement based on some value
 		schc.CalendarYear,
 		schcs.BeginDate,
-		schcs.EndDate
+		schcs.EndDate,
+        schcs.SchoolCalendarRefId,
+        schcs.SchoolCalendarSchoolYear
 	from schoolcalendarsession as schcs
     join schoolcalendar as schc
 		on schc.SchoolCalendarRefId = schcs.SchoolCalendarRefId
         and schc.SchoolCalendarSchoolYear = schcs.SchoolCalendarSchoolYear
-    #where now() between schcs.BeginDate and schcs.EndDate
 )
 order by SourcedId, SourcedSchoolYear;

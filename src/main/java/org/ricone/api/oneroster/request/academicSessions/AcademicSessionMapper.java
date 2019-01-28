@@ -45,10 +45,11 @@ class AcademicSessionMapper {
         academicSession.setStatus(StatusType.active);
         academicSession.setDateLastModified(null);
         academicSession.setMetadata(mapMetadata(instance, districtId));
-        academicSession.setTitle(instance.getTitle()); //TODO: Not correct, what goes here?
-        academicSession.setType(SessionType.valueOf(instance.getType()));
-        academicSession.setParent(MappingUtil.buildGUIDRef("academicSessions", instance.getAcademicSessionId(), GUIDType.academicSession));
 
+        academicSession.setTitle(instance.getTitle());
+        academicSession.setType(SessionType.valueOf(instance.getType()));
+
+        academicSession.setParent(MappingUtil.buildGUIDRef("academicSessions", instance.getAcademicSessionId(), GUIDType.academicSession));
         instance.getChildren().forEach(child -> {
             academicSession.getChildren().add(MappingUtil.buildGUIDRef("terms", child.getChildId(), GUIDType.academicSession));
         });

@@ -10,9 +10,9 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @IdClass(GradeComposite.class)
-@Immutable @Entity @Table(name = "classgradeview")
+@Immutable @Entity @Table(name = "coursegradeview")
 @Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
-public class ClassGradeView implements Serializable {
+public class CourseGradeView implements Serializable {
 	private static final long serialVersionUID = -1680434938122940174L;
 
 	@Column(name = "GradeId")
@@ -29,16 +29,16 @@ public class ClassGradeView implements Serializable {
 			@JoinColumn(name="SourcedId", referencedColumnName="sourcedId", nullable = false),
 			@JoinColumn(name="SourcedSchoolYear", referencedColumnName="sourcedSchoolYear", nullable = false),
 	})
-	private ClassView classView;
+	private CourseView courseView;
 
-	public ClassGradeView() {
+	public CourseGradeView() {
 	}
 
-	public ClassGradeView(String gradeId, Integer gradeSchoolYear, String gradeLevel, ClassView classView) {
+	public CourseGradeView(String gradeId, Integer gradeSchoolYear, String gradeLevel, CourseView courseView) {
 		this.gradeId = gradeId;
 		this.gradeSchoolYear = gradeSchoolYear;
 		this.gradeLevel = gradeLevel;
-		this.classView = classView;
+		this.courseView = courseView;
 	}
 
 	public String getGradeId() {
@@ -65,11 +65,11 @@ public class ClassGradeView implements Serializable {
 		this.gradeLevel = gradeLevel;
 	}
 
-	public ClassView getClassView() {
-		return classView;
+	public CourseView getCourseView() {
+		return courseView;
 	}
 
-	public void setClassView(ClassView classView) {
-		this.classView = classView;
+	public void setCourseView(CourseView courseView) {
+		this.courseView = courseView;
 	}
 }

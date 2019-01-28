@@ -10,9 +10,9 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @IdClass(SubjectComposite.class)
-@Immutable @Entity @Table(name = "classsubjectview")
+@Immutable @Entity @Table(name = "coursesubjectview")
 @Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
-public class ClassSubjectView implements Serializable {
+public class CourseSubjectView implements Serializable {
 	private static final long serialVersionUID = -1680434938122940174L;
 
 	@Column(name = "SubjectId")
@@ -32,17 +32,17 @@ public class ClassSubjectView implements Serializable {
 			@JoinColumn(name="SourcedId", referencedColumnName="sourcedId", nullable = false),
 			@JoinColumn(name="SourcedSchoolYear", referencedColumnName="sourcedSchoolYear", nullable = false),
 	})
-	private ClassView classView;
+	private CourseView courseView;
 
-	public ClassSubjectView() {
+	public CourseSubjectView() {
 	}
 
-	public ClassSubjectView(String subjectId, Integer subjectSchoolYear, String subject, String subjectCode, ClassView classView) {
+	public CourseSubjectView(String subjectId, Integer subjectSchoolYear, String subject, String subjectCode, CourseView courseView) {
 		this.subjectId = subjectId;
 		this.subjectSchoolYear = subjectSchoolYear;
 		this.subject = subject;
 		this.subjectCode = subjectCode;
-		this.classView = classView;
+		this.courseView = courseView;
 	}
 
 	public String getSubjectId() {
@@ -77,11 +77,11 @@ public class ClassSubjectView implements Serializable {
 		this.subjectCode = subjectCode;
 	}
 
-	public ClassView getClassView() {
-		return classView;
+	public CourseView getCourseView() {
+		return courseView;
 	}
 
-	public void setClassView(ClassView classView) {
-		this.classView = classView;
+	public void setCourseView(CourseView courseView) {
+		this.courseView = courseView;
 	}
 }

@@ -6,16 +6,16 @@ import java.io.Serializable;
  * @project: API
  * @author: Dan on 3/1/2018.
  */
-public class ClassSubjectComposite implements Serializable {
+public class SubjectComposite implements Serializable {
     private static final long serialVersionUID = -6775456278122710145L;
 
     private String subjectId;
     private Integer subjectSchoolYear;
 
-    public ClassSubjectComposite() {
+    public SubjectComposite() {
     }
 
-    public ClassSubjectComposite(String subjectId, Integer subjectSchoolYear) {
+    public SubjectComposite(String subjectId, Integer subjectSchoolYear) {
         this.subjectId = subjectId;
         this.subjectSchoolYear = subjectSchoolYear;
     }
@@ -23,9 +23,9 @@ public class ClassSubjectComposite implements Serializable {
     @Override
     public boolean equals(Object o) {
         if(this == o) return true;
-        if(!(o instanceof ClassSubjectComposite)) return false;
+        if(!(o instanceof SubjectComposite)) return false;
 
-        ClassSubjectComposite that = (ClassSubjectComposite) o;
+        SubjectComposite that = (SubjectComposite) o;
 
         if(subjectId != null ? !subjectId.equals(that.subjectId) : that.subjectId != null) return false;
         return subjectSchoolYear != null ? subjectSchoolYear.equals(that.subjectSchoolYear) : that.subjectSchoolYear == null;

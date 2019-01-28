@@ -2,7 +2,6 @@ package org.ricone.api.oneroster.request.classes;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.hibernate.Hibernate;
 import org.ricone.api.core.model.view.ClassTermView;
 import org.ricone.api.core.model.view.ClassUserView;
 import org.ricone.api.core.model.view.ClassView;
@@ -41,9 +40,7 @@ class ClassDAOImp extends BaseDAO implements ClassDAO {
 
 		Query q = em.createQuery(select);
 		try {
-			ClassView instance = (ClassView) q.getSingleResult();
-			initialize(instance);
-			return instance;
+			return (ClassView) q.getSingleResult();
 		}
 		catch(NoResultException ignored) { }
 		return null;
@@ -69,10 +66,7 @@ class ClassDAOImp extends BaseDAO implements ClassDAO {
 			q.setFirstResult(metadata.getPaging().getOffset());
 			q.setMaxResults(metadata.getPaging().getLimit());
 		}
-
-		List<ClassView> instance = q.getResultList();
-		initialize(instance);
-		return instance;
+		return (List<ClassView>) q.getResultList();
 	}
 
 	@Override
@@ -97,10 +91,7 @@ class ClassDAOImp extends BaseDAO implements ClassDAO {
 			q.setFirstResult(metadata.getPaging().getOffset());
 			q.setMaxResults(metadata.getPaging().getLimit());
 		}
-
-		List<ClassView> instance = q.getResultList();
-		initialize(instance);
-		return instance;
+		return (List<ClassView>) q.getResultList();
 	}
 
 	@Override
@@ -124,10 +115,7 @@ class ClassDAOImp extends BaseDAO implements ClassDAO {
 			q.setFirstResult(metadata.getPaging().getOffset());
 			q.setMaxResults(metadata.getPaging().getLimit());
 		}
-
-		List<ClassView> instance = q.getResultList();
-		initialize(instance);
-		return instance;
+		return (List<ClassView>) q.getResultList();
 	}
 
 	@Override
@@ -152,9 +140,7 @@ class ClassDAOImp extends BaseDAO implements ClassDAO {
 			q.setMaxResults(metadata.getPaging().getLimit());
 		}
 
-		List<ClassView> instance = q.getResultList();
-		initialize(instance);
-		return instance;
+		return (List<ClassView>) q.getResultList();
 	}
 
 	@Override
@@ -182,9 +168,7 @@ class ClassDAOImp extends BaseDAO implements ClassDAO {
 				q.setMaxResults(metadata.getPaging().getLimit());
 			}
 
-			List<ClassView> instance = q.getResultList();
-			initialize(instance);
-			return instance;
+			return (List<ClassView>) q.getResultList();
 		}
 		catch(Exception e ) {
 			e.printStackTrace();
@@ -217,9 +201,7 @@ class ClassDAOImp extends BaseDAO implements ClassDAO {
 			q.setMaxResults(metadata.getPaging().getLimit());
 		}
 
-		List<ClassView> instance = q.getResultList();
-		initialize(instance);
-		return instance;
+		return (List<ClassView>) q.getResultList();
 	}
 
 	@Override
@@ -245,25 +227,6 @@ class ClassDAOImp extends BaseDAO implements ClassDAO {
 			q.setMaxResults(metadata.getPaging().getLimit());
 		}
 
-		List<ClassView> instance = q.getResultList();
-		initialize(instance);
-		return instance;
-	}
-
-	/** Initialize **/
-	private void initialize(ClassView instance) {
-		Hibernate.initialize(instance.getGrades());
-		Hibernate.initialize(instance.getPeriods());
-		Hibernate.initialize(instance.getSubjects());
-		Hibernate.initialize(instance.getTerms());
-	}
-
-	private void initialize(List<ClassView> instance) {
-		instance.forEach(wrapper -> {
-			Hibernate.initialize(wrapper.getGrades());
-			Hibernate.initialize(wrapper.getPeriods());
-			Hibernate.initialize(wrapper.getSubjects());
-			Hibernate.initialize(wrapper.getTerms());
-		});
+		return (List<ClassView>) q.getResultList();
 	}
 }

@@ -19,10 +19,11 @@ import java.util.List;
 class DemographicServiceImp implements DemographicService {
 	@Autowired private DemographicDAO dao;
 	@Autowired private DemographicMapper mapper;
+	@Autowired private DemographicFieldSelector selector;
 
 	@Override
 	public DemographicResponse getDemographic(ControllerData metadata, String refId) throws Exception {
-		DemographicResponse response = mapper.convert(dao.getDemographic(metadata, refId));
+		DemographicResponse response = selector.apply(mapper.convert(dao.getDemographic(metadata, refId)), metadata);
 		if(response != null) {
 			return response;
 		}
@@ -35,6 +36,6 @@ class DemographicServiceImp implements DemographicService {
 		if(CollectionUtils.isEmpty(instance)) {
 			throw new NoContentException();
 		}
-		return mapper.convert(instance);
+		return selector.apply(mapper.convert(instance), metadata);
 	}
 }

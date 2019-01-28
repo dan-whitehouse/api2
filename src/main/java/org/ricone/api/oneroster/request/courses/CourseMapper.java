@@ -1,27 +1,23 @@
 package org.ricone.api.oneroster.request.courses;
 
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.ricone.api.core.model.CourseIdentifier;
-import org.ricone.api.core.model.wrapper.CourseWrapper;
+import org.ricone.api.core.model.view.CourseView;
 import org.ricone.api.oneroster.model.*;
 import org.ricone.api.oneroster.util.MappingUtil;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 
 @Component("OneRoster:Courses:CourseMapper")
 class CourseMapper {
     CourseMapper() {
     }
 
-    CoursesResponse convert(List<CourseWrapper> instance) {
+    CoursesResponse convert(List<CourseView> instance) {
         List<Course> list = new ArrayList<>();
-        for (CourseWrapper wrapper : instance) {
-            Course org = map(wrapper.getCourse(), wrapper.getDistrictId());
+        for (CourseView wrapper : instance) {
+            Course org = map(wrapper, null);
             if(org != null) {
                 list.add(org);
             }
@@ -32,55 +28,49 @@ class CourseMapper {
         return response;
     }
 
-    CourseResponse convert(CourseWrapper wrapper) {
+    CourseResponse convert(CourseView wrapper) {
         if(wrapper != null) {
             CourseResponse response = new CourseResponse();
-            response.setCourse(map(wrapper.getCourse(), wrapper.getDistrictId()));
+            response.setCourse(map(wrapper, null));
             return response;
         }
         return null;
     }
 
-    private Course map(org.ricone.api.core.model.Course instance, String districtId) {
+    private Course map(CourseView instance, String districtId) {
         Course course = new Course();
-        course.setSourcedId(instance.getCourseRefId());
+        course.setSourcedId(instance.getSourcedId());
         course.setStatus(StatusType.active);
         course.setDateLastModified(null);
         course.setMetadata(mapMetadata(instance, districtId));
 
         course.setTitle(instance.getTitle());
-        //course.setSchoolYear();
-        course.setCourseCode(mapIdentifier(instance.getCourseIdentifiers()));
+        course.setCourseCode(instance.getCourseCode());
 
         //Grades
-        if(CollectionUtils.isNotEmpty(instance.getCourseGrades())) {
-            instance.getCourseGrades().forEach(courseGrade -> {
-                course.getGrades().add(courseGrade.getGradeLevelCode());
-            });
-        }
+        instance.getGrades().forEach(grade -> {
+            course.getGrades().add(grade.getGradeLevel());
+        });
 
         //Subjects
-        course.getSubjects().add(instance.getSubjectCode());
-        course.getSubjectCodes().add(instance.getSubjectCode());
+        instance.getSubjects().forEach(subject -> {
+            course.getSubjects().add(StringUtils.isNotBlank(subject.getSubject()) ? subject.getSubject() : null);
+            course.getSubjectCodes().add(StringUtils.isNotBlank(subject.getSubjectCode()) ? subject.getSubjectCode() : null);
+        });
 
         //School Year - AcademicSession Ref
-        course.setSchoolYear(MappingUtil.buildGUIDRef("academicSessions", instance.getSchool().getSchoolRefId(), GUIDType.academicSession)); //TODO - Not Correct
+        course.setSchoolYear(MappingUtil.buildGUIDRef("academicSessions", instance.getAcademicSessionId(), GUIDType.academicSession));
 
         //Org - School
-        course.setOrg(MappingUtil.buildGUIDRef("schools", instance.getSchool().getSchoolRefId(), GUIDType.org));
+        course.setOrg(MappingUtil.buildGUIDRef("schools", instance.getOrgId(), GUIDType.org));
 
         return course;
     }
 
-    private Metadata mapMetadata(org.ricone.api.core.model.Course instance, String districtId) {
+    private Metadata mapMetadata(CourseView instance, String districtId) {
         Metadata metadata = new Metadata();
-        metadata.getAdditionalProperties().put("ricone.schoolYear", instance.getCourseSchoolYear());
+        metadata.getAdditionalProperties().put("ricone.schoolYear", instance.getSourcedSchoolYear());
         metadata.getAdditionalProperties().put("ricone.districtId", districtId);
         return metadata;
-    }
-
-    private String mapIdentifier(Set<CourseIdentifier> courseIdentifiers) {
-        Optional<CourseIdentifier> id = courseIdentifiers.stream().filter(ci -> StringUtils.equalsIgnoreCase(ci.getIdentificationSystemCode(), "School")).findFirst();
-        return id.map(CourseIdentifier::getCourseId).orElse(null);
     }
 }

@@ -1,6 +1,7 @@
 package org.ricone.api.oneroster.request.academicSessions;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.ricone.api.core.model.view.AcademicSessionView;
 import org.ricone.api.core.model.wrapper.SchoolCalendarSessionWrapper;
 import org.ricone.api.oneroster.error.exception.UnknownObjectException;
 import org.ricone.api.oneroster.model.AcademicSessionResponse;
@@ -18,60 +19,44 @@ import java.util.List;
 @Transactional
 @Service("OneRoster:AcademicSessions:AcademicSessionService")
 class AcademicSessionServiceImp implements AcademicSessionService {
-	@Autowired private TermDAO termDAO;
-	@Autowired private TermMapper termMapper;
-	@Autowired private CalendarDAO calendarDAO;
-	@Autowired private CalendarMapper calendarMapper;
+	@Autowired private AcademicSessionDAO dao;
+	@Autowired private AcademicSessionMapper mapper;
+	@Autowired private AcademicSessionFieldSelector fieldSelector;
 
 	@Override
 	public AcademicSessionResponse getAcademicSession(ControllerData metadata, String refId) throws Exception {
-		AcademicSessionResponse studentResponse = calendarMapper.convert(calendarDAO.getCalendar(metadata, refId));
-		if(studentResponse != null) {
-			return studentResponse;
-		}
-
-		AcademicSessionResponse teacherResponse = termMapper.convert(termDAO.getTerm(metadata, refId));
-		if(teacherResponse != null) {
-			return teacherResponse;
+		AcademicSessionResponse response = fieldSelector.apply(mapper.convert(dao.getAcademicSession(metadata, refId)), metadata);
+		if(response != null) {
+			return response;
 		}
 		throw new UnknownObjectException();
 	}
 
 	@Override
 	public AcademicSessionsResponse getAllAcademicSessions(ControllerData metadata) throws Exception {
-		AcademicSessionsResponse response = new AcademicSessionsResponse();
-		AcademicSessionsResponse studentsResponse = calendarMapper.convert(calendarDAO.getAllCalendars(metadata));
-		AcademicSessionsResponse teachersResponse = termMapper.convert(termDAO.getAllTerms(metadata));
-
-		if(CollectionUtils.isNotEmpty(studentsResponse.getAcademicSessions())) {
-			response.getAcademicSessions().addAll(studentsResponse.getAcademicSessions());
+		List<AcademicSessionView> instance = dao.getAllAcademicSessions(metadata);
+		if(CollectionUtils.isEmpty(instance)) {
+			throw new NoContentException();
 		}
-
-		if(CollectionUtils.isNotEmpty(teachersResponse.getAcademicSessions())) {
-			response.getAcademicSessions().addAll(teachersResponse.getAcademicSessions());
-		}
-
-		//Sort On RefId
-		response.getAcademicSessions().sort(Comparator.comparing(Base::getSourcedId));
-		return response;
+		return fieldSelector.apply(mapper.convert(instance), metadata);
 	}
 
 	@Override
 	public AcademicSessionResponse getTerm(ControllerData metadata, String refId) throws Exception {
-		SchoolCalendarSessionWrapper instance = termDAO.getTerm(metadata, refId);
-		if(instance == null) {
-			throw new UnknownObjectException();
+		AcademicSessionResponse studentResponse = fieldSelector.apply(mapper.convert(dao.getTerm(metadata, refId)), metadata);
+		if(studentResponse != null) {
+			return studentResponse;
 		}
-		return termMapper.convert(instance);
+		throw new UnknownObjectException();
 	}
 
 	@Override
 	public AcademicSessionsResponse getAllTerms(ControllerData metadata) throws Exception {
-		List<SchoolCalendarSessionWrapper> instance = termDAO.getAllTerms(metadata);
+		List<AcademicSessionView> instance = dao.getAllTerms(metadata);
 		if(CollectionUtils.isEmpty(instance)) {
 			throw new NoContentException();
 		}
-		return termMapper.convert(instance);
+		return fieldSelector.apply(mapper.convert(instance), metadata);
 	}
 
 	@Override

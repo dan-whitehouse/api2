@@ -1,6 +1,7 @@
 package org.ricone.api.oneroster.request.courses;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.ricone.api.core.model.view.CourseView;
 import org.ricone.api.core.model.wrapper.CourseWrapper;
 import org.ricone.api.oneroster.error.exception.UnknownObjectException;
 import org.ricone.api.oneroster.model.CourseResponse;
@@ -30,7 +31,7 @@ class CourseServiceImp implements CourseService {
 
 	@Override
 	public CoursesResponse getAllCourses(ControllerData metadata) throws Exception {
-		List<CourseWrapper> instance = dao.getAllCourses(metadata);
+		List<CourseView> instance = dao.getAllCourses(metadata);
 		if(CollectionUtils.isEmpty(instance)) {
 			throw new NoContentException();
 		}
@@ -39,7 +40,7 @@ class CourseServiceImp implements CourseService {
 
 	@Override
 	public CoursesResponse getCoursesForSchool(ControllerData metadata, String refId) throws Exception {
-		List<CourseWrapper> instance = dao.getCoursesForSchool(metadata, refId);
+		List<CourseView> instance = dao.getCoursesForSchool(metadata, refId);
 		if(CollectionUtils.isEmpty(instance)) {
 			throw new NoContentException();
 		}

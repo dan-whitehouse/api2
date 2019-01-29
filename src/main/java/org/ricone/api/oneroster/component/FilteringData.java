@@ -3,9 +3,11 @@ package org.ricone.api.oneroster.component;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ricone.api.xpress.error.exception.BadRequestException;
 
-import javax.persistence.criteria.*;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.Path;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,11 +35,11 @@ public class FilteringData {
 		}
 	}
 
-	public boolean isFiltered() {
+	boolean isFiltered() {
 		return StringUtils.isNotBlank(filter);
 	}
 
-	public Predicate getFiltering(CriteriaBuilder cb, Root from) {
+	Predicate getFiltering(CriteriaBuilder cb, Root from) {
 		buildPredicates(cb, from);
 
 		//if filter contains AND or OR, load in the predicates we created

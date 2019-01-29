@@ -78,11 +78,54 @@ class EnrollmentDAOImp extends BaseDAO implements EnrollmentDAO {
 
 	@Override
 	public List<EnrollmentView> getEnrollmentsForSchool(ControllerData metadata, String refId) {
-		return null;
+		final CriteriaBuilder cb = em.getCriteriaBuilder();
+		final CriteriaQuery<EnrollmentView> select = cb.createQuery(EnrollmentView.class);
+		final Root<EnrollmentView> from = select.from(EnrollmentView.class);
+
+		//Method Specific Predicate
+		final Predicate methodSpecificPredicate = cb.and(
+			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
+			cb.equal(from.get("orgId"), refId),
+			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+		);
+
+		select.distinct(true);
+		select.select(from);
+		select.where(getWhereClause(metadata, cb, from, methodSpecificPredicate));
+		select.orderBy(getSortOrder(metadata, cb, from));
+
+		Query q = em.createQuery(select);
+		if(metadata.getPaging().isPaged()) {
+			q.setFirstResult(metadata.getPaging().getOffset());
+			q.setMaxResults(metadata.getPaging().getLimit());
+		}
+		return (List<EnrollmentView>) q.getResultList();
 	}
 
 	@Override
 	public List<EnrollmentView> getEnrollmentsForClassInSchool(ControllerData metadata, String schoolId, String classId) {
-		return null;
+		final CriteriaBuilder cb = em.getCriteriaBuilder();
+		final CriteriaQuery<EnrollmentView> select = cb.createQuery(EnrollmentView.class);
+		final Root<EnrollmentView> from = select.from(EnrollmentView.class);
+
+		//Method Specific Predicate
+		final Predicate methodSpecificPredicate = cb.and(
+			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
+			cb.equal(from.get("orgId"), schoolId),
+			cb.equal(from.get("classId"), classId),
+			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+		);
+
+		select.distinct(true);
+		select.select(from);
+		select.where(getWhereClause(metadata, cb, from, methodSpecificPredicate));
+		select.orderBy(getSortOrder(metadata, cb, from));
+
+		Query q = em.createQuery(select);
+		if(metadata.getPaging().isPaged()) {
+			q.setFirstResult(metadata.getPaging().getOffset());
+			q.setMaxResults(metadata.getPaging().getLimit());
+		}
+		return (List<EnrollmentView>) q.getResultList();
 	}
 }

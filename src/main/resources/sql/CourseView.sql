@@ -2,6 +2,7 @@ CREATE VIEW CourseView AS
 select distinct
 	c.CourseRefId as SourcedId, 
 	c.CourseSchoolYear as SourcedSchoolYear,
+    l.leaId as DistrictId,
 	c.Title as Title,
     ci.CourseId as CourseCode,
     schc.SchoolCalendarRefId as AcademicSessionId,
@@ -15,9 +16,13 @@ left join courseidentifier as ci
     and c.CourseSchoolYear = ci.CourseSchoolYear
     and ci.IdentificationSystemCode = 'School'
     
-left join school as sch
+join school as sch
 	on sch.SchoolRefId = c.SchoolRefId
     and sch.SchoolSchoolYear = c.SchoolSchoolYear
+
+join lea as l 
+	on l.LEARefId = sch.LEARefId 
+	and l.LEASchoolYear = sch.LEASchoolYear  
     
 left join schoolcalendar schc
 	on schc.SchoolRefId = sch.SchoolRefId

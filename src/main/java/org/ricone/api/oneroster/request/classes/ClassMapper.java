@@ -20,7 +20,7 @@ class ClassMapper extends BaseMapper {
     ClassesResponse convert(List<ClassView> instance, ControllerData metadata) {
         List<Class> list = new ArrayList<>();
         for (ClassView wrapper : instance) {
-            Class clazz = map(wrapper, null);
+            Class clazz = map(wrapper);
             if(clazz != null) {
                 list.add(clazz);
             }
@@ -35,19 +35,19 @@ class ClassMapper extends BaseMapper {
     ClassResponse convert(ClassView wrapper, ControllerData metadata) {
         if(wrapper != null) {
             ClassResponse response = new ClassResponse();
-            response.setClass_(map(wrapper, null));
+            response.setClass_(map(wrapper));
             response.setStatusInfoSets(mapErrors(metadata, ClassView.class, Class.class));
             return response;
         }
         return null;
     }
 
-    private Class map(ClassView instance, String districtId) {
+    private Class map(ClassView instance) {
         Class clazz = new Class();
         clazz.setSourcedId(instance.getSourcedId());
         clazz.setStatus(StatusType.active);
         clazz.setDateLastModified(null);
-        clazz.setMetadata(mapMetadata(instance, districtId));
+        clazz.setMetadata(mapMetadata(instance));
 
         clazz.setTitle(instance.getTitle());
         clazz.setClassType(ClassType.valueOf(instance.getClassType()));
@@ -85,10 +85,10 @@ class ClassMapper extends BaseMapper {
         return clazz;
     }
 
-    private Metadata mapMetadata(ClassView instance, String districtId) {
+    private Metadata mapMetadata(ClassView instance) {
         Metadata metadata = new Metadata();
         metadata.getAdditionalProperties().put("ricone.schoolYear", instance.getSourcedSchoolYear());
-        metadata.getAdditionalProperties().put("ricone.districtId", districtId);
+        metadata.getAdditionalProperties().put("ricone.districtId", instance.getDistrictId());
         return metadata;
     }
 }

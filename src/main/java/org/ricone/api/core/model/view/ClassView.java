@@ -25,6 +25,9 @@ public class ClassView implements Serializable {
 	@Column(name = "SourcedSchoolYear")
 	@Id private Integer sourcedSchoolYear;
 
+	@Column(name = "DistrictId")
+	private String districtId;
+
 	@Column(name = "Title")
 	private String title;
 
@@ -72,9 +75,10 @@ public class ClassView implements Serializable {
 	public ClassView() {
 	}
 
-	public ClassView(String sourcedId, Integer sourcedSchoolYear, String title, String classCode, String classType, String location, Set<ClassGradeView> grades, Set<ClassSubjectView> subjects, String courseId, Integer courseSchoolYear, String orgId, Integer orgSchoolYear, Set<ClassTermView> terms, Set<ClassPeriodView> periods) {
+	public ClassView(String sourcedId, Integer sourcedSchoolYear, String districtId, String title, String classCode, String classType, String location, Set<ClassGradeView> grades, Set<ClassSubjectView> subjects, String courseId, Integer courseSchoolYear, String orgId, Integer orgSchoolYear, Set<ClassTermView> terms, Set<ClassPeriodView> periods, Set<ClassUserView> users) {
 		this.sourcedId = sourcedId;
 		this.sourcedSchoolYear = sourcedSchoolYear;
+		this.districtId = districtId;
 		this.title = title;
 		this.classCode = classCode;
 		this.classType = classType;
@@ -87,6 +91,7 @@ public class ClassView implements Serializable {
 		this.orgSchoolYear = orgSchoolYear;
 		this.terms = terms;
 		this.periods = periods;
+		this.users = users;
 	}
 
 	public String getSourcedId() {
@@ -103,6 +108,14 @@ public class ClassView implements Serializable {
 
 	public void setSourcedSchoolYear(Integer sourcedSchoolYear) {
 		this.sourcedSchoolYear = sourcedSchoolYear;
+	}
+
+	public String getDistrictId() {
+		return districtId;
+	}
+
+	public void setDistrictId(String districtId) {
+		this.districtId = districtId;
 	}
 
 	public String getTitle() {

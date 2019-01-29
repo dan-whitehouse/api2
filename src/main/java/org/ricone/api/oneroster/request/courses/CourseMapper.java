@@ -17,7 +17,7 @@ class CourseMapper {
     CoursesResponse convert(List<CourseView> instance) {
         List<Course> list = new ArrayList<>();
         for (CourseView wrapper : instance) {
-            Course org = map(wrapper, null);
+            Course org = map(wrapper);
             if(org != null) {
                 list.add(org);
             }
@@ -31,18 +31,18 @@ class CourseMapper {
     CourseResponse convert(CourseView wrapper) {
         if(wrapper != null) {
             CourseResponse response = new CourseResponse();
-            response.setCourse(map(wrapper, null));
+            response.setCourse(map(wrapper));
             return response;
         }
         return null;
     }
 
-    private Course map(CourseView instance, String districtId) {
+    private Course map(CourseView instance) {
         Course course = new Course();
         course.setSourcedId(instance.getSourcedId());
         course.setStatus(StatusType.active);
         course.setDateLastModified(null);
-        course.setMetadata(mapMetadata(instance, districtId));
+        course.setMetadata(mapMetadata(instance));
 
         course.setTitle(instance.getTitle());
         course.setCourseCode(instance.getCourseCode());
@@ -67,10 +67,10 @@ class CourseMapper {
         return course;
     }
 
-    private Metadata mapMetadata(CourseView instance, String districtId) {
+    private Metadata mapMetadata(CourseView instance) {
         Metadata metadata = new Metadata();
         metadata.getAdditionalProperties().put("ricone.schoolYear", instance.getSourcedSchoolYear());
-        metadata.getAdditionalProperties().put("ricone.districtId", districtId);
+        metadata.getAdditionalProperties().put("ricone.districtId", instance.getDistrictId());
         return metadata;
     }
 }

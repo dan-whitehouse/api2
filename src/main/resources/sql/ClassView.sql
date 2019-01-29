@@ -2,18 +2,15 @@ CREATE VIEW ClassView AS
 select distinct
 	cs.CourseSectionRefId as SourcedId, 
 	cs.CourseSectionSchoolYear as SourcedSchoolYear,
+	l.leaId as DistrictId,
 	c.Title as Title,
     ci.CourseId as ClassCode,
     'scheduled' as ClassType,
     csc.ClassroomIdentifier as Location,
-    #grades 	-- ClassGradeView
-    #subjects 	-- ClassSubjectView
     c.CourseRefId as CourseId,
     c.CourseSchoolYear as CourseSchoolYear,
     sch.SchoolRefId as OrgId,
     sch.SchoolSchoolYear as OrgSchoolYear
-    #terms 		-- ClassTermView
-    #periods 	-- ClassPeriodView
 from coursesection as cs
 left join coursesectionschedule csc
 	on csc.CourseSectionRefId = cs.CourseSectionRefId
@@ -33,8 +30,13 @@ left join courseidentifier as ci
     and c.CourseSchoolYear = ci.CourseSchoolYear
     and ci.IdentificationSystemCode = 'School'
     
-left join school as sch
+join school as sch
 	on sch.SchoolRefId = c.SchoolRefId
     and sch.SchoolSchoolYear = c.SchoolSchoolYear
+
+join lea as l 
+		on l.LEARefId = sch.LEARefId 
+        and l.LEASchoolYear = sch.LEASchoolYear    
+
 ;
 

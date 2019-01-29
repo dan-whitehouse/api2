@@ -19,7 +19,7 @@ class AcademicSessionMapper {
     AcademicSessionsResponse convert(List<AcademicSessionView> instance) {
         List<AcademicSession> list = new ArrayList<>();
         for (AcademicSessionView wrapper : instance) {
-            AcademicSession academicSession = map(wrapper, null);
+            AcademicSession academicSession = map(wrapper);
             if(academicSession != null) {
                 list.add(academicSession);
             }
@@ -33,18 +33,18 @@ class AcademicSessionMapper {
     AcademicSessionResponse convert(AcademicSessionView wrapper) {
         if(wrapper != null) {
             AcademicSessionResponse response = new AcademicSessionResponse();
-            response.setAcademicSession(map(wrapper, null));
+            response.setAcademicSession(map(wrapper));
             return response;
         }
         return null;
     }
 
-    private AcademicSession map(AcademicSessionView instance, String districtId) {
+    private AcademicSession map(AcademicSessionView instance) {
         AcademicSession academicSession = new AcademicSession();
         academicSession.setSourcedId(instance.getSourcedId());
         academicSession.setStatus(StatusType.active);
         academicSession.setDateLastModified(null);
-        academicSession.setMetadata(mapMetadata(instance, districtId));
+        academicSession.setMetadata(mapMetadata(instance));
 
         academicSession.setTitle(instance.getTitle());
         academicSession.setType(SessionType.valueOf(instance.getType()));
@@ -60,10 +60,10 @@ class AcademicSessionMapper {
         return academicSession;
     }
 
-    private Metadata mapMetadata(AcademicSessionView instance, String districtId) {
+    private Metadata mapMetadata(AcademicSessionView instance) {
         Metadata metadata = new Metadata();
         metadata.getAdditionalProperties().put("ricone.schoolYear", instance.getSourcedSchoolYear());
-        metadata.getAdditionalProperties().put("ricone.districtId", districtId);
+        metadata.getAdditionalProperties().put("ricone.districtId", instance.getDistrictId());
         return metadata;
     }
 }

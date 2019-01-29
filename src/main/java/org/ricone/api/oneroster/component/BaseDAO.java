@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BaseDAO {
+    protected final String DISTRICT_ID = "districtId";
     protected final String PRIMARY_KEY = "sourcedId";
     protected final String SCHOOL_YEAR_KEY = "sourcedSchoolYear";
 

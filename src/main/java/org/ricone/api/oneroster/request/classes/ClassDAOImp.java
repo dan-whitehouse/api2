@@ -30,7 +30,8 @@ class ClassDAOImp extends BaseDAO implements ClassDAO {
 
 		final Predicate methodSpecificPredicate = cb.and(
 			cb.equal(from.get(PRIMARY_KEY), refId),
-			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019)
+			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
+			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 		);
 
 		select.distinct(true);
@@ -53,7 +54,8 @@ class ClassDAOImp extends BaseDAO implements ClassDAO {
 		final Root<ClassView> from = select.from(ClassView.class);
 
 		final Predicate methodSpecificPredicate = cb.and(
-			cb.equal(from.get(SCHOOL_YEAR_KEY), "2019")
+			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
+			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 		);
 
 		select.distinct(true);
@@ -77,8 +79,9 @@ class ClassDAOImp extends BaseDAO implements ClassDAO {
 		final SetJoin<ClassView, ClassTermView> classTerms = (SetJoin<ClassView, ClassTermView>) from.<ClassView, ClassTermView>join(JOIN_CLASS_TERMS, JoinType.LEFT);
 
 		final Predicate methodSpecificPredicate = cb.and(
-			cb.equal(from.get(SCHOOL_YEAR_KEY), "2019"),
-			cb.equal(classTerms.get("termId"), refId)
+			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
+			cb.equal(classTerms.get("termId"), refId),
+			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 		);
 
 		select.distinct(true);
@@ -101,8 +104,9 @@ class ClassDAOImp extends BaseDAO implements ClassDAO {
 		final Root<ClassView> from = select.from(ClassView.class);
 
 		final Predicate methodSpecificPredicate = cb.and(
-			cb.equal(from.get(SCHOOL_YEAR_KEY), "2019"),
-			cb.equal(from.get("courseId"), refId)
+			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
+			cb.equal(from.get("courseId"), refId),
+			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 		);
 
 		select.distinct(true);
@@ -125,8 +129,9 @@ class ClassDAOImp extends BaseDAO implements ClassDAO {
 		final Root<ClassView> from = select.from(ClassView.class);
 
 		final Predicate methodSpecificPredicate = cb.and(
-			cb.equal(from.get(SCHOOL_YEAR_KEY), "2019"),
-			cb.equal(from.get("orgId"), refId)
+			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
+			cb.equal(from.get("orgId"), refId),
+			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 		);
 
 		select.distinct(true);
@@ -152,9 +157,10 @@ class ClassDAOImp extends BaseDAO implements ClassDAO {
 			final SetJoin<ClassView, ClassUserView> classUsers = (SetJoin<ClassView, ClassUserView>) from.<ClassView, ClassUserView>join(JOIN_CLASS_USERS, JoinType.LEFT);
 
 			final Predicate methodSpecificPredicate = cb.and(
-					cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
-					cb.equal(classUsers.get("userId"), refId),
-					cb.equal(classUsers.get("role"), "student")
+				cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
+				cb.equal(classUsers.get("userId"), refId),
+				cb.equal(classUsers.get("role"), "student"),
+				from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 			);
 
 			select.distinct(true);
@@ -187,7 +193,8 @@ class ClassDAOImp extends BaseDAO implements ClassDAO {
 		final Predicate methodSpecificPredicate = cb.and(
 			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
 			cb.equal(classUsers.get("userId"), refId),
-			cb.equal(classUsers.get("role"), "teacher")
+			cb.equal(classUsers.get("role"), "teacher"),
+			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 		);
 
 		select.distinct(true);
@@ -213,7 +220,8 @@ class ClassDAOImp extends BaseDAO implements ClassDAO {
 
 		final Predicate methodSpecificPredicate = cb.and(
 			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
-			cb.equal(classUsers.get("userId"), refId)
+			cb.equal(classUsers.get("userId"), refId),
+			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 		);
 
 		select.distinct(true);

@@ -31,7 +31,8 @@ class CourseDAOImp extends BaseDAO implements CourseDAO {
 
 		final Predicate methodSpecificPredicate = cb.and(
 			cb.equal(from.get(PRIMARY_KEY), refId),
-			cb.equal(from.get(SCHOOL_YEAR_KEY), "2019")
+			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
+			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 		);
 
 		select.distinct(true);
@@ -53,7 +54,8 @@ class CourseDAOImp extends BaseDAO implements CourseDAO {
 		final Root<CourseView> from = select.from(CourseView.class);
 
 		final Predicate methodSpecificPredicate = cb.and(
-			cb.equal(from.get(SCHOOL_YEAR_KEY), "2019")
+			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
+			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 		);
 
 		select.distinct(true);
@@ -78,7 +80,8 @@ class CourseDAOImp extends BaseDAO implements CourseDAO {
 
 		final Predicate methodSpecificPredicate = cb.and(
 			cb.equal(from.get("orgId"), refId),
-			cb.equal(from.get(SCHOOL_YEAR_KEY), "2019")
+			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
+			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 		);
 
 		select.distinct(true);

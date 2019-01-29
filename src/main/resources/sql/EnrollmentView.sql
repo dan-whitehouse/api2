@@ -3,6 +3,7 @@ CREATE VIEW EnrollmentView AS
 	select 
 		scs.StudentCourseSectionRefId as SourcedId,
         scs.StudentCourseSectionSchoolYear as SourcedSchoolYear,
+        l.leaId as DistrictId,
         scs.StudentRefId as UserId,
 		scs.StudentSchoolYear as UserSchoolYear,
 		'student' as Role,
@@ -20,12 +21,19 @@ CREATE VIEW EnrollmentView AS
 	join course as c 
 		on cs.CourseRefId = c.CourseRefId
         and cs.CourseSchoolYear = c.CourseSchoolYear
+	join school as sch
+		on sch.SchoolRefId = c.SchoolRefId
+        and sch.SchoolSchoolYear = c.SchoolSchoolYear
+	join lea as l 
+		on l.LEARefId = sch.LEARefId 
+		and l.LEASchoolYear = sch.LEASchoolYear  
 )
 union all
 (
 	select 
 		scs.StaffCourseSectionRefId,
         scs.StaffCourseSectionSchoolYear,
+        l.leaId as DistrictId,
         scs.StaffRefId,
 		scs.StaffSchoolYear,
 		'teacher',
@@ -43,6 +51,12 @@ union all
 	join course as c 
 		on cs.CourseRefId = c.CourseRefId
         and cs.CourseSchoolYear = c.CourseSchoolYear
+	join school as sch
+		on sch.SchoolRefId = c.SchoolRefId
+        and sch.SchoolSchoolYear = c.SchoolSchoolYear
+	join lea as l 
+		on l.LEARefId = sch.LEARefId 
+		and l.LEASchoolYear = sch.LEASchoolYear  
 )
 order by UserId, UserSchoolYear;
 

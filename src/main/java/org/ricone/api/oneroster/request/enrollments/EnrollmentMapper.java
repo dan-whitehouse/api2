@@ -17,8 +17,8 @@ class EnrollmentMapper extends BaseMapper {
 
     EnrollmentsResponse convert(List<EnrollmentView> instance, ControllerData metadata) {
         List<Enrollment> list = new ArrayList<>();
-        for (EnrollmentView wrapper : instance) {
-            Enrollment user = map(wrapper, null);
+        for (EnrollmentView view : instance) {
+            Enrollment user = map(view);
             if(user != null) {
                 list.add(user);
             }
@@ -30,22 +30,22 @@ class EnrollmentMapper extends BaseMapper {
         return response;
     }
 
-    EnrollmentResponse convert(EnrollmentView wrapper, ControllerData metadata) {
-        if(wrapper != null) {
+    EnrollmentResponse convert(EnrollmentView view, ControllerData metadata) {
+        if(view != null) {
             EnrollmentResponse response = new EnrollmentResponse();
-            response.setEnrollment(map(wrapper, null));
+            response.setEnrollment(map(view));
             response.setStatusInfoSets(mapErrors(metadata, EnrollmentView.class, Enrollment.class));
             return response;
         }
         return null;
     }
 
-    private Enrollment map(EnrollmentView instance, String districtId) {
+    private Enrollment map(EnrollmentView instance) {
         Enrollment enrollment = new Enrollment();
         enrollment.setSourcedId(instance.getSourcedId());
         enrollment.setStatus(StatusType.active);
         enrollment.setDateLastModified(null);
-        enrollment.setMetadata(mapMetadata(instance, districtId));
+        enrollment.setMetadata(mapMetadata(instance));
 
         enrollment.setRole(RoleType.valueOf(instance.getRole()));
         enrollment.setPrimary(instance.getPrimary());
@@ -58,10 +58,10 @@ class EnrollmentMapper extends BaseMapper {
         return enrollment;
     }
 
-    private Metadata mapMetadata(EnrollmentView instance, String districtId) {
+    private Metadata mapMetadata(EnrollmentView instance) {
         Metadata metadata = new Metadata();
         metadata.getAdditionalProperties().put("ricone.schoolYear", instance.getSourcedSchoolYear());
-        metadata.getAdditionalProperties().put("ricone.districtId", districtId);
+        metadata.getAdditionalProperties().put("ricone.districtId", instance.getDistrictId());
         return metadata;
     }
 }

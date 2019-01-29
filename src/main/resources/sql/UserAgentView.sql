@@ -11,6 +11,7 @@ CREATE VIEW UserAgentView AS
 	join studentcontactrelationship as scr 
 		on scr.StudentRefId = s.StudentRefId 
         and scr.StudentSchoolYear = s.StudentSchoolYear
+	where scr.RelationshipCode is not null
 )
 union all
 (
@@ -25,6 +26,7 @@ union all
 	join studentcontactrelationship as scr 
 		on scr.StudentContactRefId = sc.StudentContactRefId 
 		and scr.StudentContactSchoolYear = sc.StudentContactSchoolYear
+	where scr.RelationshipCode is not null
 )
 order by SourcedId, SourcedSchoolYear;
 

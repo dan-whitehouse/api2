@@ -17,8 +17,8 @@ class UserMapper {
 
     UsersResponse convert(List<UserView> instance) {
         List<User> list = new ArrayList<>();
-        for (UserView wrapper : instance) {
-            User user = map(wrapper, null);
+        for (UserView view : instance) {
+            User user = map(view);
             if(user != null) {
                 list.add(user);
             }
@@ -29,21 +29,21 @@ class UserMapper {
         return response;
     }
 
-    UserResponse convert(UserView wrapper) {
-        if(wrapper != null) {
+    UserResponse convert(UserView view) {
+        if(view != null) {
             UserResponse response = new UserResponse();
-            response.setUser(map(wrapper, null));
+            response.setUser(map(view));
             return response;
         }
         return null;
     }
 
-    private User map(UserView instance, String districtId) {
+    private User map(UserView instance) {
         User user = new User();
         user.setSourcedId(instance.getSourcedId());
         user.setStatus(StatusType.active);
         user.setDateLastModified(null);
-        user.setMetadata(mapMetadata(instance, districtId));
+        user.setMetadata(mapMetadata(instance));
 
         if("student".equalsIgnoreCase(instance.getRole())) {
             user.setRole(RoleType.student);
@@ -94,13 +94,19 @@ class UserMapper {
                 user.getUserIds().add(new UserId(id.getCode(), id.getId()));
             });
         }
+
+        //Grades
+        instance.getUserGrades().forEach(grade -> {
+            user.getGrades().add(grade.getGradeLevel());
+        });
+
         return user;
     }
 
-    private Metadata mapMetadata(UserView instance, String districtId) {
+    private Metadata mapMetadata(UserView instance) {
         Metadata metadata = new Metadata();
         metadata.getAdditionalProperties().put("ricone.schoolYear", instance.getSourcedSchoolYear());
-        metadata.getAdditionalProperties().put("ricone.districtId", districtId);
+        metadata.getAdditionalProperties().put("ricone.districtId", instance.getDistrictId());
         return metadata;
     }
 }

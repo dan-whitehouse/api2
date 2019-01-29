@@ -22,6 +22,9 @@ public class EnrollmentView implements Serializable {
 	@Column(name = "SourcedSchoolYear")
 	@Id private Integer sourcedSchoolYear;
 
+	@Column(name = "DistrictId")
+	private String districtId;
+
 	@Column(name = "UserId")
 	private String userId;
 
@@ -55,9 +58,10 @@ public class EnrollmentView implements Serializable {
 	public EnrollmentView() {
 	}
 
-	public EnrollmentView(String sourcedId, Integer sourcedSchoolYear, String userId, Integer userSchoolYear, String role, String classId, Integer classSchoolYear, Boolean primary, LocalDate beginDate, LocalDate endDate, String orgId, Integer orgSchoolYear) {
+	public EnrollmentView(String sourcedId, Integer sourcedSchoolYear, String districtId, String userId, Integer userSchoolYear, String role, String classId, Integer classSchoolYear, Boolean primary, LocalDate beginDate, LocalDate endDate, String orgId, Integer orgSchoolYear) {
 		this.sourcedId = sourcedId;
 		this.sourcedSchoolYear = sourcedSchoolYear;
+		this.districtId = districtId;
 		this.userId = userId;
 		this.userSchoolYear = userSchoolYear;
 		this.role = role;
@@ -84,6 +88,14 @@ public class EnrollmentView implements Serializable {
 
 	public void setSourcedSchoolYear(Integer sourcedSchoolYear) {
 		this.sourcedSchoolYear = sourcedSchoolYear;
+	}
+
+	public String getDistrictId() {
+		return districtId;
+	}
+
+	public void setDistrictId(String districtId) {
+		this.districtId = districtId;
 	}
 
 	public String getUserId() {

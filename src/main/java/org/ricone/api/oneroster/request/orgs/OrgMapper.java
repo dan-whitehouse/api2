@@ -23,8 +23,8 @@ class OrgMapper extends BaseMapper {
 
     OrgsResponse convert(List<OrgView> instance, ControllerData metadata) {
         List<Org> list = new ArrayList<>();
-        for (OrgView wrapper : instance) {
-            Org org = map(wrapper, wrapper.getLea().getLeaId());
+        for (OrgView view : instance) {
+            Org org = map(view);
             if(org != null) {
                 list.add(org);
             }
@@ -36,44 +36,39 @@ class OrgMapper extends BaseMapper {
         return response;
     }
 
-    OrgResponse convert(OrgView wrapper, ControllerData metadata) {
-        if(wrapper != null) {
+    OrgResponse convert(OrgView view, ControllerData metadata) {
+        if(view != null) {
             OrgResponse response = new OrgResponse();
-            response.setOrg(map(wrapper, wrapper.getLea().getLeaId()));
+            response.setOrg(map(view));
             response.setStatusInfoSets(mapErrors(metadata, OrgView.class, Org.class));
             return response;
         }
         return null;
     }
 
-    private Org map(OrgView instance, String districtId) {
+    private Org map(OrgView instance) {
         Org org = new Org();
-        org.setSourcedId(instance.getSourceId());
+        org.setSourcedId(instance.getSourcedId());
         org.setStatus(StatusType.active);
         org.setDateLastModified(null);
-        org.setMetadata(mapMetadata(instance, districtId));
+        org.setMetadata(mapMetadata(instance));
 
         org.setType(OrgType.valueOf(instance.getType()));
         org.setName(instance.getName());
         org.setIdentifier(instance.getIdentifier());
 
-        if(org.getType().equals(OrgType.district)) {
-            if(instance.getLea() != null && CollectionUtils.isNotEmpty(instance.getLea().getSchools())) {
-                instance.getLea().getSchools().forEach(school -> {
-                    org.getChildren().add(MappingUtil.buildGUIDRef("schools", school.getSchoolRefId(), GUIDType.org));
-                });
-            }
-        }
-        else {
-            org.setParent(MappingUtil.buildGUIDRef("orgs", instance.getLea().getLeaRefId(), GUIDType.org));
-        }
+        org.setParent(MappingUtil.buildGUIDRef("orgs", instance.getParentId(), GUIDType.org));
+        instance.getChildren().forEach(child -> {
+            org.getChildren().add(MappingUtil.buildGUIDRef("schools", child.getChildId(), GUIDType.org));
+        });
+
         return org;
     }
 
-    private Metadata mapMetadata(OrgView instance, String districtId) {
+    private Metadata mapMetadata(OrgView instance) {
         Metadata metadata = new Metadata();
-        metadata.getAdditionalProperties().put("ricone.schoolYear", instance.getLea().getLeaSchoolYear());
-        metadata.getAdditionalProperties().put("ricone.districtId", districtId);
+        metadata.getAdditionalProperties().put("ricone.schoolYear", instance.getSourcedSchoolYear());
+        metadata.getAdditionalProperties().put("ricone.districtId", instance.getDistrictId());
 
         if(StringUtils.isNotBlank(instance.getLine1())) {
             metadata.getAdditionalProperties().put("address1", instance.getLine1());

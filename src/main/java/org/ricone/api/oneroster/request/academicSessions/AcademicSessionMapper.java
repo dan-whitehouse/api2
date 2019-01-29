@@ -18,8 +18,8 @@ class AcademicSessionMapper {
 
     AcademicSessionsResponse convert(List<AcademicSessionView> instance) {
         List<AcademicSession> list = new ArrayList<>();
-        for (AcademicSessionView wrapper : instance) {
-            AcademicSession academicSession = map(wrapper);
+        for (AcademicSessionView view : instance) {
+            AcademicSession academicSession = map(view);
             if(academicSession != null) {
                 list.add(academicSession);
             }
@@ -30,10 +30,10 @@ class AcademicSessionMapper {
         return response;
     }
 
-    AcademicSessionResponse convert(AcademicSessionView wrapper) {
-        if(wrapper != null) {
+    AcademicSessionResponse convert(AcademicSessionView view) {
+        if(view != null) {
             AcademicSessionResponse response = new AcademicSessionResponse();
-            response.setAcademicSession(map(wrapper));
+            response.setAcademicSession(map(view));
             return response;
         }
         return null;
@@ -49,7 +49,7 @@ class AcademicSessionMapper {
         academicSession.setTitle(instance.getTitle());
         academicSession.setType(SessionType.valueOf(instance.getType()));
 
-        academicSession.setParent(MappingUtil.buildGUIDRef("academicSessions", instance.getAcademicSessionId(), GUIDType.academicSession));
+        academicSession.setParent(MappingUtil.buildGUIDRef("academicSessions", instance.getParentId(), GUIDType.academicSession));
         instance.getChildren().forEach(child -> {
             academicSession.getChildren().add(MappingUtil.buildGUIDRef("terms", child.getChildId(), GUIDType.academicSession));
         });

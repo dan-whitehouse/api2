@@ -1,20 +1,30 @@
 package org.ricone.api.core.model.view;
 
 
+import org.hibernate.annotations.*;
 import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.Immutable;
 import org.ricone.api.core.model.Lea;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 @Immutable @Entity @Table(name = "orgview")
 @Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
-public class OrgView implements java.io.Serializable {
+public class OrgView implements Serializable {
 	private static final long serialVersionUID = -2620417938122940193L;
 
-	@Column(name = "SourceId", length = 30)
-	@Id private String sourceId;
+	@Column(name = "SourcedId")
+	@Id private String sourcedId;
+
+	@Column(name = "SourcedSchoolYear")
+	@Id private Integer sourcedSchoolYear;
+
+	@Column(name = "DistrictId")
+	private String districtId;
 
 	@Column(name = "Type", length = 30)
 	private String type;
@@ -43,18 +53,23 @@ public class OrgView implements java.io.Serializable {
 	@Column(name = "Country", length = 50)
 	private String country;
 
-	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumns({
-			@JoinColumn(name="LEARefId", referencedColumnName="leaRefId"),
-			@JoinColumn(name="LEASchoolYear", referencedColumnName="leaSchoolYear")
-	})
-	private Lea lea;
+	@Column(name = "ParentId")
+	private String parentId;
+
+	@Column(name = "ParentSchoolYear")
+	private Integer parentSchoolYear;
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "orgView")
+	@Fetch(FetchMode.SELECT) @BatchSize(size = 20)
+	private Set<OrgChildrenView> children = new HashSet<>(0);
 
 	public OrgView() {
 	}
 
-	public OrgView(String sourceId, String type, String name, String identifier, String line1, String line2, String city, String state, String postCode, String country, Lea lea) {
-		this.sourceId = sourceId;
+	public OrgView(String sourcedId, Integer sourcedSchoolYear, String districtId, String type, String name, String identifier, String line1, String line2, String city, String state, String postCode, String country, String parentId, Integer parentSchoolYear, Set<OrgChildrenView> children) {
+		this.sourcedId = sourcedId;
+		this.sourcedSchoolYear = sourcedSchoolYear;
+		this.districtId = districtId;
 		this.type = type;
 		this.name = name;
 		this.identifier = identifier;
@@ -64,27 +79,39 @@ public class OrgView implements java.io.Serializable {
 		this.state = state;
 		this.postCode = postCode;
 		this.country = country;
-		this.lea = lea;
+		this.parentId = parentId;
+		this.parentSchoolYear = parentSchoolYear;
+		this.children = children;
 	}
 
-	public Lea getLea() {
-		return lea;
+	public String getSourcedId() {
+		return sourcedId;
 	}
 
-	public void setLea(Lea lea) {
-		this.lea = lea;
+	public void setSourcedId(String sourcedId) {
+		this.sourcedId = sourcedId;
 	}
 
-	public String getSourceId() {
-		return sourceId;
+	public Integer getSourcedSchoolYear() {
+		return sourcedSchoolYear;
 	}
-	public void setSourceId(String sourceId) {
-		this.sourceId = sourceId;
+
+	public void setSourcedSchoolYear(Integer sourcedSchoolYear) {
+		this.sourcedSchoolYear = sourcedSchoolYear;
+	}
+
+	public String getDistrictId() {
+		return districtId;
+	}
+
+	public void setDistrictId(String districtId) {
+		this.districtId = districtId;
 	}
 
 	public String getType() {
 		return type;
 	}
+
 	public void setType(String type) {
 		this.type = type;
 	}
@@ -92,6 +119,7 @@ public class OrgView implements java.io.Serializable {
 	public String getName() {
 		return name;
 	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -99,6 +127,7 @@ public class OrgView implements java.io.Serializable {
 	public String getIdentifier() {
 		return identifier;
 	}
+
 	public void setIdentifier(String identifier) {
 		this.identifier = identifier;
 	}
@@ -106,6 +135,7 @@ public class OrgView implements java.io.Serializable {
 	public String getLine1() {
 		return line1;
 	}
+
 	public void setLine1(String line1) {
 		this.line1 = line1;
 	}
@@ -113,6 +143,7 @@ public class OrgView implements java.io.Serializable {
 	public String getLine2() {
 		return line2;
 	}
+
 	public void setLine2(String line2) {
 		this.line2 = line2;
 	}
@@ -120,6 +151,7 @@ public class OrgView implements java.io.Serializable {
 	public String getCity() {
 		return city;
 	}
+
 	public void setCity(String city) {
 		this.city = city;
 	}
@@ -127,6 +159,7 @@ public class OrgView implements java.io.Serializable {
 	public String getState() {
 		return state;
 	}
+
 	public void setState(String state) {
 		this.state = state;
 	}
@@ -134,6 +167,7 @@ public class OrgView implements java.io.Serializable {
 	public String getPostCode() {
 		return postCode;
 	}
+
 	public void setPostCode(String postCode) {
 		this.postCode = postCode;
 	}
@@ -141,9 +175,32 @@ public class OrgView implements java.io.Serializable {
 	public String getCountry() {
 		return country;
 	}
+
 	public void setCountry(String country) {
 		this.country = country;
 	}
 
+	public String getParentId() {
+		return parentId;
+	}
 
+	public void setParentId(String parentId) {
+		this.parentId = parentId;
+	}
+
+	public Integer getParentSchoolYear() {
+		return parentSchoolYear;
+	}
+
+	public void setParentSchoolYear(Integer parentSchoolYear) {
+		this.parentSchoolYear = parentSchoolYear;
+	}
+
+	public Set<OrgChildrenView> getChildren() {
+		return children;
+	}
+
+	public void setChildren(Set<OrgChildrenView> children) {
+		this.children = children;
+	}
 }

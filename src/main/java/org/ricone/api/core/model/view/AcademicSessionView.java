@@ -42,11 +42,11 @@ public class AcademicSessionView implements Serializable {
 	@Column(name = "EndDate")
 	LocalDate endDate;
 
-	@Column(name = "AcademicSessionId")
-	private String academicSessionId;
+	@Column(name = "ParentId")
+	private String parentId;
 
-	@Column(name = "AcademicSessionSchoolYear")
-	private Integer academicSessionSchoolYear;
+	@Column(name = "ParentSchoolYear")
+	private Integer parentSchoolYear;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "academicSessionView")
 	@Fetch(FetchMode.SELECT) @BatchSize(size = 20)
@@ -55,7 +55,7 @@ public class AcademicSessionView implements Serializable {
 	public AcademicSessionView() {
 	}
 
-	public AcademicSessionView(String sourcedId, Integer sourcedSchoolYear, String districtId, String title, String type, String schoolYear, LocalDate beginDate, LocalDate endDate, String academicSessionId, Integer academicSessionSchoolYear, Set<AcademicSessionChildrenView> children) {
+	public AcademicSessionView(String sourcedId, Integer sourcedSchoolYear, String districtId, String title, String type, String schoolYear, LocalDate beginDate, LocalDate endDate, String parentId, Integer parentSchoolYear, Set<AcademicSessionChildrenView> children) {
 		this.sourcedId = sourcedId;
 		this.sourcedSchoolYear = sourcedSchoolYear;
 		this.districtId = districtId;
@@ -64,8 +64,8 @@ public class AcademicSessionView implements Serializable {
 		this.schoolYear = schoolYear;
 		this.beginDate = beginDate;
 		this.endDate = endDate;
-		this.academicSessionId = academicSessionId;
-		this.academicSessionSchoolYear = academicSessionSchoolYear;
+		this.parentId = parentId;
+		this.parentSchoolYear = parentSchoolYear;
 		this.children = children;
 	}
 
@@ -133,20 +133,20 @@ public class AcademicSessionView implements Serializable {
 		this.endDate = endDate;
 	}
 
-	public String getAcademicSessionId() {
-		return academicSessionId;
+	public String getParentId() {
+		return parentId;
 	}
 
-	public void setAcademicSessionId(String academicSessionId) {
-		this.academicSessionId = academicSessionId;
+	public void setParentId(String parentId) {
+		this.parentId = parentId;
 	}
 
-	public Integer getAcademicSessionSchoolYear() {
-		return academicSessionSchoolYear;
+	public Integer getParentSchoolYear() {
+		return parentSchoolYear;
 	}
 
-	public void setAcademicSessionSchoolYear(Integer academicSessionSchoolYear) {
-		this.academicSessionSchoolYear = academicSessionSchoolYear;
+	public void setParentSchoolYear(Integer parentSchoolYear) {
+		this.parentSchoolYear = parentSchoolYear;
 	}
 
 	public Set<AcademicSessionChildrenView> getChildren() {

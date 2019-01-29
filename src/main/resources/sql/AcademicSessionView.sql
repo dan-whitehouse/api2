@@ -19,8 +19,8 @@ CREATE VIEW AcademicSessionView AS
 			where sub.SchoolCalendarRefId = schc.SchoolCalendarRefId
 			and sub.SchoolCalendarSchoolYear = schc.SchoolCalendarSchoolYear
 		) as EndDate,
-        null as AcademicSessionId,
-        null as AcademicSessionSchoolYear
+        null as ParentId,
+        null as ParentSchoolYear
 	from schoolcalendar as schc
     join school as sch 
 		on sch.SchoolRefId = schc.SchoolRefId 

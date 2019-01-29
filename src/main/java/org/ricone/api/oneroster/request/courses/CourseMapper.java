@@ -16,8 +16,8 @@ class CourseMapper {
 
     CoursesResponse convert(List<CourseView> instance) {
         List<Course> list = new ArrayList<>();
-        for (CourseView wrapper : instance) {
-            Course org = map(wrapper);
+        for (CourseView view : instance) {
+            Course org = map(view);
             if(org != null) {
                 list.add(org);
             }
@@ -28,10 +28,10 @@ class CourseMapper {
         return response;
     }
 
-    CourseResponse convert(CourseView wrapper) {
-        if(wrapper != null) {
+    CourseResponse convert(CourseView view) {
+        if(view != null) {
             CourseResponse response = new CourseResponse();
-            response.setCourse(map(wrapper));
+            response.setCourse(map(view));
             return response;
         }
         return null;

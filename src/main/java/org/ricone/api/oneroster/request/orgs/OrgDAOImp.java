@@ -22,8 +22,6 @@ import java.util.List;
 class OrgDAOImp extends BaseDAO implements OrgDAO {
 	@PersistenceContext private EntityManager em;
 	private Logger logger = LogManager.getLogger(OrgDAOImp.class);
-	private final String PRIMARY_KEY = "leaRefId";
-	private final String SCHOOL_YEAR_KEY = "leaSchoolYear";
 
 	@Override
 	public OrgView getOrg(ControllerData metadata, String refId) throws Exception {
@@ -31,19 +29,20 @@ class OrgDAOImp extends BaseDAO implements OrgDAO {
 		final CriteriaQuery<OrgView> select = cb.createQuery(OrgView.class);
 		final Root<OrgView> from = select.from(OrgView.class);
 
+		//Method Specific Predicate
+		final Predicate methodSpecificPredicate = cb.and(
+			cb.equal(from.get(PRIMARY_KEY), refId),
+			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
+			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+		);
+
 		select.distinct(true);
 		select.select(from);
-		select.where(
-			cb.and(
-				cb.equal(from.get("sourceId"), refId),
-				cb.equal(from.get(SCHOOL_YEAR_KEY), "2019")
-			)
-		);
+		select.where(getWhereClause(metadata, cb, from, methodSpecificPredicate));
 
 		Query q = em.createQuery(select);
 		try {
-			OrgView instance = (OrgView) q.getSingleResult();
-			return instance;
+			return (OrgView) q.getSingleResult();
 		}
 		catch(NoResultException ignored) { }
 		return null;
@@ -54,12 +53,11 @@ class OrgDAOImp extends BaseDAO implements OrgDAO {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<OrgView> select = cb.createQuery(OrgView.class);
 		final Root<OrgView> from = select.from(OrgView.class);
-		final Join<OrgView, Lea> lea = from.join(JOIN_LEA, JoinType.LEFT);
 
 		//Method Specific Predicate
 		final Predicate methodSpecificPredicate = cb.and(
-			cb.equal(lea.get(SCHOOL_YEAR_KEY), 2019),
-			lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
+			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 		);
 
 		select.distinct(false);
@@ -74,9 +72,7 @@ class OrgDAOImp extends BaseDAO implements OrgDAO {
 			q.setMaxResults(metadata.getPaging().getLimit());
 		}
 
-		List<OrgView> instance = q.getResultList();
-		initialize(instance);
-		return instance;
+		return (List<OrgView>) q.getResultList();
 	}
 
 	@Override
@@ -85,20 +81,21 @@ class OrgDAOImp extends BaseDAO implements OrgDAO {
 		final CriteriaQuery<OrgView> select = cb.createQuery(OrgView.class);
 		final Root<OrgView> from = select.from(OrgView.class);
 
+		//Method Specific Predicate
+		final Predicate methodSpecificPredicate = cb.and(
+			cb.equal(from.get(PRIMARY_KEY), refId),
+			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
+			cb.equal(from.get("type"), "school"),
+			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+		);
+
 		select.distinct(true);
 		select.select(from);
-		select.where(
-			cb.and(
-				cb.equal(from.get("sourceId"), refId),
-				cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
-				cb.equal(from.get("type"), "school")
-			)
-		);
+		select.where(getWhereClause(metadata, cb, from, methodSpecificPredicate));
 
 		Query q = em.createQuery(select);
 		try {
-			OrgView instance = (OrgView) q.getSingleResult();
-			return instance;
+			return (OrgView) q.getSingleResult();
 		}
 		catch(NoResultException ignored) { }
 		return null;
@@ -112,7 +109,8 @@ class OrgDAOImp extends BaseDAO implements OrgDAO {
 
 		final Predicate methodSpecificPredicate = cb.and(
 			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
-			cb.equal(from.get("type"), "school")
+			cb.equal(from.get("type"), "school"),
+			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 		);
 
 		select.distinct(true);
@@ -125,20 +123,6 @@ class OrgDAOImp extends BaseDAO implements OrgDAO {
 			q.setFirstResult(metadata.getPaging().getOffset());
 			q.setMaxResults(metadata.getPaging().getLimit());
 		}
-
-		List<OrgView> instance = q.getResultList();
-		return instance;
-	}
-
-	private void initialize(OrgView instance) {
-		Hibernate.initialize(instance.getLea());
-		instance.getLea().getSchools().forEach(Hibernate::initialize);
-	}
-
-	private void initialize(List<OrgView> instance) {
-		instance.forEach(wrapper -> {
-			Hibernate.initialize(wrapper.getLea());
-			wrapper.getLea().getSchools().forEach(Hibernate::initialize);
-		});
+		return (List<OrgView>) q.getResultList();
 	}
 }

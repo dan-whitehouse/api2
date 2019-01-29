@@ -9,6 +9,7 @@ CREATE VIEW UserIdentifierView AS
 		si.StudentSchoolYear as SourcedSchoolYear,
 		'student' as SourcedRole
 	from studentidentifier as si
+    where si.IdentificationSystemCode != 'SchoolToolRefId'
 )
 union all
 (
@@ -21,6 +22,7 @@ union all
 		si.StaffSchoolYear,
 		'teacher'
 	from staffidentifier as si
+    where si.IdentificationSystemCode != 'SchoolToolRefId'
 )
 union all
 (
@@ -33,6 +35,7 @@ union all
 		si.StudentContactSchoolYear,
 		'contact' as role
 	from studentcontactidentifier as si
+    where si.IdentificationSystemCode != 'SchoolToolRefId'
 )
 order by SourcedId, SourcedSchoolYear;
 

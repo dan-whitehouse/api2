@@ -10,9 +10,9 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @IdClass(ChildComposite.class)
-@Immutable @Entity @Table(name = "academicsessionchildrenview")
+@Immutable @Entity @Table(name = "orgchildrenview")
 @Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
-public class AcademicSessionChildrenView implements Serializable {
+public class OrgChildrenView implements Serializable {
 	private static final long serialVersionUID = -1680434938122940174L;
 
 	@Column(name = "ChildId")
@@ -26,15 +26,15 @@ public class AcademicSessionChildrenView implements Serializable {
 			@JoinColumn(name="SourcedId", referencedColumnName="sourcedId", nullable = false),
 			@JoinColumn(name="SourcedSchoolYear", referencedColumnName="sourcedSchoolYear", nullable = false),
 	})
-	private AcademicSessionView academicSessionView;
+	private OrgView orgView;
 
-	public AcademicSessionChildrenView() {
+	public OrgChildrenView() {
 	}
 
-	public AcademicSessionChildrenView(String childId, Integer childSchoolYear, AcademicSessionView academicSessionView) {
+	public OrgChildrenView(String childId, Integer childSchoolYear, OrgView orgView) {
 		this.childId = childId;
 		this.childSchoolYear = childSchoolYear;
-		this.academicSessionView = academicSessionView;
+		this.orgView = orgView;
 	}
 
 	public String getChildId() {
@@ -53,11 +53,11 @@ public class AcademicSessionChildrenView implements Serializable {
 		this.childSchoolYear = childSchoolYear;
 	}
 
-	public AcademicSessionView getAcademicSessionView() {
-		return academicSessionView;
+	public OrgView getOrgView() {
+		return orgView;
 	}
 
-	public void setAcademicSessionView(AcademicSessionView academicSessionView) {
-		this.academicSessionView = academicSessionView;
+	public void setOrgView(OrgView orgView) {
+		this.orgView = orgView;
 	}
 }

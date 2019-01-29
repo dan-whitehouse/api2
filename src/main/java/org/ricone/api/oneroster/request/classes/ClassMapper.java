@@ -19,8 +19,8 @@ class ClassMapper extends BaseMapper {
 
     ClassesResponse convert(List<ClassView> instance, ControllerData metadata) {
         List<Class> list = new ArrayList<>();
-        for (ClassView wrapper : instance) {
-            Class clazz = map(wrapper);
+        for (ClassView view : instance) {
+            Class clazz = map(view);
             if(clazz != null) {
                 list.add(clazz);
             }
@@ -32,10 +32,10 @@ class ClassMapper extends BaseMapper {
         return response;
     }
 
-    ClassResponse convert(ClassView wrapper, ControllerData metadata) {
-        if(wrapper != null) {
+    ClassResponse convert(ClassView view, ControllerData metadata) {
+        if(view != null) {
             ClassResponse response = new ClassResponse();
-            response.setClass_(map(wrapper));
+            response.setClass_(map(view));
             response.setStatusInfoSets(mapErrors(metadata, ClassView.class, Class.class));
             return response;
         }

@@ -8,6 +8,6 @@ from AcademicSessionView as asv
 join schoolcalendarsession scs 
 	on 	scs.SchoolCalendarRefId = asv.SourcedId
     and scs.SchoolCalendarSchoolYear = asv.SourcedSchoolYear
-where asv.AcademicSessionId is null 
-and  asv.AcademicSessionSchoolYear is null
+where asv.ParentId is null 
+and  asv.ParentSchoolYear is null
 

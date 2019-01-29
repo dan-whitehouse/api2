@@ -35,7 +35,8 @@ class EnrollmentDAOImp extends BaseDAO implements EnrollmentDAO {
 		//Method Specific Predicate
 		final Predicate methodSpecificPredicate = cb.and(
 			cb.equal(from.get(PRIMARY_KEY), refId),
-			cb.equal(from.get(SCHOOL_YEAR_KEY), "2019")
+			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
+			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 		);
 
 		select.distinct(true);
@@ -44,8 +45,7 @@ class EnrollmentDAOImp extends BaseDAO implements EnrollmentDAO {
 
 		Query q = em.createQuery(select);
 		try {
-			EnrollmentView instance = (EnrollmentView) q.getSingleResult();
-			return instance;
+			return (EnrollmentView) q.getSingleResult();
 		}
 		catch(NoResultException ignored) { }
 		return null;
@@ -59,7 +59,8 @@ class EnrollmentDAOImp extends BaseDAO implements EnrollmentDAO {
 
 		//Method Specific Predicate
 		final Predicate methodSpecificPredicate = cb.and(
-			cb.equal(from.get(SCHOOL_YEAR_KEY), "2019")
+			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
+			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 		);
 
 		select.distinct(true);
@@ -72,9 +73,7 @@ class EnrollmentDAOImp extends BaseDAO implements EnrollmentDAO {
 			q.setFirstResult(metadata.getPaging().getOffset());
 			q.setMaxResults(metadata.getPaging().getLimit());
 		}
-
-		List<EnrollmentView> instance = q.getResultList();
-		return instance;
+		return (List<EnrollmentView>) q.getResultList();
 	}
 
 	@Override
@@ -85,18 +84,5 @@ class EnrollmentDAOImp extends BaseDAO implements EnrollmentDAO {
 	@Override
 	public List<EnrollmentView> getEnrollmentsForClassInSchool(ControllerData metadata, String schoolId, String classId) {
 		return null;
-	}
-
-	/** Initialize **/
-	private void initialize(StudentCourseSectionWrapper instance) {
-		Hibernate.initialize(instance.getStudentCourseSection().getStudent());
-		Hibernate.initialize(instance.getStudentCourseSection().getCourseSection());
-	}
-
-	private void initialize(List<StudentCourseSectionWrapper> instance) {
-		instance.forEach(wrapper -> {
-			Hibernate.initialize(wrapper.getStudentCourseSection().getStudent());
-			Hibernate.initialize(wrapper.getStudentCourseSection().getCourseSection());
-		});
 	}
 }

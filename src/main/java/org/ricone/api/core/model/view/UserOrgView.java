@@ -28,8 +28,8 @@ public class UserOrgView implements Serializable {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumns({
 			@JoinColumn(name="SourcedId", referencedColumnName="sourcedId", nullable = false),
-			@JoinColumn(name="SourcedSchoolYear", referencedColumnName="sourcedSchoolYear", nullable = false),
-			@JoinColumn(name="SourcedRole", referencedColumnName="role", nullable = false)
+			@JoinColumn(name="SourcedSchoolYear", referencedColumnName="sourcedSchoolYear", nullable = false)/*,
+			@JoinColumn(name="SourcedRole", referencedColumnName="role", nullable = false)*/
 	})
 	private UserView userView;
 

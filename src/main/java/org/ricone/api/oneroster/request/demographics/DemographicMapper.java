@@ -24,8 +24,8 @@ class DemographicMapper {
 
     DemographicsResponse convert(List<DemographicView> instance) {
         List<Demographic> list = new ArrayList<>();
-        for (DemographicView wrapper : instance) {
-            Demographic demographic = map(wrapper, null);
+        for (DemographicView view : instance) {
+            Demographic demographic = map(view);
             if(demographic != null) {
                 list.add(demographic);
             }
@@ -36,21 +36,21 @@ class DemographicMapper {
         return response;
     }
 
-    DemographicResponse convert(DemographicView wrapper) {
-        if(wrapper != null) {
+    DemographicResponse convert(DemographicView view) {
+        if(view != null) {
             DemographicResponse response = new DemographicResponse();
-            response.setDemographics(map(wrapper, null));
+            response.setDemographics(map(view));
             return response;
         }
         return null;
     }
 
-    private Demographic map(DemographicView instance, String districtId) {
+    private Demographic map(DemographicView instance) {
         Demographic demographic = new Demographic();
         demographic.setSourcedId(instance.getSourcedId());
         demographic.setStatus(StatusType.active);
         demographic.setDateLastModified(null);
-        demographic.setMetadata(mapMetadata(instance, districtId));
+        demographic.setMetadata(mapMetadata(instance));
 
         //Birthdate
         if(instance.getBirthDate() != null) {
@@ -78,10 +78,10 @@ class DemographicMapper {
         return demographic;
     }
 
-    private Metadata mapMetadata(DemographicView instance, String districtId) {
+    private Metadata mapMetadata(DemographicView instance) {
         Metadata metadata = new Metadata();
         metadata.getAdditionalProperties().put("ricone.schoolYear", instance.getSourcedSchoolYear());
-        metadata.getAdditionalProperties().put("ricone.districtId", districtId);
+        metadata.getAdditionalProperties().put("ricone.districtId", instance.getDistrictId());
         return metadata;
     }
 }

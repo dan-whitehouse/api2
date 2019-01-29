@@ -23,6 +23,9 @@ public class DemographicView implements Serializable {
 	@Column(name = "SourcedSchoolYear")
 	@Id private Integer sourcedSchoolYear;
 
+	@Column(name = "DistrictId")
+	private String districtId;
+
 	@Column(name = "BirthDate")
 	private LocalDate birthDate;
 
@@ -65,9 +68,10 @@ public class DemographicView implements Serializable {
 	public DemographicView() {
 	}
 
-	public DemographicView(String sourcedId, Integer sourcedSchoolYear, LocalDate birthDate, String sex, Boolean americanIndianOrAlaskaNative, Boolean asian, Boolean blackOrAfricanAmerican, Boolean nativeHawaiianOrOtherPacificIslander, Boolean white, Boolean demographicRaceTwoOrMoreRaces, Boolean hispanicOrLatinoEthnicity, String countryOfBirthCode, String stateOfBirthAbbreviation, String cityOfBirth, String publicSchoolResidenceStatus) {
+	public DemographicView(String sourcedId, Integer sourcedSchoolYear, String districtId, LocalDate birthDate, String sex, Boolean americanIndianOrAlaskaNative, Boolean asian, Boolean blackOrAfricanAmerican, Boolean nativeHawaiianOrOtherPacificIslander, Boolean white, Boolean demographicRaceTwoOrMoreRaces, Boolean hispanicOrLatinoEthnicity, String countryOfBirthCode, String stateOfBirthAbbreviation, String cityOfBirth, String publicSchoolResidenceStatus) {
 		this.sourcedId = sourcedId;
 		this.sourcedSchoolYear = sourcedSchoolYear;
+		this.districtId = districtId;
 		this.birthDate = birthDate;
 		this.sex = sex;
 		this.americanIndianOrAlaskaNative = americanIndianOrAlaskaNative;
@@ -97,6 +101,14 @@ public class DemographicView implements Serializable {
 
 	public void setSourcedSchoolYear(Integer sourcedSchoolYear) {
 		this.sourcedSchoolYear = sourcedSchoolYear;
+	}
+
+	public String getDistrictId() {
+		return districtId;
+	}
+
+	public void setDistrictId(String districtId) {
+		this.districtId = districtId;
 	}
 
 	public LocalDate getBirthDate() {

@@ -3,6 +3,7 @@ CREATE VIEW DemographicView AS
 	select
 		s.StudentRefId as SourcedId, 
 		s.StudentSchoolYear as SourcedSchoolYear,
+        l.leaId as DistrictId,
 		s.Birthdate as BirthDate,
 		s.SexCode as Sex,
 		case when sr_native.raceCode is null then false else true end as AmericanIndianOrAlaskaNative, 
@@ -41,5 +42,15 @@ CREATE VIEW DemographicView AS
 		on s.StudentRefId = sr_white.StudentRefId 
 		and s.StudentSchoolYear = sr_white.StudentSchoolYear 
 		and sr_white.RaceCode = 'White'
+        
+	left join studentenrollment as se
+		on se.StudentRefId = s.StudentRefId
+        and se.StudentSchoolYear = s.StudentSchoolYear
+	join school as sch
+		on sch.SchoolRefId = se.SchoolRefId
+        and sch.SchoolSchoolYear = se.SchoolSchoolYear
+	join lea as l 
+		on l.LEARefId = sch.LEARefId 
+		and l.LEASchoolYear = sch.LEASchoolYear  
  )       
 order by SourcedId, SourcedSchoolYear;	

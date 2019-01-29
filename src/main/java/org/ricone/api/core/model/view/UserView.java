@@ -3,6 +3,7 @@ package org.ricone.api.core.model.view;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.*;
+import org.ricone.api.core.model.view.composite.SourcedComposite;
 import org.ricone.api.core.model.view.composite.UserComposite;
 
 import javax.persistence.Entity;
@@ -12,7 +13,8 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-@IdClass(UserComposite.class)
+//@IdClass(UserComposite.class)
+@IdClass(SourcedComposite.class)
 @Immutable @Entity @Table(name = "userview")
 @Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 public class UserView implements Serializable {
@@ -25,7 +27,10 @@ public class UserView implements Serializable {
 	@Id private Integer sourcedSchoolYear;
 
 	@Column(name = "Role")
-	@Id private String role;
+	/*@Id */private String role;
+
+	@Column(name = "DistrictId")
+	private String districtId;
 
 	@Column(name = "EnabledUser")
 	private Boolean enabledUser;
@@ -67,13 +72,18 @@ public class UserView implements Serializable {
 	@Fetch(FetchMode.SELECT) @BatchSize(size = 20)
 	private Set<UserClassView> userClasses = new HashSet<>(0);
 
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "userView")
+	@Fetch(FetchMode.SELECT) @BatchSize(size = 20)
+	private Set<UserGradeView> userGrades = new HashSet<>(0);
+
 	public UserView() {
 	}
 
-	public UserView(String sourcedId, Integer sourcedSchoolYear, String role, Boolean enabledUser, String givenName, String familyName, String middleName, String identifier, String email, String phone, String sms, Set<UserIdentifierView> userIds, Set<UserOrgView> userOrgs, Set<UserAgentView> userAgents, Set<UserClassView> userClasses) {
+	public UserView(String sourcedId, Integer sourcedSchoolYear, String role, String districtId, Boolean enabledUser, String givenName, String familyName, String middleName, String identifier, String email, String phone, String sms, Set<UserIdentifierView> userIds, Set<UserOrgView> userOrgs, Set<UserAgentView> userAgents, Set<UserClassView> userClasses, Set<UserGradeView> userGrades) {
 		this.sourcedId = sourcedId;
 		this.sourcedSchoolYear = sourcedSchoolYear;
 		this.role = role;
+		this.districtId = districtId;
 		this.enabledUser = enabledUser;
 		this.givenName = givenName;
 		this.familyName = familyName;
@@ -86,6 +96,7 @@ public class UserView implements Serializable {
 		this.userOrgs = userOrgs;
 		this.userAgents = userAgents;
 		this.userClasses = userClasses;
+		this.userGrades = userGrades;
 	}
 
 	public String getSourcedId() {
@@ -110,6 +121,14 @@ public class UserView implements Serializable {
 
 	public void setRole(String role) {
 		this.role = role;
+	}
+
+	public String getDistrictId() {
+		return districtId;
+	}
+
+	public void setDistrictId(String districtId) {
+		this.districtId = districtId;
 	}
 
 	public Boolean getEnabledUser() {
@@ -206,5 +225,13 @@ public class UserView implements Serializable {
 
 	public void setUserClasses(Set<UserClassView> userClasses) {
 		this.userClasses = userClasses;
+	}
+
+	public Set<UserGradeView> getUserGrades() {
+		return userGrades;
+	}
+
+	public void setUserGrades(Set<UserGradeView> userGrades) {
+		this.userGrades = userGrades;
 	}
 }

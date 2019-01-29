@@ -5,8 +5,8 @@ import org.apache.logging.log4j.Logger;
 import org.ricone.api.core.model.view.UserClassView;
 import org.ricone.api.core.model.view.UserOrgView;
 import org.ricone.api.core.model.view.UserView;
-import org.ricone.api.oneroster.component.ControllerData;
 import org.ricone.api.oneroster.component.BaseDAO;
+import org.ricone.api.oneroster.component.ControllerData;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -14,7 +14,6 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.criteria.*;
-import java.util.ArrayList;
 import java.util.List;
 
 @Repository("OneRoster:Users:UserDAO")
@@ -22,8 +21,6 @@ import java.util.List;
 class UserDAOImp extends BaseDAO implements UserDAO {
 	@PersistenceContext private EntityManager em;
 	private Logger logger = LogManager.getLogger(UserDAOImp.class);
-	private final String PRIMARY_KEY = "sourcedId";
-	private final String SCHOOL_YEAR_KEY = "sourcedSchoolYear";
 	private final String ROLE = "role";
 
 	@Override
@@ -32,19 +29,20 @@ class UserDAOImp extends BaseDAO implements UserDAO {
 		final CriteriaQuery<UserView> select = cb.createQuery(UserView.class);
 		final Root<UserView> from = select.from(UserView.class);
 
+		//Method Specific Predicate
+		final Predicate methodSpecificPredicate = cb.and(
+			cb.equal(from.get(PRIMARY_KEY), refId),
+			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
+			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+		);
+
 		select.distinct(true);
 		select.select(from);
-		select.where(
-			cb.and(
-				cb.equal(from.get(PRIMARY_KEY), refId),
-				cb.equal(from.get(SCHOOL_YEAR_KEY), "2019")
-			)
-		);
+		select.where(getWhereClause(metadata, cb, from, methodSpecificPredicate));
 
 		Query q = em.createQuery(select);
 		try {
-			UserView instance = (UserView) q.getSingleResult();
-			return instance;
+			return (UserView) q.getSingleResult();
 		}
 		catch(NoResultException ignored) { }
 		return null;
@@ -59,7 +57,8 @@ class UserDAOImp extends BaseDAO implements UserDAO {
 
 			//Method Specific Predicate
 			final Predicate methodSpecificPredicate = cb.and(
-				cb.equal(from.get(SCHOOL_YEAR_KEY), 2019)
+				cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
+				from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 			);
 
 			select.distinct(false);
@@ -73,8 +72,7 @@ class UserDAOImp extends BaseDAO implements UserDAO {
 				q.setMaxResults(metadata.getPaging().getLimit());
 			}
 
-			List<UserView> instance = q.getResultList();
-			return instance;
+			return (List<UserView>) q.getResultList();
 		}
 		catch(Exception e) {
 			e.printStackTrace();
@@ -88,20 +86,21 @@ class UserDAOImp extends BaseDAO implements UserDAO {
 		final CriteriaQuery<UserView> select = cb.createQuery(UserView.class);
 		final Root<UserView> from = select.from(UserView.class);
 
+		//Method Specific Predicate
+		final Predicate methodSpecificPredicate = cb.and(
+			cb.equal(from.get(PRIMARY_KEY), refId),
+			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
+			cb.equal(from.get(ROLE), "student"),
+			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+		);
+
 		select.distinct(true);
 		select.select(from);
-		select.where(
-			cb.and(
-				cb.equal(from.get(PRIMARY_KEY), refId),
-				cb.equal(from.get(SCHOOL_YEAR_KEY), "2019"),
-				cb.equal(from.get(ROLE), "student")
-			)
-		);
+		select.where(getWhereClause(metadata, cb, from, methodSpecificPredicate));
 
 		Query q = em.createQuery(select);
 		try {
-			UserView instance = (UserView) q.getSingleResult();
-			return instance;
+			return (UserView) q.getSingleResult();
 		}
 		catch(NoResultException ignored) { }
 		return null;
@@ -116,7 +115,8 @@ class UserDAOImp extends BaseDAO implements UserDAO {
 		//Method Specific Predicate
 		final Predicate methodSpecificPredicate = cb.and(
 			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
-			cb.equal(from.get(ROLE), "student")
+			cb.equal(from.get(ROLE), "student"),
+			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 		);
 
 		select.distinct(true);
@@ -129,9 +129,7 @@ class UserDAOImp extends BaseDAO implements UserDAO {
 			q.setFirstResult(metadata.getPaging().getOffset());
 			q.setMaxResults(metadata.getPaging().getLimit());
 		}
-
-		List<UserView> instance = q.getResultList();
-		return instance;
+		return (List<UserView>) q.getResultList();
 	}
 
 	@Override
@@ -145,6 +143,7 @@ class UserDAOImp extends BaseDAO implements UserDAO {
 		final Predicate methodSpecificPredicate = cb.and(
 			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
 			cb.equal(from.get(ROLE), "student"),
+			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()),
 			cb.and(
 				cb.equal(userOrgs.get("orgId"), refId),
 				cb.equal(userOrgs.get("orgType"), "school")
@@ -161,9 +160,7 @@ class UserDAOImp extends BaseDAO implements UserDAO {
 			q.setFirstResult(metadata.getPaging().getOffset());
 			q.setMaxResults(metadata.getPaging().getLimit());
 		}
-
-		List<UserView> instance = q.getResultList();
-		return instance;
+		return (List<UserView>) q.getResultList();
 	}
 
 	@Override
@@ -177,6 +174,7 @@ class UserDAOImp extends BaseDAO implements UserDAO {
 		final Predicate methodSpecificPredicate = cb.and(
 			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
 			cb.equal(from.get(ROLE), "student"),
+			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()),
 			cb.equal(userClasses.get("classId"), refId)
 		);
 
@@ -190,9 +188,7 @@ class UserDAOImp extends BaseDAO implements UserDAO {
 			q.setFirstResult(metadata.getPaging().getOffset());
 			q.setMaxResults(metadata.getPaging().getLimit());
 		}
-
-		List<UserView> instance = q.getResultList();
-		return instance;
+		return (List<UserView>) q.getResultList();
 	}
 
 	@Override
@@ -206,6 +202,7 @@ class UserDAOImp extends BaseDAO implements UserDAO {
 		final Predicate methodSpecificPredicate = cb.and(
 			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
 			cb.equal(from.get(ROLE), "student"),
+			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()),
 			cb.equal(userClasses.get("orgId"), schoolId),
 			cb.equal(userClasses.get("classId"), classId)
 		);
@@ -220,9 +217,7 @@ class UserDAOImp extends BaseDAO implements UserDAO {
 			q.setFirstResult(metadata.getPaging().getOffset());
 			q.setMaxResults(metadata.getPaging().getLimit());
 		}
-
-		List<UserView> instance = q.getResultList();
-		return instance;
+		return (List<UserView>) q.getResultList();
 	}
 
 	@Override
@@ -236,15 +231,15 @@ class UserDAOImp extends BaseDAO implements UserDAO {
 		select.where(
 			cb.and(
 				cb.equal(from.get(PRIMARY_KEY), refId),
-				cb.equal(from.get(SCHOOL_YEAR_KEY), "2019"),
-				cb.equal(from.get(ROLE), "teacher")
+				cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
+				cb.equal(from.get(ROLE), "teacher"),
+				from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 			)
 		);
 
 		Query q = em.createQuery(select);
 		try {
-			UserView instance = (UserView) q.getSingleResult();
-			return instance;
+			return (UserView) q.getSingleResult();
 		}
 		catch(NoResultException ignored) { }
 		return null;
@@ -259,7 +254,8 @@ class UserDAOImp extends BaseDAO implements UserDAO {
 		//Method Specific Predicate
 		final Predicate methodSpecificPredicate = cb.and(
 			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
-			cb.equal(from.get(ROLE), "teacher")
+			cb.equal(from.get(ROLE), "teacher"),
+			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 		);
 
 		select.distinct(true);
@@ -272,9 +268,7 @@ class UserDAOImp extends BaseDAO implements UserDAO {
 			q.setFirstResult(metadata.getPaging().getOffset());
 			q.setMaxResults(metadata.getPaging().getLimit());
 		}
-
-		List<UserView> instance = q.getResultList();
-		return instance;
+		return (List<UserView>) q.getResultList();
 	}
 
 	@Override
@@ -288,6 +282,7 @@ class UserDAOImp extends BaseDAO implements UserDAO {
 		final Predicate methodSpecificPredicate = cb.and(
 			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
 			cb.equal(from.get(ROLE), "teacher"),
+			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()),
 			cb.and(
 				cb.equal(userOrgs.get("orgId"), refId),
 				cb.equal(userOrgs.get("orgType"), "school")
@@ -304,9 +299,7 @@ class UserDAOImp extends BaseDAO implements UserDAO {
 			q.setFirstResult(metadata.getPaging().getOffset());
 			q.setMaxResults(metadata.getPaging().getLimit());
 		}
-
-		List<UserView> instance = q.getResultList();
-		return instance;
+		return (List<UserView>) q.getResultList();
 	}
 
 	@Override
@@ -320,6 +313,7 @@ class UserDAOImp extends BaseDAO implements UserDAO {
 		final Predicate methodSpecificPredicate = cb.and(
 			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
 			cb.equal(from.get(ROLE), "teacher"),
+			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()),
 			cb.equal(userClasses.get("classId"), refId)
 		);
 
@@ -333,9 +327,7 @@ class UserDAOImp extends BaseDAO implements UserDAO {
 			q.setFirstResult(metadata.getPaging().getOffset());
 			q.setMaxResults(metadata.getPaging().getLimit());
 		}
-
-		List<UserView> instance = q.getResultList();
-		return instance;
+		return (List<UserView>) q.getResultList();
 	}
 
 	@Override
@@ -349,6 +341,7 @@ class UserDAOImp extends BaseDAO implements UserDAO {
 		final Predicate methodSpecificPredicate = cb.and(
 			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
 			cb.equal(from.get(ROLE), "student"),
+			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()),
 			cb.equal(userClasses.get("orgId"), schoolId),
 			cb.equal(userClasses.get("classId"), classId)
 		);
@@ -363,9 +356,7 @@ class UserDAOImp extends BaseDAO implements UserDAO {
 			q.setFirstResult(metadata.getPaging().getOffset());
 			q.setMaxResults(metadata.getPaging().getLimit());
 		}
-
-		List<UserView> instance = q.getResultList();
-		return instance;
+		return (List<UserView>) q.getResultList();
 	}
 
 	@Override
@@ -374,20 +365,21 @@ class UserDAOImp extends BaseDAO implements UserDAO {
 		final CriteriaQuery<UserView> select = cb.createQuery(UserView.class);
 		final Root<UserView> from = select.from(UserView.class);
 
+		//Method Specific Predicate
+		final Predicate methodSpecificPredicate = cb.and(
+			cb.equal(from.get(PRIMARY_KEY), refId),
+			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
+			cb.equal(from.get(ROLE), "contact"),
+			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+		);
+
 		select.distinct(true);
 		select.select(from);
-		select.where(
-			cb.and(
-				cb.equal(from.get(PRIMARY_KEY), refId),
-				cb.equal(from.get(SCHOOL_YEAR_KEY), "2019"),
-				cb.equal(from.get(ROLE), "contact")
-			)
-		);
+		select.where(getWhereClause(metadata, cb, from, methodSpecificPredicate));
 
 		Query q = em.createQuery(select);
 		try {
-			UserView instance = (UserView) q.getSingleResult();
-			return instance;
+			return (UserView) q.getSingleResult();
 		}
 		catch(NoResultException ignored) { }
 		return null;
@@ -402,7 +394,8 @@ class UserDAOImp extends BaseDAO implements UserDAO {
 		//Method Specific Predicate
 		final Predicate methodSpecificPredicate = cb.and(
 			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
-			cb.equal(from.get(ROLE), "contact")
+			cb.equal(from.get(ROLE), "contact"),
+			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 		);
 
 		select.distinct(true);
@@ -415,8 +408,6 @@ class UserDAOImp extends BaseDAO implements UserDAO {
 			q.setFirstResult(metadata.getPaging().getOffset());
 			q.setMaxResults(metadata.getPaging().getLimit());
 		}
-
-		List<UserView> instance = q.getResultList();
-		return instance;
+		return (List<UserView>) q.getResultList();
 	}
 }

@@ -4,6 +4,11 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.ricone.api.oneroster.model.Base;
 
 public class BaseFieldSelector<T extends Base> {
+	private Class<T> model;
+
+	public BaseFieldSelector(Class<T> model) {
+		this.model = model;
+	}
 
 	protected void selectBaseFields(T instance, ControllerData metaData) {
 		if(!CollectionUtils.containsAny(metaData.getFieldSelection().getFields(), "sourcedId")) {
@@ -24,5 +29,9 @@ public class BaseFieldSelector<T extends Base> {
 
 	public void selectFields(T instance, ControllerData metaData) {
 		//Will be overridden by child extension
+	}
+
+	public Class<T> getModelClass() {
+		return model;
 	}
 }

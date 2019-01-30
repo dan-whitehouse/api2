@@ -10,7 +10,7 @@ import java.util.List;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"courses"})
-public class CoursesResponse implements Serializable {
+public class CoursesResponse extends BaseResponse implements Serializable {
 
 	@JsonProperty("courses")
 	private List<Course> course = new ArrayList<Course>();

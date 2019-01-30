@@ -23,7 +23,7 @@ class DemographicServiceImp implements DemographicService {
 
 	@Override
 	public DemographicResponse getDemographic(ControllerData metadata, String refId) throws Exception {
-		DemographicResponse response = selector.apply(mapper.convert(dao.getDemographic(metadata, refId)), metadata);
+		DemographicResponse response = selector.apply(mapper.convert(dao.getDemographic(metadata, refId), metadata), metadata);
 		if(response != null) {
 			return response;
 		}
@@ -36,6 +36,6 @@ class DemographicServiceImp implements DemographicService {
 		if(CollectionUtils.isEmpty(instance)) {
 			throw new NoContentException();
 		}
-		return selector.apply(mapper.convert(instance), metadata);
+		return selector.apply(mapper.convert(instance, metadata), metadata);
 	}
 }

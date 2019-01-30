@@ -4,6 +4,8 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
 import org.ricone.api.core.model.view.AcademicSessionView;
 import org.ricone.api.core.model.view.UserView;
+import org.ricone.api.oneroster.component.BaseMapper;
+import org.ricone.api.oneroster.component.ControllerData;
 import org.ricone.api.oneroster.model.*;
 import org.ricone.api.oneroster.util.MappingUtil;
 import org.springframework.stereotype.Component;
@@ -12,11 +14,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component("OneRoster:AcademicSessions:AcademicSessionMapper")
-class AcademicSessionMapper {
+class AcademicSessionMapper extends BaseMapper {
     AcademicSessionMapper() {
     }
 
-    AcademicSessionsResponse convert(List<AcademicSessionView> instance) {
+    AcademicSessionsResponse convert(List<AcademicSessionView> instance, ControllerData metadata) {
         List<AcademicSession> list = new ArrayList<>();
         for (AcademicSessionView view : instance) {
             AcademicSession academicSession = map(view);
@@ -27,13 +29,15 @@ class AcademicSessionMapper {
 
         AcademicSessionsResponse response = new AcademicSessionsResponse();
         response.setAcademicSessions(list);
+        response.setStatusInfoSets(mapErrors(metadata, AcademicSessionView.class, AcademicSession.class));
         return response;
     }
 
-    AcademicSessionResponse convert(AcademicSessionView view) {
+    AcademicSessionResponse convert(AcademicSessionView view, ControllerData metadata) {
         if(view != null) {
             AcademicSessionResponse response = new AcademicSessionResponse();
             response.setAcademicSession(map(view));
+            response.setStatusInfoSets(mapErrors(metadata, AcademicSessionView.class, AcademicSession.class));
             return response;
         }
         return null;

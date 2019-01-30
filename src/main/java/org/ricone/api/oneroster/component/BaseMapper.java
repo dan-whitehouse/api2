@@ -1,6 +1,5 @@
 package org.ricone.api.oneroster.component;
 
-import org.apache.commons.collections4.CollectionUtils;
 import org.ricone.api.oneroster.model.*;
 
 import java.lang.Class;

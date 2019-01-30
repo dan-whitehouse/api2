@@ -8,15 +8,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BaseDAO {
-    protected final String DISTRICT_ID = "districtId";
-    protected final String PRIMARY_KEY = "sourcedId";
-    protected final String SCHOOL_YEAR_KEY = "sourcedSchoolYear";
+    protected static final String PRIMARY_KEY = "sourcedId";
+    protected static final String SCHOOL_YEAR_KEY = "sourcedSchoolYear";
+    protected static final String FIELD_DISTRICT_ID = "districtId";
+    protected static final String FIELD_ORG_ID = "orgId";
+    protected static final String FIELD_ORG_TYPE = "orgType";
+    protected static final String FIELD_COURSE_ID = "courseId";
+    protected static final String FIELD_CLASS_ID = "classId";
+    protected static final String FIELD_TERM_ID = "termId";
+    protected static final String FIELD_USER_ID = "userId";
+    protected static final String FIELD_TYPE = "type";
+    protected static final String FIELD_ROLE = "role";
 
     /* Joins - Core - Views */
-    protected final String JOIN_USER_ORGS = "userOrgs";
-    protected final String JOIN_USER_CLASSES = "userClasses";
-    protected final String JOIN_CLASS_TERMS = "terms";
-    protected final String JOIN_CLASS_USERS = "users";
+    protected static final String JOIN_USER_ORGS = "userOrgs";
+    protected static final String JOIN_USER_CLASSES = "userClasses";
+    protected static final String JOIN_CLASS_TERMS = "terms";
+    protected static final String JOIN_CLASS_USERS = "users";
 
     protected Predicate[] getWhereClause(ControllerData metadata, CriteriaBuilder cb, Root from, Predicate methodSpecificPredicate) {
         final List<Predicate> predicates = new ArrayList<>();

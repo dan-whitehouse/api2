@@ -18,11 +18,11 @@ import java.util.List;
 class UserServiceImp implements UserService {
 	@Autowired private UserDAO dao;
 	@Autowired private UserMapper mapper;
-	@Autowired private UserFieldSelector fieldSelector;
+	@Autowired private UserFieldSelector selector;
 
 	@Override
 	public UserResponse getUser(ControllerData metadata, String refId) throws Exception {
-		UserResponse studentResponse = fieldSelector.apply(mapper.convert(dao.getStudent(metadata, refId)), metadata);
+		UserResponse studentResponse = selector.apply(mapper.convert(dao.getStudent(metadata, refId), metadata), metadata);
 		if(studentResponse != null) {
 			return studentResponse;
 		}
@@ -35,12 +35,12 @@ class UserServiceImp implements UserService {
 		if(CollectionUtils.isEmpty(instance)) {
 			throw new NoContentException();
 		}
-		return fieldSelector.apply(mapper.convert(instance), metadata);
+		return selector.apply(mapper.convert(instance, metadata), metadata);
 	}
 
 	@Override
 	public UserResponse getStudent(ControllerData metadata, String refId) throws Exception {
-		UserResponse studentResponse = fieldSelector.apply(mapper.convert(dao.getStudent(metadata, refId)), metadata);
+		UserResponse studentResponse = selector.apply(mapper.convert(dao.getStudent(metadata, refId), metadata), metadata);
 		if(studentResponse != null) {
 			return studentResponse;
 		}
@@ -53,7 +53,7 @@ class UserServiceImp implements UserService {
 		if(CollectionUtils.isEmpty(instance)) {
 			throw new NoContentException();
 		}
-		return fieldSelector.apply(mapper.convert(instance), metadata);
+		return selector.apply(mapper.convert(instance, metadata), metadata);
 	}
 
 	@Override
@@ -62,7 +62,7 @@ class UserServiceImp implements UserService {
 		if(CollectionUtils.isEmpty(instance)) {
 			throw new NoContentException();
 		}
-		return fieldSelector.apply(mapper.convert(instance), metadata);
+		return selector.apply(mapper.convert(instance, metadata), metadata);
 	}
 
 	@Override
@@ -71,7 +71,7 @@ class UserServiceImp implements UserService {
 		if(CollectionUtils.isEmpty(instance)) {
 			throw new NoContentException();
 		}
-		return fieldSelector.apply(mapper.convert(instance), metadata);
+		return selector.apply(mapper.convert(instance, metadata), metadata);
 	}
 
 	@Override
@@ -80,12 +80,12 @@ class UserServiceImp implements UserService {
 		if(CollectionUtils.isEmpty(instance)) {
 			throw new NoContentException();
 		}
-		return fieldSelector.apply(mapper.convert(instance), metadata);
+		return selector.apply(mapper.convert(instance, metadata), metadata);
 	}
 
 	@Override
 	public UserResponse getTeacher(ControllerData metadata, String refId) throws Exception {
-		UserResponse studentResponse = fieldSelector.apply(mapper.convert(dao.getTeacher(metadata, refId)), metadata);
+		UserResponse studentResponse = selector.apply(mapper.convert(dao.getTeacher(metadata, refId), metadata), metadata);
 		if(studentResponse != null) {
 			return studentResponse;
 		}
@@ -98,7 +98,7 @@ class UserServiceImp implements UserService {
 		if(CollectionUtils.isEmpty(instance)) {
 			throw new NoContentException();
 		}
-		return fieldSelector.apply(mapper.convert(instance), metadata);
+		return selector.apply(mapper.convert(instance, metadata), metadata);
 	}
 
 	@Override
@@ -107,7 +107,7 @@ class UserServiceImp implements UserService {
 		if(CollectionUtils.isEmpty(instance)) {
 			throw new NoContentException();
 		}
-		return fieldSelector.apply(mapper.convert(instance), metadata);
+		return selector.apply(mapper.convert(instance, metadata), metadata);
 	}
 
 	@Override
@@ -116,7 +116,7 @@ class UserServiceImp implements UserService {
 		if(CollectionUtils.isEmpty(instance)) {
 			throw new NoContentException();
 		}
-		return fieldSelector.apply(mapper.convert(instance), metadata);
+		return selector.apply(mapper.convert(instance, metadata), metadata);
 	}
 
 	@Override
@@ -125,6 +125,6 @@ class UserServiceImp implements UserService {
 		if(CollectionUtils.isEmpty(instance)) {
 			throw new NoContentException();
 		}
-		return fieldSelector.apply(mapper.convert(instance), metadata);
+		return selector.apply(mapper.convert(instance, metadata), metadata);
 	}
 }

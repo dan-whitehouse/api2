@@ -15,10 +15,11 @@ import org.springframework.stereotype.Component;
 @Component("OneRoster:Enrollments:EnrollmentFieldSelector")
 public class EnrollmentFieldSelector extends BaseFieldSelector<Enrollment> {
 	public EnrollmentFieldSelector() {
+		super(Enrollment.class);
 	}
 
 	EnrollmentsResponse apply(EnrollmentsResponse response, ControllerData metadata) {
-		if(metadata.getFieldSelection().hasFieldSelection() && metadata.getFieldSelection().isValidFieldSelection(Enrollment.class)) {
+		if(metadata.getFieldSelection().hasFieldSelection() && metadata.getFieldSelection().isValidFieldSelection(getModelClass())) {
 			for (Enrollment enrollment : response.getEnrollments()) {
 				selectBaseFields(enrollment, metadata);
 			}
@@ -31,7 +32,7 @@ public class EnrollmentFieldSelector extends BaseFieldSelector<Enrollment> {
 	}
 
 	EnrollmentResponse apply(EnrollmentResponse response, ControllerData metadata) {
-		if(metadata.getFieldSelection().hasFieldSelection() && metadata.getFieldSelection().isValidFieldSelection(Enrollment.class)) {
+		if(metadata.getFieldSelection().hasFieldSelection() && metadata.getFieldSelection().isValidFieldSelection(getModelClass())) {
 			selectBaseFields(response.getEnrollment(), metadata);
 			if (response.getEnrollment() == null) {
 				return null;

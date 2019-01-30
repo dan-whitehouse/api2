@@ -2,8 +2,6 @@ package org.ricone.api.oneroster.request.orgs;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.hibernate.Hibernate;
-import org.ricone.api.core.model.Lea;
 import org.ricone.api.core.model.view.OrgView;
 import org.ricone.api.oneroster.component.ControllerData;
 import org.ricone.api.oneroster.component.BaseDAO;
@@ -14,7 +12,6 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.criteria.*;
-import java.util.ArrayList;
 import java.util.List;
 
 @Repository("OneRoster:Orgs:OrgDAO")
@@ -33,7 +30,7 @@ class OrgDAOImp extends BaseDAO implements OrgDAO {
 		final Predicate methodSpecificPredicate = cb.and(
 			cb.equal(from.get(PRIMARY_KEY), refId),
 			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
-			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 		);
 
 		select.distinct(true);
@@ -57,7 +54,7 @@ class OrgDAOImp extends BaseDAO implements OrgDAO {
 		//Method Specific Predicate
 		final Predicate methodSpecificPredicate = cb.and(
 			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
-			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 		);
 
 		select.distinct(false);
@@ -71,7 +68,6 @@ class OrgDAOImp extends BaseDAO implements OrgDAO {
 			q.setFirstResult(metadata.getPaging().getOffset());
 			q.setMaxResults(metadata.getPaging().getLimit());
 		}
-
 		return (List<OrgView>) q.getResultList();
 	}
 
@@ -85,8 +81,8 @@ class OrgDAOImp extends BaseDAO implements OrgDAO {
 		final Predicate methodSpecificPredicate = cb.and(
 			cb.equal(from.get(PRIMARY_KEY), refId),
 			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
-			cb.equal(from.get("type"), "school"),
-			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			cb.equal(from.get(FIELD_TYPE), "school"),
+			from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 		);
 
 		select.distinct(true);
@@ -109,8 +105,8 @@ class OrgDAOImp extends BaseDAO implements OrgDAO {
 
 		final Predicate methodSpecificPredicate = cb.and(
 			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
-			cb.equal(from.get("type"), "school"),
-			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			cb.equal(from.get(FIELD_TYPE), "school"),
+			from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 		);
 
 		select.distinct(true);

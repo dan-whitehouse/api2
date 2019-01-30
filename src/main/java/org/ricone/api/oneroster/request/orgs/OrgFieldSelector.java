@@ -17,10 +17,11 @@ import org.springframework.stereotype.Component;
 @Component("OneRoster:Orgs:OrgFieldSelector")
 public class OrgFieldSelector extends BaseFieldSelector<Org> {
 	public OrgFieldSelector() {
+		super(Org.class);
 	}
 
 	OrgsResponse apply(OrgsResponse response, ControllerData metadata) {
-		if(metadata.getFieldSelection().hasFieldSelection() && metadata.getFieldSelection().isValidFieldSelection(Org.class)) {
+		if(metadata.getFieldSelection().hasFieldSelection() && metadata.getFieldSelection().isValidFieldSelection(getModelClass())) {
 			for (Org org : response.getOrgs()) {
 				selectBaseFields(org, metadata);
 			}
@@ -33,7 +34,7 @@ public class OrgFieldSelector extends BaseFieldSelector<Org> {
 	}
 
 	OrgResponse apply(OrgResponse response, ControllerData metadata) {
-		if(metadata.getFieldSelection().hasFieldSelection() && metadata.getFieldSelection().isValidFieldSelection(Org.class)) {
+		if(metadata.getFieldSelection().hasFieldSelection() && metadata.getFieldSelection().isValidFieldSelection(getModelClass())) {
 			selectBaseFields(response.getOrg(), metadata);
 			if (response.getOrg() == null) {
 				return null;

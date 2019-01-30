@@ -2,10 +2,7 @@ package org.ricone.api.oneroster.request.courses;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.hibernate.Hibernate;
-import org.ricone.api.core.model.*;
 import org.ricone.api.core.model.view.CourseView;
-import org.ricone.api.core.model.wrapper.CourseWrapper;
 import org.ricone.api.oneroster.component.BaseDAO;
 import org.ricone.api.oneroster.component.ControllerData;
 import org.springframework.stereotype.Repository;
@@ -32,7 +29,7 @@ class CourseDAOImp extends BaseDAO implements CourseDAO {
 		final Predicate methodSpecificPredicate = cb.and(
 			cb.equal(from.get(PRIMARY_KEY), refId),
 			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
-			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 		);
 
 		select.distinct(true);
@@ -55,7 +52,7 @@ class CourseDAOImp extends BaseDAO implements CourseDAO {
 
 		final Predicate methodSpecificPredicate = cb.and(
 			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
-			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 		);
 
 		select.distinct(true);
@@ -68,7 +65,6 @@ class CourseDAOImp extends BaseDAO implements CourseDAO {
 			q.setFirstResult(metadata.getPaging().getOffset());
 			q.setMaxResults(metadata.getPaging().getLimit());
 		}
-
 		return (List<CourseView>) q.getResultList();
 	}
 
@@ -79,9 +75,9 @@ class CourseDAOImp extends BaseDAO implements CourseDAO {
 		final Root<CourseView> from = select.from(CourseView.class);
 
 		final Predicate methodSpecificPredicate = cb.and(
-			cb.equal(from.get("orgId"), refId),
+			cb.equal(from.get(FIELD_ORG_ID), refId),
 			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
-			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 		);
 
 		select.distinct(true);
@@ -94,7 +90,6 @@ class CourseDAOImp extends BaseDAO implements CourseDAO {
 			q.setFirstResult(metadata.getPaging().getOffset());
 			q.setMaxResults(metadata.getPaging().getLimit());
 		}
-
 		return (List<CourseView>) q.getResultList();
 	}
 }

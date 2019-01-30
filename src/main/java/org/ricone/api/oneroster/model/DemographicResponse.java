@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"demographics"})
-public class DemographicResponse implements Serializable {
+public class DemographicResponse extends BaseResponse implements Serializable {
 
 	@JsonProperty("demographics")
 	private Demographic demographics;

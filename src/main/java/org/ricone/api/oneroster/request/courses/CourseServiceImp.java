@@ -19,10 +19,11 @@ import java.util.List;
 class CourseServiceImp implements CourseService {
 	@Autowired private CourseDAO dao;
 	@Autowired private CourseMapper mapper;
+	@Autowired private CourseFieldSelector selector;
 
 	@Override
 	public CourseResponse getCourse(ControllerData metadata, String refId) throws Exception {
-		CourseResponse response = mapper.convert(dao.getCourse(metadata, refId));
+		CourseResponse response = selector.apply(mapper.convert(dao.getCourse(metadata, refId), metadata), metadata);
 		if(response != null) {
 			return response;
 		}
@@ -35,7 +36,7 @@ class CourseServiceImp implements CourseService {
 		if(CollectionUtils.isEmpty(instance)) {
 			throw new NoContentException();
 		}
-		return mapper.convert(instance);
+		return selector.apply(mapper.convert(instance, metadata), metadata);
 	}
 
 	@Override
@@ -44,6 +45,6 @@ class CourseServiceImp implements CourseService {
 		if(CollectionUtils.isEmpty(instance)) {
 			throw new NoContentException();
 		}
-		return mapper.convert(instance);
+		return selector.apply(mapper.convert(instance, metadata), metadata);
 	}
 }

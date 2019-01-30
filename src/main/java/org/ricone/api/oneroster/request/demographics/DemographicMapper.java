@@ -9,6 +9,8 @@ import org.ricone.api.core.model.StudentRace;
 import org.ricone.api.core.model.StudentTelephone;
 import org.ricone.api.core.model.view.DemographicView;
 import org.ricone.api.core.model.wrapper.StudentWrapper;
+import org.ricone.api.oneroster.component.BaseMapper;
+import org.ricone.api.oneroster.component.ControllerData;
 import org.ricone.api.oneroster.model.*;
 import org.springframework.stereotype.Component;
 
@@ -18,11 +20,11 @@ import java.util.Optional;
 import java.util.Set;
 
 @Component("OneRoster:Demographics:DemographicMapper")
-class DemographicMapper {
+class DemographicMapper extends BaseMapper {
     DemographicMapper() {
     }
 
-    DemographicsResponse convert(List<DemographicView> instance) {
+    DemographicsResponse convert(List<DemographicView> instance, ControllerData metadata) {
         List<Demographic> list = new ArrayList<>();
         for (DemographicView view : instance) {
             Demographic demographic = map(view);
@@ -33,13 +35,15 @@ class DemographicMapper {
 
         DemographicsResponse response = new DemographicsResponse();
         response.setDemographics(list);
+        response.setStatusInfoSets(mapErrors(metadata, DemographicView.class, Demographic.class));
         return response;
     }
 
-    DemographicResponse convert(DemographicView view) {
+    DemographicResponse convert(DemographicView view, ControllerData metadata) {
         if(view != null) {
             DemographicResponse response = new DemographicResponse();
             response.setDemographics(map(view));
+            response.setStatusInfoSets(mapErrors(metadata, DemographicView.class, Demographic.class));
             return response;
         }
         return null;

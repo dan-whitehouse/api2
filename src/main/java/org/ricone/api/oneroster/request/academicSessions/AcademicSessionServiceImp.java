@@ -25,7 +25,7 @@ class AcademicSessionServiceImp implements AcademicSessionService {
 
 	@Override
 	public AcademicSessionResponse getAcademicSession(ControllerData metadata, String refId) throws Exception {
-		AcademicSessionResponse response = fieldSelector.apply(mapper.convert(dao.getAcademicSession(metadata, refId)), metadata);
+		AcademicSessionResponse response = fieldSelector.apply(mapper.convert(dao.getAcademicSession(metadata, refId), metadata), metadata);
 		if(response != null) {
 			return response;
 		}
@@ -38,12 +38,12 @@ class AcademicSessionServiceImp implements AcademicSessionService {
 		if(CollectionUtils.isEmpty(instance)) {
 			throw new NoContentException();
 		}
-		return fieldSelector.apply(mapper.convert(instance), metadata);
+		return fieldSelector.apply(mapper.convert(instance, metadata), metadata);
 	}
 
 	@Override
 	public AcademicSessionResponse getTerm(ControllerData metadata, String refId) throws Exception {
-		AcademicSessionResponse studentResponse = fieldSelector.apply(mapper.convert(dao.getTerm(metadata, refId)), metadata);
+		AcademicSessionResponse studentResponse = fieldSelector.apply(mapper.convert(dao.getTerm(metadata, refId), metadata), metadata);
 		if(studentResponse != null) {
 			return studentResponse;
 		}
@@ -56,7 +56,7 @@ class AcademicSessionServiceImp implements AcademicSessionService {
 		if(CollectionUtils.isEmpty(instance)) {
 			throw new NoContentException();
 		}
-		return fieldSelector.apply(mapper.convert(instance), metadata);
+		return fieldSelector.apply(mapper.convert(instance, metadata), metadata);
 	}
 
 	@Override

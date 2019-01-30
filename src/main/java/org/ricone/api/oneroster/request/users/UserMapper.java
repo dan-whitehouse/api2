@@ -3,6 +3,8 @@ package org.ricone.api.oneroster.request.users;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
 import org.ricone.api.core.model.view.UserView;
+import org.ricone.api.oneroster.component.BaseMapper;
+import org.ricone.api.oneroster.component.ControllerData;
 import org.ricone.api.oneroster.model.*;
 import org.ricone.api.oneroster.util.MappingUtil;
 import org.springframework.stereotype.Component;
@@ -11,11 +13,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component("OneRoster:Users:UserMapper")
-class UserMapper {
+class UserMapper extends BaseMapper {
     UserMapper() {
     }
 
-    UsersResponse convert(List<UserView> instance) {
+    UsersResponse convert(List<UserView> instance, ControllerData metadata) {
         List<User> list = new ArrayList<>();
         for (UserView view : instance) {
             User user = map(view);
@@ -26,13 +28,15 @@ class UserMapper {
 
         UsersResponse response = new UsersResponse();
         response.setUsers(list);
+        response.setStatusInfoSets(mapErrors(metadata, UserView.class, User.class));
         return response;
     }
 
-    UserResponse convert(UserView view) {
+    UserResponse convert(UserView view, ControllerData metadata) {
         if(view != null) {
             UserResponse response = new UserResponse();
             response.setUser(map(view));
+            response.setStatusInfoSets(mapErrors(metadata, UserView.class, User.class));
             return response;
         }
         return null;

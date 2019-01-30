@@ -16,10 +16,11 @@ import org.springframework.stereotype.Component;
 @Component("OneRoster:Classes:ClassFieldSelector")
 public class ClassFieldSelector extends BaseFieldSelector<Class> {
 	public ClassFieldSelector() {
+		super(Class.class);
 	}
 
 	ClassesResponse apply(ClassesResponse response, ControllerData metadata) {
-		if(metadata.getFieldSelection().hasFieldSelection() && metadata.getFieldSelection().isValidFieldSelection(User.class)) {
+		if(metadata.getFieldSelection().hasFieldSelection() && metadata.getFieldSelection().isValidFieldSelection(getModelClass())) {
 			for (Class c : response.getClass_()) {
 				selectBaseFields(c, metadata);
 			}
@@ -32,7 +33,7 @@ public class ClassFieldSelector extends BaseFieldSelector<Class> {
 	}
 
 	ClassResponse apply(ClassResponse response, ControllerData metadata) {
-		if(metadata.getFieldSelection().hasFieldSelection() && metadata.getFieldSelection().isValidFieldSelection(User.class)) {
+		if(metadata.getFieldSelection().hasFieldSelection() && metadata.getFieldSelection().isValidFieldSelection(getModelClass())) {
 			selectBaseFields(response.getClass_(), metadata);
 			if (response.getClass_() == null) {
 				return null;

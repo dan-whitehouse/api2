@@ -18,11 +18,11 @@ import java.util.List;
 class OrgServiceImp implements OrgService {
 	@Autowired private OrgDAO dao;
 	@Autowired private OrgMapper mapper;
-	@Autowired private OrgFieldSelector fieldSelector;
+	@Autowired private OrgFieldSelector selector;
 
 	@Override
 	public OrgResponse getOrg(ControllerData metadata, String refId) throws Exception {
-		OrgResponse response = fieldSelector.apply(mapper.convert(dao.getOrg(metadata, refId), metadata), metadata);
+		OrgResponse response = selector.apply(mapper.convert(dao.getOrg(metadata, refId), metadata), metadata);
 		if(response != null) {
 			return response;
 		}
@@ -35,7 +35,7 @@ class OrgServiceImp implements OrgService {
 		if(CollectionUtils.isEmpty(instance)) {
 			throw new NoContentException();
 		}
-		return fieldSelector.apply(mapper.convert(instance, metadata), metadata);
+		return selector.apply(mapper.convert(instance, metadata), metadata);
 	}
 
 	@Override

@@ -17,10 +17,11 @@ import org.springframework.stereotype.Component;
 @Component("OneRoster:Demographics:DemographicFieldSelector")
 public class DemographicFieldSelector extends BaseFieldSelector<Demographic> {
 	public DemographicFieldSelector() {
+		super(Demographic.class);
 	}
 
 	DemographicsResponse apply(DemographicsResponse response, ControllerData metadata) {
-		if(metadata.getFieldSelection().hasFieldSelection() && metadata.getFieldSelection().isValidFieldSelection(Demographic.class)) {
+		if(metadata.getFieldSelection().hasFieldSelection() && metadata.getFieldSelection().isValidFieldSelection(getModelClass())) {
 			for (Demographic demographic : response.getDemographics()) {
 				selectBaseFields(demographic, metadata);
 			}
@@ -33,7 +34,7 @@ public class DemographicFieldSelector extends BaseFieldSelector<Demographic> {
 	}
 
 	DemographicResponse apply(DemographicResponse response, ControllerData metadata) {
-		if(metadata.getFieldSelection().hasFieldSelection() && metadata.getFieldSelection().isValidFieldSelection(Demographic.class)) {
+		if(metadata.getFieldSelection().hasFieldSelection() && metadata.getFieldSelection().isValidFieldSelection(getModelClass())) {
 			selectBaseFields(response.getDemographics(), metadata);
 			if (response.getDemographics() == null) {
 				return null;

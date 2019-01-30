@@ -15,10 +15,11 @@ import org.springframework.stereotype.Component;
 @Component("OneRoster:AcademicSessions:AcademicSessionFieldSelector")
 public class AcademicSessionFieldSelector extends BaseFieldSelector<AcademicSession> {
 	public AcademicSessionFieldSelector() {
+		super(AcademicSession.class);
 	}
 
 	AcademicSessionsResponse apply(AcademicSessionsResponse response, ControllerData metadata) {
-		if(metadata.getFieldSelection().hasFieldSelection() && metadata.getFieldSelection().isValidFieldSelection(AcademicSession.class)) {
+		if(metadata.getFieldSelection().hasFieldSelection() && metadata.getFieldSelection().isValidFieldSelection(getModelClass())) {
 			for (AcademicSession academicSession : response.getAcademicSessions()) {
 				selectBaseFields(academicSession, metadata);
 			}
@@ -31,7 +32,7 @@ public class AcademicSessionFieldSelector extends BaseFieldSelector<AcademicSess
 	}
 
 	AcademicSessionResponse apply(AcademicSessionResponse response, ControllerData metadata) {
-		if(metadata.getFieldSelection().hasFieldSelection() && metadata.getFieldSelection().isValidFieldSelection(AcademicSession.class)) {
+		if(metadata.getFieldSelection().hasFieldSelection() && metadata.getFieldSelection().isValidFieldSelection(getModelClass())) {
 			selectBaseFields(response.getAcademicSession(), metadata);
 			if (response.getAcademicSession() == null) {
 				return null;

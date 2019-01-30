@@ -15,10 +15,11 @@ import org.springframework.stereotype.Component;
 @Component("OneRoster:Users:UserFieldSelector")
 public class UserFieldSelector extends BaseFieldSelector<User> {
 	public UserFieldSelector() {
+		super(User.class);
 	}
 
 	UsersResponse apply(UsersResponse response, ControllerData metadata) {
-		if(metadata.getFieldSelection().hasFieldSelection() && metadata.getFieldSelection().isValidFieldSelection(User.class)) {
+		if(metadata.getFieldSelection().hasFieldSelection() && metadata.getFieldSelection().isValidFieldSelection(getModelClass())) {
 			for (User user : response.getUsers()) {
 				selectBaseFields(user, metadata);
 			}
@@ -31,7 +32,7 @@ public class UserFieldSelector extends BaseFieldSelector<User> {
 	}
 
 	UserResponse apply(UserResponse response, ControllerData metadata) {
-		if(metadata.getFieldSelection().hasFieldSelection() && metadata.getFieldSelection().isValidFieldSelection(User.class)) {
+		if(metadata.getFieldSelection().hasFieldSelection() && metadata.getFieldSelection().isValidFieldSelection(getModelClass())) {
 			selectBaseFields(response.getUser(), metadata);
 			if (response.getUser() == null) {
 				return null;

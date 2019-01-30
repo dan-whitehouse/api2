@@ -2,6 +2,8 @@ package org.ricone.api.oneroster.request.courses;
 
 import org.apache.commons.lang3.StringUtils;
 import org.ricone.api.core.model.view.CourseView;
+import org.ricone.api.oneroster.component.BaseMapper;
+import org.ricone.api.oneroster.component.ControllerData;
 import org.ricone.api.oneroster.model.*;
 import org.ricone.api.oneroster.util.MappingUtil;
 import org.springframework.stereotype.Component;
@@ -10,11 +12,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component("OneRoster:Courses:CourseMapper")
-class CourseMapper {
+class CourseMapper extends BaseMapper {
     CourseMapper() {
     }
 
-    CoursesResponse convert(List<CourseView> instance) {
+    CoursesResponse convert(List<CourseView> instance, ControllerData metadata) {
         List<Course> list = new ArrayList<>();
         for (CourseView view : instance) {
             Course org = map(view);
@@ -25,13 +27,15 @@ class CourseMapper {
 
         CoursesResponse response = new CoursesResponse();
         response.setCourse(list);
+        response.setStatusInfoSets(mapErrors(metadata, CourseView.class, Course.class));
         return response;
     }
 
-    CourseResponse convert(CourseView view) {
+    CourseResponse convert(CourseView view, ControllerData metadata) {
         if(view != null) {
             CourseResponse response = new CourseResponse();
             response.setCourse(map(view));
+            response.setStatusInfoSets(mapErrors(metadata, CourseView.class, Course.class));
             return response;
         }
         return null;

@@ -3,7 +3,7 @@ package org.ricone.api.oneroster.component;
 import org.apache.commons.collections4.CollectionUtils;
 import org.ricone.api.oneroster.model.Base;
 
-public class BaseFieldSelector<T extends Base> {
+public abstract class BaseFieldSelector<T extends Base> {
 	private Class<T> model;
 
 	public BaseFieldSelector(Class<T> model) {
@@ -27,11 +27,9 @@ public class BaseFieldSelector<T extends Base> {
 		selectFields(instance, metaData);
 	}
 
-	public void selectFields(T instance, ControllerData metaData) {
-		//Will be overridden by child extension
-	}
+	protected abstract void selectFields(T instance, ControllerData metaData);
 
-	public Class<T> getModelClass() {
+	protected Class<T> getModelClass() {
 		return model;
 	}
 }

@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"sourcedId", "status", "dateLastModified", "metadata"})
-public class Base implements Serializable {
+public abstract class Base implements Serializable {
 
 	@JsonProperty("sourcedId")
 	private String sourcedId;

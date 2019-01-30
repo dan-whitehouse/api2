@@ -6,7 +6,7 @@ import java.lang.Class;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BaseMapper {
+public abstract class BaseMapper {
 	protected List<StatusInfoSet> mapErrors(ControllerData metadata, Class<?> table, Class<? extends Base> model) {
 		List<StatusInfoSet> statusInfoSets = new ArrayList<>();
 

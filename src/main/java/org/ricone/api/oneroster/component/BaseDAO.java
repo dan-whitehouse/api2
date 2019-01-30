@@ -7,7 +7,7 @@ import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BaseDAO {
+public abstract class BaseDAO {
     protected static final String PRIMARY_KEY = "sourcedId";
     protected static final String SCHOOL_YEAR_KEY = "sourcedSchoolYear";
     protected static final String FIELD_DISTRICT_ID = "districtId";

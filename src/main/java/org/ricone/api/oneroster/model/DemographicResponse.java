@@ -13,6 +13,9 @@ import java.util.List;
 public class DemographicResponse extends BaseSingleResponse<Demographic> implements Serializable {
 	private final static long serialVersionUID = 6174150439900047310L;
 
+	public DemographicResponse() {
+	}
+
 	public DemographicResponse(Demographic demographic) {
 		super(demographic);
 	}

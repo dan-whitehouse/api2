@@ -13,6 +13,9 @@ import java.util.List;
 public class EnrollmentResponse extends BaseSingleResponse<Enrollment> implements Serializable {
 	private final static long serialVersionUID = 6097789264454176014L;
 
+	public EnrollmentResponse() {
+	}
+
 	public EnrollmentResponse(Enrollment enrollment) {
 		super(enrollment);
 	}

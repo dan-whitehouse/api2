@@ -2,6 +2,8 @@ package org.ricone.api.oneroster.request.academicSessions;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.ricone.api.core.model.view.AcademicSessionView;
 import org.ricone.api.core.model.view.UserView;
 import org.ricone.api.oneroster.component.BaseMapper;
@@ -14,29 +16,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component("OneRoster:AcademicSessions:AcademicSessionMapper")
-class AcademicSessionMapper extends BaseMapper {
-    AcademicSessionMapper() {
+class AcademicSessionMapper extends BaseMapper<AcademicSessionView, AcademicSession, AcademicSessionsResponse, AcademicSessionResponse> {
+    private Logger logger = LogManager.getLogger(this.getClass());
+
+    AcademicSessionMapper() throws NoSuchMethodException {
+        super(AcademicSessionView.class, AcademicSession.class, AcademicSessionsResponse.class, AcademicSessionResponse.class);
     }
 
-    AcademicSessionsResponse convert(List<AcademicSessionView> instance, ControllerData metadata) {
-        List<AcademicSession> list = new ArrayList<>();
-        for (AcademicSessionView view : instance) {
-            AcademicSession academicSession = map(view);
-            if(academicSession != null) {
-                list.add(academicSession);
-            }
-        }
-        return new AcademicSessionsResponse(list, mapErrors(metadata, AcademicSessionView.class, AcademicSession.class));
-    }
-
-    AcademicSessionResponse convert(AcademicSessionView view, ControllerData metadata) {
-        if(view != null) {
-            return new AcademicSessionResponse(map(view), mapErrors(metadata, AcademicSessionView.class, AcademicSession.class));
-        }
-        return null;
-    }
-
-    private AcademicSession map(AcademicSessionView instance) {
+    @Override protected AcademicSession map(AcademicSessionView instance) {
         AcademicSession academicSession = new AcademicSession();
         academicSession.setSourcedId(instance.getSourcedId());
         academicSession.setStatus(StatusType.active);
@@ -57,7 +44,7 @@ class AcademicSessionMapper extends BaseMapper {
         return academicSession;
     }
 
-    private Metadata mapMetadata(AcademicSessionView instance) {
+    @Override protected Metadata mapMetadata(AcademicSessionView instance) {
         Metadata metadata = new Metadata();
         metadata.getAdditionalProperties().put("ricone.schoolYear", instance.getSourcedSchoolYear());
         metadata.getAdditionalProperties().put("ricone.districtId", instance.getDistrictId());

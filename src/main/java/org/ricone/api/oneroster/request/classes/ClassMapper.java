@@ -1,41 +1,24 @@
 package org.ricone.api.oneroster.request.classes;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.ricone.api.core.model.view.ClassView;
 import org.ricone.api.oneroster.component.BaseMapper;
-import org.ricone.api.oneroster.component.ControllerData;
 import org.ricone.api.oneroster.model.Class;
 import org.ricone.api.oneroster.model.*;
 import org.ricone.api.oneroster.util.MappingUtil;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Component("OneRoster:Classes:ClassMapper")
-class ClassMapper extends BaseMapper {
-    ClassMapper() {
+class ClassMapper extends BaseMapper<ClassView, Class, ClassesResponse, ClassResponse> {
+    private Logger logger = LogManager.getLogger(this.getClass());
+
+    ClassMapper() throws NoSuchMethodException {
+        super(ClassView.class, Class.class, ClassesResponse.class, ClassResponse.class);
     }
 
-    ClassesResponse convert(List<ClassView> instance, ControllerData metadata) {
-        List<Class> list = new ArrayList<>();
-        for (ClassView view : instance) {
-            Class clazz = map(view);
-            if(clazz != null) {
-                list.add(clazz);
-            }
-        }
-        return new ClassesResponse(list, mapErrors(metadata, ClassView.class, Class.class));
-    }
-
-    ClassResponse convert(ClassView view, ControllerData metadata) {
-        if(view != null) {
-            return new ClassResponse(map(view), mapErrors(metadata, ClassView.class, Class.class));
-        }
-        return null;
-    }
-
-    private Class map(ClassView instance) {
+    @Override protected Class map(ClassView instance) {
         Class clazz = new Class();
         clazz.setSourcedId(instance.getSourcedId());
         clazz.setStatus(StatusType.active);
@@ -78,7 +61,7 @@ class ClassMapper extends BaseMapper {
         return clazz;
     }
 
-    private Metadata mapMetadata(ClassView instance) {
+    @Override protected Metadata mapMetadata(ClassView instance) {
         Metadata metadata = new Metadata();
         metadata.getAdditionalProperties().put("ricone.schoolYear", instance.getSourcedSchoolYear());
         metadata.getAdditionalProperties().put("ricone.districtId", instance.getDistrictId());

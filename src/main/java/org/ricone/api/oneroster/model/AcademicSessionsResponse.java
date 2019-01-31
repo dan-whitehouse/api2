@@ -14,6 +14,9 @@ import java.util.List;
 public class AcademicSessionsResponse extends BaseMultiResponse<AcademicSession> implements Serializable {
 	private final static long serialVersionUID = 9018025310977717656L;
 
+	public AcademicSessionsResponse() {
+	}
+
 	public AcademicSessionsResponse(List<AcademicSession> academicSessions) {
 		super(academicSessions);
 	}

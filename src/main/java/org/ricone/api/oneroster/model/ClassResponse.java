@@ -13,6 +13,9 @@ import java.util.List;
 public class ClassResponse extends BaseSingleResponse<Class> implements Serializable {
 	private final static long serialVersionUID = 7631981467689004007L;
 
+	public ClassResponse() {
+	}
+
 	public ClassResponse(Class _class) {
 		super(_class);
 	}

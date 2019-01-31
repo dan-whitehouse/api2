@@ -13,6 +13,9 @@ import java.util.List;
 public class DemographicsResponse extends BaseMultiResponse<Demographic> implements Serializable {
 	private final static long serialVersionUID = 6089973485073338986L;
 
+	public DemographicsResponse() {
+	}
+
 	public DemographicsResponse(List<Demographic> demographics) {
 		super(demographics);
 	}

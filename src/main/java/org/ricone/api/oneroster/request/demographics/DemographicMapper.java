@@ -3,6 +3,8 @@ package org.ricone.api.oneroster.request.demographics;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.ricone.api.core.model.Student;
 import org.ricone.api.core.model.StudentEmail;
 import org.ricone.api.core.model.StudentRace;
@@ -20,29 +22,14 @@ import java.util.Optional;
 import java.util.Set;
 
 @Component("OneRoster:Demographics:DemographicMapper")
-class DemographicMapper extends BaseMapper {
-    DemographicMapper() {
+class DemographicMapper extends BaseMapper<DemographicView, Demographic, DemographicsResponse, DemographicResponse> {
+    private Logger logger = LogManager.getLogger(this.getClass());
+
+    DemographicMapper() throws NoSuchMethodException {
+        super(DemographicView.class, Demographic.class, DemographicsResponse.class, DemographicResponse.class);
     }
 
-    DemographicsResponse convert(List<DemographicView> instance, ControllerData metadata) {
-        List<Demographic> list = new ArrayList<>();
-        for (DemographicView view : instance) {
-            Demographic demographic = map(view);
-            if(demographic != null) {
-                list.add(demographic);
-            }
-        }
-        return new DemographicsResponse(list, mapErrors(metadata, DemographicView.class, Demographic.class));
-    }
-
-    DemographicResponse convert(DemographicView view, ControllerData metadata) {
-        if(view != null) {
-            return new DemographicResponse(map(view), mapErrors(metadata, DemographicView.class, Demographic.class));
-        }
-        return null;
-    }
-
-    private Demographic map(DemographicView instance) {
+    @Override protected Demographic map(DemographicView instance) {
         Demographic demographic = new Demographic();
         demographic.setSourcedId(instance.getSourcedId());
         demographic.setStatus(StatusType.active);
@@ -75,7 +62,7 @@ class DemographicMapper extends BaseMapper {
         return demographic;
     }
 
-    private Metadata mapMetadata(DemographicView instance) {
+    @Override protected Metadata mapMetadata(DemographicView instance) {
         Metadata metadata = new Metadata();
         metadata.getAdditionalProperties().put("ricone.schoolYear", instance.getSourcedSchoolYear());
         metadata.getAdditionalProperties().put("ricone.districtId", instance.getDistrictId());

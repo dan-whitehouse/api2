@@ -14,6 +14,9 @@ import java.util.List;
 public class CoursesResponse extends BaseMultiResponse<Course> implements Serializable {
 	private final static long serialVersionUID = 8240007651262912068L;
 
+	public CoursesResponse() {
+	}
+
 	public CoursesResponse(List<Course> course) {
 		super(course);
 	}

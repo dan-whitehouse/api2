@@ -1,6 +1,8 @@
 package org.ricone.api.oneroster.request.courses;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.ricone.api.core.model.view.CourseView;
 import org.ricone.api.oneroster.component.BaseMapper;
 import org.ricone.api.oneroster.component.ControllerData;
@@ -12,29 +14,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component("OneRoster:Courses:CourseMapper")
-class CourseMapper extends BaseMapper {
-    CourseMapper() {
+class CourseMapper extends BaseMapper<CourseView, Course, CoursesResponse, CourseResponse> {
+    private Logger logger = LogManager.getLogger(this.getClass());
+
+    CourseMapper() throws NoSuchMethodException {
+        super(CourseView.class, Course.class, CoursesResponse.class, CourseResponse.class);
     }
 
-    CoursesResponse convert(List<CourseView> instance, ControllerData metadata) {
-        List<Course> list = new ArrayList<>();
-        for (CourseView view : instance) {
-            Course org = map(view);
-            if(org != null) {
-                list.add(org);
-            }
-        }
-        return new CoursesResponse(list, mapErrors(metadata, CourseView.class, Course.class));
-    }
-
-    CourseResponse convert(CourseView view, ControllerData metadata) {
-        if(view != null) {
-            return new CourseResponse(map(view), mapErrors(metadata, CourseView.class, Course.class));
-        }
-        return null;
-    }
-
-    private Course map(CourseView instance) {
+    @Override protected Course map(CourseView instance) {
         Course course = new Course();
         course.setSourcedId(instance.getSourcedId());
         course.setStatus(StatusType.active);
@@ -64,7 +51,7 @@ class CourseMapper extends BaseMapper {
         return course;
     }
 
-    private Metadata mapMetadata(CourseView instance) {
+    @Override protected Metadata mapMetadata(CourseView instance) {
         Metadata metadata = new Metadata();
         metadata.getAdditionalProperties().put("ricone.schoolYear", instance.getSourcedSchoolYear());
         metadata.getAdditionalProperties().put("ricone.districtId", instance.getDistrictId());

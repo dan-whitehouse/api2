@@ -14,6 +14,9 @@ import java.util.List;
 public class EnrollmentsResponse extends BaseMultiResponse<Enrollment> implements Serializable {
 	private final static long serialVersionUID = -3656792804387663344L;
 
+	public EnrollmentsResponse() {
+	}
+
 	public EnrollmentsResponse(List<Enrollment> enrollments) {
 		super(enrollments);
 	}

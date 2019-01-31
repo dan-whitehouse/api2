@@ -14,6 +14,9 @@ import java.util.List;
 public class UsersResponse extends BaseMultiResponse<User> implements Serializable {
 	private final static long serialVersionUID = -2820152702413553355L;
 
+	public UsersResponse() {
+	}
+
 	public UsersResponse(List<User> users) {
 		super(users);
 	}

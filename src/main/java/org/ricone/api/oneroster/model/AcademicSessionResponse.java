@@ -13,6 +13,9 @@ import java.util.List;
 public class AcademicSessionResponse extends BaseSingleResponse<AcademicSession> implements Serializable {
 	private final static long serialVersionUID = 254536018508141411L;
 
+	public AcademicSessionResponse() {
+	}
+
 	public AcademicSessionResponse(AcademicSession academicSession) {
 		super(academicSession);
 	}

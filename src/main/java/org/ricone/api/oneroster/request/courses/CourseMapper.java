@@ -24,19 +24,12 @@ class CourseMapper extends BaseMapper {
                 list.add(org);
             }
         }
-
-        CoursesResponse response = new CoursesResponse();
-        response.setCourse(list);
-        response.setStatusInfoSets(mapErrors(metadata, CourseView.class, Course.class));
-        return response;
+        return new CoursesResponse(list, mapErrors(metadata, CourseView.class, Course.class));
     }
 
     CourseResponse convert(CourseView view, ControllerData metadata) {
         if(view != null) {
-            CourseResponse response = new CourseResponse();
-            response.setCourse(map(view));
-            response.setStatusInfoSets(mapErrors(metadata, CourseView.class, Course.class));
-            return response;
+            return new CourseResponse(map(view), mapErrors(metadata, CourseView.class, Course.class));
         }
         return null;
     }

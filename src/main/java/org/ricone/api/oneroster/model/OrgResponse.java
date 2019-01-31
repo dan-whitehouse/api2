@@ -3,38 +3,34 @@ package org.ricone.api.oneroster.model;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import org.ricone.api.oneroster.component.BaseSingleResponse;
 
 import java.io.Serializable;
+import java.util.List;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"org"})
-public class OrgResponse extends BaseResponse implements Serializable {
-
-	@JsonProperty("org")
-	private Org org;
+public class OrgResponse extends BaseSingleResponse<Org> implements Serializable {
 	private final static long serialVersionUID = 4198000642945588466L;
 
-	/**
-	 * No args constructor for use in serialization
-	 */
 	public OrgResponse() {
 	}
 
-	/**
-	 * @param org
-	 */
 	public OrgResponse(Org org) {
-		super();
-		this.org = org;
+		super(org);
+	}
+
+	public OrgResponse(Org org, List<StatusInfoSet> errors) {
+		super(org, errors);
 	}
 
 	@JsonProperty("org")
-	public Org getOrg() {
-		return org;
+	@Override public Org getData() {
+		return super.getData();
 	}
 
 	@JsonProperty("org")
-	public void setOrg(Org org) {
-		this.org = org;
+	@Override public void setData(Org org) {
+		super.setData(org);
 	}
 }

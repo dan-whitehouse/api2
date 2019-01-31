@@ -17,7 +17,7 @@ import java.util.List;
 @Service("OneRoster:Orgs:OrgService")
 class OrgServiceImp implements OrgService {
 	@Autowired private OrgDAO dao;
-	@Autowired private OrgMapper mapper;
+	@Autowired private OrgMapper2 mapper;
 	@Autowired private OrgFieldSelector selector;
 
 	@Override

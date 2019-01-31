@@ -23,19 +23,12 @@ class EnrollmentMapper extends BaseMapper {
                 list.add(user);
             }
         }
-
-        EnrollmentsResponse response = new EnrollmentsResponse();
-        response.setEnrollments(list);
-        response.setStatusInfoSets(mapErrors(metadata, EnrollmentView.class, Enrollment.class));
-        return response;
+        return new EnrollmentsResponse(list, mapErrors(metadata, EnrollmentView.class, Enrollment.class));
     }
 
     EnrollmentResponse convert(EnrollmentView view, ControllerData metadata) {
         if(view != null) {
-            EnrollmentResponse response = new EnrollmentResponse();
-            response.setEnrollment(map(view));
-            response.setStatusInfoSets(mapErrors(metadata, EnrollmentView.class, Enrollment.class));
-            return response;
+            return new EnrollmentResponse(map(view), mapErrors(metadata, EnrollmentView.class, Enrollment.class));
         }
         return null;
     }

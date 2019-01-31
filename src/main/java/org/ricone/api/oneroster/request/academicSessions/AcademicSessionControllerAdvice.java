@@ -23,8 +23,8 @@ public class AcademicSessionControllerAdvice implements ResponseBodyAdvice<Acade
 
 	@Override
 	public AcademicSessionsResponse beforeBodyWrite(AcademicSessionsResponse body, MethodParameter returnType, MediaType selectedContentType, Class<? extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
-		if(body != null && body.getAcademicSessions() != null) {
-			response.getHeaders().add("X-Total-Count", String.valueOf(body.getAcademicSessions().size()));
+		if(body != null && body.getData() != null) {
+			response.getHeaders().add("X-Total-Count", String.valueOf(body.getData().size()));
 		}
 		return body;
 	}

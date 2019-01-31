@@ -3,39 +3,32 @@ package org.ricone.api.oneroster.model;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import org.ricone.api.oneroster.component.BaseSingleResponse;
 
 import java.io.Serializable;
+import java.util.List;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"enrollment"})
-public class EnrollmentResponse extends BaseResponse implements Serializable {
-
-	@JsonProperty("enrollment")
-	private Enrollment enrollment;
+public class EnrollmentResponse extends BaseSingleResponse<Enrollment> implements Serializable {
 	private final static long serialVersionUID = 6097789264454176014L;
 
-	/**
-	 * No args constructor for use in serialization
-	 */
-	public EnrollmentResponse() {
-	}
-
-	/**
-	 * @param enrollment
-	 */
 	public EnrollmentResponse(Enrollment enrollment) {
-		super();
-		this.enrollment = enrollment;
+		super(enrollment);
+	}
+
+	public EnrollmentResponse(Enrollment enrollment, List<StatusInfoSet> errors) {
+		super(enrollment);
 	}
 
 	@JsonProperty("enrollment")
-	public Enrollment getEnrollment() {
-		return enrollment;
+	@Override public Enrollment getData() {
+		return super.getData();
 	}
 
 	@JsonProperty("enrollment")
-	public void setEnrollment(Enrollment enrollment) {
-		this.enrollment = enrollment;
+	@Override public void setData(Enrollment enrollment) {
+		super.setData(enrollment);
 	}
 
 }

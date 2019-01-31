@@ -3,41 +3,31 @@ package org.ricone.api.oneroster.model;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import org.ricone.api.oneroster.component.BaseMultiResponse;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"demographics"})
-public class DemographicsResponse extends BaseResponse implements Serializable {
-
-	@JsonProperty("demographics")
-	private List<Demographic> demographics = new ArrayList<Demographic>();
+public class DemographicsResponse extends BaseMultiResponse<Demographic> implements Serializable {
 	private final static long serialVersionUID = 6089973485073338986L;
 
-	/**
-	 * No args constructor for use in serialization
-	 */
-	public DemographicsResponse() {
-	}
-
-	/**
-	 * @param demographics
-	 */
 	public DemographicsResponse(List<Demographic> demographics) {
-		super();
-		this.demographics = demographics;
+		super(demographics);
+	}
+
+	public DemographicsResponse(List<Demographic> demographics, List<StatusInfoSet> errors) {
+		super(demographics, errors);
 	}
 
 	@JsonProperty("demographics")
-	public List<Demographic> getDemographics() {
-		return demographics;
+	@Override public List<Demographic> getData() {
+		return super.getData();
 	}
 
 	@JsonProperty("demographics")
-	public void setDemographics(List<Demographic> demographics) {
-		this.demographics = demographics;
+	@Override public void setData(List<Demographic> demographics) {
+		super.setData(demographics);
 	}
-
 }

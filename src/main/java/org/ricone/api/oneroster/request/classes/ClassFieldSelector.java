@@ -21,11 +21,11 @@ public class ClassFieldSelector extends BaseFieldSelector<Class> {
 
 	ClassesResponse apply(ClassesResponse response, ControllerData metadata) {
 		if(metadata.getFieldSelection().hasFieldSelection() && metadata.getFieldSelection().isValidFieldSelection(getModelClass())) {
-			for (Class c : response.getClass_()) {
+			for (Class c : response.getData()) {
 				selectBaseFields(c, metadata);
 			}
 
-			if (CollectionUtils.isEmpty(response.getClass_())) {
+			if (CollectionUtils.isEmpty(response.getData())) {
 				return null;
 			}
 		}
@@ -34,8 +34,8 @@ public class ClassFieldSelector extends BaseFieldSelector<Class> {
 
 	ClassResponse apply(ClassResponse response, ControllerData metadata) {
 		if(metadata.getFieldSelection().hasFieldSelection() && metadata.getFieldSelection().isValidFieldSelection(getModelClass())) {
-			selectBaseFields(response.getClass_(), metadata);
-			if (response.getClass_() == null) {
+			selectBaseFields(response.getData(), metadata);
+			if (response.getData() == null) {
 				return null;
 			}
 		}

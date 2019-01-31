@@ -22,8 +22,8 @@ public class UserControllerAdvice implements ResponseBodyAdvice<UsersResponse> {
 
 	@Override
 	public UsersResponse beforeBodyWrite(UsersResponse body, MethodParameter returnType, MediaType selectedContentType, Class<? extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
-		if(body != null && body.getUsers() != null) {
-			response.getHeaders().add("X-Total-Count", String.valueOf(body.getUsers().size()));
+		if(body != null && body.getData() != null) {
+			response.getHeaders().add("X-Total-Count", String.valueOf(body.getData().size()));
 		}
 		return body;
 	}

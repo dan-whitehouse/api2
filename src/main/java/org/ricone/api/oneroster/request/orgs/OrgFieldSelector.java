@@ -22,11 +22,11 @@ public class OrgFieldSelector extends BaseFieldSelector<Org> {
 
 	OrgsResponse apply(OrgsResponse response, ControllerData metadata) {
 		if(metadata.getFieldSelection().hasFieldSelection() && metadata.getFieldSelection().isValidFieldSelection(getModelClass())) {
-			for (Org org : response.getOrgs()) {
+			for (Org org : response.getData()) {
 				selectBaseFields(org, metadata);
 			}
 
-			if (CollectionUtils.isEmpty(response.getOrgs())) {
+			if (CollectionUtils.isEmpty(response.getData())) {
 				return null;
 			}
 		}
@@ -35,8 +35,8 @@ public class OrgFieldSelector extends BaseFieldSelector<Org> {
 
 	OrgResponse apply(OrgResponse response, ControllerData metadata) {
 		if(metadata.getFieldSelection().hasFieldSelection() && metadata.getFieldSelection().isValidFieldSelection(getModelClass())) {
-			selectBaseFields(response.getOrg(), metadata);
-			if (response.getOrg() == null) {
+			selectBaseFields(response.getData(), metadata);
+			if (response.getData() == null) {
 				return null;
 			}
 		}

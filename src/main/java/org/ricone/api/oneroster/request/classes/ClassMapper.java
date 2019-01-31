@@ -25,19 +25,12 @@ class ClassMapper extends BaseMapper {
                 list.add(clazz);
             }
         }
-
-        ClassesResponse response = new ClassesResponse();
-        response.setClass_(list);
-        response.setStatusInfoSets(mapErrors(metadata, ClassView.class, Class.class));
-        return response;
+        return new ClassesResponse(list, mapErrors(metadata, ClassView.class, Class.class));
     }
 
     ClassResponse convert(ClassView view, ControllerData metadata) {
         if(view != null) {
-            ClassResponse response = new ClassResponse();
-            response.setClass_(map(view));
-            response.setStatusInfoSets(mapErrors(metadata, ClassView.class, Class.class));
-            return response;
+            return new ClassResponse(map(view), mapErrors(metadata, ClassView.class, Class.class));
         }
         return null;
     }

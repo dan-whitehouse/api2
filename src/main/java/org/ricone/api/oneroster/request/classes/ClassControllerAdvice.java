@@ -23,8 +23,8 @@ public class ClassControllerAdvice implements ResponseBodyAdvice<ClassesResponse
 
 	@Override
 	public ClassesResponse beforeBodyWrite(ClassesResponse body, MethodParameter returnType, MediaType selectedContentType, Class<? extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
-		if(body != null && body.getClass_() != null) {
-			response.getHeaders().add("X-Total-Count", String.valueOf(body.getClass_().size()));
+		if(body != null && body.getData() != null) {
+			response.getHeaders().add("X-Total-Count", String.valueOf(body.getData().size()));
 		}
 		return body;
 	}

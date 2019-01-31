@@ -21,11 +21,11 @@ public class CourseFieldSelector extends BaseFieldSelector<Course> {
 
 	CoursesResponse apply(CoursesResponse response, ControllerData metadata) {
 		if(metadata.getFieldSelection().hasFieldSelection() && metadata.getFieldSelection().isValidFieldSelection(getModelClass())) {
-			for (Course c : response.getCourse()) {
+			for (Course c : response.getData()) {
 				selectBaseFields(c, metadata);
 			}
 
-			if (CollectionUtils.isEmpty(response.getCourse())) {
+			if (CollectionUtils.isEmpty(response.getData())) {
 				return null;
 			}
 		}
@@ -34,8 +34,8 @@ public class CourseFieldSelector extends BaseFieldSelector<Course> {
 
 	CourseResponse apply(CourseResponse response, ControllerData metadata) {
 		if(metadata.getFieldSelection().hasFieldSelection() && metadata.getFieldSelection().isValidFieldSelection(getModelClass())) {
-			selectBaseFields(response.getCourse(), metadata);
-			if (response.getCourse() == null) {
+			selectBaseFields(response.getData(), metadata);
+			if (response.getData() == null) {
 				return null;
 			}
 		}

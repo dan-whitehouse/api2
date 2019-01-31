@@ -20,11 +20,11 @@ public class AcademicSessionFieldSelector extends BaseFieldSelector<AcademicSess
 
 	AcademicSessionsResponse apply(AcademicSessionsResponse response, ControllerData metadata) {
 		if(metadata.getFieldSelection().hasFieldSelection() && metadata.getFieldSelection().isValidFieldSelection(getModelClass())) {
-			for (AcademicSession academicSession : response.getAcademicSessions()) {
+			for (AcademicSession academicSession : response.getData()) {
 				selectBaseFields(academicSession, metadata);
 			}
 
-			if (CollectionUtils.isEmpty(response.getAcademicSessions())) {
+			if (CollectionUtils.isEmpty(response.getData())) {
 				return null;
 			}
 		}
@@ -33,8 +33,8 @@ public class AcademicSessionFieldSelector extends BaseFieldSelector<AcademicSess
 
 	AcademicSessionResponse apply(AcademicSessionResponse response, ControllerData metadata) {
 		if(metadata.getFieldSelection().hasFieldSelection() && metadata.getFieldSelection().isValidFieldSelection(getModelClass())) {
-			selectBaseFields(response.getAcademicSession(), metadata);
-			if (response.getAcademicSession() == null) {
+			selectBaseFields(response.getData(), metadata);
+			if (response.getData() == null) {
 				return null;
 			}
 		}

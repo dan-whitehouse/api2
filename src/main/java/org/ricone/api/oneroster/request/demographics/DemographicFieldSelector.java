@@ -22,11 +22,11 @@ public class DemographicFieldSelector extends BaseFieldSelector<Demographic> {
 
 	DemographicsResponse apply(DemographicsResponse response, ControllerData metadata) {
 		if(metadata.getFieldSelection().hasFieldSelection() && metadata.getFieldSelection().isValidFieldSelection(getModelClass())) {
-			for (Demographic demographic : response.getDemographics()) {
+			for (Demographic demographic : response.getData()) {
 				selectBaseFields(demographic, metadata);
 			}
 
-			if (CollectionUtils.isEmpty(response.getDemographics())) {
+			if (CollectionUtils.isEmpty(response.getData())) {
 				return null;
 			}
 		}
@@ -35,8 +35,8 @@ public class DemographicFieldSelector extends BaseFieldSelector<Demographic> {
 
 	DemographicResponse apply(DemographicResponse response, ControllerData metadata) {
 		if(metadata.getFieldSelection().hasFieldSelection() && metadata.getFieldSelection().isValidFieldSelection(getModelClass())) {
-			selectBaseFields(response.getDemographics(), metadata);
-			if (response.getDemographics() == null) {
+			selectBaseFields(response.getData(), metadata);
+			if (response.getData() == null) {
 				return null;
 			}
 		}

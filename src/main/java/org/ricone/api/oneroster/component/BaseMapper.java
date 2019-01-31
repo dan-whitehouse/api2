@@ -1,5 +1,6 @@
 package org.ricone.api.oneroster.component;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.ricone.api.oneroster.model.*;
 
 import java.lang.Class;
@@ -26,6 +27,10 @@ public abstract class BaseMapper {
 			sortError.setImsxSeverity(Severity.warning);
 			sortError.setImsxDescription("One or more of the fields " + metadata.getFieldSelection().getInvalidFields(model) + " included in the fields parameter doesn't exist.");
 			statusInfoSets.add(sortError);
+		}
+
+		if(CollectionUtils.isEmpty(statusInfoSets)) {
+			return null;
 		}
 		return statusInfoSets;
 	}

@@ -20,11 +20,11 @@ public class UserFieldSelector extends BaseFieldSelector<User> {
 
 	UsersResponse apply(UsersResponse response, ControllerData metadata) {
 		if(metadata.getFieldSelection().hasFieldSelection() && metadata.getFieldSelection().isValidFieldSelection(getModelClass())) {
-			for (User user : response.getUsers()) {
+			for (User user : response.getData()) {
 				selectBaseFields(user, metadata);
 			}
 
-			if (CollectionUtils.isEmpty(response.getUsers())) {
+			if (CollectionUtils.isEmpty(response.getData())) {
 				return null;
 			}
 		}
@@ -33,8 +33,8 @@ public class UserFieldSelector extends BaseFieldSelector<User> {
 
 	UserResponse apply(UserResponse response, ControllerData metadata) {
 		if(metadata.getFieldSelection().hasFieldSelection() && metadata.getFieldSelection().isValidFieldSelection(getModelClass())) {
-			selectBaseFields(response.getUser(), metadata);
-			if (response.getUser() == null) {
+			selectBaseFields(response.getData(), metadata);
+			if (response.getData() == null) {
 				return null;
 			}
 		}

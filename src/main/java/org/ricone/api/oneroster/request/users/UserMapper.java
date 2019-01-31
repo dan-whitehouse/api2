@@ -25,19 +25,12 @@ class UserMapper extends BaseMapper {
                 list.add(user);
             }
         }
-
-        UsersResponse response = new UsersResponse();
-        response.setUsers(list);
-        response.setStatusInfoSets(mapErrors(metadata, UserView.class, User.class));
-        return response;
+        return new UsersResponse(list, mapErrors(metadata, UserView.class, User.class));
     }
 
     UserResponse convert(UserView view, ControllerData metadata) {
         if(view != null) {
-            UserResponse response = new UserResponse();
-            response.setUser(map(view));
-            response.setStatusInfoSets(mapErrors(metadata, UserView.class, User.class));
-            return response;
+            return new UserResponse(map(view), mapErrors(metadata, UserView.class, User.class));
         }
         return null;
     }

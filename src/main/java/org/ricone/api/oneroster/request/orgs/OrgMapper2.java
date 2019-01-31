@@ -1,11 +1,11 @@
 package org.ricone.api.oneroster.request.orgs;
 
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ricone.api.core.model.view.OrgView;
 import org.ricone.api.oneroster.component.BaseMapper;
+import org.ricone.api.oneroster.component.BaseMapper2;
 import org.ricone.api.oneroster.component.ControllerData;
 import org.ricone.api.oneroster.model.*;
 import org.ricone.api.oneroster.util.MappingUtil;
@@ -14,32 +14,15 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 
-@Component("OneRoster:Orgs:OrgMapper")
-class OrgMapper extends BaseMapper {
-    private Logger logger = LogManager.getLogger(OrgMapper.class);
+@Component("OneRoster:Orgs:OrgMapper2")
+class OrgMapper2 extends BaseMapper2<OrgView, Org, OrgsResponse, OrgResponse> {
+    private Logger logger = LogManager.getLogger(OrgMapper2.class);
 
-    OrgMapper() {
+    OrgMapper2() throws NoSuchMethodException {
+        super(OrgView.class, Org.class, OrgsResponse.class, OrgResponse.class);
     }
 
-    OrgsResponse convert(List<OrgView> instance, ControllerData metadata) {
-        List<Org> list = new ArrayList<>();
-        for (OrgView view : instance) {
-            Org org = map(view);
-            if(org != null) {
-                list.add(org);
-            }
-        }
-        return new OrgsResponse(list, mapErrors(metadata, OrgView.class, Org.class));
-    }
-
-    OrgResponse convert(OrgView view, ControllerData metadata) {
-        if(view != null) {
-            return new OrgResponse(map(view), mapErrors(metadata, OrgView.class, Org.class));
-        }
-        return null;
-    }
-
-    private Org map(OrgView instance) {
+    @Override public Org map(OrgView instance) {
         Org org = new Org();
         org.setSourcedId(instance.getSourcedId());
         org.setStatus(StatusType.active);
@@ -58,7 +41,7 @@ class OrgMapper extends BaseMapper {
         return org;
     }
 
-    private Metadata mapMetadata(OrgView instance) {
+    @Override public Metadata mapMetadata(OrgView instance) {
         Metadata metadata = new Metadata();
         metadata.getAdditionalProperties().put("ricone.schoolYear", instance.getSourcedSchoolYear());
         metadata.getAdditionalProperties().put("ricone.districtId", instance.getDistrictId());

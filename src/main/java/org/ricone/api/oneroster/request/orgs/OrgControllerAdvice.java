@@ -23,8 +23,8 @@ public class OrgControllerAdvice implements ResponseBodyAdvice<OrgsResponse> {
 
 	@Override
 	public OrgsResponse beforeBodyWrite(OrgsResponse body, MethodParameter returnType, MediaType selectedContentType, Class<? extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
-		if(body != null && body.getOrgs() != null) {
-			response.getHeaders().add("X-Total-Count", String.valueOf(body.getOrgs().size()));
+		if(body != null && body.getData() != null) {
+			response.getHeaders().add("X-Total-Count", String.valueOf(body.getData().size()));
 		}
 		return body;
 	}

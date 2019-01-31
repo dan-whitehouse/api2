@@ -32,19 +32,12 @@ class DemographicMapper extends BaseMapper {
                 list.add(demographic);
             }
         }
-
-        DemographicsResponse response = new DemographicsResponse();
-        response.setDemographics(list);
-        response.setStatusInfoSets(mapErrors(metadata, DemographicView.class, Demographic.class));
-        return response;
+        return new DemographicsResponse(list, mapErrors(metadata, DemographicView.class, Demographic.class));
     }
 
     DemographicResponse convert(DemographicView view, ControllerData metadata) {
         if(view != null) {
-            DemographicResponse response = new DemographicResponse();
-            response.setDemographics(map(view));
-            response.setStatusInfoSets(mapErrors(metadata, DemographicView.class, Demographic.class));
-            return response;
+            return new DemographicResponse(map(view), mapErrors(metadata, DemographicView.class, Demographic.class));
         }
         return null;
     }

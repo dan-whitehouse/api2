@@ -26,19 +26,12 @@ class AcademicSessionMapper extends BaseMapper {
                 list.add(academicSession);
             }
         }
-
-        AcademicSessionsResponse response = new AcademicSessionsResponse();
-        response.setAcademicSessions(list);
-        response.setStatusInfoSets(mapErrors(metadata, AcademicSessionView.class, AcademicSession.class));
-        return response;
+        return new AcademicSessionsResponse(list, mapErrors(metadata, AcademicSessionView.class, AcademicSession.class));
     }
 
     AcademicSessionResponse convert(AcademicSessionView view, ControllerData metadata) {
         if(view != null) {
-            AcademicSessionResponse response = new AcademicSessionResponse();
-            response.setAcademicSession(map(view));
-            response.setStatusInfoSets(mapErrors(metadata, AcademicSessionView.class, AcademicSession.class));
-            return response;
+            return new AcademicSessionResponse(map(view), mapErrors(metadata, AcademicSessionView.class, AcademicSession.class));
         }
         return null;
     }

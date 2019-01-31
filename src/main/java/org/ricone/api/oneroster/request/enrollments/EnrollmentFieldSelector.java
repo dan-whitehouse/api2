@@ -20,11 +20,11 @@ public class EnrollmentFieldSelector extends BaseFieldSelector<Enrollment> {
 
 	EnrollmentsResponse apply(EnrollmentsResponse response, ControllerData metadata) {
 		if(metadata.getFieldSelection().hasFieldSelection() && metadata.getFieldSelection().isValidFieldSelection(getModelClass())) {
-			for (Enrollment enrollment : response.getEnrollments()) {
+			for (Enrollment enrollment : response.getData()) {
 				selectBaseFields(enrollment, metadata);
 			}
 
-			if (CollectionUtils.isEmpty(response.getEnrollments())) {
+			if (CollectionUtils.isEmpty(response.getData())) {
 				return null;
 			}
 		}
@@ -33,8 +33,8 @@ public class EnrollmentFieldSelector extends BaseFieldSelector<Enrollment> {
 
 	EnrollmentResponse apply(EnrollmentResponse response, ControllerData metadata) {
 		if(metadata.getFieldSelection().hasFieldSelection() && metadata.getFieldSelection().isValidFieldSelection(getModelClass())) {
-			selectBaseFields(response.getEnrollment(), metadata);
-			if (response.getEnrollment() == null) {
+			selectBaseFields(response.getData(), metadata);
+			if (response.getData() == null) {
 				return null;
 			}
 		}

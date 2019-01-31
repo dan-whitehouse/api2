@@ -3,38 +3,31 @@ package org.ricone.api.oneroster.model;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import org.ricone.api.oneroster.component.BaseSingleResponse;
 
 import java.io.Serializable;
+import java.util.List;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"class"})
-public class ClassResponse extends BaseResponse implements Serializable {
-
-	@JsonProperty("class")
-	private Class _class;
+public class ClassResponse extends BaseSingleResponse<Class> implements Serializable {
 	private final static long serialVersionUID = 7631981467689004007L;
 
-	/**
-	 * No args constructor for use in serialization
-	 */
-	public ClassResponse() {
-	}
-
-	/**
-	 * @param _class
-	 */
 	public ClassResponse(Class _class) {
-		super();
-		this._class = _class;
+		super(_class);
+	}
+
+	public ClassResponse(Class _class, List<StatusInfoSet> errors) {
+		super(_class, errors);
 	}
 
 	@JsonProperty("class")
-	public Class getClass_() {
-		return _class;
+	@Override public Class getData() {
+		return super.getData();
 	}
 
 	@JsonProperty("class")
-	public void setClass_(Class _class) {
-		this._class = _class;
+	@Override public void setData(Class _class) {
+		super.setData(_class);
 	}
 }

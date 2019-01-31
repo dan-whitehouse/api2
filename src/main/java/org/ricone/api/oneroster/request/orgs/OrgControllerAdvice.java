@@ -1,5 +1,7 @@
 package org.ricone.api.oneroster.request.orgs;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.ricone.api.oneroster.model.DemographicsResponse;
 import org.ricone.api.oneroster.model.OrgsResponse;
 import org.springframework.core.MethodParameter;
@@ -14,6 +16,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 @ControllerAdvice
 public class OrgControllerAdvice implements ResponseBodyAdvice<OrgsResponse> {
+	private Logger logger = LogManager.getLogger(this.getClass());
 
 	@Override
 	public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {

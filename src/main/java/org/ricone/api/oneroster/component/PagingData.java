@@ -49,6 +49,19 @@ public class PagingData {
 		return limit;
 	}
 
+	private void test(Integer totalRecords) {
+		if(totalRecords != null) {
+			Integer next_limit = limit;
+			Integer next_offset = offset+limit < totalRecords ? offset+limit : null;
+
+			Integer previous_limit;
+			Integer previous_offset = offset-limit > 0 ? offset-limit : null;
+
+			Integer first_limit = limit;
+			Integer first_offset = 0;
+		}
+	}
+
 	@Override
 	public String toString() {
 		return "Paging{" + "offset=" + offset + ", limit=" + limit + '}';

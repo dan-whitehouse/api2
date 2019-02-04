@@ -67,7 +67,25 @@ class DemographicDAOImp extends BaseDAO implements DemographicDAO {
 		if(metadata.getPaging().isPaged()) {
 			q.setFirstResult(metadata.getPaging().getOffset());
 			q.setMaxResults(metadata.getPaging().getLimit());
+			metadata.getPaging().setPagingHeaders(countAllDemographics(metadata));
 		}
 		return (List<DemographicView>) q.getResultList();
+	}
+
+	@Override
+	public int countAllDemographics(ControllerData metadata) {
+		final CriteriaBuilder cb = em.getCriteriaBuilder();
+		final CriteriaQuery<Long> select = cb.createQuery(Long.class);
+		final Root<DemographicView> from = select.from(DemographicView.class);
+
+		final Predicate methodSpecificPredicate = cb.and(
+			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
+			from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+		);
+
+		select.select(cb.countDistinct(from));
+		select.where(getWhereClause(metadata, cb, from, methodSpecificPredicate));
+		select.orderBy(getSortOrder(metadata, cb, from));
+		return em.createQuery(select).getSingleResult().intValue();
 	}
 }

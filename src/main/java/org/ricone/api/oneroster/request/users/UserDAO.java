@@ -34,4 +34,24 @@ interface UserDAO {
 	UserView getContact(ControllerData metadata, String refId);
 
 	List<UserView> getAllContacts(ControllerData metadata);
+
+	int countAllUsers(ControllerData metadata);
+
+	int countAllStudents(ControllerData metadata);
+
+	int countStudentsForSchool(ControllerData metadata, String refId);
+
+	int countStudentsForClass(ControllerData metadata, String refId);
+
+	int countStudentsForClassInSchool(ControllerData metadata, String refId, String classRefId);
+
+	int countAllTeachers(ControllerData metadata);
+
+	int countTeachersForSchool(ControllerData metadata, String refId);
+
+	int countTeachersForClass(ControllerData metadata, String refId);
+
+	int countTeachersForClassInSchool(ControllerData metadata, String schoolRefId, String classRefId);
+
+	int countAllContacts(ControllerData metadata);
 }

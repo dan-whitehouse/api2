@@ -20,4 +20,10 @@ interface AcademicSessionDAO {
 	AcademicSessionView getTerm(ControllerData metadata, String refId);
 
 	List<AcademicSessionView> getAllTerms(ControllerData metadata);
+
+	int countAllAcademicSessions(ControllerData metadata);
+
+	int countAllCalendars(ControllerData metadata);
+
+	int countAllTerms(ControllerData metadata);
 }

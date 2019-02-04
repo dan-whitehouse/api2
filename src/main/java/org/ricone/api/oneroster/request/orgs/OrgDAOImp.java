@@ -67,6 +67,7 @@ class OrgDAOImp extends BaseDAO implements OrgDAO {
 		if(metadata.getPaging().isPaged()) {
 			q.setFirstResult(metadata.getPaging().getOffset());
 			q.setMaxResults(metadata.getPaging().getLimit());
+			metadata.getPaging().setPagingHeaders(countAllOrgs(metadata));
 		}
 		return (List<OrgView>) q.getResultList();
 	}
@@ -118,7 +119,46 @@ class OrgDAOImp extends BaseDAO implements OrgDAO {
 		if(metadata.getPaging().isPaged()) {
 			q.setFirstResult(metadata.getPaging().getOffset());
 			q.setMaxResults(metadata.getPaging().getLimit());
+			metadata.getPaging().setPagingHeaders(countAllSchools(metadata));
 		}
 		return (List<OrgView>) q.getResultList();
+	}
+
+	/* Counts */
+
+	@Override
+	public int countAllOrgs(ControllerData metadata) throws Exception {
+		final CriteriaBuilder cb = em.getCriteriaBuilder();
+		final CriteriaQuery<Long> select = cb.createQuery(Long.class);
+		final Root<OrgView> from = select.from(OrgView.class);
+
+		//Method Specific Predicate
+		final Predicate methodSpecificPredicate = cb.and(
+			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
+			from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+		);
+
+		select.select(cb.countDistinct(from));
+		select.where(getWhereClause(metadata, cb, from, methodSpecificPredicate));
+		select.orderBy(getSortOrder(metadata, cb, from));
+		return em.createQuery(select).getSingleResult().intValue();
+	}
+
+	@Override
+	public int countAllSchools(ControllerData metadata) throws Exception {
+		final CriteriaBuilder cb = em.getCriteriaBuilder();
+		final CriteriaQuery<Long> select = cb.createQuery(Long.class);
+		final Root<OrgView> from = select.from(OrgView.class);
+
+		final Predicate methodSpecificPredicate = cb.and(
+			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
+			cb.equal(from.get(FIELD_TYPE), "school"),
+			from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+		);
+
+		select.select(cb.countDistinct(from));
+		select.where(getWhereClause(metadata, cb, from, methodSpecificPredicate));
+		select.orderBy(getSortOrder(metadata, cb, from));
+		return em.createQuery(select).getSingleResult().intValue();
 	}
 }

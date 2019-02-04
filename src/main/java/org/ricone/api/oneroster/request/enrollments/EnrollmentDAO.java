@@ -13,4 +13,10 @@ interface EnrollmentDAO {
 	List<EnrollmentView> getEnrollmentsForSchool(ControllerData metadata, String refId);
 
 	List<EnrollmentView> getEnrollmentsForClassInSchool(ControllerData metadata, String schoolId, String classId);
+
+	int countAllEnrollments(ControllerData metadata);
+
+	int countEnrollmentsForSchool(ControllerData metadata, String refId);
+
+	int countEnrollmentsForClassInSchool(ControllerData metadata, String schoolId, String classId);
 }

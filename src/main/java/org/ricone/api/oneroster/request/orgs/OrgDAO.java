@@ -13,4 +13,8 @@ interface OrgDAO {
 	OrgView getSchool(ControllerData metadata, String refId) throws Exception;
 
 	List<OrgView> getAllSchools(ControllerData metadata) throws Exception;
+
+	int countAllOrgs(ControllerData metadata) throws Exception;
+
+	int countAllSchools(ControllerData metadata) throws Exception;
 }

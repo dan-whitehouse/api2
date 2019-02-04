@@ -11,4 +11,8 @@ interface CourseDAO {
 	List<CourseView> getAllCourses(ControllerData metadata) throws Exception;
 
 	List<CourseView> getCoursesForSchool(ControllerData metadata, String refId) throws Exception;
+
+	int countAllCourses(ControllerData metadata) throws Exception;
+
+	int countCoursesForSchool(ControllerData metadata, String refId) throws Exception;
 }

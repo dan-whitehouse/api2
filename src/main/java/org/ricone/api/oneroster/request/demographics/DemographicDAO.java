@@ -9,4 +9,6 @@ interface DemographicDAO {
 	DemographicView getDemographic(ControllerData metadata, String refId);
 
 	List<DemographicView> getAllDemographics(ControllerData metadata);
+
+	int countAllDemographics(ControllerData metadata);
 }

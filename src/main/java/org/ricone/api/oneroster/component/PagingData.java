@@ -3,21 +3,26 @@ package org.ricone.api.oneroster.component;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ricone.api.xpress.error.exception.BadRequestException;
+import org.springframework.hateoas.LinkBuilder;
+import org.springframework.http.HttpHeaders;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PagingData {
 	private Logger logger = LogManager.getLogger(PagingData.class);
 	private final String OFFSET = "offset";
 	private final String LIMIT = "limit";
 
+	HttpServletRequest request;
 	private HttpServletResponse response;
 	private Integer offset = null;
 	private Integer limit = null;
 
 	PagingData(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		this.request = request;
 		this.response = response;
 
 		if(NumberUtils.isDigits(request.getParameter(OFFSET))) {
@@ -49,16 +54,42 @@ public class PagingData {
 		return limit;
 	}
 
-	private void test(Integer totalRecords) {
-		if(totalRecords != null) {
-			Integer next_limit = limit;
-			Integer next_offset = offset+limit < totalRecords ? offset+limit : null;
+	public void setPagingHeaders(int totalRecords) {
+		/*  TODO: Should this only be returned when paging is applicable? Meaning, move the method call in DAO's to outside of the paging block.
+			It is RECOMMENDED that implementations pass the total resource count in collection back to the requester.
+			This MUST be provided in the custom HTTP header: X-Total-Count
+		 */
+		response.setHeader("X-Total-Count", String.valueOf(totalRecords));
 
-			Integer previous_limit;
-			Integer previous_offset = offset-limit > 0 ? offset-limit : null;
+		if(isPaged()) {
+			/*  Reference: https://stackoverflow.com/questions/27992413/how-do-i-calculate-the-offsets-for-pagination
+				It is RECOMMENDED that implementers pass back next, previous, first and last links in the HTTP Link Header.
 
-			Integer first_limit = limit;
-			Integer first_offset = 0;
+				Example: 503 student resources exist in the collection. Pagination is on the second page, in units of 10.
+				Link:
+					<https://imsglobal.org/ims/oneroster/v1p1/students?limit=10&offset=20>; rel="next",
+					<https://imsglobal.org/ims/oneroster/v1p1/students?limit=3&offset=500>; rel="last",
+					<https://imsglobal.org/ims/oneroster/v1p1/students?limit=10&offset=0>; rel="first",
+					<https://imsglobal.org/ims/oneroster/v1p1/students?limit=10&offset=0>; rel="prev"
+				NOTE: Pagination must be supported for ALL endpoints that return a collection.
+			 */
+			int currentPage = (int)Math.floor(offset / limit);
+			int totalPages = (int)Math.ceil(totalRecords / limit);
+			int last_offset = totalPages * limit;
+			int previous_offset = (currentPage - 1) * limit;
+			int next_offset = (currentPage + 1) * limit;
+
+			List<String> list = new ArrayList<>();
+			if(next_offset <= totalPages) {
+				list.add("<" + request.getRequestURL() + "?limit=" + limit + "&offset=" + next_offset + ">; rel=\"next\"");
+			}
+			list.add("<" + request.getRequestURL() + "?limit=" + limit + "&offset=" + last_offset + ">; rel=\"last\"");
+			list.add("<" + request.getRequestURL() + "?limit=" + limit + "&offset=" + 0 + ">; rel=\"first\"");
+			if(previous_offset >= 0) {
+				list.add("<" + request.getRequestURL() + "?limit=" + limit + "&offset=" + previous_offset + ">; rel=\"prev\"");
+			}
+
+			response.setHeader(HttpHeaders.LINK, String.join(", ", list));
 		}
 	}
 

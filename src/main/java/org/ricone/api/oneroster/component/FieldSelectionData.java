@@ -16,6 +16,36 @@ public class FieldSelectionData {
 	private final String FIELDS = "fields";
 	private Set<String> fields = null;
 
+	/*
+		Field Selection
+		It MUST be possible for requesters to select the range of fields to be returned. By default, all mandatory and optional fields from the core description of the resource MUST be returned. If any fields are specified in the request then the implementation MUST return those fields AND ONLY those fields i.e. the multiplicity rules for an element are overridden. Any Field or fields from the Full Data Model MAY be requested. Any field or fields from the Data Model MAY be requested.
+
+		Field selection request MUST make use of the reserved word fields. The value of fields is a comma delimited list of the fields to return.
+
+		Example: To ask for a list of students retuning only the given name and family name:
+
+		GET https://imsglobal.org/ims/oneroster/v1p1/students?fields=givenName,familyName
+
+		If the consumer requests that data be selected using non-existent field, ALL data for the record is returned and the server must provide the associated transaction status code information of:
+			• CodeMajor value is 'success';
+			• Severity value is 'warning';
+			• CodeMinor value is 'invalid_selection_field';
+			• StatusCode value is the corresponding HTTP response code;
+			• Description should contain the supplied unknown field.
+
+		If the consumer requests that data be selected using a blank field the request will be treated as an invalid request. The server must provide the associated transaction status code information of:
+		•         CodeMajor value is 'failure';
+
+		•         Severity value is 'error';
+
+		•         CodeMinor value is 'invalid_blank_selection_field';
+
+		•         StatusCode value is the corresponding HTTP response code.
+
+		NOTE: Field Selection must be supported for ALL read endpoints.
+	 */
+
+
 	FieldSelectionData(HttpServletRequest request) throws Exception {
 		if(request.getParameter(FIELDS) != null) {
 			if(StringUtils.isEmpty(request.getParameter(FIELDS))) {

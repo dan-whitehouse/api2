@@ -21,4 +21,18 @@ interface ClassDAO {
 	List<ClassView> getClassesForSchool(ControllerData metadata, String refId) throws Exception;
 
 	List<ClassView> getClassesForUser(ControllerData metadata, String refId) throws Exception;
+
+	int countAllClasses(ControllerData metadata) throws Exception;
+
+	int countClassesForTerm(ControllerData metadata, String refId) throws Exception;
+
+	int countClassesForCourse(ControllerData metadata, String refId) throws Exception;
+
+	int countClassesForStudent(ControllerData metadata, String refId) throws Exception;
+
+	int countClassesForTeacher(ControllerData metadata, String refId) throws Exception;
+
+	int countClassesForSchool(ControllerData metadata, String refId) throws Exception;
+
+	int countClassesForUser(ControllerData metadata, String refId) throws Exception;
 }

@@ -67,6 +67,7 @@ class ClassDAOImp extends BaseDAO implements ClassDAO {
 		if(metadata.getPaging().isPaged()) {
 			q.setFirstResult(metadata.getPaging().getOffset());
 			q.setMaxResults(metadata.getPaging().getLimit());
+			metadata.getPaging().setPagingHeaders(countAllClasses(metadata));
 		}
 		return (List<ClassView>) q.getResultList();
 	}
@@ -93,6 +94,7 @@ class ClassDAOImp extends BaseDAO implements ClassDAO {
 		if(metadata.getPaging().isPaged()) {
 			q.setFirstResult(metadata.getPaging().getOffset());
 			q.setMaxResults(metadata.getPaging().getLimit());
+			metadata.getPaging().setPagingHeaders(countClassesForTerm(metadata, refId));
 		}
 		return (List<ClassView>) q.getResultList();
 	}
@@ -118,6 +120,7 @@ class ClassDAOImp extends BaseDAO implements ClassDAO {
 		if(metadata.getPaging().isPaged()) {
 			q.setFirstResult(metadata.getPaging().getOffset());
 			q.setMaxResults(metadata.getPaging().getLimit());
+			metadata.getPaging().setPagingHeaders(countClassesForCourse(metadata, refId));
 		}
 		return (List<ClassView>) q.getResultList();
 	}
@@ -143,6 +146,7 @@ class ClassDAOImp extends BaseDAO implements ClassDAO {
 		if(metadata.getPaging().isPaged()) {
 			q.setFirstResult(metadata.getPaging().getOffset());
 			q.setMaxResults(metadata.getPaging().getLimit());
+			metadata.getPaging().setPagingHeaders(countClassesForSchool(metadata, refId));
 		}
 		return (List<ClassView>) q.getResultList();
 	}
@@ -170,6 +174,7 @@ class ClassDAOImp extends BaseDAO implements ClassDAO {
 		if(metadata.getPaging().isPaged()) {
 			q.setFirstResult(metadata.getPaging().getOffset());
 			q.setMaxResults(metadata.getPaging().getLimit());
+			metadata.getPaging().setPagingHeaders(countClassesForStudent(metadata, refId));
 		}
 		return (List<ClassView>) q.getResultList();
 	}
@@ -197,6 +202,7 @@ class ClassDAOImp extends BaseDAO implements ClassDAO {
 		if(metadata.getPaging().isPaged()) {
 			q.setFirstResult(metadata.getPaging().getOffset());
 			q.setMaxResults(metadata.getPaging().getLimit());
+			metadata.getPaging().setPagingHeaders(countClassesForTeacher(metadata, refId));
 		}
 		return (List<ClassView>) q.getResultList();
 	}
@@ -223,7 +229,139 @@ class ClassDAOImp extends BaseDAO implements ClassDAO {
 		if(metadata.getPaging().isPaged()) {
 			q.setFirstResult(metadata.getPaging().getOffset());
 			q.setMaxResults(metadata.getPaging().getLimit());
+			metadata.getPaging().setPagingHeaders(countClassesForUser(metadata, refId));
 		}
 		return (List<ClassView>) q.getResultList();
+	}
+
+	@Override
+	public int countAllClasses(ControllerData metadata) throws Exception {
+		final CriteriaBuilder cb = em.getCriteriaBuilder();
+		final CriteriaQuery<Long> select = cb.createQuery(Long.class);
+		final Root<ClassView> from = select.from(ClassView.class);
+
+		final Predicate methodSpecificPredicate = cb.and(
+				cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
+				from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+		);
+
+		select.select(cb.countDistinct(from));
+		select.where(getWhereClause(metadata, cb, from, methodSpecificPredicate));
+		select.orderBy(getSortOrder(metadata, cb, from));
+		return em.createQuery(select).getSingleResult().intValue();
+	}
+
+	@Override
+	public int countClassesForTerm(ControllerData metadata, String refId) throws Exception {
+		final CriteriaBuilder cb = em.getCriteriaBuilder();
+		final CriteriaQuery<Long> select = cb.createQuery(Long.class);
+		final Root<ClassView> from = select.from(ClassView.class);
+		final SetJoin<ClassView, ClassTermView> classTerms = (SetJoin<ClassView, ClassTermView>) from.<ClassView, ClassTermView>join(JOIN_CLASS_TERMS, JoinType.LEFT);
+
+		final Predicate methodSpecificPredicate = cb.and(
+				cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
+				cb.equal(classTerms.get(FIELD_TERM_ID), refId),
+				from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+		);
+
+		select.select(cb.countDistinct(from));
+		select.where(getWhereClause(metadata, cb, from, methodSpecificPredicate));
+		select.orderBy(getSortOrder(metadata, cb, from));
+		return em.createQuery(select).getSingleResult().intValue();
+	}
+
+	@Override
+	public int countClassesForCourse(ControllerData metadata, String refId) throws Exception {
+		final CriteriaBuilder cb = em.getCriteriaBuilder();
+		final CriteriaQuery<Long> select = cb.createQuery(Long.class);
+		final Root<ClassView> from = select.from(ClassView.class);
+
+		final Predicate methodSpecificPredicate = cb.and(
+				cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
+				cb.equal(from.get(FIELD_COURSE_ID), refId),
+				from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+		);
+
+		select.select(cb.countDistinct(from));
+		select.where(getWhereClause(metadata, cb, from, methodSpecificPredicate));
+		select.orderBy(getSortOrder(metadata, cb, from));
+		return em.createQuery(select).getSingleResult().intValue();
+	}
+
+	@Override
+	public int countClassesForSchool(ControllerData metadata, String refId) throws Exception {
+		final CriteriaBuilder cb = em.getCriteriaBuilder();
+		final CriteriaQuery<Long> select = cb.createQuery(Long.class);
+		final Root<ClassView> from = select.from(ClassView.class);
+
+		final Predicate methodSpecificPredicate = cb.and(
+				cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
+				cb.equal(from.get(FIELD_ORG_ID), refId),
+				from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+		);
+
+		select.select(cb.countDistinct(from));
+		select.where(getWhereClause(metadata, cb, from, methodSpecificPredicate));
+		select.orderBy(getSortOrder(metadata, cb, from));
+		return em.createQuery(select).getSingleResult().intValue();
+	}
+
+	@Override
+	public int countClassesForStudent(ControllerData metadata, String refId) throws Exception {
+		final CriteriaBuilder cb = em.getCriteriaBuilder();
+		final CriteriaQuery<Long> select = cb.createQuery(Long.class);
+		final Root<ClassView> from = select.from(ClassView.class);
+		final SetJoin<ClassView, ClassUserView> classUsers = (SetJoin<ClassView, ClassUserView>) from.<ClassView, ClassUserView>join(JOIN_CLASS_USERS, JoinType.LEFT);
+
+		final Predicate methodSpecificPredicate = cb.and(
+				cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
+				cb.equal(classUsers.get(FIELD_USER_ID), refId),
+				cb.equal(classUsers.get(FIELD_ROLE), "student"),
+				from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+		);
+
+		select.select(cb.countDistinct(from));
+		select.where(getWhereClause(metadata, cb, from, methodSpecificPredicate));
+		select.orderBy(getSortOrder(metadata, cb, from));
+		return em.createQuery(select).getSingleResult().intValue();
+	}
+
+	@Override
+	public int countClassesForTeacher(ControllerData metadata, String refId) throws Exception {
+		final CriteriaBuilder cb = em.getCriteriaBuilder();
+		final CriteriaQuery<Long> select = cb.createQuery(Long.class);
+		final Root<ClassView> from = select.from(ClassView.class);
+		final SetJoin<ClassView, ClassUserView> classUsers = (SetJoin<ClassView, ClassUserView>) from.<ClassView, ClassUserView>join(JOIN_CLASS_USERS, JoinType.LEFT);
+
+		final Predicate methodSpecificPredicate = cb.and(
+				cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
+				cb.equal(classUsers.get(FIELD_USER_ID), refId),
+				cb.equal(classUsers.get(FIELD_ROLE), "teacher"),
+				from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+		);
+
+		select.select(cb.countDistinct(from));
+		select.where(getWhereClause(metadata, cb, from, methodSpecificPredicate));
+		select.orderBy(getSortOrder(metadata, cb, from));
+		return em.createQuery(select).getSingleResult().intValue();
+	}
+
+	@Override
+	public int countClassesForUser(ControllerData metadata, String refId) throws Exception {
+		final CriteriaBuilder cb = em.getCriteriaBuilder();
+		final CriteriaQuery<Long> select = cb.createQuery(Long.class);
+		final Root<ClassView> from = select.from(ClassView.class);
+		final SetJoin<ClassView, ClassUserView> classUsers = (SetJoin<ClassView, ClassUserView>) from.<ClassView, ClassUserView>join(JOIN_CLASS_USERS, JoinType.LEFT);
+
+		final Predicate methodSpecificPredicate = cb.and(
+				cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
+				cb.equal(classUsers.get(FIELD_USER_ID), refId),
+				from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+		);
+
+		select.select(cb.countDistinct(from));
+		select.where(getWhereClause(metadata, cb, from, methodSpecificPredicate));
+		select.orderBy(getSortOrder(metadata, cb, from));
+		return em.createQuery(select).getSingleResult().intValue();
 	}
 }

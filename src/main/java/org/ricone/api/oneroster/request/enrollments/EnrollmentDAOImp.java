@@ -70,6 +70,7 @@ class EnrollmentDAOImp extends BaseDAO implements EnrollmentDAO {
 		if(metadata.getPaging().isPaged()) {
 			q.setFirstResult(metadata.getPaging().getOffset());
 			q.setMaxResults(metadata.getPaging().getLimit());
+			metadata.getPaging().setPagingHeaders(countAllEnrollments(metadata));
 		}
 		return (List<EnrollmentView>) q.getResultList();
 	}
@@ -96,6 +97,7 @@ class EnrollmentDAOImp extends BaseDAO implements EnrollmentDAO {
 		if(metadata.getPaging().isPaged()) {
 			q.setFirstResult(metadata.getPaging().getOffset());
 			q.setMaxResults(metadata.getPaging().getLimit());
+			metadata.getPaging().setPagingHeaders(countEnrollmentsForSchool(metadata, refId));
 		}
 		return (List<EnrollmentView>) q.getResultList();
 	}
@@ -123,7 +125,65 @@ class EnrollmentDAOImp extends BaseDAO implements EnrollmentDAO {
 		if(metadata.getPaging().isPaged()) {
 			q.setFirstResult(metadata.getPaging().getOffset());
 			q.setMaxResults(metadata.getPaging().getLimit());
+			metadata.getPaging().setPagingHeaders(countEnrollmentsForClassInSchool(metadata, schoolId, classId));
 		}
 		return (List<EnrollmentView>) q.getResultList();
+	}
+
+	@Override
+	public int countAllEnrollments(ControllerData metadata) {
+		final CriteriaBuilder cb = em.getCriteriaBuilder();
+		final CriteriaQuery<Long> select = cb.createQuery(Long.class);
+		final Root<EnrollmentView> from = select.from(EnrollmentView.class);
+
+		//Method Specific Predicate
+		final Predicate methodSpecificPredicate = cb.and(
+			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
+			from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+		);
+
+		select.select(cb.countDistinct(from));
+		select.where(getWhereClause(metadata, cb, from, methodSpecificPredicate));
+		select.orderBy(getSortOrder(metadata, cb, from));
+		return em.createQuery(select).getSingleResult().intValue();
+	}
+
+	@Override
+	public int countEnrollmentsForSchool(ControllerData metadata, String refId) {
+		final CriteriaBuilder cb = em.getCriteriaBuilder();
+		final CriteriaQuery<Long> select = cb.createQuery(Long.class);
+		final Root<EnrollmentView> from = select.from(EnrollmentView.class);
+
+		//Method Specific Predicate
+		final Predicate methodSpecificPredicate = cb.and(
+			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
+			cb.equal(from.get(FIELD_ORG_ID), refId),
+			from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+		);
+
+		select.select(cb.countDistinct(from));
+		select.where(getWhereClause(metadata, cb, from, methodSpecificPredicate));
+		select.orderBy(getSortOrder(metadata, cb, from));
+		return em.createQuery(select).getSingleResult().intValue();
+	}
+
+	@Override
+	public int countEnrollmentsForClassInSchool(ControllerData metadata, String schoolId, String classId) {
+		final CriteriaBuilder cb = em.getCriteriaBuilder();
+		final CriteriaQuery<Long> select = cb.createQuery(Long.class);
+		final Root<EnrollmentView> from = select.from(EnrollmentView.class);
+
+		//Method Specific Predicate
+		final Predicate methodSpecificPredicate = cb.and(
+			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
+			cb.equal(from.get(FIELD_ORG_ID), schoolId),
+			cb.equal(from.get(FIELD_CLASS_ID), classId),
+			from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+		);
+
+		select.select(cb.countDistinct(from));
+		select.where(getWhereClause(metadata, cb, from, methodSpecificPredicate));
+		select.orderBy(getSortOrder(metadata, cb, from));
+		return em.createQuery(select).getSingleResult().intValue();
 	}
 }

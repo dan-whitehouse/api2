@@ -3,8 +3,9 @@ package org.ricone.api.oneroster.component;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.hateoas.LinkBuilder;
 import org.springframework.http.HttpHeaders;
+import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -12,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PagingData {
-	private Logger logger = LogManager.getLogger(PagingData.class);
+	private Logger logger = LogManager.getLogger(this.getClass());
 	private final String OFFSET = "offset";
 	private final String LIMIT = "limit";
 
@@ -73,25 +74,36 @@ public class PagingData {
 					<https://imsglobal.org/ims/oneroster/v1p1/students?limit=10&offset=0>; rel="prev"
 				NOTE: Pagination must be supported for ALL endpoints that return a collection.
 			 */
-			int currentPage = (int)Math.floor(offset / limit);
-			int totalPages = (int)Math.ceil(totalRecords / limit);
-			int last_offset = totalPages * limit;
+
+			int currentPage = (int)Math.floor((double)offset / limit);
+			int totalPages = (int)Math.ceil((double)totalRecords / limit);
+			int last_offset = (totalPages - 1) * limit;
 			int previous_offset = (currentPage - 1) * limit;
 			int next_offset = (currentPage + 1) * limit;
 
 			List<String> list = new ArrayList<>();
-			if(next_offset <= totalPages) {
-				list.add("<" + request.getRequestURL() + "?limit=" + limit + "&offset=" + next_offset + ">; rel=\"next\"");
+			if(next_offset <= last_offset) {
+				list.add(buildLink(limit, next_offset, "next"));
 			}
-			list.add("<" + request.getRequestURL() + "?limit=" + limit + "&offset=" + last_offset + ">; rel=\"last\"");
-			list.add("<" + request.getRequestURL() + "?limit=" + limit + "&offset=" + 0 + ">; rel=\"first\"");
+			list.add(buildLink(limit, last_offset, "last"));
+			list.add(buildLink(limit, 0, "first"));
 			if(previous_offset >= 0) {
-				list.add("<" + request.getRequestURL() + "?limit=" + limit + "&offset=" + previous_offset + ">; rel=\"prev\"");
+				list.add(buildLink(limit, previous_offset, "prev"));
 			}
 
 			response.setHeader(HttpHeaders.LINK, String.join(", ", list));
 		}
 	}
+
+	private String buildLink(int limit, int offset, String rel) {
+		UriComponentsBuilder builder = UriComponentsBuilder.newInstance();
+		builder.path(request.getRequestURL().toString());
+		builder.queryParam("limit", limit);
+		builder.queryParam("offset", offset);
+		return "<" + builder.build().toString() + ">; rel=\"" + rel + "\"";
+	}
+
+
 
 	@Override
 	public String toString() {

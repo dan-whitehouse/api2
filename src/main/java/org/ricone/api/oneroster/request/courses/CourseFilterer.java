@@ -2,6 +2,7 @@ package org.ricone.api.oneroster.request.courses;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.ricone.api.oneroster.error.exception.InvalidFilterFieldException;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.criteria.*;
@@ -15,7 +16,6 @@ public class CourseFilterer {
 	private Root from;
 	private List<Join> joinList = new ArrayList<>();
 
-
 	public CourseFilterer() {
 	}
 
@@ -24,7 +24,7 @@ public class CourseFilterer {
 		Collections.addAll(joinList, joins);
 	}
 
-	private Path getPath(String field) {
+	public Path getPath(String field) throws InvalidFilterFieldException {
 		switch(field) {
 			case "sourcedId": return from.get(field);
 			case "status": return from.get(field);
@@ -41,10 +41,14 @@ public class CourseFilterer {
 			case "subjectCodes": return getJoin("subjects").get("subjectCode");
 			default: break;
 		}
-		return null;
+		throw new InvalidFilterFieldException("The filter parameter [" + field + "] is a non-existent field");
 	}
 
 	private Join getJoin(String field) {
 		return joinList.stream().filter(join -> field.equalsIgnoreCase(join.getAlias())).findFirst().get();
+	}
+
+	public Root getFrom() {
+		return from;
 	}
 }

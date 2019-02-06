@@ -29,6 +29,7 @@ public class ControllerData {
 	private SortingData sortable;
 	private FieldSelectionData fieldSelection;
 	private FilteringData filterable;
+	private FilteringDataTest filterableTest;
 	private String providerId;
 	private Application application;
 
@@ -40,6 +41,7 @@ public class ControllerData {
 		this.sortable = new SortingData(request);
 		this.fieldSelection = new FieldSelectionData(request);
 		this.filterable = new FilteringData(request);
+		this.filterableTest = new FilteringDataTest(request);
 		this.application = (Application) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 	}
 
@@ -97,5 +99,9 @@ public class ControllerData {
 
 	public FilteringData getFiltering() {
 		return filterable;
+	}
+
+	public FilteringDataTest getFilterableTest() {
+		return filterableTest;
 	}
 }

@@ -26,7 +26,7 @@ public class ErrorController {
             failure/unknown error will occur. Once the 'sourcedId' has been assigned (for example using the OneRoster CSV Bulk Import) then a read
             request should be successful and the request object returned in the service payload.
          */
-        StatusInfoSet error = new StatusInfoSet(CodeMajor.failure, Severity.error, null, null, "Not Found - there is no resource behind the URI", CodeMinor.unknown_object);
+        StatusInfoSet error = new StatusInfoSet(Severity.error, CodeMajor.failure, CodeMinor.unknown_object, "Not Found - there is no resource behind the URI");
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.getStatusInfoSet().add(error);
         return errorResponse;
@@ -44,7 +44,7 @@ public class ErrorController {
 				•  CodeMinor value is 'invalid_blank_selection_field';
 				•  StatusCode value is the corresponding HTTP response code.
         */
-        StatusInfoSet error = new StatusInfoSet(CodeMajor.failure, Severity.error, null, null, "The fields parameter can not be blank", CodeMinor.invalid_blank_selection_field);
+        StatusInfoSet error = new StatusInfoSet(Severity.error, CodeMajor.failure, CodeMinor.invalid_blank_selection_field, "The fields parameter can not be blank");
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.getStatusInfoSet().add(error);
         return errorResponse;
@@ -63,7 +63,7 @@ public class ErrorController {
                 •  StatusCode value is the corresponding HTTP response code;
                 •  Description should contain the supplied unknown field.
         */
-        StatusInfoSet error = new StatusInfoSet(CodeMajor.failure, Severity.error, null, null, "The filter parameter has non-existent fields", CodeMinor.invalid_filter_field);
+        StatusInfoSet error = new StatusInfoSet(Severity.error, CodeMajor.failure, CodeMinor.invalid_filter_field, ex.getMessage());
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.getStatusInfoSet().add(error);
         return errorResponse;

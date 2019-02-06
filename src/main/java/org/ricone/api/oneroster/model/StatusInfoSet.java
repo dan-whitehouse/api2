@@ -29,22 +29,12 @@ public class StatusInfoSet implements Serializable {
 	public StatusInfoSet() {
 	}
 
-	/**
-	 * @param imsxSeverity
-	 * @param imsxCodeMinor
-	 * @param imsxMessageRefIdentifier
-	 * @param imsxDescription
-	 * @param imsxOperationRefIdentifier
-	 * @param imsxCodeMajor
-	 */
-	public StatusInfoSet(CodeMajor imsxCodeMajor, Severity imsxSeverity, String imsxMessageRefIdentifier, String imsxOperationRefIdentifier, String imsxDescription, CodeMinor imsxCodeMinor) {
+	public StatusInfoSet(Severity severity, CodeMajor codeMajor, CodeMinor codeMinor, String description) {
 		super();
-		this.imsxCodeMajor = imsxCodeMajor;
-		this.imsxSeverity = imsxSeverity;
-		this.imsxMessageRefIdentifier = imsxMessageRefIdentifier;
-		this.imsxOperationRefIdentifier = imsxOperationRefIdentifier;
-		this.imsxDescription = imsxDescription;
-		this.imsxCodeMinor = imsxCodeMinor;
+		this.imsxSeverity = severity;
+		this.imsxCodeMajor = codeMajor;
+		this.imsxCodeMinor = codeMinor;
+		this.imsxDescription = description;
 	}
 
 	@JsonProperty("imsx_codeMajor")

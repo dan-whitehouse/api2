@@ -6,6 +6,7 @@ import org.ricone.api.core.model.view.CourseGradeView;
 import org.ricone.api.core.model.view.CourseSubjectView;
 import org.ricone.api.core.model.view.CourseView;
 import org.ricone.api.oneroster.component.BaseDAO;
+import org.ricone.api.oneroster.component.BaseDAOTest;
 import org.ricone.api.oneroster.component.ControllerData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -19,7 +20,7 @@ import java.util.List;
 
 @Repository("OneRoster:Courses:CourseDAO")
 @SuppressWarnings({"unchecked", "unused", "RedundantTypeArguments"})
-class CourseDAOImp extends BaseDAO implements CourseDAO {
+class CourseDAOImp extends BaseDAOTest implements CourseDAO {
 	@PersistenceContext private EntityManager em;
 	@Autowired private CourseFilterer filterer;
 	private Logger logger = LogManager.getLogger(CourseDAOImp.class);
@@ -38,7 +39,7 @@ class CourseDAOImp extends BaseDAO implements CourseDAO {
 
 		select.distinct(true);
 		select.select(from);
-		select.where(getWhereClause(metadata, cb, from, methodSpecificPredicate));
+		select.where(getWhereClause(metadata, cb, filterer, methodSpecificPredicate));
 
 		Query q = em.createQuery(select);
 		try {
@@ -50,11 +51,13 @@ class CourseDAOImp extends BaseDAO implements CourseDAO {
 
 	@Override
 	public List<CourseView> getAllCourses(ControllerData metadata) throws Exception {
+
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<CourseView> select = cb.createQuery(CourseView.class);
 		final Root<CourseView> from = select.from(CourseView.class);
 		final SetJoin<CourseView, CourseSubjectView> subjects = (SetJoin<CourseView, CourseSubjectView>) from.<CourseView, CourseSubjectView>join("subjects", JoinType.LEFT).alias("subjects");
 		final SetJoin<CourseView, CourseGradeView> grades = (SetJoin<CourseView, CourseGradeView>) from.<CourseView, CourseGradeView>join("grades", JoinType.LEFT).alias("grades");
+		filterer.addJoins(from, subjects, grades);
 
 		final Predicate methodSpecificPredicate = cb.and(
 			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
@@ -63,7 +66,7 @@ class CourseDAOImp extends BaseDAO implements CourseDAO {
 
 		select.distinct(true);
 		select.select(from);
-		select.where(getWhereClause(metadata, cb, from, methodSpecificPredicate));
+		select.where(getWhereClause(metadata, cb, filterer, methodSpecificPredicate));
 		select.orderBy(getSortOrder(metadata, cb, from));
 
 		Query q = em.createQuery(select);
@@ -89,7 +92,7 @@ class CourseDAOImp extends BaseDAO implements CourseDAO {
 
 		select.distinct(true);
 		select.select(from);
-		select.where(getWhereClause(metadata, cb, from, methodSpecificPredicate));
+		select.where(getWhereClause(metadata, cb, filterer, methodSpecificPredicate));
 		select.orderBy(getSortOrder(metadata, cb, from));
 
 		Query q = em.createQuery(select);
@@ -106,14 +109,17 @@ class CourseDAOImp extends BaseDAO implements CourseDAO {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<Long> select = cb.createQuery(Long.class);
 		final Root<CourseView> from = select.from(CourseView.class);
+		final SetJoin<CourseView, CourseSubjectView> subjects = (SetJoin<CourseView, CourseSubjectView>) from.<CourseView, CourseSubjectView>join("subjects", JoinType.LEFT).alias("subjects");
+		final SetJoin<CourseView, CourseGradeView> grades = (SetJoin<CourseView, CourseGradeView>) from.<CourseView, CourseGradeView>join("grades", JoinType.LEFT).alias("grades");
+		filterer.addJoins(from, subjects, grades);
 
 		final Predicate methodSpecificPredicate = cb.and(
-				cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
-				from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
+			from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 		);
 
 		select.select(cb.countDistinct(from));
-		select.where(getWhereClause(metadata, cb, from, methodSpecificPredicate));
+		select.where(getWhereClause(metadata, cb, filterer, methodSpecificPredicate));
 		select.orderBy(getSortOrder(metadata, cb, from));
 		return em.createQuery(select).getSingleResult().intValue();
 	}
@@ -131,7 +137,7 @@ class CourseDAOImp extends BaseDAO implements CourseDAO {
 		);
 
 		select.select(cb.countDistinct(from));
-		select.where(getWhereClause(metadata, cb, from, methodSpecificPredicate));
+		select.where(getWhereClause(metadata, cb, filterer, methodSpecificPredicate));
 		select.orderBy(getSortOrder(metadata, cb, from));
 		return em.createQuery(select).getSingleResult().intValue();
 	}

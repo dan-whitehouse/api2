@@ -39,15 +39,15 @@ public class FilteringData {
 		return StringUtils.isNotBlank(filter);
 	}
 
-	Predicate getFiltering(CriteriaBuilder cb, Root from) {
-		/*
-			It MUST be possible to filter collections for elements matching a certain criteria.
-			It MUST be possible to filter collections based on any data element in the core description of the resource.
+	/*
+		It MUST be possible to filter collections for elements matching a certain criteria.
+		It MUST be possible to filter collections based on any data element in the core description of the resource.
 
-			For version 1.1, it is RECOMMENDED that logical operations are limited to " AND " and " OR " (note the surrounding white space at each side)
-			and that there is only one such operator used in any filter i.e. a single 'AND' or a single 'OR' in the filter. A single white space must
-			occur before and after the parameter.
-		 */
+		For version 1.1, it is RECOMMENDED that logical operations are limited to " AND " and " OR " (note the surrounding white space at each side)
+		and that there is only one such operator used in any filter i.e. a single 'AND' or a single 'OR' in the filter. A single white space must
+		occur before and after the parameter.
+	 */
+	Predicate getFiltering(CriteriaBuilder cb, Root from) {
 		buildPredicates(cb, from);
 
 		//if filter contains AND or OR, load in the predicates we created

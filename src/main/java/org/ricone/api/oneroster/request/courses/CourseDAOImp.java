@@ -2,9 +2,12 @@ package org.ricone.api.oneroster.request.courses;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.ricone.api.core.model.view.CourseGradeView;
+import org.ricone.api.core.model.view.CourseSubjectView;
 import org.ricone.api.core.model.view.CourseView;
 import org.ricone.api.oneroster.component.BaseDAO;
 import org.ricone.api.oneroster.component.ControllerData;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -18,6 +21,7 @@ import java.util.List;
 @SuppressWarnings({"unchecked", "unused", "RedundantTypeArguments"})
 class CourseDAOImp extends BaseDAO implements CourseDAO {
 	@PersistenceContext private EntityManager em;
+	@Autowired private CourseFilterer filterer;
 	private Logger logger = LogManager.getLogger(CourseDAOImp.class);
 
 	@Override
@@ -49,6 +53,8 @@ class CourseDAOImp extends BaseDAO implements CourseDAO {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<CourseView> select = cb.createQuery(CourseView.class);
 		final Root<CourseView> from = select.from(CourseView.class);
+		final SetJoin<CourseView, CourseSubjectView> subjects = (SetJoin<CourseView, CourseSubjectView>) from.<CourseView, CourseSubjectView>join("subjects", JoinType.LEFT).alias("subjects");
+		final SetJoin<CourseView, CourseGradeView> grades = (SetJoin<CourseView, CourseGradeView>) from.<CourseView, CourseGradeView>join("grades", JoinType.LEFT).alias("grades");
 
 		final Predicate methodSpecificPredicate = cb.and(
 			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),

@@ -1,5 +1,8 @@
 package org.ricone.api.oneroster.component;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Predicate;
@@ -8,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class BaseDAO {
+    private Logger logger = LogManager.getLogger(this.getClass());
     protected static final String PRIMARY_KEY = "sourcedId";
     protected static final String SCHOOL_YEAR_KEY = "sourcedSchoolYear";
     protected static final String FIELD_DISTRICT_ID = "districtId";

@@ -4,7 +4,6 @@ import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpHeaders;
-import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
@@ -102,8 +101,6 @@ public class PagingData {
 		builder.queryParam("offset", offset);
 		return "<" + builder.build().toString() + ">; rel=\"" + rel + "\"";
 	}
-
-
 
 	@Override
 	public String toString() {

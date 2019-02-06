@@ -2,9 +2,10 @@ package org.ricone.api.oneroster.request.orgs;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.ricone.api.core.model.view.OrgChildrenView;
 import org.ricone.api.core.model.view.OrgView;
-import org.ricone.api.oneroster.component.ControllerData;
 import org.ricone.api.oneroster.component.BaseDAO;
+import org.ricone.api.oneroster.component.ControllerData;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -50,6 +51,7 @@ class OrgDAOImp extends BaseDAO implements OrgDAO {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<OrgView> select = cb.createQuery(OrgView.class);
 		final Root<OrgView> from = select.from(OrgView.class);
+		final SetJoin<OrgView, OrgChildrenView> children = (SetJoin<OrgView, OrgChildrenView>) from.<OrgView, OrgChildrenView>join("children", JoinType.LEFT).alias("children");
 
 		//Method Specific Predicate
 		final Predicate methodSpecificPredicate = cb.and(

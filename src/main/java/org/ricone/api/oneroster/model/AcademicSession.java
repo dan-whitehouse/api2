@@ -3,30 +3,33 @@ package org.ricone.api.oneroster.model;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @JsonPropertyOrder({"sourcedId", "status", "dateLastModified", "metadata", "title", "startDate", "endDate", "type", "parent", "children", "schoolYear"})
 public class AcademicSession extends Base implements Serializable {
-
+	private final static long serialVersionUID = 5476752215341220106L;
 	@JsonProperty("title")
 	private String title;
 	@JsonProperty("startDate")
-	private String startDate;
+	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+	private LocalDate startDate;
 	@JsonProperty("endDate")
-	private String endDate;
+	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+	private LocalDate endDate;
 	@JsonProperty("type")
 	private SessionType type;
 	@JsonProperty("parent")
 	private GUIDRef parent;
 	@JsonProperty("children")
-	private List<GUIDRef> children = new ArrayList<GUIDRef>();
+	private List<GUIDRef> children = new ArrayList<>();
 	@JsonProperty("schoolYear")
 	private String schoolYear;
-	private final static long serialVersionUID = 5476752215341220106L;
 
 	/**
 	 * No args constructor for use in serialization
@@ -43,7 +46,7 @@ public class AcademicSession extends Base implements Serializable {
 	 * @param endDate
 	 * @param type
 	 */
-	public AcademicSession(String title, String startDate, String endDate, SessionType type, GUIDRef parent, List<GUIDRef> children, String schoolYear) {
+	public AcademicSession(String title, LocalDate startDate, LocalDate endDate, SessionType type, GUIDRef parent, List<GUIDRef> children, String schoolYear) {
 		super();
 		this.title = title;
 		this.startDate = startDate;
@@ -65,22 +68,22 @@ public class AcademicSession extends Base implements Serializable {
 	}
 
 	@JsonProperty("startDate")
-	public String getStartDate() {
+	public LocalDate getStartDate() {
 		return startDate;
 	}
 
 	@JsonProperty("startDate")
-	public void setStartDate(String startDate) {
+	public void setStartDate(LocalDate startDate) {
 		this.startDate = startDate;
 	}
 
 	@JsonProperty("endDate")
-	public String getEndDate() {
+	public LocalDate getEndDate() {
 		return endDate;
 	}
 
 	@JsonProperty("endDate")
-	public void setEndDate(String endDate) {
+	public void setEndDate(LocalDate endDate) {
 		this.endDate = endDate;
 	}
 

@@ -29,8 +29,8 @@ class EnrollmentMapper extends BaseMapper<EnrollmentView, Enrollment, Enrollment
 
         enrollment.setRole(RoleType.valueOf(instance.getRole()));
         enrollment.setPrimary(instance.getPrimary());
-        enrollment.setBeginDate(instance.getBeginDate());
-        enrollment.setEndDate(instance.getEndDate());
+        enrollment.setBeginDate(instance.getBeginDate());   //TODO: Not available in core. Though maybe available in staging?
+        enrollment.setEndDate(instance.getEndDate());       //TODO: Not available in core. Though maybe available in staging?
 
         enrollment.setUser(MappingUtil.buildGUIDRef("users", instance.getUserId(), GUIDType.valueOf(instance.getRole())));
         enrollment.setClass_(MappingUtil.buildGUIDRef("classes", instance.getClassId(), GUIDType.clazz));

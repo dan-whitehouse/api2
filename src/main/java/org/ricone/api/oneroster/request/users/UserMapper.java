@@ -47,7 +47,7 @@ class UserMapper extends BaseMapper<UserView, User, UsersResponse, UserResponse>
         //Account
         user.setUsername(null);
         user.setPassword(null);
-        user.setEnabledUser(BooleanUtils.toStringTrueFalse(instance.getEnabledUser()));
+        user.setEnabledUser(instance.getEnabledUser());
 
         user.setPhone(instance.getPhone());
         user.setSms(instance.getSms());

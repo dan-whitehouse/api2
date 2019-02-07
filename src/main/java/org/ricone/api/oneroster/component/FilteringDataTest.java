@@ -92,7 +92,6 @@ public class FilteringDataTest {
 			throw new InvalidFilterFieldException("The filter parameter value is missing single quotes, or is blank");
 		}
 
-
 		if(isEqual(segment)) {
 			path = filterer.getPath(StringUtils.substringBefore(segment, PREDICATE_EQ));
 			if(StringUtils.contains(value, ",")) {

@@ -1,19 +1,14 @@
 package org.ricone.api.oneroster.request.academicSessions;
 
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.BooleanUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ricone.api.core.model.view.AcademicSessionView;
-import org.ricone.api.core.model.view.UserView;
 import org.ricone.api.oneroster.component.BaseMapper;
-import org.ricone.api.oneroster.component.ControllerData;
 import org.ricone.api.oneroster.model.*;
 import org.ricone.api.oneroster.util.MappingUtil;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDate;
 
 @Component("OneRoster:AcademicSessions:AcademicSessionMapper")
 class AcademicSessionMapper extends BaseMapper<AcademicSessionView, AcademicSession, AcademicSessionsResponse, AcademicSessionResponse> {
@@ -38,9 +33,11 @@ class AcademicSessionMapper extends BaseMapper<AcademicSessionView, AcademicSess
             academicSession.getChildren().add(MappingUtil.buildGUIDRef("terms", child.getChildId(), GUIDType.academicSession));
         });
 
+
         academicSession.setSchoolYear(instance.getSchoolYear());
-        academicSession.setStartDate(instance.getBeginDate().toString());
-        academicSession.setEndDate(instance.getEndDate().toString());
+        // TODO - use to take a string, now takes date and I only get YYYY. Need to figure out to make it a date....
+        academicSession.setStartDate(instance.getBeginDate());
+        academicSession.setEndDate(instance.getEndDate());
         return academicSession;
     }
 

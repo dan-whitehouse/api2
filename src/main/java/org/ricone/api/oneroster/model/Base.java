@@ -3,22 +3,24 @@ package org.ricone.api.oneroster.model;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"sourcedId", "status", "dateLastModified", "metadata"})
 public abstract class Base implements Serializable {
-
+	private final static long serialVersionUID = 602595453201771641L;
 	@JsonProperty("sourcedId")
 	private String sourcedId;
 	@JsonProperty("status")
 	private StatusType status;
 	@JsonProperty("dateLastModified")
-	private String dateLastModified;
+	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+	private LocalDateTime dateLastModified;
 	@JsonProperty("metadata")
 	private Metadata metadata;
-	private final static long serialVersionUID = 602595453201771641L;
 
 	/**
 	 * No args constructor for use in serialization
@@ -32,7 +34,7 @@ public abstract class Base implements Serializable {
 	 * @param metadata
 	 * @param sourcedId
 	 */
-	public Base(String sourcedId, StatusType status, String dateLastModified, Metadata metadata) {
+	public Base(String sourcedId, StatusType status, LocalDateTime dateLastModified, Metadata metadata) {
 		super();
 		this.sourcedId = sourcedId;
 		this.status = status;
@@ -61,12 +63,12 @@ public abstract class Base implements Serializable {
 	}
 
 	@JsonProperty("dateLastModified")
-	public String getDateLastModified() {
+	public LocalDateTime getDateLastModified() {
 		return dateLastModified;
 	}
 
 	@JsonProperty("dateLastModified")
-	public void setDateLastModified(String dateLastModified) {
+	public void setDateLastModified(LocalDateTime dateLastModified) {
 		this.dateLastModified = dateLastModified;
 	}
 

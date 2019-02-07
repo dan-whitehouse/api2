@@ -11,12 +11,13 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @JsonPropertyOrder({"sourcedId", "status", "dateLastModified", "metadata", "username", "userIds", "enabledUser", "givenName", "familyName", "middleName", "role", "identifier", "email", "sms", "phone", "agents", "orgs", "grades", "password"})
 public class User extends Base implements Serializable {
+	private final static long serialVersionUID = 1500791574718760163L;
 	@JsonProperty("username")
 	private String username;
 	@JsonProperty("userIds")
 	private List<UserId> userIds = new ArrayList<UserId>();
 	@JsonProperty("enabledUser")
-	private String enabledUser;
+	private Boolean enabledUser;
 	@JsonProperty("givenName")
 	private String givenName;
 	@JsonProperty("familyName")
@@ -34,14 +35,13 @@ public class User extends Base implements Serializable {
 	@JsonProperty("phone")
 	private String phone;
 	@JsonProperty("agents")
-	private List<GUIDRef> agents = new ArrayList<GUIDRef>();
+	private List<GUIDRef> agents = new ArrayList<>();
 	@JsonProperty("orgs")
-	private List<GUIDRef> orgs = new ArrayList<GUIDRef>();
+	private List<GUIDRef> orgs = new ArrayList<>();
 	@JsonProperty("grades")
-	private List<String> grades = new ArrayList<String>();
+	private List<String> grades = new ArrayList<>();
 	@JsonProperty("password")
 	private String password;
-	private final static long serialVersionUID = 1500791574718760163L;
 
 	/**
 	 * No args constructor for use in serialization
@@ -66,7 +66,7 @@ public class User extends Base implements Serializable {
 	 * @param grades
 	 * @param identifier
 	 */
-	public User(String username, List<UserId> userIds, String enabledUser, String givenName, String familyName, String middleName, RoleType role, String identifier, String email, String sms, String phone, List<GUIDRef> agents, List<GUIDRef> orgs, List<String> grades, String password) {
+	public User(String username, List<UserId> userIds, Boolean enabledUser, String givenName, String familyName, String middleName, RoleType role, String identifier, String email, String sms, String phone, List<GUIDRef> agents, List<GUIDRef> orgs, List<String> grades, String password) {
 		super();
 		this.username = username;
 		this.userIds = userIds;
@@ -106,12 +106,12 @@ public class User extends Base implements Serializable {
 	}
 
 	@JsonProperty("enabledUser")
-	public String getEnabledUser() {
+	public Boolean getEnabledUser() {
 		return enabledUser;
 	}
 
 	@JsonProperty("enabledUser")
-	public void setEnabledUser(String enabledUser) {
+	public void setEnabledUser(Boolean enabledUser) {
 		this.enabledUser = enabledUser;
 	}
 

@@ -3,6 +3,7 @@ package org.ricone.api.oneroster.model;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -10,7 +11,7 @@ import java.time.LocalDate;
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @JsonPropertyOrder({"sourcedId", "status", "dateLastModified", "metadata", "role", "primary", "user", "class", "school", "beginDate", "endDate"})
 public class Enrollment extends Base implements Serializable {
-
+	private final static long serialVersionUID = -471764017962444775L;
 	@JsonProperty("role")
 	private RoleType role;
 	@JsonProperty("primary")
@@ -22,10 +23,11 @@ public class Enrollment extends Base implements Serializable {
 	@JsonProperty("school")
 	private GUIDRef school;
 	@JsonProperty("beginDate")
+	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
 	private LocalDate beginDate;
 	@JsonProperty("endDate")
+	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
 	private LocalDate endDate;
-	private final static long serialVersionUID = -471764017962444775L;
 
 	/**
 	 * No args constructor for use in serialization

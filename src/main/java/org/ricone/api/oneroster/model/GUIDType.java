@@ -1,8 +1,10 @@
 package org.ricone.api.oneroster.model;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+
 public enum GUIDType {
 	academicSession("academicSession"),
-	category("categories"),
+	category("category"),
 	clazz("class"),
 	course("course"),
 	demographics("demographics"),
@@ -18,10 +20,10 @@ public enum GUIDType {
 	user("user");
 
 	private final String label;
-	private GUIDType(String label) {
+	GUIDType(String label) {
 		this.label = label;
 	}
-	public String getLabel() {
+	@JsonValue public String getLabel() {
 		return label;
 	}
 }

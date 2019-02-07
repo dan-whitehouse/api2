@@ -11,7 +11,7 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @JsonPropertyOrder({"sourcedId", "status", "dateLastModified", "metadata", "title", "schoolYear", "courseCode", "grades", "subjects", "org", "subjectCodes", "resources"})
 public class Course extends Base implements Serializable {
-
+	private final static long serialVersionUID = 6014301965221202137L;
 	@JsonProperty("title")
 	private String title;
 	@JsonProperty("schoolYear")
@@ -19,16 +19,15 @@ public class Course extends Base implements Serializable {
 	@JsonProperty("courseCode")
 	private String courseCode;
 	@JsonProperty("grades")
-	private List<String> grades = new ArrayList<String>();
+	private List<String> grades = new ArrayList<>();
 	@JsonProperty("subjects")
-	private List<String> subjects = new ArrayList<String>();
+	private List<String> subjects = new ArrayList<>();
 	@JsonProperty("org")
 	private GUIDRef org;
 	@JsonProperty("subjectCodes")
-	private List<String> subjectCodes = new ArrayList<String>();
+	private List<String> subjectCodes = new ArrayList<>();
 	@JsonProperty("resources")
-	private List<GUIDRef> resources = new ArrayList<GUIDRef>();
-	private final static long serialVersionUID = 6014301965221202137L;
+	private List<GUIDRef> resources = new ArrayList<>();
 
 	/**
 	 * No args constructor for use in serialization

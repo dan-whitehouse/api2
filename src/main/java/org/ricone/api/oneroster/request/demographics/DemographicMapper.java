@@ -38,20 +38,20 @@ class DemographicMapper extends BaseMapper<DemographicView, Demographic, Demogra
 
         //Birthdate
         if(instance.getBirthDate() != null) {
-            demographic.setBirthDate(instance.getBirthDate().toString());
+            demographic.setBirthDate(instance.getBirthDate());
         }
 
         //Sex
         demographic.setSex(Gender.valueOf(StringUtils.lowerCase(instance.getSex())));
 
         //Races
-        demographic.setAsian(BooleanUtils.toStringTrueFalse(instance.getAsian()));
-        demographic.setBlackOrAfricanAmerican(BooleanUtils.toStringTrueFalse(instance.getBlackOrAfricanAmerican()));
-        demographic.setWhite(BooleanUtils.toStringTrueFalse(instance.getWhite()));
-        demographic.setAmericanIndianOrAlaskaNative(BooleanUtils.toStringTrueFalse(instance.getAmericanIndianOrAlaskaNative()));
-        demographic.setNativeHawaiianOrOtherPacificIslander(BooleanUtils.toStringTrueFalse(instance.getNativeHawaiianOrOtherPacificIslander()));
-        demographic.setDemographicRaceTwoOrMoreRaces(BooleanUtils.toStringTrueFalse(instance.getDemographicRaceTwoOrMoreRaces()));
-        demographic.setHispanicOrLatinoEthnicity(BooleanUtils.toStringTrueFalse(instance.getHispanicOrLatinoEthnicity()));
+        demographic.setAsian(instance.getAsian());
+        demographic.setBlackOrAfricanAmerican(instance.getBlackOrAfricanAmerican());
+        demographic.setWhite(instance.getWhite());
+        demographic.setAmericanIndianOrAlaskaNative(instance.getAmericanIndianOrAlaskaNative());
+        demographic.setNativeHawaiianOrOtherPacificIslander(instance.getNativeHawaiianOrOtherPacificIslander());
+        demographic.setDemographicRaceTwoOrMoreRaces(instance.getDemographicRaceTwoOrMoreRaces());
+        demographic.setHispanicOrLatinoEthnicity(instance.getHispanicOrLatinoEthnicity());
 
         //Of Birth
         demographic.setCountryOfBirthCode(instance.getCountryOfBirthCode());

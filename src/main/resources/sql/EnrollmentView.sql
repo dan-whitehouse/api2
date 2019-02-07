@@ -15,9 +15,15 @@ CREATE VIEW EnrollmentView AS
         c.SchoolRefId as OrgId,
         c.SchoolSchoolYear as OrgSchoolYear
 	from studentcoursesection as scs
-	join coursesection cs 
+	join coursesection as cs 
 		on scs.CourseSectionRefId = cs.CourseSectionRefId
         and scs.CourseSectionSchoolYear= cs.CourseSectionSchoolYear
+	left join coursesectionschedule as css
+		on cs.CourseSectionRefId = css.CourseSectionRefId
+        and cs.CourseSectionSchoolYear = css.CourseSectionSchoolYear
+	left join schoolcalendarsession as schcs 
+		on css.SchoolCalendarSessionRefId = schcs.SchoolCalendarSessionRefId
+        and css.SchoolCalendarSessionSchoolYear = schcs.SchoolCalendarSessionSchoolYear
 	join course as c 
 		on cs.CourseRefId = c.CourseRefId
         and cs.CourseSchoolYear = c.CourseSchoolYear
@@ -60,4 +66,4 @@ union all
 )
 order by UserId, UserSchoolYear;
 
-select * from EnrollmentView;
+#select * from EnrollmentView;

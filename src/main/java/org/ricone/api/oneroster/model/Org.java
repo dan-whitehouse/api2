@@ -11,7 +11,7 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @JsonPropertyOrder({"sourcedId", "status", "dateLastModified", "metadata", "name", "type", "identifier", "parent", "children"})
 public class Org extends Base implements Serializable {
-
+	private final static long serialVersionUID = -1025191997431202352L;
 	@JsonProperty("name")
 	private String name;
 	@JsonProperty("type")
@@ -21,8 +21,7 @@ public class Org extends Base implements Serializable {
 	@JsonProperty("parent")
 	private GUIDRef parent;
 	@JsonProperty("children")
-	private List<GUIDRef> children = new ArrayList<GUIDRef>();
-	private final static long serialVersionUID = -1025191997431202352L;
+	private List<GUIDRef> children = new ArrayList<>();
 
 	/**
 	 * No args constructor for use in serialization

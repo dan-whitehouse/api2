@@ -3,6 +3,7 @@ package org.ricone.api.oneroster.component;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.ricone.api.oneroster.error.exception.InvalidPagingException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -16,49 +17,57 @@ public class PagingData {
 	private final String OFFSET = "offset";
 	private final String LIMIT = "limit";
 
-	HttpServletRequest request;
+	private HttpServletRequest request;
 	private HttpServletResponse response;
 	private Integer offset = null;
 	private Integer limit = null;
 
-	PagingData(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	PagingData(HttpServletRequest request, HttpServletResponse response) throws InvalidPagingException {
 		this.request = request;
 		this.response = response;
 
-		if(NumberUtils.isDigits(request.getParameter(OFFSET))) {
-			offset = Integer.parseInt(request.getParameter(OFFSET));
-		}
-
-		if(NumberUtils.isDigits(request.getParameter(LIMIT))) {
-			limit = Integer.parseInt(request.getParameter(LIMIT));
-		}
-
-		if(isPaged()) {
-			if(offset == null) offset = 0;
-			if(limit == null) limit = 100;
+		if(request.getParameter(LIMIT) != null || request.getParameter(OFFSET) != null) {
+			buildLimit(request.getParameter(LIMIT));
+			buildOffset(request.getParameter(OFFSET));
 
 			response.setHeader(OFFSET, String.valueOf(offset));
 			response.setHeader(LIMIT, String.valueOf(limit));
 		}
 	}
 
-	public boolean isPaged() {
-		return limit != null;
+	private void buildLimit(String limit) throws InvalidPagingException {
+		if(NumberUtils.isCreatable(limit)) {
+			this.limit = Integer.parseInt(limit);
+			if(this.limit < 0) {
+				throw new InvalidPagingException("Pagination limit value must be a positive number");
+			}
+		}
+		else if(limit == null) {
+			this.limit = 100;
+		}
+		else {
+			//If the value is a letter or symbol
+			throw new InvalidPagingException("Pagination limit value must be a valid number");
+		}
 	}
 
-	public Integer getOffset() {
-		return offset;
-	}
-
-	public Integer getLimit() {
-		return limit;
+	private void buildOffset(String offset) throws InvalidPagingException {
+		if(NumberUtils.isCreatable(offset)) {
+			this.offset = Integer.parseInt(offset);
+			if(this.offset < 0) {
+				throw new InvalidPagingException("Pagination offset value must be a positive number");
+			}
+		}
+		else if(offset == null){
+			this.offset = 0;
+		}
+		else {
+			//If the value is a letter or symbol
+			throw new InvalidPagingException("Pagination offset value must be a valid number");
+		}
 	}
 
 	public void setPagingHeaders(int totalRecords) {
-		/*  TODO: Should this only be returned when paging is applicable? Meaning, move the method call in DAO's to outside of the paging block.
-			It is RECOMMENDED that implementations pass the total resource count in collection back to the requester.
-			This MUST be provided in the custom HTTP header: X-Total-Count
-		 */
 		response.setHeader("X-Total-Count", String.valueOf(totalRecords));
 
 		if(isPaged()) {
@@ -97,9 +106,21 @@ public class PagingData {
 	private String buildLink(int limit, int offset, String rel) {
 		UriComponentsBuilder builder = UriComponentsBuilder.newInstance();
 		builder.path(request.getRequestURL().toString());
-		builder.queryParam("limit", limit);
-		builder.queryParam("offset", offset);
+		builder.queryParam(LIMIT, limit);
+		builder.queryParam(OFFSET, offset);
 		return "<" + builder.build().toString() + ">; rel=\"" + rel + "\"";
+	}
+
+	public boolean isPaged() {
+		return limit != null && offset != null;
+	}
+
+	public Integer getOffset() {
+		return offset;
+	}
+
+	public Integer getLimit() {
+		return limit;
 	}
 
 	@Override

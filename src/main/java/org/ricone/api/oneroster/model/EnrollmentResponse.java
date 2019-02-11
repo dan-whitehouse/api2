@@ -9,7 +9,7 @@ import java.io.Serializable;
 import java.util.List;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"enrollment"})
+@JsonPropertyOrder({"warnings","enrollment"})
 public class EnrollmentResponse extends BaseSingleResponse<Enrollment> implements Serializable {
 	private final static long serialVersionUID = 6097789264454176014L;
 
@@ -20,7 +20,7 @@ public class EnrollmentResponse extends BaseSingleResponse<Enrollment> implement
 		super(enrollment);
 	}
 
-	public EnrollmentResponse(Enrollment enrollment, List<StatusInfoSet> errors) {
+	public EnrollmentResponse(Enrollment enrollment, List<Error> errors) {
 		super(enrollment);
 	}
 

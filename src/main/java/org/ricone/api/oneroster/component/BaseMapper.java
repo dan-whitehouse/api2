@@ -2,6 +2,7 @@ package org.ricone.api.oneroster.component;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.ricone.api.oneroster.model.*;
+import org.ricone.api.oneroster.model.Error;
 
 import java.lang.Class;
 import java.lang.reflect.Constructor;
@@ -37,7 +38,7 @@ public abstract class BaseMapper<V, M extends Base, R1 extends BaseMultiResponse
 
 		R1 r1 = r1Constructor.newInstance();
 		r1.setData(list);
-		r1.setStatusInfoSets(mapPartialErrors(metadata, viewClass, modelClass));
+		r1.setWarnings(mapPartialErrors(metadata, viewClass, modelClass));
 		return r1;
 	}
 
@@ -45,7 +46,7 @@ public abstract class BaseMapper<V, M extends Base, R1 extends BaseMultiResponse
 		if(view != null) {
 			R2 r2 = r2Constructor.newInstance();
 			r2.setData(map(view));
-			r2.setStatusInfoSets(mapPartialErrors(metadata, viewClass, modelClass));
+			r2.setWarnings(mapPartialErrors(metadata, viewClass, modelClass));
 			return r2;
 		}
 		return null;
@@ -55,8 +56,8 @@ public abstract class BaseMapper<V, M extends Base, R1 extends BaseMultiResponse
 
 	protected abstract Metadata mapMetadata(V instance);
 
-	private List<StatusInfoSet> mapPartialErrors(ControllerData metadata, Class<?> table, Class<? extends Base> model) {
-		List<StatusInfoSet> statusInfoSets = new ArrayList<>();
+	private List<Error> mapPartialErrors(ControllerData metadata, Class<?> table, Class<? extends Base> model) {
+		List<Error> statusInfoSets = new ArrayList<>();
 
 		/*
 			If the consumer requests that data be selected using non-existent field, ALL data for the record is returned
@@ -68,12 +69,14 @@ public abstract class BaseMapper<V, M extends Base, R1 extends BaseMultiResponse
 				•  Description should contain the supplied unknown field.
 		*/
 		if(metadata.getFieldSelection().hasFieldSelection() && !metadata.getFieldSelection().isValidFieldSelection(model)) {
-			StatusInfoSet sortError = new StatusInfoSet();
-			sortError.setImsxCodeMajor(CodeMajor.success);
-			sortError.setImsxCodeMinor(CodeMinor.invalid_selection_field);
-			sortError.setImsxSeverity(Severity.warning);
-			sortError.setImsxDescription("One or more of the fields " + metadata.getFieldSelection().getInvalidFields(model) + " included in the fields parameter doesn't exist.");
-			statusInfoSets.add(sortError);
+			metadata.getFieldSelection().getInvalidFields(model).forEach(warning -> {
+				Error error = new Error();
+				error.setCodeMajor(CodeMajor.success);
+				error.setCodeMinor(CodeMinor.invalid_selection_field);
+				error.setSeverity(Severity.warning);
+				error.setDescription("Invalid field: " + warning);
+				statusInfoSets.add(error);
+			});
 		}
 
 		/*
@@ -86,12 +89,12 @@ public abstract class BaseMapper<V, M extends Base, R1 extends BaseMultiResponse
 				•  Description should contain the supplied unknown field.
 		*/
 		if(metadata.getSorting().isSorted() && !metadata.getSorting().isValidField(table)) {
-			StatusInfoSet sortError = new StatusInfoSet();
-			sortError.setImsxCodeMajor(CodeMajor.success);
-			sortError.setImsxCodeMinor(CodeMinor.invalid_sort_field);
-			sortError.setImsxSeverity(Severity.warning);
-			sortError.setImsxDescription("The field used in the sort parameter doesn't exist.");
-			statusInfoSets.add(sortError);
+			Error error = new Error();
+			error.setCodeMajor(CodeMajor.success);
+			error.setCodeMinor(CodeMinor.invalid_sort_field);
+			error.setSeverity(Severity.warning);
+			error.setDescription("Invalid field: " + metadata.getSorting().getSort());
+			statusInfoSets.add(error);
 		}
 
 		if(CollectionUtils.isEmpty(statusInfoSets)) {

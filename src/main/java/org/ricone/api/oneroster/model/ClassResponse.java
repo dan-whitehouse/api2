@@ -9,7 +9,7 @@ import java.io.Serializable;
 import java.util.List;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"class"})
+@JsonPropertyOrder({"warnings","class"})
 public class ClassResponse extends BaseSingleResponse<Class> implements Serializable {
 	private final static long serialVersionUID = 7631981467689004007L;
 
@@ -20,7 +20,7 @@ public class ClassResponse extends BaseSingleResponse<Class> implements Serializ
 		super(_class);
 	}
 
-	public ClassResponse(Class _class, List<StatusInfoSet> errors) {
+	public ClassResponse(Class _class, List<Error> errors) {
 		super(_class, errors);
 	}
 

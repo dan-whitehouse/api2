@@ -6,11 +6,10 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.ricone.api.oneroster.component.BaseMultiResponse;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"users"})
+@JsonPropertyOrder({"warnings","users"})
 public class UsersResponse extends BaseMultiResponse<User> implements Serializable {
 	private final static long serialVersionUID = -2820152702413553355L;
 
@@ -21,7 +20,7 @@ public class UsersResponse extends BaseMultiResponse<User> implements Serializab
 		super(users);
 	}
 
-	public UsersResponse(List<User> users, List<StatusInfoSet> errors) {
+	public UsersResponse(List<User> users, List<Error> errors) {
 		super(users, errors);
 	}
 

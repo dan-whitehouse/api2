@@ -9,7 +9,7 @@ import java.io.Serializable;
 import java.util.List;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"demographics"})
+@JsonPropertyOrder({"warnings","demographics"})
 public class DemographicResponse extends BaseSingleResponse<Demographic> implements Serializable {
 	private final static long serialVersionUID = 6174150439900047310L;
 
@@ -20,7 +20,7 @@ public class DemographicResponse extends BaseSingleResponse<Demographic> impleme
 		super(demographic);
 	}
 
-	public DemographicResponse(Demographic demographic, List<StatusInfoSet> errors) {
+	public DemographicResponse(Demographic demographic, List<Error> errors) {
 		super(demographic, errors);
 	}
 

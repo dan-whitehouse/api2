@@ -73,7 +73,7 @@ public class FieldSelectionData {
 	}
 
 	List<String> getInvalidFields(Class<?> clazz) {
-		//TODO: Should this be case sensitive? Right now it is.
+		//While testing infinite campus, fields were case-sensitive
 		final List<String> actualFieldNames = new ArrayList<>();
 		final Field[] baseFields = clazz.getSuperclass().getDeclaredFields(); //Base: sourcedId, status, metadata, dateLastModified
 		final Field[] fields = clazz.getDeclaredFields(); //?: Whatever class is passed in, this will always extend Base.

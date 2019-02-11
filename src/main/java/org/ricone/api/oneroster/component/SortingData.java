@@ -3,12 +3,10 @@ package org.ricone.api.oneroster.component;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ricone.api.core.model.view.OrgView;
-import org.ricone.api.xpress.error.exception.BadRequestException;
+import org.ricone.api.oneroster.error.exception.InvalidSortingException;
 
 import javax.persistence.criteria.*;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,13 +20,22 @@ public class SortingData {
 	private String orderBy = null;
 
 	SortingData(HttpServletRequest request) throws Exception {
-
 		if(StringUtils.isNotBlank(request.getParameter(SORT))) {
 			sort = request.getParameter(SORT);
 		}
 
 		if(StringUtils.isNotBlank(request.getParameter(ORDER_BY))) {
 			orderBy = request.getParameter(ORDER_BY);
+		}
+
+		/*
+			If we provide a sort value, and the orderBy is anything
+			other then asc or desc then we need to throw and error.
+		*/
+		if(isSorted() && request.getParameter(ORDER_BY) != null) {
+			if(!isAscending() && !isDescending()) {
+				throw new InvalidSortingException("Invalid sort order: " +  orderBy);
+			}
 		}
 	}
 
@@ -71,6 +78,7 @@ public class SortingData {
 	}
 
 	boolean isValidField(Class<?> clazz) {
+		//While testing infinite campus, fields were case-sensitive
 		final List<String> actualFieldNames = new ArrayList<>();
 		final Field[] baseFields = clazz.getSuperclass().getDeclaredFields(); //Base: sourcedId, status, metadata, dateLastModified
 		final Field[] fields = clazz.getDeclaredFields(); //?: Whatever class is passed in, this will always extend Base.
@@ -84,5 +92,13 @@ public class SortingData {
 		for (Field field : fields)
 			fieldNames.add(field.getName());
 		return fieldNames;
+	}
+
+	public String getSort() {
+		return sort;
+	}
+
+	public String getOrderBy() {
+		return orderBy;
 	}
 }

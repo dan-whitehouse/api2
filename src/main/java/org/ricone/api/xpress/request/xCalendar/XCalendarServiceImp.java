@@ -1,19 +1,12 @@
 package org.ricone.api.xpress.request.xCalendar;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.ricone.api.core.model.wrapper.LeaWrapper;
 import org.ricone.api.core.model.wrapper.SchoolCalendarWrapper;
 import org.ricone.api.xpress.component.ControllerData;
-import org.ricone.api.xpress.error.exception.NoContentException;
+import org.ricone.error.NoContentException;
 import org.ricone.api.xpress.error.exception.NotFoundException;
 import org.ricone.api.xpress.model.XCalendarResponse;
 import org.ricone.api.xpress.model.XCalendarsResponse;
-import org.ricone.api.xpress.model.XLeaResponse;
-import org.ricone.api.xpress.model.XLeasResponse;
-import org.ricone.api.xpress.request.xLea.XLeaDAO;
-import org.ricone.api.xpress.request.xLea.XLeaFilterer;
-import org.ricone.api.xpress.request.xLea.XLeaMapper;
-import org.ricone.api.xpress.request.xLea.XLeaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

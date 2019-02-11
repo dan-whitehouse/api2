@@ -9,7 +9,7 @@ import java.io.Serializable;
 import java.util.List;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"academicSession"})
+@JsonPropertyOrder({"warnings","academicSession"})
 public class AcademicSessionResponse extends BaseSingleResponse<AcademicSession> implements Serializable {
 	private final static long serialVersionUID = 254536018508141411L;
 
@@ -20,7 +20,7 @@ public class AcademicSessionResponse extends BaseSingleResponse<AcademicSession>
 		super(academicSession);
 	}
 
-	public AcademicSessionResponse(AcademicSession academicSession, List<StatusInfoSet> errors) {
+	public AcademicSessionResponse(AcademicSession academicSession, List<Error> errors) {
 		super(academicSession, errors);
 	}
 

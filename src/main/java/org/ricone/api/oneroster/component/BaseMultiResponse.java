@@ -2,15 +2,17 @@ package org.ricone.api.oneroster.component;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.ricone.api.oneroster.model.StatusInfoSet;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import org.ricone.api.oneroster.model.Error;
 
 import java.io.Serializable;
 import java.util.List;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonPropertyOrder({"warnings"})
 public abstract class BaseMultiResponse<T> implements Serializable {
 	private List<T> data;
-	private List<StatusInfoSet> errors;
+	private List<Error> warnings;
 
 	protected BaseMultiResponse() {
 	}
@@ -19,9 +21,9 @@ public abstract class BaseMultiResponse<T> implements Serializable {
 		this.data = data;
 	}
 
-	public BaseMultiResponse(List<T> data, List<StatusInfoSet> errors) {
+	public BaseMultiResponse(List<T> data, List<Error> warnings) {
 		this.data = data;
-		this.errors = errors;
+		this.warnings = warnings;
 	}
 
 	public List<T> getData() {
@@ -32,13 +34,13 @@ public abstract class BaseMultiResponse<T> implements Serializable {
 		this.data = data;
 	}
 
-	@JsonProperty("statusInfoSet")
-	public List<StatusInfoSet> getStatusInfoSets() {
-		return errors;
+	@JsonProperty("warnings")
+	public List<Error> getWarnings() {
+		return warnings;
 	}
 
-	@JsonProperty("statusInfoSet")
-	public void setStatusInfoSets(List<StatusInfoSet> errors) {
-		this.errors = errors;
+	@JsonProperty("warnings")
+	public void setWarnings(List<Error> errors) {
+		this.warnings = errors;
 	}
 }

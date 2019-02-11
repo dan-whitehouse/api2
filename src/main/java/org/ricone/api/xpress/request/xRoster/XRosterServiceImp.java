@@ -3,7 +3,7 @@ package org.ricone.api.xpress.request.xRoster;
 import org.apache.commons.collections4.CollectionUtils;
 import org.ricone.api.core.model.wrapper.CourseSectionWrapper;
 import org.ricone.api.xpress.component.ControllerData;
-import org.ricone.api.xpress.error.exception.NoContentException;
+import org.ricone.error.NoContentException;
 import org.ricone.api.xpress.error.exception.NotFoundException;
 import org.ricone.api.xpress.model.XRosterResponse;
 import org.ricone.api.xpress.model.XRostersResponse;

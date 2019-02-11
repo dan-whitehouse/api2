@@ -1,4 +1,4 @@
-package org.ricone.api.xpress.error.exception;
+package org.ricone.error;
 
 public class NoContentException extends Exception {
     private static final long serialVersionUID = 4571363863275275931L;

@@ -2,12 +2,11 @@ package org.ricone.api.oneroster.request.courses;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.ricone.api.core.model.view.CourseView;
-import org.ricone.api.core.model.wrapper.CourseWrapper;
 import org.ricone.api.oneroster.error.exception.UnknownObjectException;
 import org.ricone.api.oneroster.model.CourseResponse;
 import org.ricone.api.oneroster.model.CoursesResponse;
 import org.ricone.api.oneroster.component.ControllerData;
-import org.ricone.api.xpress.error.exception.NoContentException;
+import org.ricone.error.NoContentException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

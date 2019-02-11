@@ -1,5 +1,6 @@
 package org.ricone.api.oneroster.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -7,6 +8,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"sourcedId", "status", "dateLastModified", "metadata"})
@@ -17,8 +19,8 @@ public abstract class Base implements Serializable {
 	@JsonProperty("status")
 	private StatusType status;
 	@JsonProperty("dateLastModified")
-	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-	private LocalDateTime dateLastModified;
+	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone="America/New_York")
+	private ZonedDateTime dateLastModified;
 	@JsonProperty("metadata")
 	private Metadata metadata;
 
@@ -29,12 +31,12 @@ public abstract class Base implements Serializable {
 	}
 
 	/**
-	 * @param status
-	 * @param dateLastModified
-	 * @param metadata
-	 * @param sourcedId
+	 * @param status - active | tobedeleted
+	 * @param dateLastModified - All objects must be annotated with the dateTime upon which they were last modified. DateTimes MUST be expressed in W3C profile of ISO 8601 and MUST contain the UTC timezone;
+	 * @param metadata - Objects can be extended using the Metadata class. This specification is silent on what implementers may consider to be appropriate extensions.
+	 * @param sourcedId - This is a GUID System ID for an object. This is the GUID that systems will refer to when making API calls, or when needing to identify an object
 	 */
-	public Base(String sourcedId, StatusType status, LocalDateTime dateLastModified, Metadata metadata) {
+	public Base(String sourcedId, StatusType status, ZonedDateTime dateLastModified, Metadata metadata) {
 		super();
 		this.sourcedId = sourcedId;
 		this.status = status;
@@ -63,12 +65,12 @@ public abstract class Base implements Serializable {
 	}
 
 	@JsonProperty("dateLastModified")
-	public LocalDateTime getDateLastModified() {
+	public ZonedDateTime getDateLastModified() {
 		return dateLastModified;
 	}
 
 	@JsonProperty("dateLastModified")
-	public void setDateLastModified(LocalDateTime dateLastModified) {
+	public void setDateLastModified(ZonedDateTime dateLastModified) {
 		this.dateLastModified = dateLastModified;
 	}
 
@@ -81,5 +83,4 @@ public abstract class Base implements Serializable {
 	public void setMetadata(Metadata metadata) {
 		this.metadata = metadata;
 	}
-
 }

@@ -6,11 +6,10 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.ricone.api.oneroster.component.BaseMultiResponse;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"courses"})
+@JsonPropertyOrder({"warnings","courses"})
 public class CoursesResponse extends BaseMultiResponse<Course> implements Serializable {
 	private final static long serialVersionUID = 8240007651262912068L;
 
@@ -21,7 +20,7 @@ public class CoursesResponse extends BaseMultiResponse<Course> implements Serial
 		super(course);
 	}
 
-	public CoursesResponse(List<Course> course, List<StatusInfoSet> errors) {
+	public CoursesResponse(List<Course> course, List<Error> errors) {
 		super(course);
 	}
 

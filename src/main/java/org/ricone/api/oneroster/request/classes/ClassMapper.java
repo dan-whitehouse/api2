@@ -26,7 +26,7 @@ class ClassMapper extends BaseMapper<ClassView, Class, ClassesResponse, ClassRes
         clazz.setMetadata(mapMetadata(instance));
 
         clazz.setTitle(instance.getTitle());
-        clazz.setClassType(ClassType.valueOf(instance.getClassType()));
+        clazz.setClassType(ClassType.valueOf(instance.getClassType())); //TODO - We have no way to determine if the class is a homeroom.
         clazz.setLocation(instance.getLocation());
         clazz.setClassCode(instance.getClassCode());
 

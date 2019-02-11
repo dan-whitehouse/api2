@@ -1,6 +1,8 @@
 package org.ricone.api.xpress.error;
 
 import org.ricone.api.xpress.error.exception.*;
+import org.ricone.api.xpress.error.exception.ForbiddenException;
+import org.ricone.error.NoContentException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
@@ -11,18 +13,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @RestController
-@ControllerAdvice
+@ControllerAdvice(basePackages = "org.ricone.api.xpress")
 public class ErrorController {
-    /**** 20X ****/
-    @ResponseBody
-    @ExceptionHandler(NoContentException.class)
-    @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public void noContent(HttpServletRequest request, HttpServletResponse response, Exception ex) {
-        //Do nothing
-    }
+    /*
+        20X
+        204 - Handled In GlobalController
+    */
 
-    /**** 40X ****/
-
+    /* 40X */
     @ResponseBody
     @ExceptionHandler(BadRequestException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
@@ -66,7 +64,7 @@ public class ErrorController {
         return new Error(request.getRequestURL().toString(), 409, "Conflict", ex.getMessage());
     }
 
-    /**** 50X ****/
+    /* 50X */
     @ResponseBody
     @ExceptionHandler({Exception.class, MappingException.class})
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)

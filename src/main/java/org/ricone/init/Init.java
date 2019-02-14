@@ -1,31 +1,15 @@
 package org.ricone.init;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.fasterxml.jackson.databind.ser.std.StringSerializer;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
-import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
-import org.springframework.http.MediaType;
-import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter;
-import org.springframework.web.method.support.HandlerMethodArgumentResolver;
-import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import springfox.documentation.builders.ApiInfoBuilder;
+import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.schema.ModelRef;
 import springfox.documentation.service.*;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.contexts.SecurityContext;
@@ -34,6 +18,8 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.google.common.collect.Lists.newArrayList;
 
 @SpringBootApplication
 @EnableSwagger2
@@ -46,26 +32,68 @@ public class Init {
 
 	//https://springfox.github.io/springfox/docs/current/#springfox-swagger-ui
 
+	/*
+		Multiple Specs: https://github.com/springfox/springfox/issues/748#issuecomment-104082075
+		http://localhost:8080/docs/swagger.json?group=OneRoster
+		http://localhost:8080/docs/swagger.json?group=XPress
+	 */
+
 	@Bean
-	public Docket productApi() {
+	public Docket xPressAPI() {
 		return new Docket(DocumentationType.SWAGGER_2)
 			.select()
-				.apis(RequestHandlerSelectors.any())
+				.apis(RequestHandlerSelectors.basePackage("org.ricone.api.xpress"))
 				.paths(PathSelectors.any())
 				.build()
-				.apiInfo(metaData())
+				.apiInfo(xPressMetaData())
+				.groupName("xPress")
 			.securitySchemes(getSecuritySchemes())
 			.securityContexts(getSecurityContexts())
 		;
 	}
 
-	private ApiInfo metaData() {
+	@Bean
+	public Docket oneRosterAPI() {
+		return new Docket(DocumentationType.SWAGGER_2)
+			.select()
+				.apis(RequestHandlerSelectors.basePackage("org.ricone.api.oneroster"))
+				.paths(PathSelectors.any())
+				.build()
+				.apiInfo(oneRosterMetaData())
+				.groupName("OneRoster")
+			.securitySchemes(getSecuritySchemes())
+			.securityContexts(getSecurityContexts())
+			/*.globalOperationParameters(
+				newArrayList(new ParameterBuilder()
+						.name("sort")
+						.description("Description of someGlobalParameter")
+						.modelRef(new ModelRef("string"))
+						.parameterType("query")
+						.required(false)
+						.build()))
+			*/
+			;
+	}
+
+	private ApiInfo xPressMetaData() {
 		return new ApiInfoBuilder()
-			.title("XPress")
+			.title("xPress")
 			.description("\"Spring Boot REST API for Online Store\"")
 			.version("2.0.0")
 			.license("Apache License Version 2.0")
 			.licenseUrl("https://www.apache.org/licenses/LICENSE-2.0\"")
+			.contact(new Contact("Dan Whitehouse", "https://springframework.guru/about/", "support@ricone.org"))
+			.build();
+	}
+
+	private ApiInfo oneRosterMetaData() {
+		return new ApiInfoBuilder()
+			.title("One Roster")
+			.description("\"Spring Boot REST API for Online Store\"")
+			.version("v1p1")
+			.license("Apache License Version 2.0")
+			.licenseUrl("https://www.apache.org/licenses/LICENSE-2.0\"")
+			.termsOfServiceUrl("https://www.imsglobal.org/oneroster-v11-final-specification")
 			.contact(new Contact("Dan Whitehouse", "https://springframework.guru/about/", "support@ricone.org"))
 			.build();
 	}

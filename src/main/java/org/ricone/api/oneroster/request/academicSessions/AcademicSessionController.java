@@ -25,50 +25,99 @@ class AcademicSessionController extends BaseController {
 	private AcademicSessionService service;
 
 	@ResponseBody @GetMapping(value = "/ims/oneroster/v1p1/academicSessions/{id}")
-	@SwaggerOperation.AcademicSessions.GetAcademicSession
-	@SwaggerResponse.AcademicSessionResponse
+	@ApiOperation(value = "getAcademicSession", tags = {"AcademicSession"})
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "Success", response = AcademicSessionResponse.class),
+			@ApiResponse(code = 400, message = "Bad Request", response = ErrorResponse.class),
+			@ApiResponse(code = 401, message = "Unauthorized", response = ErrorResponse.class),
+			@ApiResponse(code = 403, message = "Forbidden", response = ErrorResponse.class),
+			@ApiResponse(code = 404, message = "Not Found", response = ErrorResponse.class),
+			@ApiResponse(code = 500, message = "Internal Server Error", response = ErrorResponse.class)
+	})
 	AcademicSessionResponse getAcademicSession(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "id") String id, @FieldParam String fields) throws Exception {
 		return service.getAcademicSession(getMetaData(request, response), id);
 	}
 
 	@ResponseBody @GetMapping(value = "/ims/oneroster/v1p1/academicSessions")
-	@SwaggerOperation.AcademicSessions.GetAllAcademicSessions
-	@SwaggerResponse.AcademicSessionsResponse
+	@ApiOperation(value = "getAllAcademicSessions", tags = {"AcademicSession"})
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "Success", response = AcademicSessionsResponse.class),
+			@ApiResponse(code = 400, message = "Bad Request", response = ErrorResponse.class),
+			@ApiResponse(code = 401, message = "Unauthorized", response = ErrorResponse.class),
+			@ApiResponse(code = 403, message = "Forbidden", response = ErrorResponse.class),
+			@ApiResponse(code = 404, message = "Not Found", response = ErrorResponse.class),
+			@ApiResponse(code = 500, message = "Internal Server Error", response = ErrorResponse.class)
+	})
 	AcademicSessionsResponse getAllAcademicSessions(HttpServletRequest request, HttpServletResponse response, @PagingLimitParam String limit, @PagingOffsetParam String offset, @SortParam String sort, @OrderByParam String orderBy, @FilterParam String filter, @FieldParam String fields) throws Exception {
 		return service.getAllAcademicSessions(getMetaData(request, response));
 	}
 
 	@ResponseBody @GetMapping(value = "/ims/oneroster/v1p1/terms/{id}")
-	@SwaggerOperation.AcademicSessions.GetTerm
-	@SwaggerResponse.AcademicSessionResponse
+	@ApiOperation(value = "getTerm", tags = {"AcademicSession"})
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "Success", response = AcademicSessionResponse.class),
+			@ApiResponse(code = 400, message = "Bad Request", response = ErrorResponse.class),
+			@ApiResponse(code = 401, message = "Unauthorized", response = ErrorResponse.class),
+			@ApiResponse(code = 403, message = "Forbidden", response = ErrorResponse.class),
+			@ApiResponse(code = 404, message = "Not Found", response = ErrorResponse.class),
+			@ApiResponse(code = 500, message = "Internal Server Error", response = ErrorResponse.class)
+	})
 	AcademicSessionResponse getTerm(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "id") String id, @FieldParam String fields) throws Exception {
 		return service.getTerm(getMetaData(request, response), id);
 	}
 
 	@ResponseBody @GetMapping(value = "/ims/oneroster/v1p1/terms")
-	@SwaggerOperation.AcademicSessions.GetAllTerms
-	@SwaggerResponse.AcademicSessionsResponse
+	@ApiOperation(value = "getAllTerms", tags = {"AcademicSession"})
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "Success", response = AcademicSessionsResponse.class),
+			@ApiResponse(code = 400, message = "Bad Request", response = ErrorResponse.class),
+			@ApiResponse(code = 401, message = "Unauthorized", response = ErrorResponse.class),
+			@ApiResponse(code = 403, message = "Forbidden", response = ErrorResponse.class),
+			@ApiResponse(code = 404, message = "Not Found", response = ErrorResponse.class),
+			@ApiResponse(code = 500, message = "Internal Server Error", response = ErrorResponse.class)
+	})
 	AcademicSessionsResponse getAllTerms(HttpServletRequest request, HttpServletResponse response, @PagingLimitParam String limit, @PagingOffsetParam String offset, @SortParam String sort, @OrderByParam String orderBy, @FilterParam String filter, @FieldParam String fields) throws Exception {
 		return service.getAllTerms(getMetaData(request, response));
 	}
 
 	@ResponseBody @GetMapping(value = "/ims/oneroster/v1p1/gradingPeriods/{id}")
-	@SwaggerOperation.AcademicSessions.GetGradingPeriod
-	@SwaggerResponse.AcademicSessionResponse
+	@ApiOperation(value = "getGradingPeriod", tags = {"AcademicSession"})
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "Success", response = AcademicSessionResponse.class),
+			@ApiResponse(code = 400, message = "Bad Request", response = ErrorResponse.class),
+			@ApiResponse(code = 401, message = "Unauthorized", response = ErrorResponse.class),
+			@ApiResponse(code = 403, message = "Forbidden", response = ErrorResponse.class),
+			@ApiResponse(code = 404, message = "Not Found", response = ErrorResponse.class),
+			@ApiResponse(code = 500, message = "Internal Server Error", response = ErrorResponse.class)
+	})
 	AcademicSessionResponse getGradingPeriod(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "id") String id) throws Exception {
 		return service.getGradingPeriod(getMetaData(request, response), id);
 	}
 
 	@ResponseBody @GetMapping(value = "/ims/oneroster/v1p1/gradingPeriods")
-	@SwaggerOperation.AcademicSessions.GetAllGradingPeriods
-	@SwaggerResponse.AcademicSessionsResponse
+	@ApiOperation(value = "getAllGradingPeriods", tags = {"AcademicSession"})
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "Success", response = AcademicSessionsResponse.class),
+			@ApiResponse(code = 400, message = "Bad Request", response = ErrorResponse.class),
+			@ApiResponse(code = 401, message = "Unauthorized", response = ErrorResponse.class),
+			@ApiResponse(code = 403, message = "Forbidden", response = ErrorResponse.class),
+			@ApiResponse(code = 404, message = "Not Found", response = ErrorResponse.class),
+			@ApiResponse(code = 500, message = "Internal Server Error", response = ErrorResponse.class)
+	})
 	AcademicSessionsResponse getAllGradingPeriods(HttpServletRequest request, HttpServletResponse response, @PagingLimitParam String limit, @PagingOffsetParam String offset, @SortParam String sort, @OrderByParam String orderBy, @FilterParam String filter, @FieldParam String fields) throws Exception {
 		return service.getAllGradingPeriods(getMetaData(request, response));
 	}
 
 	@ResponseBody @GetMapping(value = "/ims/oneroster/v1p1/terms/{id}/gradingPeriods")
-	@SwaggerOperation.AcademicSessions.GetGradingPeriodsForTerm
-	@SwaggerResponse.AcademicSessionsResponse
+	@ApiOperation(value = "getGradingPeriodsForTerm", tags = {"AcademicSession"})
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "Success", response = AcademicSessionsResponse.class),
+			@ApiResponse(code = 400, message = "Bad Request", response = ErrorResponse.class),
+			@ApiResponse(code = 401, message = "Unauthorized", response = ErrorResponse.class),
+			@ApiResponse(code = 403, message = "Forbidden", response = ErrorResponse.class),
+			@ApiResponse(code = 404, message = "Not Found", response = ErrorResponse.class),
+			@ApiResponse(code = 500, message = "Internal Server Error", response = ErrorResponse.class)
+	})
 	AcademicSessionsResponse getGradingPeriodsForTerm(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "id") String id, @PagingLimitParam String limit, @PagingOffsetParam String offset, @SortParam String sort, @OrderByParam String orderBy, @FilterParam String filter, @FieldParam String fields) throws Exception {
 		return service.getGradingPeriodsForTerm(getMetaData(request, response), id);
 	}

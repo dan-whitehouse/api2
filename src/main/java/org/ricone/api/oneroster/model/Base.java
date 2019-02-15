@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import io.swagger.annotations.ApiModelProperty;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
@@ -45,6 +46,7 @@ public abstract class Base implements Serializable {
 	}
 
 	@JsonProperty("sourcedId")
+	@ApiModelProperty(position = -4)
 	public String getSourcedId() {
 		return sourcedId;
 	}
@@ -55,6 +57,7 @@ public abstract class Base implements Serializable {
 	}
 
 	@JsonProperty("status")
+	@ApiModelProperty(position = -3)
 	public StatusType getStatus() {
 		return status;
 	}
@@ -65,6 +68,7 @@ public abstract class Base implements Serializable {
 	}
 
 	@JsonProperty("dateLastModified")
+	@ApiModelProperty(position = -2)
 	public ZonedDateTime getDateLastModified() {
 		return dateLastModified;
 	}
@@ -75,6 +79,7 @@ public abstract class Base implements Serializable {
 	}
 
 	@JsonProperty("metadata")
+	@ApiModelProperty(position = -1)
 	public Metadata getMetadata() {
 		return metadata;
 	}

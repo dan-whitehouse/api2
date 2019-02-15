@@ -78,23 +78,23 @@ public class Init {
 	private ApiInfo xPressMetaData() {
 		return new ApiInfoBuilder()
 			.title("xPress")
-			.description("\"Spring Boot REST API for Online Store\"")
+			.description("\"A description goes here...\"")
 			.version("2.0.0")
 			.license("Apache License Version 2.0")
 			.licenseUrl("https://www.apache.org/licenses/LICENSE-2.0\"")
-			.contact(new Contact("Dan Whitehouse", "https://springframework.guru/about/", "support@ricone.org"))
+			.contact(new Contact("Dan Whitehouse", "http://www.ricone.org/", "support@ricone.org"))
 			.build();
 	}
 
 	private ApiInfo oneRosterMetaData() {
 		return new ApiInfoBuilder()
 			.title("One Roster")
-			.description("\"Spring Boot REST API for Online Store\"")
+			.description("\"A description goes here...\"")
 			.version("v1p1")
 			.license("Apache License Version 2.0")
 			.licenseUrl("https://www.apache.org/licenses/LICENSE-2.0\"")
-			.termsOfServiceUrl("https://www.imsglobal.org/oneroster-v11-final-specification")
-			.contact(new Contact("Dan Whitehouse", "https://springframework.guru/about/", "support@ricone.org"))
+			//.termsOfServiceUrl("https://www.imsglobal.org/oneroster-v11-final-specification")
+			.contact(new Contact("Dan Whitehouse", "http://www.ricone.org/", "support@ricone.org"))
 			.build();
 	}
 

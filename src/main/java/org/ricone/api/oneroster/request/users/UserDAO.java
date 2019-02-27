@@ -7,51 +7,51 @@ import java.util.List;
 
 interface UserDAO {
 	/* Find */
-	UserView getUser(ControllerData metadata, String refId);
+	UserView getUser(ControllerData metadata, String refId) throws Exception;
 
-	List<UserView> getAllUsers(ControllerData metadata);
+	List<UserView> getAllUsers(ControllerData metadata) throws Exception;
 
-	UserView getStudent(ControllerData metadata, String refId);
+	UserView getStudent(ControllerData metadata, String refId) throws Exception;
 
-	List<UserView> getAllStudents(ControllerData metadata);
+	List<UserView> getAllStudents(ControllerData metadata) throws Exception;
 
-	List<UserView> getStudentsForSchool(ControllerData metadata, String refId);
+	List<UserView> getStudentsForSchool(ControllerData metadata, String refId) throws Exception;
 
-	List<UserView> getStudentsForClass(ControllerData metadata, String refId);
+	List<UserView> getStudentsForClass(ControllerData metadata, String refId) throws Exception;
 
-	List<UserView> getStudentsForClassInSchool(ControllerData metadata, String refId, String classRefId);
+	List<UserView> getStudentsForClassInSchool(ControllerData metadata, String refId, String classRefId) throws Exception;
 
-	UserView getTeacher(ControllerData metadata, String refId);
+	UserView getTeacher(ControllerData metadata, String refId) throws Exception;
 
-	List<UserView> getAllTeachers(ControllerData metadata);
+	List<UserView> getAllTeachers(ControllerData metadata) throws Exception;
 
-	List<UserView> getTeachersForSchool(ControllerData metadata, String refId);
+	List<UserView> getTeachersForSchool(ControllerData metadata, String refId) throws Exception;
 
-	List<UserView> getTeachersForClass(ControllerData metadata, String refId);
+	List<UserView> getTeachersForClass(ControllerData metadata, String refId) throws Exception;
 
-	List<UserView> getTeachersForClassInSchool(ControllerData metadata, String schoolRefId, String classRefId);
+	List<UserView> getTeachersForClassInSchool(ControllerData metadata, String schoolRefId, String classRefId) throws Exception;
 
-	UserView getContact(ControllerData metadata, String refId);
+	UserView getContact(ControllerData metadata, String refId) throws Exception;
 
-	List<UserView> getAllContacts(ControllerData metadata);
+	List<UserView> getAllContacts(ControllerData metadata) throws Exception;
 
-	int countAllUsers(ControllerData metadata);
+	int countAllUsers(ControllerData metadata) throws Exception;
 
-	int countAllStudents(ControllerData metadata);
+	int countAllStudents(ControllerData metadata) throws Exception;
 
-	int countStudentsForSchool(ControllerData metadata, String refId);
+	int countStudentsForSchool(ControllerData metadata, String refId) throws Exception;
 
-	int countStudentsForClass(ControllerData metadata, String refId);
+	int countStudentsForClass(ControllerData metadata, String refId) throws Exception;
 
-	int countStudentsForClassInSchool(ControllerData metadata, String refId, String classRefId);
+	int countStudentsForClassInSchool(ControllerData metadata, String refId, String classRefId) throws Exception;
 
-	int countAllTeachers(ControllerData metadata);
+	int countAllTeachers(ControllerData metadata) throws Exception;
 
-	int countTeachersForSchool(ControllerData metadata, String refId);
+	int countTeachersForSchool(ControllerData metadata, String refId) throws Exception;
 
-	int countTeachersForClass(ControllerData metadata, String refId);
+	int countTeachersForClass(ControllerData metadata, String refId) throws Exception;
 
-	int countTeachersForClassInSchool(ControllerData metadata, String schoolRefId, String classRefId);
+	int countTeachersForClassInSchool(ControllerData metadata, String schoolRefId, String classRefId) throws Exception;
 
-	int countAllContacts(ControllerData metadata);
+	int countAllContacts(ControllerData metadata) throws Exception;
 }

@@ -17,6 +17,7 @@ import java.util.Set;
 @IdClass(SourcedComposite.class)
 @Immutable @Entity @Table(name = "userview")
 @Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+@BatchSize(size = 100)
 public class UserView implements Serializable {
 	private static final long serialVersionUID = -2620417938122940193L;
 
@@ -57,23 +58,23 @@ public class UserView implements Serializable {
 	private String sms;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "userView")
-	@Fetch(FetchMode.SELECT) @BatchSize(size = 20)
+	@Fetch(FetchMode.SELECT) @BatchSize(size = 100)
 	private Set<UserIdentifierView> userIds = new HashSet<>(0);
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "userView")
-	@Fetch(FetchMode.SELECT) @BatchSize(size = 20)
+	@Fetch(FetchMode.SELECT) @BatchSize(size = 100)
 	private Set<UserOrgView> userOrgs = new HashSet<>(0);
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "userView")
-	@Fetch(FetchMode.SELECT) @BatchSize(size = 20)
+	@Fetch(FetchMode.SELECT) @BatchSize(size = 100)
 	private Set<UserAgentView> userAgents = new HashSet<>(0);
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "userView")
-	@Fetch(FetchMode.SELECT) @BatchSize(size = 20)
+	@Fetch(FetchMode.SELECT) @BatchSize(size = 100)
 	private Set<UserClassView> userClasses = new HashSet<>(0);
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "userView")
-	@Fetch(FetchMode.SELECT) @BatchSize(size = 20)
+	@Fetch(FetchMode.SELECT) @BatchSize(size = 100)
 	private Set<UserGradeView> userGrades = new HashSet<>(0);
 
 	public UserView() {

@@ -7,6 +7,7 @@ import org.ricone.api.core.model.composite.SchoolComposite;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -14,16 +15,15 @@ import java.util.Set;
 @Table(name = "school")
 @IdClass(SchoolComposite.class)
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class School implements java.io.Serializable {
+@BatchSize(size = 100)
+public class School implements Serializable {
 	private static final long serialVersionUID = -4011491046830009714L;
 		
 	@Column(name = "SchoolRefId", unique = true, nullable = false, length = 64)
-	@Id
-    private String schoolRefId;
+	@Id private String schoolRefId;
 	
 	@Column(name = "SchoolSchoolYear", nullable = false, length = 6)
-	@Id
-    private Integer schoolSchoolYear;
+	@Id private Integer schoolSchoolYear;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumns({
@@ -60,30 +60,32 @@ public class School implements java.io.Serializable {
 	private String countryCode;
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "school")
-	@Fetch(FetchMode.SELECT) @BatchSize(size = 20)
-	private Set<SchoolGrade> schoolGrades = new HashSet<SchoolGrade>(0);
+	@Fetch(FetchMode.SELECT) @BatchSize(size = 100)
+	private Set<SchoolGrade> schoolGrades = new HashSet<>(0);
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "school")
-	@Fetch(FetchMode.SELECT) @BatchSize(size = 20)
-	private Set<SchoolTelephone> schoolTelephones = new HashSet<SchoolTelephone>(0);
+	@Fetch(FetchMode.SELECT) @BatchSize(size = 100)
+	private Set<SchoolTelephone> schoolTelephones = new HashSet<>(0);
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "school")
-	private Set<StaffAssignment> staffAssignments = new HashSet<StaffAssignment>(0);
+	@Fetch(FetchMode.SELECT) @BatchSize(size = 100)
+	private Set<StaffAssignment> staffAssignments = new HashSet<>(0);
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "school")
-	@Fetch(FetchMode.SELECT) @BatchSize(size = 20)
-	private Set<SchoolIdentifier> schoolIdentifiers = new HashSet<SchoolIdentifier>(0);
+	@Fetch(FetchMode.SELECT) @BatchSize(size = 100)
+	private Set<SchoolIdentifier> schoolIdentifiers = new HashSet<>(0);
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "school")
-	@Fetch(FetchMode.SELECT) @BatchSize(size = 20)
-	private Set<SchoolCalendar> schoolCalendars = new HashSet<SchoolCalendar>(0);
+	@Fetch(FetchMode.SELECT) @BatchSize(size = 100)
+	private Set<SchoolCalendar> schoolCalendars = new HashSet<>(0);
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "school")
-	private Set<StudentEnrollment> studentEnrollments = new HashSet<StudentEnrollment>(0);
+	@Fetch(FetchMode.SELECT) @BatchSize(size = 100)
+	private Set<StudentEnrollment> studentEnrollments = new HashSet<>(0);
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "school")
-	@Fetch(FetchMode.SELECT) @BatchSize(size = 20)
-	private Set<Course> courses = new HashSet<Course>(0);
+	@Fetch(FetchMode.SELECT) @BatchSize(size = 100)
+	private Set<Course> courses = new HashSet<>(0);
 
 	public School() {
 	}

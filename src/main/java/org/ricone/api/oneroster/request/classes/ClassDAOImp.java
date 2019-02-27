@@ -2,11 +2,11 @@ package org.ricone.api.oneroster.request.classes;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ricone.api.core.model.view.ClassTermView;
-import org.ricone.api.core.model.view.ClassUserView;
-import org.ricone.api.core.model.view.ClassView;
+import org.ricone.api.core.model.view.*;
 import org.ricone.api.oneroster.component.BaseDAO;
+import org.ricone.api.oneroster.component.BaseDAOTest;
 import org.ricone.api.oneroster.component.ControllerData;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -17,9 +17,10 @@ import javax.persistence.criteria.*;
 import java.util.List;
 
 @Repository("OneRoster:Classes:ClassDAO")
-@SuppressWarnings({"unchecked", "unused", "RedundantTypeArguments"})
-class ClassDAOImp extends BaseDAO implements ClassDAO {
+@SuppressWarnings({"unchecked", "unused"})
+class ClassDAOImp extends BaseDAOTest implements ClassDAO {
 	@PersistenceContext private EntityManager em;
+	@Autowired private ClassFilterer filterer;
 	private Logger logger = LogManager.getLogger(ClassDAOImp.class);
 
 	@Override
@@ -27,7 +28,15 @@ class ClassDAOImp extends BaseDAO implements ClassDAO {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<ClassView> select = cb.createQuery(ClassView.class);
 		final Root<ClassView> from = select.from(ClassView.class);
+		final SetJoin<ClassView, ClassGradeView> grades = (SetJoin<ClassView, ClassGradeView>) from.<ClassView, ClassGradeView>join("grades", JoinType.LEFT).alias("grades");
+		final SetJoin<ClassView, ClassSubjectView> subjects = (SetJoin<ClassView, ClassSubjectView>) from.<ClassView, ClassSubjectView>join("subjects", JoinType.LEFT).alias("subjects");
+		final SetJoin<ClassView, ClassPeriodView> periods = (SetJoin<ClassView, ClassPeriodView>) from.<ClassView, ClassPeriodView>join("periods", JoinType.LEFT).alias("periods");
+		final SetJoin<ClassView, ClassTermView> terms = (SetJoin<ClassView, ClassTermView>) from.<ClassView, ClassTermView>join("terms", JoinType.LEFT).alias("terms");
 
+		//Add Root Object & Joins to Filterer
+		filterer.addJoins(from, grades, subjects, periods, terms);
+
+		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
 			cb.equal(from.get(PRIMARY_KEY), refId),
 			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
@@ -36,7 +45,7 @@ class ClassDAOImp extends BaseDAO implements ClassDAO {
 
 		select.distinct(true);
 		select.select(from);
-		select.where(getWhereClause(metadata, cb, from, methodSpecificPredicate));
+		select.where(getWhereClause(metadata, cb, filterer, methodSpecificPredicate));
 		select.orderBy(getSortOrder(metadata, cb, from));
 
 		Query q = em.createQuery(select);
@@ -52,7 +61,15 @@ class ClassDAOImp extends BaseDAO implements ClassDAO {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<ClassView> select = cb.createQuery(ClassView.class);
 		final Root<ClassView> from = select.from(ClassView.class);
+		final SetJoin<ClassView, ClassGradeView> grades = (SetJoin<ClassView, ClassGradeView>) from.<ClassView, ClassGradeView>join("grades", JoinType.LEFT).alias("grades");
+		final SetJoin<ClassView, ClassSubjectView> subjects = (SetJoin<ClassView, ClassSubjectView>) from.<ClassView, ClassSubjectView>join("subjects", JoinType.LEFT).alias("subjects");
+		final SetJoin<ClassView, ClassPeriodView> periods = (SetJoin<ClassView, ClassPeriodView>) from.<ClassView, ClassPeriodView>join("periods", JoinType.LEFT).alias("periods");
+		final SetJoin<ClassView, ClassTermView> terms = (SetJoin<ClassView, ClassTermView>) from.<ClassView, ClassTermView>join("terms", JoinType.LEFT).alias("terms");
 
+		//Add Root Object & Joins to Filterer
+		filterer.addJoins(from, grades, subjects, periods, terms);
+
+		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
 			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
 			from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
@@ -60,7 +77,7 @@ class ClassDAOImp extends BaseDAO implements ClassDAO {
 
 		select.distinct(true);
 		select.select(from);
-		select.where(getWhereClause(metadata, cb, from, methodSpecificPredicate));
+		select.where(getWhereClause(metadata, cb, filterer, methodSpecificPredicate));
 		select.orderBy(getSortOrder(metadata, cb, from));
 
 		Query q = em.createQuery(select);
@@ -77,17 +94,24 @@ class ClassDAOImp extends BaseDAO implements ClassDAO {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<ClassView> select = cb.createQuery(ClassView.class);
 		final Root<ClassView> from = select.from(ClassView.class);
-		final SetJoin<ClassView, ClassTermView> classTerms = (SetJoin<ClassView, ClassTermView>) from.<ClassView, ClassTermView>join(JOIN_CLASS_TERMS, JoinType.LEFT);
+		final SetJoin<ClassView, ClassGradeView> grades = (SetJoin<ClassView, ClassGradeView>) from.<ClassView, ClassGradeView>join("grades", JoinType.LEFT).alias("grades");
+		final SetJoin<ClassView, ClassSubjectView> subjects = (SetJoin<ClassView, ClassSubjectView>) from.<ClassView, ClassSubjectView>join("subjects", JoinType.LEFT).alias("subjects");
+		final SetJoin<ClassView, ClassPeriodView> periods = (SetJoin<ClassView, ClassPeriodView>) from.<ClassView, ClassPeriodView>join("periods", JoinType.LEFT).alias("periods");
+		final SetJoin<ClassView, ClassTermView> terms = (SetJoin<ClassView, ClassTermView>) from.<ClassView, ClassTermView>join("terms", JoinType.LEFT).alias("terms");
 
+		//Add Root Object & Joins to Filterer
+		filterer.addJoins(from, grades, subjects, periods, terms);
+
+		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
 			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
-			cb.equal(classTerms.get(FIELD_TERM_ID), refId),
+			cb.equal(terms.get(FIELD_TERM_ID), refId),
 			from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 		);
 
 		select.distinct(true);
 		select.select(from);
-		select.where(getWhereClause(metadata, cb, from, methodSpecificPredicate));
+		select.where(getWhereClause(metadata, cb, filterer, methodSpecificPredicate));
 		select.orderBy(getSortOrder(metadata, cb, from));
 
 		Query q = em.createQuery(select);
@@ -104,7 +128,15 @@ class ClassDAOImp extends BaseDAO implements ClassDAO {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<ClassView> select = cb.createQuery(ClassView.class);
 		final Root<ClassView> from = select.from(ClassView.class);
+		final SetJoin<ClassView, ClassGradeView> grades = (SetJoin<ClassView, ClassGradeView>) from.<ClassView, ClassGradeView>join("grades", JoinType.LEFT).alias("grades");
+		final SetJoin<ClassView, ClassSubjectView> subjects = (SetJoin<ClassView, ClassSubjectView>) from.<ClassView, ClassSubjectView>join("subjects", JoinType.LEFT).alias("subjects");
+		final SetJoin<ClassView, ClassPeriodView> periods = (SetJoin<ClassView, ClassPeriodView>) from.<ClassView, ClassPeriodView>join("periods", JoinType.LEFT).alias("periods");
+		final SetJoin<ClassView, ClassTermView> terms = (SetJoin<ClassView, ClassTermView>) from.<ClassView, ClassTermView>join("terms", JoinType.LEFT).alias("terms");
 
+		//Add Root Object & Joins to Filterer
+		filterer.addJoins(from, grades, subjects, periods, terms);
+
+		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
 			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
 			cb.equal(from.get(FIELD_COURSE_ID), refId),
@@ -113,7 +145,7 @@ class ClassDAOImp extends BaseDAO implements ClassDAO {
 
 		select.distinct(true);
 		select.select(from);
-		select.where(getWhereClause(metadata, cb, from, methodSpecificPredicate));
+		select.where(getWhereClause(metadata, cb, filterer, methodSpecificPredicate));
 		select.orderBy(getSortOrder(metadata, cb, from));
 
 		Query q = em.createQuery(select);
@@ -130,7 +162,15 @@ class ClassDAOImp extends BaseDAO implements ClassDAO {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<ClassView> select = cb.createQuery(ClassView.class);
 		final Root<ClassView> from = select.from(ClassView.class);
+		final SetJoin<ClassView, ClassGradeView> grades = (SetJoin<ClassView, ClassGradeView>) from.<ClassView, ClassGradeView>join("grades", JoinType.LEFT).alias("grades");
+		final SetJoin<ClassView, ClassSubjectView> subjects = (SetJoin<ClassView, ClassSubjectView>) from.<ClassView, ClassSubjectView>join("subjects", JoinType.LEFT).alias("subjects");
+		final SetJoin<ClassView, ClassPeriodView> periods = (SetJoin<ClassView, ClassPeriodView>) from.<ClassView, ClassPeriodView>join("periods", JoinType.LEFT).alias("periods");
+		final SetJoin<ClassView, ClassTermView> terms = (SetJoin<ClassView, ClassTermView>) from.<ClassView, ClassTermView>join("terms", JoinType.LEFT).alias("terms");
 
+		//Add Root Object & Joins to Filterer
+		filterer.addJoins(from, grades, subjects, periods, terms);
+
+		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
 			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
 			cb.equal(from.get(FIELD_ORG_ID), refId),
@@ -139,7 +179,7 @@ class ClassDAOImp extends BaseDAO implements ClassDAO {
 
 		select.distinct(true);
 		select.select(from);
-		select.where(getWhereClause(metadata, cb, from, methodSpecificPredicate));
+		select.where(getWhereClause(metadata, cb, filterer, methodSpecificPredicate));
 		select.orderBy(getSortOrder(metadata, cb, from));
 
 		Query q = em.createQuery(select);
@@ -156,18 +196,26 @@ class ClassDAOImp extends BaseDAO implements ClassDAO {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<ClassView> select = cb.createQuery(ClassView.class);
 		final Root<ClassView> from = select.from(ClassView.class);
-		final SetJoin<ClassView, ClassUserView> classUsers = (SetJoin<ClassView, ClassUserView>) from.<ClassView, ClassUserView>join(JOIN_CLASS_USERS, JoinType.LEFT);
+		final SetJoin<ClassView, ClassGradeView> grades = (SetJoin<ClassView, ClassGradeView>) from.<ClassView, ClassGradeView>join("grades", JoinType.LEFT).alias("grades");
+		final SetJoin<ClassView, ClassSubjectView> subjects = (SetJoin<ClassView, ClassSubjectView>) from.<ClassView, ClassSubjectView>join("subjects", JoinType.LEFT).alias("subjects");
+		final SetJoin<ClassView, ClassPeriodView> periods = (SetJoin<ClassView, ClassPeriodView>) from.<ClassView, ClassPeriodView>join("periods", JoinType.LEFT).alias("periods");
+		final SetJoin<ClassView, ClassTermView> terms = (SetJoin<ClassView, ClassTermView>) from.<ClassView, ClassTermView>join("terms", JoinType.LEFT).alias("terms");
+		final SetJoin<ClassView, ClassUserView> users = (SetJoin<ClassView, ClassUserView>) from.<ClassView, ClassUserView>join(JOIN_CLASS_USERS, JoinType.LEFT).alias("users");;
 
+		//Add Root Object & Joins to Filterer
+		filterer.addJoins(from, grades, subjects, periods, terms);
+
+		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
 			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
-			cb.equal(classUsers.get(FIELD_USER_ID), refId),
-			cb.equal(classUsers.get(FIELD_ROLE), "student"),
+			cb.equal(users.get(FIELD_USER_ID), refId),
+			cb.equal(users.get(FIELD_ROLE), "student"),
 			from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 		);
 
 		select.distinct(true);
 		select.select(from);
-		select.where(getWhereClause(metadata, cb, from, methodSpecificPredicate));
+		select.where(getWhereClause(metadata, cb, filterer, methodSpecificPredicate));
 		select.orderBy(getSortOrder(metadata, cb, from));
 
 		Query q = em.createQuery(select);
@@ -184,18 +232,27 @@ class ClassDAOImp extends BaseDAO implements ClassDAO {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<ClassView> select = cb.createQuery(ClassView.class);
 		final Root<ClassView> from = select.from(ClassView.class);
-		final SetJoin<ClassView, ClassUserView> classUsers = (SetJoin<ClassView, ClassUserView>) from.<ClassView, ClassUserView>join(JOIN_CLASS_USERS, JoinType.LEFT);
+		final SetJoin<ClassView, ClassGradeView> grades = (SetJoin<ClassView, ClassGradeView>) from.<ClassView, ClassGradeView>join("grades", JoinType.LEFT).alias("grades");
+		final SetJoin<ClassView, ClassSubjectView> subjects = (SetJoin<ClassView, ClassSubjectView>) from.<ClassView, ClassSubjectView>join("subjects", JoinType.LEFT).alias("subjects");
+		final SetJoin<ClassView, ClassPeriodView> periods = (SetJoin<ClassView, ClassPeriodView>) from.<ClassView, ClassPeriodView>join("periods", JoinType.LEFT).alias("periods");
+		final SetJoin<ClassView, ClassTermView> terms = (SetJoin<ClassView, ClassTermView>) from.<ClassView, ClassTermView>join("terms", JoinType.LEFT).alias("terms");
+		final SetJoin<ClassView, ClassUserView> users = (SetJoin<ClassView, ClassUserView>) from.<ClassView, ClassUserView>join(JOIN_CLASS_USERS, JoinType.LEFT).alias("users");;
+
+		//Add Root Object & Joins to Filterer
+		filterer.addJoins(from, grades, subjects, periods, terms);
+
+		//Define Method Specific Predicates
 
 		final Predicate methodSpecificPredicate = cb.and(
 			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
-			cb.equal(classUsers.get(FIELD_USER_ID), refId),
-			cb.equal(classUsers.get(FIELD_ROLE), "teacher"),
+			cb.equal(users.get(FIELD_USER_ID), refId),
+			cb.equal(users.get(FIELD_ROLE), "teacher"),
 			from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 		);
 
 		select.distinct(true);
 		select.select(from);
-		select.where(getWhereClause(metadata, cb, from, methodSpecificPredicate));
+		select.where(getWhereClause(metadata, cb, filterer, methodSpecificPredicate));
 		select.orderBy(getSortOrder(metadata, cb, from));
 
 		Query q = em.createQuery(select);
@@ -212,17 +269,25 @@ class ClassDAOImp extends BaseDAO implements ClassDAO {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<ClassView> select = cb.createQuery(ClassView.class);
 		final Root<ClassView> from = select.from(ClassView.class);
-		final SetJoin<ClassView, ClassUserView> classUsers = (SetJoin<ClassView, ClassUserView>) from.<ClassView, ClassUserView>join(JOIN_CLASS_USERS, JoinType.LEFT);
+		final SetJoin<ClassView, ClassGradeView> grades = (SetJoin<ClassView, ClassGradeView>) from.<ClassView, ClassGradeView>join("grades", JoinType.LEFT).alias("grades");
+		final SetJoin<ClassView, ClassSubjectView> subjects = (SetJoin<ClassView, ClassSubjectView>) from.<ClassView, ClassSubjectView>join("subjects", JoinType.LEFT).alias("subjects");
+		final SetJoin<ClassView, ClassPeriodView> periods = (SetJoin<ClassView, ClassPeriodView>) from.<ClassView, ClassPeriodView>join("periods", JoinType.LEFT).alias("periods");
+		final SetJoin<ClassView, ClassTermView> terms = (SetJoin<ClassView, ClassTermView>) from.<ClassView, ClassTermView>join("terms", JoinType.LEFT).alias("terms");
+		final SetJoin<ClassView, ClassUserView> users = (SetJoin<ClassView, ClassUserView>) from.<ClassView, ClassUserView>join(JOIN_CLASS_USERS, JoinType.LEFT).alias("users");;
 
+		//Add Root Object & Joins to Filterer
+		filterer.addJoins(from, grades, subjects, periods, terms);
+
+		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
 			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
-			cb.equal(classUsers.get(FIELD_USER_ID), refId),
+			cb.equal(users.get(FIELD_USER_ID), refId),
 			from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 		);
 
 		select.distinct(true);
 		select.select(from);
-		select.where(getWhereClause(metadata, cb, from, methodSpecificPredicate));
+		select.where(getWhereClause(metadata, cb, filterer, methodSpecificPredicate));
 		select.orderBy(getSortOrder(metadata, cb, from));
 
 		Query q = em.createQuery(select);
@@ -239,14 +304,22 @@ class ClassDAOImp extends BaseDAO implements ClassDAO {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<Long> select = cb.createQuery(Long.class);
 		final Root<ClassView> from = select.from(ClassView.class);
+		final SetJoin<ClassView, ClassGradeView> grades = (SetJoin<ClassView, ClassGradeView>) from.<ClassView, ClassGradeView>join("grades", JoinType.LEFT).alias("grades");
+		final SetJoin<ClassView, ClassSubjectView> subjects = (SetJoin<ClassView, ClassSubjectView>) from.<ClassView, ClassSubjectView>join("subjects", JoinType.LEFT).alias("subjects");
+		final SetJoin<ClassView, ClassPeriodView> periods = (SetJoin<ClassView, ClassPeriodView>) from.<ClassView, ClassPeriodView>join("periods", JoinType.LEFT).alias("periods");
+		final SetJoin<ClassView, ClassTermView> terms = (SetJoin<ClassView, ClassTermView>) from.<ClassView, ClassTermView>join("terms", JoinType.LEFT).alias("terms");
 
+		//Add Root Object & Joins to Filterer
+		filterer.addJoins(from, grades, subjects, periods, terms);
+
+		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
-				cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
-				from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
+			from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 		);
 
 		select.select(cb.countDistinct(from));
-		select.where(getWhereClause(metadata, cb, from, methodSpecificPredicate));
+		select.where(getWhereClause(metadata, cb, filterer, methodSpecificPredicate));
 		select.orderBy(getSortOrder(metadata, cb, from));
 		return em.createQuery(select).getSingleResult().intValue();
 	}
@@ -257,15 +330,23 @@ class ClassDAOImp extends BaseDAO implements ClassDAO {
 		final CriteriaQuery<Long> select = cb.createQuery(Long.class);
 		final Root<ClassView> from = select.from(ClassView.class);
 		final SetJoin<ClassView, ClassTermView> classTerms = (SetJoin<ClassView, ClassTermView>) from.<ClassView, ClassTermView>join(JOIN_CLASS_TERMS, JoinType.LEFT);
+		final SetJoin<ClassView, ClassGradeView> grades = (SetJoin<ClassView, ClassGradeView>) from.<ClassView, ClassGradeView>join("grades", JoinType.LEFT).alias("grades");
+		final SetJoin<ClassView, ClassSubjectView> subjects = (SetJoin<ClassView, ClassSubjectView>) from.<ClassView, ClassSubjectView>join("subjects", JoinType.LEFT).alias("subjects");
+		final SetJoin<ClassView, ClassPeriodView> periods = (SetJoin<ClassView, ClassPeriodView>) from.<ClassView, ClassPeriodView>join("periods", JoinType.LEFT).alias("periods");
+		final SetJoin<ClassView, ClassTermView> terms = (SetJoin<ClassView, ClassTermView>) from.<ClassView, ClassTermView>join("terms", JoinType.LEFT).alias("terms");
 
+		//Add Root Object & Joins to Filterer
+		filterer.addJoins(from, grades, subjects, periods, terms);
+
+		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
-				cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
-				cb.equal(classTerms.get(FIELD_TERM_ID), refId),
-				from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
+			cb.equal(classTerms.get(FIELD_TERM_ID), refId),
+			from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 		);
 
 		select.select(cb.countDistinct(from));
-		select.where(getWhereClause(metadata, cb, from, methodSpecificPredicate));
+		select.where(getWhereClause(metadata, cb, filterer, methodSpecificPredicate));
 		select.orderBy(getSortOrder(metadata, cb, from));
 		return em.createQuery(select).getSingleResult().intValue();
 	}
@@ -275,15 +356,23 @@ class ClassDAOImp extends BaseDAO implements ClassDAO {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<Long> select = cb.createQuery(Long.class);
 		final Root<ClassView> from = select.from(ClassView.class);
+		final SetJoin<ClassView, ClassGradeView> grades = (SetJoin<ClassView, ClassGradeView>) from.<ClassView, ClassGradeView>join("grades", JoinType.LEFT).alias("grades");
+		final SetJoin<ClassView, ClassSubjectView> subjects = (SetJoin<ClassView, ClassSubjectView>) from.<ClassView, ClassSubjectView>join("subjects", JoinType.LEFT).alias("subjects");
+		final SetJoin<ClassView, ClassPeriodView> periods = (SetJoin<ClassView, ClassPeriodView>) from.<ClassView, ClassPeriodView>join("periods", JoinType.LEFT).alias("periods");
+		final SetJoin<ClassView, ClassTermView> terms = (SetJoin<ClassView, ClassTermView>) from.<ClassView, ClassTermView>join("terms", JoinType.LEFT).alias("terms");
 
+		//Add Root Object & Joins to Filterer
+		filterer.addJoins(from, grades, subjects, periods, terms);
+
+		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
-				cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
-				cb.equal(from.get(FIELD_COURSE_ID), refId),
-				from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
+			cb.equal(from.get(FIELD_COURSE_ID), refId),
+			from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 		);
 
 		select.select(cb.countDistinct(from));
-		select.where(getWhereClause(metadata, cb, from, methodSpecificPredicate));
+		select.where(getWhereClause(metadata, cb, filterer, methodSpecificPredicate));
 		select.orderBy(getSortOrder(metadata, cb, from));
 		return em.createQuery(select).getSingleResult().intValue();
 	}
@@ -293,15 +382,23 @@ class ClassDAOImp extends BaseDAO implements ClassDAO {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<Long> select = cb.createQuery(Long.class);
 		final Root<ClassView> from = select.from(ClassView.class);
+		final SetJoin<ClassView, ClassGradeView> grades = (SetJoin<ClassView, ClassGradeView>) from.<ClassView, ClassGradeView>join("grades", JoinType.LEFT).alias("grades");
+		final SetJoin<ClassView, ClassSubjectView> subjects = (SetJoin<ClassView, ClassSubjectView>) from.<ClassView, ClassSubjectView>join("subjects", JoinType.LEFT).alias("subjects");
+		final SetJoin<ClassView, ClassPeriodView> periods = (SetJoin<ClassView, ClassPeriodView>) from.<ClassView, ClassPeriodView>join("periods", JoinType.LEFT).alias("periods");
+		final SetJoin<ClassView, ClassTermView> terms = (SetJoin<ClassView, ClassTermView>) from.<ClassView, ClassTermView>join("terms", JoinType.LEFT).alias("terms");
 
+		//Add Root Object & Joins to Filterer
+		filterer.addJoins(from, grades, subjects, periods, terms);
+
+		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
-				cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
-				cb.equal(from.get(FIELD_ORG_ID), refId),
-				from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
+			cb.equal(from.get(FIELD_ORG_ID), refId),
+			from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 		);
 
 		select.select(cb.countDistinct(from));
-		select.where(getWhereClause(metadata, cb, from, methodSpecificPredicate));
+		select.where(getWhereClause(metadata, cb, filterer, methodSpecificPredicate));
 		select.orderBy(getSortOrder(metadata, cb, from));
 		return em.createQuery(select).getSingleResult().intValue();
 	}
@@ -311,17 +408,25 @@ class ClassDAOImp extends BaseDAO implements ClassDAO {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<Long> select = cb.createQuery(Long.class);
 		final Root<ClassView> from = select.from(ClassView.class);
-		final SetJoin<ClassView, ClassUserView> classUsers = (SetJoin<ClassView, ClassUserView>) from.<ClassView, ClassUserView>join(JOIN_CLASS_USERS, JoinType.LEFT);
+		final SetJoin<ClassView, ClassGradeView> grades = (SetJoin<ClassView, ClassGradeView>) from.<ClassView, ClassGradeView>join("grades", JoinType.LEFT).alias("grades");
+		final SetJoin<ClassView, ClassSubjectView> subjects = (SetJoin<ClassView, ClassSubjectView>) from.<ClassView, ClassSubjectView>join("subjects", JoinType.LEFT).alias("subjects");
+		final SetJoin<ClassView, ClassPeriodView> periods = (SetJoin<ClassView, ClassPeriodView>) from.<ClassView, ClassPeriodView>join("periods", JoinType.LEFT).alias("periods");
+		final SetJoin<ClassView, ClassTermView> terms = (SetJoin<ClassView, ClassTermView>) from.<ClassView, ClassTermView>join("terms", JoinType.LEFT).alias("terms");
+		final SetJoin<ClassView, ClassUserView> users = (SetJoin<ClassView, ClassUserView>) from.<ClassView, ClassUserView>join(JOIN_CLASS_USERS, JoinType.LEFT).alias("users");;
 
+		//Add Root Object & Joins to Filterer
+		filterer.addJoins(from, grades, subjects, periods, terms);
+
+		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
-				cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
-				cb.equal(classUsers.get(FIELD_USER_ID), refId),
-				cb.equal(classUsers.get(FIELD_ROLE), "student"),
-				from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
+			cb.equal(users.get(FIELD_USER_ID), refId),
+			cb.equal(users.get(FIELD_ROLE), "student"),
+			from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 		);
 
 		select.select(cb.countDistinct(from));
-		select.where(getWhereClause(metadata, cb, from, methodSpecificPredicate));
+		select.where(getWhereClause(metadata, cb, filterer, methodSpecificPredicate));
 		select.orderBy(getSortOrder(metadata, cb, from));
 		return em.createQuery(select).getSingleResult().intValue();
 	}
@@ -331,17 +436,25 @@ class ClassDAOImp extends BaseDAO implements ClassDAO {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<Long> select = cb.createQuery(Long.class);
 		final Root<ClassView> from = select.from(ClassView.class);
-		final SetJoin<ClassView, ClassUserView> classUsers = (SetJoin<ClassView, ClassUserView>) from.<ClassView, ClassUserView>join(JOIN_CLASS_USERS, JoinType.LEFT);
+		final SetJoin<ClassView, ClassGradeView> grades = (SetJoin<ClassView, ClassGradeView>) from.<ClassView, ClassGradeView>join("grades", JoinType.LEFT).alias("grades");
+		final SetJoin<ClassView, ClassSubjectView> subjects = (SetJoin<ClassView, ClassSubjectView>) from.<ClassView, ClassSubjectView>join("subjects", JoinType.LEFT).alias("subjects");
+		final SetJoin<ClassView, ClassPeriodView> periods = (SetJoin<ClassView, ClassPeriodView>) from.<ClassView, ClassPeriodView>join("periods", JoinType.LEFT).alias("periods");
+		final SetJoin<ClassView, ClassTermView> terms = (SetJoin<ClassView, ClassTermView>) from.<ClassView, ClassTermView>join("terms", JoinType.LEFT).alias("terms");
+		final SetJoin<ClassView, ClassUserView> users = (SetJoin<ClassView, ClassUserView>) from.<ClassView, ClassUserView>join(JOIN_CLASS_USERS, JoinType.LEFT).alias("users");;
 
+		//Add Root Object & Joins to Filterer
+		filterer.addJoins(from, grades, subjects, periods, terms);
+
+		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
-				cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
-				cb.equal(classUsers.get(FIELD_USER_ID), refId),
-				cb.equal(classUsers.get(FIELD_ROLE), "teacher"),
-				from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
+			cb.equal(users.get(FIELD_USER_ID), refId),
+			cb.equal(users.get(FIELD_ROLE), "teacher"),
+			from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 		);
 
 		select.select(cb.countDistinct(from));
-		select.where(getWhereClause(metadata, cb, from, methodSpecificPredicate));
+		select.where(getWhereClause(metadata, cb, filterer, methodSpecificPredicate));
 		select.orderBy(getSortOrder(metadata, cb, from));
 		return em.createQuery(select).getSingleResult().intValue();
 	}
@@ -351,16 +464,24 @@ class ClassDAOImp extends BaseDAO implements ClassDAO {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<Long> select = cb.createQuery(Long.class);
 		final Root<ClassView> from = select.from(ClassView.class);
-		final SetJoin<ClassView, ClassUserView> classUsers = (SetJoin<ClassView, ClassUserView>) from.<ClassView, ClassUserView>join(JOIN_CLASS_USERS, JoinType.LEFT);
+		final SetJoin<ClassView, ClassGradeView> grades = (SetJoin<ClassView, ClassGradeView>) from.<ClassView, ClassGradeView>join("grades", JoinType.LEFT).alias("grades");
+		final SetJoin<ClassView, ClassSubjectView> subjects = (SetJoin<ClassView, ClassSubjectView>) from.<ClassView, ClassSubjectView>join("subjects", JoinType.LEFT).alias("subjects");
+		final SetJoin<ClassView, ClassPeriodView> periods = (SetJoin<ClassView, ClassPeriodView>) from.<ClassView, ClassPeriodView>join("periods", JoinType.LEFT).alias("periods");
+		final SetJoin<ClassView, ClassTermView> terms = (SetJoin<ClassView, ClassTermView>) from.<ClassView, ClassTermView>join("terms", JoinType.LEFT).alias("terms");
+		final SetJoin<ClassView, ClassUserView> users = (SetJoin<ClassView, ClassUserView>) from.<ClassView, ClassUserView>join(JOIN_CLASS_USERS, JoinType.LEFT).alias("users");;
 
+		//Add Root Object & Joins to Filterer
+		filterer.addJoins(from, grades, subjects, periods, terms);
+
+		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
-				cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
-				cb.equal(classUsers.get(FIELD_USER_ID), refId),
-				from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
+			cb.equal(users.get(FIELD_USER_ID), refId),
+			from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 		);
 
 		select.select(cb.countDistinct(from));
-		select.where(getWhereClause(metadata, cb, from, methodSpecificPredicate));
+		select.where(getWhereClause(metadata, cb, filterer, methodSpecificPredicate));
 		select.orderBy(getSortOrder(metadata, cb, from));
 		return em.createQuery(select).getSingleResult().intValue();
 	}

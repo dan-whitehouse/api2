@@ -1,6 +1,7 @@
 package org.ricone.api.core.model.view;
 
 
+import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Immutable;
@@ -13,6 +14,7 @@ import java.time.LocalDate;
 @IdClass(EnrollmentComposite.class)
 @Immutable @Entity @Table(name = "enrollmentview")
 @Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+@BatchSize(size = 100)
 public class EnrollmentView implements Serializable {
 	private static final long serialVersionUID = -1680434938122940174L;
 

@@ -14,12 +14,10 @@ public class LeaTelephone implements java.io.Serializable {
 	private static final long serialVersionUID = -2033689116210795367L;
 
 	@Column(name = "LEATelephoneRefId", unique = true, nullable = false, length = 64)
-	@Id
-    private String leaTelephoneRefId;
+	@Id private String leaTelephoneRefId;
 
 	@Column(name = "LEATelephoneSchoolYear", length = 6)
-	@Id
-    private Integer leaTelephoneSchoolYear;
+	@Id private Integer leaTelephoneSchoolYear;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumns({ @JoinColumn(name = "LEARefId", referencedColumnName = "leaRefId", nullable = false), @JoinColumn(name = "LEASchoolYear", referencedColumnName = "leaSchoolYear", nullable = false) })

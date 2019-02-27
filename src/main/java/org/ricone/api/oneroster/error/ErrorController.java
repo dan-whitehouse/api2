@@ -6,6 +6,7 @@ import org.apache.logging.log4j.Logger;
 import org.ricone.api.oneroster.error.exception.*;
 import org.ricone.api.oneroster.model.*;
 import org.ricone.api.oneroster.model.Error;
+import org.ricone.error.NoContentException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,10 +17,14 @@ import javax.servlet.http.HttpServletResponse;
 @RestController("OneRosterErrorController")
 public class ErrorController {
     private Logger logger = LogManager.getLogger(this.getClass());
-    /*
-        20X
-        204 - Handled In GlobalController
-    */
+
+    /* 20X */
+    @ResponseBody
+    @ExceptionHandler(NoContentException.class)
+    @ResponseStatus(value = HttpStatus.NO_CONTENT) //204
+    public void noContent(HttpServletRequest request, HttpServletResponse response, Exception ex) {
+        //Do nothing
+    }
 
     /* 40X */
     @ResponseBody
@@ -58,6 +63,20 @@ public class ErrorController {
         errorResponse.getErrors().add(error);
         return errorResponse;
     }
+
+    @ResponseBody
+    @ExceptionHandler({InvalidDataException.class})
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST) //400
+    private ErrorResponse invalidDataException(HttpServletRequest request, HttpServletResponse response, Exception ex) {
+        /*
+            //TODO: Not sure what the rules of using this exception are, but it seems fitting when you can't filter on a specific field.
+        */
+        Error error = new Error(Severity.error, CodeMajor.failure, CodeMinor.invalid_data, ex.getMessage());
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.getErrors().add(error);
+        return errorResponse;
+    }
+
 
     @ResponseBody
     @ExceptionHandler({InvalidPagingException.class})
@@ -113,6 +132,9 @@ public class ErrorController {
         /*
             Avoid - Use only if there is a catastrophic error and there is not a more appropriate code.
         */
+
+        ex.printStackTrace();
+
         Error error = new Error(Severity.error, CodeMajor.failure, null, "Internal Server Error");
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.getErrors().add(error);

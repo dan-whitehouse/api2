@@ -1,54 +1,40 @@
 package org.ricone.api.oneroster.request.courses;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.ricone.api.oneroster.component.BaseFilterer;
+import org.ricone.api.oneroster.error.exception.InvalidDataException;
 import org.ricone.api.oneroster.error.exception.InvalidFilterFieldException;
 import org.springframework.stereotype.Component;
 
-import javax.persistence.criteria.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import javax.persistence.criteria.Path;
 
 @Component("OneRoster:Courses:CourseFilterer")
-public class CourseFilterer {
-	private Logger logger = LogManager.getLogger(this.getClass());
-	private Root from;
-	private List<Join> joinList = new ArrayList<>();
-
+public class CourseFilterer extends BaseFilterer {
 	public CourseFilterer() {
 	}
 
-	void addJoins(Root<?> from, Join... joins) {
-		this.from = from;
-		Collections.addAll(joinList, joins);
-	}
-
-	public Path getPath(String field) throws InvalidFilterFieldException {
+	@Override
+	public Path getPath(String field) throws InvalidFilterFieldException, InvalidDataException {
 		switch(field) {
+			case "metadata.ricone.schoolYear": return from.get("sourcedSchoolYear");
+			case "metadata.ricone.districtId": return from.get("districtId");
 			case "sourcedId": return from.get(field);
-			case "status": return from.get(field);
+			case "status": return null;
 			case "title": return from.get(field);
-			case "schoolYear.href": return null;
+
 			case "schoolYear.sourcedId": return from.get("academicSessionId");
-			case "schoolYear.type": return null;
+			case "schoolYear.href": throw new InvalidDataException(buildInvalidDataException(field));
+			case "schoolYear.type": throw new InvalidDataException(buildInvalidDataException(field));
+
 			case "courseCode": return from.get(field);
 			case "grades": return getJoin("grades").get("gradeLevel");
 			case "subjects": return getJoin("subjects").get("subject");
-			case "org.href": return null;
-			case "org.sourcedId": return from.get("academicSessionId");
-			case "org.type": return null;
 			case "subjectCodes": return getJoin("subjects").get("subjectCode");
+
+			case "org.sourcedId": return from.get("orgId");
+			case "org.href": throw new InvalidDataException(buildInvalidDataException(field));
+			case "org.type": throw new InvalidDataException(buildInvalidDataException(field));
 			default: break;
 		}
 		throw new InvalidFilterFieldException("The filter parameter [" + field + "] is a non-existent field");
-	}
-
-	private Join getJoin(String field) {
-		return joinList.stream().filter(join -> field.equalsIgnoreCase(join.getAlias())).findFirst().get();
-	}
-
-	public Root getFrom() {
-		return from;
 	}
 }

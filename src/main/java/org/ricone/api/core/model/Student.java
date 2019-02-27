@@ -8,6 +8,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -22,16 +23,15 @@ import java.util.Set;
 @Table(name = "student")
 @IdClass(StudentComposite.class)
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class Student implements java.io.Serializable {
+@BatchSize(size = 100)
+public class Student implements Serializable {
     private static final long serialVersionUID = -8205131726629327272L;
 
-    @Id
     @Column(name = "StudentRefId", unique = true, nullable = false, length = 64)
-    private String studentRefId;
+    @Id private String studentRefId;
 
-    @Id
     @Column(name = "StudentSchoolYear", nullable = false, length = 6)
-    private Integer studentSchoolYear;
+    @Id private Integer studentSchoolYear;
 
     @Column(name = "FirstName", length = 35)
     private String firstName;
@@ -84,64 +84,52 @@ public class Student implements java.io.Serializable {
     private Date projectedGraduationDate;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "student")
-    @Fetch(FetchMode.SELECT)
-    @BatchSize(size = 20)
-    private Set<StudentRace> studentRaces = new HashSet<StudentRace>(0);
+    @Fetch(FetchMode.SELECT) @BatchSize(size = 100)
+    private Set<StudentRace> studentRaces = new HashSet<>(0);
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "student")
-    @Fetch(FetchMode.SELECT)
-    @BatchSize(size = 20)
-    private Set<StudentLanguage> studentLanguages = new HashSet<StudentLanguage>(0);
+    @Fetch(FetchMode.SELECT) @BatchSize(size = 100)
+    private Set<StudentLanguage> studentLanguages = new HashSet<>(0);
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "student")
-    @Fetch(FetchMode.SELECT)
-    @BatchSize(size = 20)
-    private Set<StudentOtherName> studentOtherNames = new HashSet<StudentOtherName>(0);
+    @Fetch(FetchMode.SELECT) @BatchSize(size = 100)
+    private Set<StudentOtherName> studentOtherNames = new HashSet<>(0);
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "student")
-    @Fetch(FetchMode.SELECT)
-    @BatchSize(size = 20)
-    private Set<StudentContactRelationship> studentContactRelationships = new HashSet<StudentContactRelationship>(0);
+    @Fetch(FetchMode.SELECT) @BatchSize(size = 100)
+    private Set<StudentContactRelationship> studentContactRelationships = new HashSet<>(0);
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "student")
-    @Fetch(FetchMode.SELECT)
-    @BatchSize(size = 20)
-    private Set<StudentAcademicRecord> studentAcademicRecords = new HashSet<StudentAcademicRecord>(0);
+    @Fetch(FetchMode.SELECT) @BatchSize(size = 100)
+    private Set<StudentAcademicRecord> studentAcademicRecords = new HashSet<>(0);
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "student")
-    @Fetch(FetchMode.SELECT)
-    @BatchSize(size = 20)
-    private Set<StudentCourseSection> studentCourseSections = new HashSet<StudentCourseSection>(0);
+    @Fetch(FetchMode.SELECT) @BatchSize(size = 100)
+    private Set<StudentCourseSection> studentCourseSections = new HashSet<>(0);
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "student", cascade = CascadeType.ALL)
-    @Fetch(FetchMode.SELECT)
-    @BatchSize(size = 20)
-    private Set<StudentIdentifier> studentIdentifiers = new HashSet<StudentIdentifier>(0);
+    @Fetch(FetchMode.SELECT) @BatchSize(size = 100)
+    private Set<StudentIdentifier> studentIdentifiers = new HashSet<>(0);
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "student")
-    @Fetch(FetchMode.SELECT)
-    @BatchSize(size = 20)
+    @Fetch(FetchMode.SELECT) @BatchSize(size = 100)
     private Set<StudentHealth> studentHealths = new HashSet<StudentHealth>(0);
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "student")
-    @Fetch(FetchMode.SELECT)
-    @BatchSize(size = 20)
-    private Set<StudentEnrollment> studentEnrollments = new HashSet<StudentEnrollment>(0);
+    @Fetch(FetchMode.SELECT) @BatchSize(size = 100)
+    private Set<StudentEnrollment> studentEnrollments = new HashSet<>(0);
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "student")
-    @Fetch(FetchMode.SELECT)
-    @BatchSize(size = 20)
-    private Set<StudentTelephone> studentTelephones = new HashSet<StudentTelephone>(0);
+    @Fetch(FetchMode.SELECT) @BatchSize(size = 100)
+    private Set<StudentTelephone> studentTelephones = new HashSet<>(0);
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "student")
-    @Fetch(FetchMode.SELECT)
-    @BatchSize(size = 20)
-    private Set<StudentEmail> studentEmails = new HashSet<StudentEmail>(0);
+    @Fetch(FetchMode.SELECT) @BatchSize(size = 100)
+    private Set<StudentEmail> studentEmails = new HashSet<>(0);
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "student")
-    @Fetch(FetchMode.SELECT)
-    @BatchSize(size = 20)
-    private Set<StudentAddress> studentAddresses = new HashSet<StudentAddress>(0);
+    @Fetch(FetchMode.SELECT) @BatchSize(size = 100)
+    private Set<StudentAddress> studentAddresses = new HashSet<>(0);
 
     public Student() {
     }

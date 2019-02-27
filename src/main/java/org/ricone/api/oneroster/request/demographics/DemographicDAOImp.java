@@ -3,8 +3,9 @@ package org.ricone.api.oneroster.request.demographics;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ricone.api.core.model.view.DemographicView;
-import org.ricone.api.oneroster.component.BaseDAO;
+import org.ricone.api.oneroster.component.BaseDAOTest;
 import org.ricone.api.oneroster.component.ControllerData;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -19,16 +20,21 @@ import java.util.List;
 
 @Repository("OneRoster:Demographics:DemographicDAO")
 @SuppressWarnings({"unchecked", "unused"})
-class DemographicDAOImp extends BaseDAO implements DemographicDAO {
+class DemographicDAOImp extends BaseDAOTest implements DemographicDAO {
 	@PersistenceContext private EntityManager em;
+	@Autowired private DemographicFilterer filterer;
 	private Logger logger = LogManager.getLogger(DemographicDAOImp.class);
 
 	@Override
-	public DemographicView getDemographic(ControllerData metadata, String refId) {
+	public DemographicView getDemographic(ControllerData metadata, String refId) throws Exception {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<DemographicView> select = cb.createQuery(DemographicView.class);
 		final Root<DemographicView> from = select.from(DemographicView.class);
 
+		//Add Root Object & Joins to Filterer
+		filterer.addJoins(from);
+
+		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
 			cb.equal(from.get(PRIMARY_KEY), refId),
 			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
@@ -37,7 +43,7 @@ class DemographicDAOImp extends BaseDAO implements DemographicDAO {
 
 		select.distinct(true);
 		select.select(from);
-		select.where(getWhereClause(metadata, cb, from, methodSpecificPredicate));
+		select.where(getWhereClause(metadata, cb, filterer, methodSpecificPredicate));
 
 		Query q = em.createQuery(select);
 		try {
@@ -48,11 +54,15 @@ class DemographicDAOImp extends BaseDAO implements DemographicDAO {
 	}
 
 	@Override
-	public List<DemographicView> getAllDemographics(ControllerData metadata) {
+	public List<DemographicView> getAllDemographics(ControllerData metadata) throws Exception {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<DemographicView> select = cb.createQuery(DemographicView.class);
 		final Root<DemographicView> from = select.from(DemographicView.class);
 
+		//Add Root Object & Joins to Filterer
+		filterer.addJoins(from);
+
+		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
 			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
 			from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
@@ -60,7 +70,7 @@ class DemographicDAOImp extends BaseDAO implements DemographicDAO {
 
 		select.distinct(true);
 		select.select(from);
-		select.where(getWhereClause(metadata, cb, from, methodSpecificPredicate));
+		select.where(getWhereClause(metadata, cb, filterer, methodSpecificPredicate));
 		select.orderBy(getSortOrder(metadata, cb, from));
 
 		Query q = em.createQuery(select);
@@ -73,18 +83,22 @@ class DemographicDAOImp extends BaseDAO implements DemographicDAO {
 	}
 
 	@Override
-	public int countAllDemographics(ControllerData metadata) {
+	public int countAllDemographics(ControllerData metadata) throws Exception {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<Long> select = cb.createQuery(Long.class);
 		final Root<DemographicView> from = select.from(DemographicView.class);
 
+		//Add Root Object & Joins to Filterer
+		filterer.addJoins(from);
+
+		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
 			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
 			from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 		);
 
 		select.select(cb.countDistinct(from));
-		select.where(getWhereClause(metadata, cb, from, methodSpecificPredicate));
+		select.where(getWhereClause(metadata, cb, filterer, methodSpecificPredicate));
 		select.orderBy(getSortOrder(metadata, cb, from));
 		return em.createQuery(select).getSingleResult().intValue();
 	}

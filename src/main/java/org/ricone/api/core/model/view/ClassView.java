@@ -16,6 +16,7 @@ import java.util.Set;
 @IdClass(SourcedComposite.class)
 @Immutable @Entity @Table(name = "classview")
 @Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+@BatchSize(size = 100)
 public class ClassView implements Serializable {
 	private static final long serialVersionUID = -1680434938122940174L;
 
@@ -41,11 +42,11 @@ public class ClassView implements Serializable {
 	private String location;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "classView")
-	@Fetch(FetchMode.SELECT) @BatchSize(size = 20)
+	@Fetch(FetchMode.SELECT) @BatchSize(size = 100)
 	private Set<ClassGradeView> grades = new HashSet<>(0);
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "classView")
-	@Fetch(FetchMode.SELECT) @BatchSize(size = 20)
+	@Fetch(FetchMode.SELECT) @BatchSize(size = 100)
 	private Set<ClassSubjectView> subjects = new HashSet<>(0);
 
 	@Column(name = "CourseId")
@@ -61,15 +62,15 @@ public class ClassView implements Serializable {
 	private Integer orgSchoolYear;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "classView")
-	@Fetch(FetchMode.SELECT) @BatchSize(size = 20)
+	@Fetch(FetchMode.SELECT) @BatchSize(size = 100)
 	private Set<ClassTermView> terms = new HashSet<>(0);
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "classView")
-	@Fetch(FetchMode.SELECT) @BatchSize(size = 20)
+	@Fetch(FetchMode.SELECT) @BatchSize(size = 100)
 	private Set<ClassPeriodView> periods = new HashSet<>(0);
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "classView")
-	@Fetch(FetchMode.SELECT) @BatchSize(size = 20)
+	@Fetch(FetchMode.SELECT) @BatchSize(size = 100)
 	private Set<ClassUserView> users = new HashSet<>(0);
 
 	public ClassView() {

@@ -30,4 +30,4 @@ union all
 )
 order by SourcedId, SourcedSchoolYear;
 
-select * from UserAgentView;
+#select * from UserAgentView;

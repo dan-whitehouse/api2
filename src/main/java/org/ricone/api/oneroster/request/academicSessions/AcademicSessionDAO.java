@@ -9,21 +9,21 @@ import java.util.List;
 
 interface AcademicSessionDAO {
 
-	AcademicSessionView getAcademicSession(ControllerData metadata, String refId);
+	AcademicSessionView getAcademicSession(ControllerData metadata, String refId) throws Exception;
 
-	List<AcademicSessionView> getAllAcademicSessions(ControllerData metadata);
+	List<AcademicSessionView> getAllAcademicSessions(ControllerData metadata) throws Exception;
 
-	AcademicSessionView getCalendar(ControllerData metadata, String refId);
+	AcademicSessionView getCalendar(ControllerData metadata, String refId) throws Exception;
 
-	List<AcademicSessionView> getAllCalendars(ControllerData metadata);
+	List<AcademicSessionView> getAllCalendars(ControllerData metadata) throws Exception;
 
-	AcademicSessionView getTerm(ControllerData metadata, String refId);
+	AcademicSessionView getTerm(ControllerData metadata, String refId) throws Exception;
 
-	List<AcademicSessionView> getAllTerms(ControllerData metadata);
+	List<AcademicSessionView> getAllTerms(ControllerData metadata) throws Exception;
 
-	int countAllAcademicSessions(ControllerData metadata);
+	int countAllAcademicSessions(ControllerData metadata) throws Exception;
 
-	int countAllCalendars(ControllerData metadata);
+	int countAllCalendars(ControllerData metadata) throws Exception;
 
-	int countAllTerms(ControllerData metadata);
+	int countAllTerms(ControllerData metadata) throws Exception;
 }

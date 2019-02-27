@@ -36,4 +36,4 @@ union all
 )
 order by SourcedId, SourcedSchoolYear;
 
-select * from UserClassView;
+#select * from UserClassView;

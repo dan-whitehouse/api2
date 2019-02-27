@@ -2,6 +2,7 @@ package org.ricone.api.oneroster.component;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.ricone.api.oneroster.error.exception.InvalidFilterFieldException;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Order;
@@ -30,7 +31,7 @@ public abstract class BaseDAO {
     protected static final String JOIN_CLASS_TERMS = "terms";
     protected static final String JOIN_CLASS_USERS = "users";
 
-    protected Predicate[] getWhereClause(ControllerData metadata, CriteriaBuilder cb, Root from, Predicate methodSpecificPredicate) {
+    protected Predicate[] getWhereClause(ControllerData metadata, CriteriaBuilder cb, Root from, Predicate methodSpecificPredicate) throws InvalidFilterFieldException {
         final List<Predicate> predicates = new ArrayList<>();
         if(metadata.getFiltering().isFiltered()) {
             predicates.add(methodSpecificPredicate);

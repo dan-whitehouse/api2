@@ -3,6 +3,7 @@ package org.ricone.api.oneroster.component;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.ricone.api.oneroster.error.exception.InvalidFilterFieldException;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Path;
@@ -47,7 +48,7 @@ public class FilteringData {
 		and that there is only one such operator used in any filter i.e. a single 'AND' or a single 'OR' in the filter. A single white space must
 		occur before and after the parameter.
 	 */
-	Predicate getFiltering(CriteriaBuilder cb, Root from) {
+	Predicate getFiltering(CriteriaBuilder cb, Root from) throws InvalidFilterFieldException {
 		buildPredicates(cb, from);
 
 		//if filter contains AND or OR, load in the predicates we created
@@ -64,7 +65,7 @@ public class FilteringData {
 		return wrapper;
 	}
 
-	private void buildPredicates(CriteriaBuilder cb, Root from) {
+	private void buildPredicates(CriteriaBuilder cb, Root from) throws InvalidFilterFieldException {
 		if(isAnd()) {
 			String[] segments = StringUtils.split(filter, LOGICAL_AND);
 			for(String segment : segments) {
@@ -82,25 +83,15 @@ public class FilteringData {
 		}
 	}
 
-	private void buildPredicate(CriteriaBuilder cb, Root from, String segment) {
+	private void buildPredicate(CriteriaBuilder cb, Root from, String segment) throws InvalidFilterFieldException {
 		Path path; //TODO - At the moment, I only select from the From table. Do something to determine the table based on the field.
 		String value = StringUtils.substringBetween(segment, "'"); //All values must be wrapped in single quotes
-		if(isEqual(segment)) {
-			path = from.get(StringUtils.substringBefore(segment, PREDICATE_EQ));
-			if(StringUtils.contains(value, ",")) {
-				String[] valueSegments = StringUtils.split(value, ",");
-				List<Predicate> p = new ArrayList<>();
-				for(String valueSegment : valueSegments) {
-					p.add(cb.equal(path, valueSegment));
-				}
-				Predicate and = cb.and(p.toArray(new Predicate[0]));
-				predicates.add(and);
-			}
-			else {
-				predicates.add(cb.equal(path, value));
-			}
+
+		if(StringUtils.isBlank(value)) {
+			throw new InvalidFilterFieldException("The filter parameter value is missing single quotes, or is blank");
 		}
-		else if(isNotEqual(segment)) {
+
+		if(isNotEqual(segment)) {
 			path = from.get(StringUtils.substringBefore(segment, PREDICATE_NEQ));
 			predicates.add(cb.notEqual(path, value));
 		}
@@ -119,6 +110,21 @@ public class FilteringData {
 		else if(isLessThan(segment)) {
 			path = from.get(StringUtils.substringBefore(segment, PREDICATE_LT));
 			predicates.add(cb.lessThan(path, value));
+		}
+		else if(isEqual(segment)) {
+			path = from.get(StringUtils.substringBefore(segment, PREDICATE_EQ));
+			if(StringUtils.contains(value, ",")) {
+				String[] valueSegments = StringUtils.split(value, ",");
+				List<Predicate> p = new ArrayList<>();
+				for(String valueSegment : valueSegments) {
+					p.add(cb.equal(path, valueSegment));
+				}
+				Predicate and = cb.and(p.toArray(new Predicate[0]));
+				predicates.add(and);
+			}
+			else {
+				predicates.add(cb.equal(path, value));
+			}
 		}
 		else if(isContains(segment)) {
 			path = from.get(StringUtils.substringBefore(segment, PREDICATE_CON));

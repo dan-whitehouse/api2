@@ -13,4 +13,4 @@ CREATE VIEW UserGradeView AS
 order by SourcedId, SourcedSchoolYear;
 
 
-select * from UserGradeView;
+#select * from UserGradeView;

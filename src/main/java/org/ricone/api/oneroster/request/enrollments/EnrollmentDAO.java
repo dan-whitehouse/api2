@@ -6,17 +6,17 @@ import org.ricone.api.oneroster.component.ControllerData;
 import java.util.List;
 
 interface EnrollmentDAO {
-	EnrollmentView getEnrollment(ControllerData metadata, String refId);
+	EnrollmentView getEnrollment(ControllerData metadata, String refId) throws Exception;
 
-	List<EnrollmentView> getAllEnrollments(ControllerData metadata);
+	List<EnrollmentView> getAllEnrollments(ControllerData metadata) throws Exception;
 
-	List<EnrollmentView> getEnrollmentsForSchool(ControllerData metadata, String refId);
+	List<EnrollmentView> getEnrollmentsForSchool(ControllerData metadata, String refId) throws Exception;
 
-	List<EnrollmentView> getEnrollmentsForClassInSchool(ControllerData metadata, String schoolId, String classId);
+	List<EnrollmentView> getEnrollmentsForClassInSchool(ControllerData metadata, String schoolId, String classId) throws Exception;
 
-	int countAllEnrollments(ControllerData metadata);
+	int countAllEnrollments(ControllerData metadata) throws Exception;
 
-	int countEnrollmentsForSchool(ControllerData metadata, String refId);
+	int countEnrollmentsForSchool(ControllerData metadata, String refId) throws Exception ;
 
-	int countEnrollmentsForClassInSchool(ControllerData metadata, String schoolId, String classId);
+	int countEnrollmentsForClassInSchool(ControllerData metadata, String schoolId, String classId) throws Exception;
 }

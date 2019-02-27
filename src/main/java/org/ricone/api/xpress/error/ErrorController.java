@@ -15,10 +15,13 @@ import javax.servlet.http.HttpServletResponse;
 @RestController("xPressErrorController")
 @ControllerAdvice(basePackages = "org.ricone.api.xpress")
 public class ErrorController {
-    /*
-        20X
-        204 - Handled In GlobalController
-    */
+    /* 20X */
+    @ResponseBody
+    @ExceptionHandler(NoContentException.class)
+    @ResponseStatus(value = HttpStatus.NO_CONTENT) //204
+    public void noContent(HttpServletRequest request, HttpServletResponse response, Exception ex) {
+        //Do nothing
+    }
 
     /* 40X */
     @ResponseBody

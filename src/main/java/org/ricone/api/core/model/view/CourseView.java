@@ -15,6 +15,7 @@ import java.util.Set;
 @IdClass(SourcedComposite.class)
 @Immutable @Entity @Table(name = "courseview")
 @Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+@BatchSize(size = 100)
 public class CourseView implements Serializable {
 	private static final long serialVersionUID = -1680434938122940174L;
 
@@ -46,11 +47,11 @@ public class CourseView implements Serializable {
 	private Integer orgSchoolYear;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "courseView")
-	@Fetch(FetchMode.SELECT) @BatchSize(size = 20)
+	@Fetch(FetchMode.SELECT) @BatchSize(size = 100)
 	private Set<CourseGradeView> grades = new HashSet<>(0);
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "courseView")
-	@Fetch(FetchMode.SELECT) @BatchSize(size = 20)
+	@Fetch(FetchMode.SELECT) @BatchSize(size = 100)
 	private Set<CourseSubjectView> subjects = new HashSet<>(0);
 
 	public CourseView() {

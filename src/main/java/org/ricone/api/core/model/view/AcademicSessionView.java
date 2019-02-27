@@ -15,6 +15,7 @@ import java.util.Set;
 @IdClass(SourcedComposite.class)
 @Immutable @Entity @Table(name = "academicsessionview")
 @Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+@BatchSize(size = 100)
 public class AcademicSessionView implements Serializable {
 	private static final long serialVersionUID = -1680434938122940174L;
 
@@ -49,7 +50,7 @@ public class AcademicSessionView implements Serializable {
 	private Integer parentSchoolYear;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "academicSessionView")
-	@Fetch(FetchMode.SELECT) @BatchSize(size = 20)
+	@Fetch(FetchMode.SELECT) @BatchSize(size = 100)
 	private Set<AcademicSessionChildrenView> children = new HashSet<>(0);
 
 	public AcademicSessionView() {

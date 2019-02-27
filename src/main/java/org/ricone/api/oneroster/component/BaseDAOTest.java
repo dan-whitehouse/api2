@@ -2,6 +2,7 @@ package org.ricone.api.oneroster.component;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.ricone.api.oneroster.error.exception.InvalidDataException;
 import org.ricone.api.oneroster.error.exception.InvalidFilterFieldException;
 import org.ricone.api.oneroster.request.courses.CourseFilterer;
 
@@ -32,7 +33,7 @@ public abstract class BaseDAOTest {
     protected static final String JOIN_CLASS_TERMS = "terms";
     protected static final String JOIN_CLASS_USERS = "users";
 
-    protected Predicate[] getWhereClause(ControllerData metadata, CriteriaBuilder cb, CourseFilterer filterer, Predicate methodSpecificPredicate) throws InvalidFilterFieldException {
+    protected Predicate[] getWhereClause(ControllerData metadata, CriteriaBuilder cb, BaseFilterer filterer, Predicate methodSpecificPredicate) throws InvalidFilterFieldException, InvalidDataException {
         final List<Predicate> predicates = new ArrayList<>();
         if(metadata.getFiltering().isFiltered()) {
             predicates.add(methodSpecificPredicate);

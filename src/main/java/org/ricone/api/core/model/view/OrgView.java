@@ -14,6 +14,7 @@ import java.util.Set;
 
 @Immutable @Entity @Table(name = "orgview")
 @Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+@BatchSize(size = 100)
 public class OrgView implements Serializable {
 	private static final long serialVersionUID = -2620417938122940193L;
 
@@ -60,7 +61,7 @@ public class OrgView implements Serializable {
 	private Integer parentSchoolYear;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "orgView")
-	@Fetch(FetchMode.SELECT) @BatchSize(size = 20)
+	@Fetch(FetchMode.SELECT) @BatchSize(size = 100)
 	private Set<OrgChildrenView> children = new HashSet<>(0);
 
 	public OrgView() {

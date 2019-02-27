@@ -4,8 +4,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ricone.api.core.model.view.OrgChildrenView;
 import org.ricone.api.core.model.view.OrgView;
-import org.ricone.api.oneroster.component.BaseDAO;
+import org.ricone.api.oneroster.component.BaseDAOTest;
 import org.ricone.api.oneroster.component.ControllerData;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -17,8 +18,9 @@ import java.util.List;
 
 @Repository("OneRoster:Orgs:OrgDAO")
 @SuppressWarnings({"unchecked", "unused"})
-class OrgDAOImp extends BaseDAO implements OrgDAO {
+class OrgDAOImp extends BaseDAOTest implements OrgDAO {
 	@PersistenceContext private EntityManager em;
+	@Autowired private OrgFilterer filterer;
 	private Logger logger = LogManager.getLogger(OrgDAOImp.class);
 
 	@Override
@@ -26,8 +28,12 @@ class OrgDAOImp extends BaseDAO implements OrgDAO {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<OrgView> select = cb.createQuery(OrgView.class);
 		final Root<OrgView> from = select.from(OrgView.class);
+		final SetJoin<OrgView, OrgChildrenView> children = (SetJoin<OrgView, OrgChildrenView>) from.<OrgView, OrgChildrenView>join("children", JoinType.LEFT).alias("children");
 
-		//Method Specific Predicate
+		//Add Root Object & Joins to Filterer
+		filterer.addJoins(from, children);
+
+		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
 			cb.equal(from.get(PRIMARY_KEY), refId),
 			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
@@ -36,7 +42,7 @@ class OrgDAOImp extends BaseDAO implements OrgDAO {
 
 		select.distinct(true);
 		select.select(from);
-		select.where(getWhereClause(metadata, cb, from, methodSpecificPredicate));
+		select.where(getWhereClause(metadata, cb, filterer, methodSpecificPredicate));
 
 		Query q = em.createQuery(select);
 		try {
@@ -53,15 +59,18 @@ class OrgDAOImp extends BaseDAO implements OrgDAO {
 		final Root<OrgView> from = select.from(OrgView.class);
 		final SetJoin<OrgView, OrgChildrenView> children = (SetJoin<OrgView, OrgChildrenView>) from.<OrgView, OrgChildrenView>join("children", JoinType.LEFT).alias("children");
 
-		//Method Specific Predicate
+		//Add Root Object & Joins to Filterer
+		filterer.addJoins(from, children);
+
+		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
 			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
 			from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 		);
 
-		select.distinct(false);
+		select.distinct(true);
 		select.select(from);
-		select.where(getWhereClause(metadata, cb, from, methodSpecificPredicate));
+		select.where(getWhereClause(metadata, cb, filterer, methodSpecificPredicate));
 		select.orderBy(getSortOrder(metadata, cb, from));
 
 		//Paging
@@ -79,8 +88,12 @@ class OrgDAOImp extends BaseDAO implements OrgDAO {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<OrgView> select = cb.createQuery(OrgView.class);
 		final Root<OrgView> from = select.from(OrgView.class);
+		final SetJoin<OrgView, OrgChildrenView> children = (SetJoin<OrgView, OrgChildrenView>) from.<OrgView, OrgChildrenView>join("children", JoinType.LEFT).alias("children");
 
-		//Method Specific Predicate
+		//Add Root Object & Joins to Filterer
+		filterer.addJoins(from, children);
+
+		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
 			cb.equal(from.get(PRIMARY_KEY), refId),
 			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
@@ -90,7 +103,7 @@ class OrgDAOImp extends BaseDAO implements OrgDAO {
 
 		select.distinct(true);
 		select.select(from);
-		select.where(getWhereClause(metadata, cb, from, methodSpecificPredicate));
+		select.where(getWhereClause(metadata, cb, filterer, methodSpecificPredicate));
 
 		Query q = em.createQuery(select);
 		try {
@@ -105,7 +118,12 @@ class OrgDAOImp extends BaseDAO implements OrgDAO {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<OrgView> select = cb.createQuery(OrgView.class);
 		final Root<OrgView> from = select.from(OrgView.class);
+		final SetJoin<OrgView, OrgChildrenView> children = (SetJoin<OrgView, OrgChildrenView>) from.<OrgView, OrgChildrenView>join("children", JoinType.LEFT).alias("children");
 
+		//Add Root Object & Joins to Filterer
+		filterer.addJoins(from, children);
+
+		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
 			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
 			cb.equal(from.get(FIELD_TYPE), "school"),
@@ -114,7 +132,7 @@ class OrgDAOImp extends BaseDAO implements OrgDAO {
 
 		select.distinct(true);
 		select.select(from);
-		select.where(getWhereClause(metadata, cb, from, methodSpecificPredicate));
+		select.where(getWhereClause(metadata, cb, filterer, methodSpecificPredicate));
 		select.orderBy(getSortOrder(metadata, cb, from));
 
 		Query q = em.createQuery(select);
@@ -133,15 +151,19 @@ class OrgDAOImp extends BaseDAO implements OrgDAO {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<Long> select = cb.createQuery(Long.class);
 		final Root<OrgView> from = select.from(OrgView.class);
+		final SetJoin<OrgView, OrgChildrenView> children = (SetJoin<OrgView, OrgChildrenView>) from.<OrgView, OrgChildrenView>join("children", JoinType.LEFT).alias("children");
 
-		//Method Specific Predicate
+		//Add Root Object & Joins to Filterer
+		filterer.addJoins(from, children);
+
+		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
 			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
 			from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 		);
 
 		select.select(cb.countDistinct(from));
-		select.where(getWhereClause(metadata, cb, from, methodSpecificPredicate));
+		select.where(getWhereClause(metadata, cb, filterer, methodSpecificPredicate));
 		select.orderBy(getSortOrder(metadata, cb, from));
 		return em.createQuery(select).getSingleResult().intValue();
 	}
@@ -151,7 +173,12 @@ class OrgDAOImp extends BaseDAO implements OrgDAO {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<Long> select = cb.createQuery(Long.class);
 		final Root<OrgView> from = select.from(OrgView.class);
+		final SetJoin<OrgView, OrgChildrenView> children = (SetJoin<OrgView, OrgChildrenView>) from.<OrgView, OrgChildrenView>join("children", JoinType.LEFT).alias("children");
 
+		//Add Root Object & Joins to Filterer
+		filterer.addJoins(from, children);
+
+		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
 			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
 			cb.equal(from.get(FIELD_TYPE), "school"),
@@ -159,7 +186,7 @@ class OrgDAOImp extends BaseDAO implements OrgDAO {
 		);
 
 		select.select(cb.countDistinct(from));
-		select.where(getWhereClause(metadata, cb, from, methodSpecificPredicate));
+		select.where(getWhereClause(metadata, cb, filterer, methodSpecificPredicate));
 		select.orderBy(getSortOrder(metadata, cb, from));
 		return em.createQuery(select).getSingleResult().intValue();
 	}

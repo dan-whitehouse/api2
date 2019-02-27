@@ -8,6 +8,7 @@ import org.ricone.api.core.model.composite.LeaComposite;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,7 +16,8 @@ import java.util.Set;
 @Table(name = "lea")
 @IdClass(LeaComposite.class)
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class Lea implements java.io.Serializable {
+@BatchSize(size = 100)
+public class Lea implements Serializable {
 	private static final long serialVersionUID = -2620417938122940193L;
 
 	@Column(name = "LEARefId", unique = true, nullable = false, length = 64)
@@ -64,12 +66,12 @@ public class Lea implements java.io.Serializable {
 	private String countryCode;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "lea")
-	@Fetch(FetchMode.SELECT) @BatchSize(size = 20)
-	private Set<School> schools = new HashSet<School>(0);
+	@Fetch(FetchMode.SELECT) @BatchSize(size = 100)
+	private Set<School> schools = new HashSet<>(0);
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "lea")
-	@Fetch(FetchMode.SELECT) @BatchSize(size = 20)
-	private Set<LeaTelephone> leaTelephones = new HashSet<LeaTelephone>(0);
+	@Fetch(FetchMode.SELECT) @BatchSize(size = 100)
+	private Set<LeaTelephone> leaTelephones = new HashSet<>(0);
 
 
 	public Lea() {

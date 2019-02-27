@@ -8,6 +8,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -17,16 +18,15 @@ import java.util.Set;
 @Table(name = "staff")
 @IdClass(StaffComposite.class)
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class Staff implements java.io.Serializable {
+@BatchSize(size = 100)
+public class Staff implements Serializable {
 	private static final long serialVersionUID = 1919054468978898526L;
 	
 	@Column(name = "StaffRefId", unique = true, nullable = false, length = 64)
-	@Id
-    private String staffRefId;
+	@Id private String staffRefId;
 	
 	@Column(name = "StaffSchoolYear", nullable = false, length = 6)
-	@Id
-    private Integer staffSchoolYear;
+	@Id private Integer staffSchoolYear;
 	
 	@Column(name = "FirstName", length = 35)
 	private String firstName;
@@ -63,24 +63,24 @@ public class Staff implements java.io.Serializable {
 	private String type;
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "staff")
-	@Fetch(FetchMode.SELECT) @BatchSize(size = 20)
-	private Set<StaffCourseSection> staffCourseSections = new HashSet<StaffCourseSection>(0);
+	@Fetch(FetchMode.SELECT) @BatchSize(size = 100)
+	private Set<StaffCourseSection> staffCourseSections = new HashSet<>(0);
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "staff", cascade = CascadeType.ALL)
-	@Fetch(FetchMode.SELECT) @BatchSize(size = 20)
-	private Set<StaffIdentifier> staffIdentifiers = new HashSet<StaffIdentifier>(0);
+	@Fetch(FetchMode.SELECT) @BatchSize(size = 100)
+	private Set<StaffIdentifier> staffIdentifiers = new HashSet<>(0);
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "staff")
-	@Fetch(FetchMode.SELECT) @BatchSize(size = 20)
-	private Set<StudentEnrollment> studentEnrollments = new HashSet<StudentEnrollment>(0);
+	@Fetch(FetchMode.SELECT) @BatchSize(size = 100)
+	private Set<StudentEnrollment> studentEnrollments = new HashSet<>(0);
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "staff")
-	@Fetch(FetchMode.SELECT) @BatchSize(size = 20)
-	private Set<StaffEmail> staffEmails = new HashSet<StaffEmail>(0);
+	@Fetch(FetchMode.SELECT) @BatchSize(size = 100)
+	private Set<StaffEmail> staffEmails = new HashSet<>(0);
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "staff")
-	@Fetch(FetchMode.SELECT) @BatchSize(size = 20)
-	private Set<StaffAssignment> staffAssignments = new HashSet<StaffAssignment>(0);
+	@Fetch(FetchMode.SELECT) @BatchSize(size = 100)
+	private Set<StaffAssignment> staffAssignments = new HashSet<>(0);
 
 	public Staff() {
 	}

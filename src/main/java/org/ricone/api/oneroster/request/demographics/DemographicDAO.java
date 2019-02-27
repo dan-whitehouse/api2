@@ -6,9 +6,9 @@ import org.ricone.api.oneroster.component.ControllerData;
 import java.util.List;
 
 interface DemographicDAO {
-	DemographicView getDemographic(ControllerData metadata, String refId);
+	DemographicView getDemographic(ControllerData metadata, String refId) throws Exception;
 
-	List<DemographicView> getAllDemographics(ControllerData metadata);
+	List<DemographicView> getAllDemographics(ControllerData metadata) throws Exception;
 
-	int countAllDemographics(ControllerData metadata);
+	int countAllDemographics(ControllerData metadata) throws Exception;
 }

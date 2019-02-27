@@ -11,22 +11,19 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-//TODO teacher & staff... not sure on JoinColumn name field.
-
 @Entity
 @Table(name = "studentenrollment")
 @IdClass(StudentEnrollmentComposite.class)
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+@BatchSize(size = 100)
 public class StudentEnrollment implements java.io.Serializable {
     private static final long serialVersionUID = -7894349036867529032L;
 
     @Column(name = "StudentEnrollmentRefId", unique = true, nullable = false, length = 64)
-    @Id
-    private String studentEnrollmentRefId;
+    @Id private String studentEnrollmentRefId;
 
     @Column(name = "StudentEnrollmentSchoolYear", nullable = false, length = 6)
-    @Id
-    private Integer studentEnrollmentSchoolYear;
+    @Id private Integer studentEnrollmentSchoolYear;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumns({
@@ -114,9 +111,8 @@ public class StudentEnrollment implements java.io.Serializable {
     private String studentSchoolAssociationRefId;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "studentEnrollment")
-    @Fetch(FetchMode.SELECT)
-    @BatchSize(size = 20)
-    private Set<EntryExitCode> entryExitCodes = new HashSet<EntryExitCode>(0);
+    @Fetch(FetchMode.SELECT) @BatchSize(size = 100)
+    private Set<EntryExitCode> entryExitCodes = new HashSet<>(0);
 
     public StudentEnrollment() {
     }

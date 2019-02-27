@@ -1,15 +1,16 @@
 package org.ricone.api.oneroster.component;
 
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.ricone.api.oneroster.error.exception.InvalidDataException;
 import org.ricone.api.oneroster.error.exception.InvalidFilterFieldException;
-import org.ricone.api.oneroster.request.courses.CourseFilterer;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,24 +50,35 @@ public class FilteringDataTest {
 		and that there is only one such operator used in any filter i.e. a single 'AND' or a single 'OR' in the filter. A single white space must
 		occur before and after the parameter.
 	 */
-	Predicate getFiltering(CriteriaBuilder cb, CourseFilterer filterer) throws InvalidFilterFieldException {
+	Predicate getFiltering(CriteriaBuilder cb, BaseFilterer filterer) throws InvalidFilterFieldException, InvalidDataException {
 		buildPredicates(cb, filterer);
 
 		//if filter contains AND or OR, load in the predicates we created
-		Predicate wrapper = null;
-		if(isAnd()) {
-			wrapper = cb.and(predicates.toArray(new Predicate[0]));
-		}
-		else if(isOr()) {
-			wrapper = cb.or(predicates.toArray(new Predicate[0]));
+		Predicate wrapper;
+
+		logger.debug("predicates: " + predicates);
+
+		if(CollectionUtils.isNotEmpty(predicates)) {
+			if(isAnd()) {
+				wrapper = cb.and(predicates.toArray(new Predicate[0]));
+			}
+			else if(isOr()) {
+				wrapper = cb.or(predicates.toArray(new Predicate[0]));
+			}
+			else {
+				wrapper = predicates.toArray(new Predicate[0])[0]; //Our list will only have 1 thing in it.
+			}
 		}
 		else {
-			wrapper = predicates.toArray(new Predicate[0])[0]; //Our list will only have 1 thing in it.
+			//Because we add whatever is in this wrapper to the DAO, I have to return something so that DAO doesn't receive a null value.
+			// This will add something like where querySpecificPredicates = someValues [and 1 = 1]
+			wrapper = cb.equal(cb.literal(1), 1); //1=1
 		}
+		logger.debug("wrapper: " + wrapper);
 		return wrapper;
 	}
 
-	private void buildPredicates(CriteriaBuilder cb, CourseFilterer filterer) throws InvalidFilterFieldException {
+	private void buildPredicates(CriteriaBuilder cb, BaseFilterer filterer) throws InvalidFilterFieldException, InvalidDataException {
 		if(isAnd()) {
 			String[] segments = StringUtils.split(filter, LOGICAL_AND);
 			for(String segment : segments) {
@@ -84,8 +96,8 @@ public class FilteringDataTest {
 		}
 	}
 
-	private void buildPredicate(CriteriaBuilder cb, CourseFilterer filterer, String segment) throws InvalidFilterFieldException {
-		Path path; //TODO - At the moment, I only select from the From table. Do something to determine the table based on the field.
+	private void buildPredicate(CriteriaBuilder cb, BaseFilterer filterer, String segment) throws InvalidFilterFieldException, InvalidDataException {
+		Path path;
 		String value = StringUtils.substringBetween(segment, "'"); //All values must be wrapped in single quotes
 
 		if(StringUtils.isBlank(value)) {
@@ -100,20 +112,31 @@ public class FilteringDataTest {
 				for(String valueSegment : valueSegments) {
 					p.add(cb.equal(path, valueSegment));
 				}
-				Predicate and = cb.and(p.toArray(new Predicate[0]));
-				predicates.add(and);
+				predicates.add(cb.and(p.toArray(new Predicate[0])));
 			}
 			else {
-				predicates.add(cb.equal(path, value));
+				if(path.getJavaType().equals(Boolean.class)) {
+					predicates.add(cb.equal(path, BooleanUtils.toBoolean(value)));
+				}
+				else {
+					predicates.add(cb.equal(path, value));
+				}
 			}
 		}
 		else if(isNotEqual(segment)) {
 			path = filterer.getPath(StringUtils.substringBefore(segment, PREDICATE_NEQ));
-			predicates.add(cb.notEqual(path, value));
+			if(path.getJavaType().equals(Boolean.class)) {
+				predicates.add(cb.notEqual(path, BooleanUtils.toBoolean(value)));
+			}
+			else {
+				predicates.add(cb.notEqual(path, value));
+			}
 		}
 		else if(isGreaterThanOrEqual(segment)) {
 			path = filterer.getPath(StringUtils.substringBefore(segment, PREDICATE_GTE));
-			predicates.add(cb.greaterThanOrEqualTo(path, value));
+			if(path != null) {
+				predicates.add(cb.greaterThanOrEqualTo(path, value));
+			}
 		}
 		else if(isGreaterThan(segment)) {
 			path = filterer.getPath(StringUtils.substringBefore(segment, PREDICATE_GT));
@@ -121,18 +144,22 @@ public class FilteringDataTest {
 		}
 		else if(isLessThanOrEqual(segment)) {
 			path = filterer.getPath(StringUtils.substringBefore(segment, PREDICATE_LTE));
-			predicates.add(cb.lessThanOrEqualTo(path, value));
+			if(path != null) {
+				predicates.add(cb.lessThanOrEqualTo(path, value));
+			}
 		}
 		else if(isLessThan(segment)) {
 			path = filterer.getPath(StringUtils.substringBefore(segment, PREDICATE_LT));
-			predicates.add(cb.lessThan(path, value));
+			if(path != null) {
+				predicates.add(cb.lessThan(path, value));
+			}
 		}
 		else if(isContains(segment)) {
 			path = filterer.getPath(StringUtils.substringBefore(segment, PREDICATE_CON));
 			if(StringUtils.contains(value, ",")) {
 				String[] valueSegments = StringUtils.split(value, ",");
 				List<Predicate> p = new ArrayList<>();
-				for(String valueSegment : valueSegments) {
+				for (String valueSegment : valueSegments) {
 					p.add(cb.like(path, valueSegment));
 				}
 				Predicate and = cb.or(p.toArray(new Predicate[0]));

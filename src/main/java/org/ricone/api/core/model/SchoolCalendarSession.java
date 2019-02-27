@@ -7,6 +7,7 @@ import org.ricone.api.core.model.composite.SchoolCalendarSessionComposite;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -15,16 +16,15 @@ import java.util.Set;
 @Table(name = "schoolcalendarsession")
 @IdClass(SchoolCalendarSessionComposite.class)
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class SchoolCalendarSession implements java.io.Serializable {
+@BatchSize(size = 100)
+public class SchoolCalendarSession implements Serializable {
 	private static final long serialVersionUID = -5166710493348669924L;
 	
 	@Column(name = "SchoolCalendarSessionRefId", unique = true, nullable = false, length = 64)
-	@Id
-    private String schoolCalendarSessionRefId;
+	@Id private String schoolCalendarSessionRefId;
 
 	@Column(name = "SchoolCalendarSessionSchoolYear", nullable = false, length = 6)
-	@Id
-    private Integer schoolCalendarSessionSchoolYear;
+	@Id private Integer schoolCalendarSessionSchoolYear;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumns({
@@ -91,12 +91,12 @@ public class SchoolCalendarSession implements java.io.Serializable {
 	private String linkedSessionCode;
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "schoolCalendarSession")
-	@Fetch(FetchMode.SELECT) @BatchSize(size = 20)
-	private Set<CourseSection> courseSections = new HashSet<CourseSection>(0);
+	@Fetch(FetchMode.SELECT) @BatchSize(size = 100)
+	private Set<CourseSection> courseSections = new HashSet<>(0);
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "schoolCalendarSession")
-	@Fetch(FetchMode.SELECT) @BatchSize(size = 20)
-	private Set<CourseSectionSchedule> courseSectionSchedules = new HashSet<CourseSectionSchedule>(0);
+	@Fetch(FetchMode.SELECT) @BatchSize(size = 100)
+	private Set<CourseSectionSchedule> courseSectionSchedules = new HashSet<>(0);
 
 	public SchoolCalendarSession() {
 	}

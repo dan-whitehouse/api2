@@ -7,6 +7,7 @@ import org.ricone.api.core.model.composite.StudentContactComposite;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -14,16 +15,15 @@ import java.util.Set;
 @Table(name = "studentcontact")
 @IdClass(StudentContactComposite.class)
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class StudentContact implements java.io.Serializable {
+@BatchSize(size = 100)
+public class StudentContact implements Serializable {
 	private static final long serialVersionUID = -1949488111557559072L;
 	
 	@Column(name = "StudentContactRefId", unique = true, nullable = false, length = 64)
-	@Id
-    private String studentContactRefId;
+	@Id private String studentContactRefId;
 	
 	@Column(name = "StudentContactSchoolYear", nullable = false, length = 6)
-	@Id
-    private Integer studentContactSchoolYear;
+	@Id private Integer studentContactSchoolYear;
 	
 	@Column(name = "FirstName", length = 35)
 	private String firstName;

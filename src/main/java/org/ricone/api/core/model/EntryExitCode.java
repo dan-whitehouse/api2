@@ -14,12 +14,10 @@ public class EntryExitCode implements java.io.Serializable {
 	private static final long serialVersionUID = -6732821891680730343L;
 	
 	@Column(name = "EntryExitCodeRefId", unique = true, nullable = false, length = 64)
-	@Id
-    private String entryExitCodeRefId;
+	@Id private String entryExitCodeRefId;
 	
 	@Column(name = "EntryExitCodeSchoolYear", nullable = false, length = 6)
-	@Id
-    private Integer entryExitCodeSchoolYear;
+	@Id private Integer entryExitCodeSchoolYear;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumns({

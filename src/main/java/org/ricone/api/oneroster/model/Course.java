@@ -137,4 +137,34 @@ public class Course extends Base implements Serializable {
 		this.resources = resources;
 	}
 
+
+	@Override
+	public boolean equals(Object o) {
+		if(this == o) return true;
+		if(!(o instanceof Course)) return false;
+
+		Course course = (Course) o;
+
+		if(title != null ? !title.equals(course.title) : course.title != null) return false;
+		if(schoolYear != null ? !schoolYear.equals(course.schoolYear) : course.schoolYear != null) return false;
+		if(courseCode != null ? !courseCode.equals(course.courseCode) : course.courseCode != null) return false;
+		if(grades != null ? !grades.equals(course.grades) : course.grades != null) return false;
+		if(subjects != null ? !subjects.equals(course.subjects) : course.subjects != null) return false;
+		if(org != null ? !org.equals(course.org) : course.org != null) return false;
+		if(subjectCodes != null ? !subjectCodes.equals(course.subjectCodes) : course.subjectCodes != null) return false;
+		return resources != null ? resources.equals(course.resources) : course.resources == null;
+	}
+
+	@Override
+	public int hashCode() {
+		int result = title != null ? title.hashCode() : 0;
+		result = 31 * result + (schoolYear != null ? schoolYear.hashCode() : 0);
+		result = 31 * result + (courseCode != null ? courseCode.hashCode() : 0);
+		result = 31 * result + (grades != null ? grades.hashCode() : 0);
+		result = 31 * result + (subjects != null ? subjects.hashCode() : 0);
+		result = 31 * result + (org != null ? org.hashCode() : 0);
+		result = 31 * result + (subjectCodes != null ? subjectCodes.hashCode() : 0);
+		result = 31 * result + (resources != null ? resources.hashCode() : 0);
+		return result;
+	}
 }

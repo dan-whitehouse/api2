@@ -8,10 +8,7 @@ import org.ricone.api.oneroster.component.ControllerData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
+import javax.persistence.*;
 import javax.persistence.criteria.*;
 import java.util.List;
 
@@ -73,6 +70,7 @@ class UserDAOImp extends BaseDAOTest implements UserDAO {
 			from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 		);
 
+
 		select.distinct(false);
 		select.select(from);
 		select.where(getWhereClause(metadata, cb, filterer, methodSpecificPredicate));
@@ -84,6 +82,10 @@ class UserDAOImp extends BaseDAOTest implements UserDAO {
 			q.setMaxResults(metadata.getPaging().getLimit());
 			metadata.getPaging().setPagingHeaders(countAllUsers(metadata));
 		}
+
+		logger.debug("q.toString: " + q.toString());
+
+
 		return (List<UserView>) q.getResultList();
 	}
 

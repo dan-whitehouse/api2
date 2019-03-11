@@ -4,7 +4,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ricone.api.oneroster.error.exception.InvalidDataException;
 import org.ricone.api.oneroster.error.exception.InvalidFilterFieldException;
-import org.ricone.api.oneroster.request.courses.CourseFilterer;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Order;
@@ -37,7 +36,7 @@ public abstract class BaseDAOTest {
         final List<Predicate> predicates = new ArrayList<>();
         if(metadata.getFiltering().isFiltered()) {
             predicates.add(methodSpecificPredicate);
-            predicates.add(metadata.getFilterableTest().getFiltering(cb, filterer)); //TODO -- Test
+            predicates.add(metadata.getFilterableTest().getPredicate(cb, filterer));
         }
         else {
             predicates.add(methodSpecificPredicate);

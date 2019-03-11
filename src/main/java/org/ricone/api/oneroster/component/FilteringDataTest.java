@@ -3,6 +3,7 @@ package org.ricone.api.oneroster.component;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ricone.api.oneroster.error.exception.InvalidDataException;
@@ -15,31 +16,28 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("unchecked")
 public class FilteringDataTest {
-	private Logger logger = LogManager.getLogger(FilteringDataTest.class);
-	private final String FILTER = "filter";
-	private final String LOGICAL_AND = " AND ";
-	private final String LOGICAL_OR = " OR ";
-	private final String PREDICATE_EQ = "=";
-	private final String PREDICATE_NEQ = "!=";
-	private final String PREDICATE_GTE = ">=";
-	private final String PREDICATE_GT = ">";
-	private final String PREDICATE_LTE = "<=";
-	private final String PREDICATE_LT = "<";
-	private final String PREDICATE_CON = "~";
+	private static Logger logger = LogManager.getLogger(FilteringDataTest.class);
+	private static final String FILTER = "filter";
+	private static final String LOGICAL_AND = " AND ";
+	private static final String LOGICAL_OR = " OR ";
+	private static final String PREDICATE_EQ = "=";
+	private static final String PREDICATE_NEQ = "!=";
+	private static final String PREDICATE_GTE = ">=";
+	private static final String PREDICATE_GT = ">";
+	private static final String PREDICATE_LTE = "<=";
+	private static final String PREDICATE_LT = "<";
+	private static final String PREDICATE_CON = "~";
 
 	private String filter = null;
 	private List<Predicate> predicates;
 
-	FilteringDataTest(HttpServletRequest request) throws Exception {
+	FilteringDataTest(HttpServletRequest request) {
 		if(StringUtils.isNotBlank(request.getParameter(FILTER))) {
 			filter = request.getParameter(FILTER);
 			predicates = new ArrayList<>();
 		}
-	}
-
-	public boolean isFiltered() {
-		return StringUtils.isNotBlank(filter);
 	}
 
 	/*
@@ -50,14 +48,11 @@ public class FilteringDataTest {
 		and that there is only one such operator used in any filter i.e. a single 'AND' or a single 'OR' in the filter. A single white space must
 		occur before and after the parameter.
 	 */
-	Predicate getFiltering(CriteriaBuilder cb, BaseFilterer filterer) throws InvalidFilterFieldException, InvalidDataException {
+	Predicate getPredicate(CriteriaBuilder cb, BaseFilterer filterer) throws InvalidFilterFieldException, InvalidDataException {
 		buildPredicates(cb, filterer);
 
-		//if filter contains AND or OR, load in the predicates we created
 		Predicate wrapper;
-
-		logger.debug("predicates: " + predicates);
-
+		//if filter contains AND or OR, load in the predicates we created
 		if(CollectionUtils.isNotEmpty(predicates)) {
 			if(isAnd()) {
 				wrapper = cb.and(predicates.toArray(new Predicate[0]));
@@ -70,110 +65,227 @@ public class FilteringDataTest {
 			}
 		}
 		else {
-			//Because we add whatever is in this wrapper to the DAO, I have to return something so that DAO doesn't receive a null value.
-			// This will add something like where querySpecificPredicates = someValues [and 1 = 1]
+			// Wrapper can not return a null value, as it will always be returned to the DAO.
+			// If nothing is filtered, add something like WHERE querySpecificPredicate = someValue AND [1=1]
 			wrapper = cb.equal(cb.literal(1), 1); //1=1
 		}
-		logger.debug("wrapper: " + wrapper);
 		return wrapper;
 	}
 
 	private void buildPredicates(CriteriaBuilder cb, BaseFilterer filterer) throws InvalidFilterFieldException, InvalidDataException {
+		String[] filters;
 		if(isAnd()) {
-			String[] segments = StringUtils.split(filter, LOGICAL_AND);
-			for(String segment : segments) {
-				buildPredicate(cb, filterer, segment);
+			filters = getFilterArray(filter, LOGICAL_AND);
+			for(String filter : filters) {
+				fillPredicatesList(cb, filterer, filter);
 			}
 		}
 		else if(isOr()) {
-			String[] segments = StringUtils.split(filter, LOGICAL_OR);
-			for(String segment : segments) {
-				buildPredicate(cb, filterer, segment);
+			filters = getFilterArray(filter, LOGICAL_OR);
+			for(String filter : filters) {
+				fillPredicatesList(cb, filterer, filter);
 			}
 		}
 		else {
-			buildPredicate(cb, filterer, filter); //build predicate directly from the filter string
+			// Build predicates directly from the filter string
+			fillPredicatesList(cb, filterer, filter);
 		}
 	}
 
-	private void buildPredicate(CriteriaBuilder cb, BaseFilterer filterer, String segment) throws InvalidFilterFieldException, InvalidDataException {
+	private String[] getFilterArray(String filter, String logical) throws InvalidDataException {
+		String[] filters = StringUtils.splitByWholeSeparator(filter, logical);
+		if(filters != null && filters.length > 2) {
+			throw new InvalidDataException("The filter parameter only allows one logical operator");
+		}
+		return filters;
+	}
+
+	private void fillPredicatesList(CriteriaBuilder cb, BaseFilterer filterer, String filter) throws InvalidFilterFieldException, InvalidDataException {
 		Path path;
-		String value = StringUtils.substringBetween(segment, "'"); //All values must be wrapped in single quotes
+		String value = getValue(filter); //All values must be wrapped in single quotes
+		String predicate = getPredicateKey(filter);
 
 		if(StringUtils.isBlank(value)) {
 			throw new InvalidFilterFieldException("The filter parameter value is missing single quotes, or is blank");
 		}
 
-		if(isEqual(segment)) {
-			path = filterer.getPath(StringUtils.substringBefore(segment, PREDICATE_EQ));
-			if(StringUtils.contains(value, ",")) {
-				String[] valueSegments = StringUtils.split(value, ",");
-				List<Predicate> p = new ArrayList<>();
-				for(String valueSegment : valueSegments) {
-					p.add(cb.equal(path, valueSegment));
+		//Determine Predicate Type
+		if(isGreaterThanOrEqual(predicate)) {
+			path = getPath(filterer, filter, PREDICATE_GTE);
+			predicates.add(getGreaterThanOrEqualToPredicate(cb, path, value));
+		}
+		else if(isGreaterThan(predicate)) {
+			path = getPath(filterer, filter, PREDICATE_GT);
+			predicates.add(getGreaterThanToPredicate(cb, path, value));
+		}
+		else if(isLessThanOrEqual(predicate)) {
+			path = getPath(filterer, filter, PREDICATE_LTE);
+			predicates.add(getLessThanOrEqualToPredicate(cb, path, value));
+		}
+		else if(isLessThan(predicate)) {
+			path = getPath(filterer, filter, PREDICATE_LT);
+			predicates.add(getLessThanToPredicate(cb, path, value));
+		}
+		else if(isNotEqual(predicate)) {
+			path = getPath(filterer, filter, PREDICATE_NEQ);
+			predicates.add(getNotEqualPredicate(cb, path, value));
+		}
+		else if(isEqual(predicate)) {
+			path = getPath(filterer, filter, PREDICATE_EQ);
+			if(isMultiValue(value)) {
+				String[] values = StringUtils.split(value, ",");
+				List<Predicate> list = new ArrayList<>();
+				for(String v : values) {
+					list.add(getEqualPredicate(cb, path, v));
 				}
-				predicates.add(cb.and(p.toArray(new Predicate[0])));
+				predicates.add(cb.and(list.toArray(new Predicate[0])));
 			}
 			else {
-				if(path.getJavaType().equals(Boolean.class)) {
-					predicates.add(cb.equal(path, BooleanUtils.toBoolean(value)));
-				}
-				else {
-					predicates.add(cb.equal(path, value));
-				}
+				predicates.add(getEqualPredicate(cb, path, value));
 			}
 		}
-		else if(isNotEqual(segment)) {
-			path = filterer.getPath(StringUtils.substringBefore(segment, PREDICATE_NEQ));
-			if(path.getJavaType().equals(Boolean.class)) {
-				predicates.add(cb.notEqual(path, BooleanUtils.toBoolean(value)));
+		else if(isContains(predicate)) {
+			path = getPath(filterer, filter, PREDICATE_CON);
+			if(isMultiValue(value)) {
+				String[] values = StringUtils.split(value, ",");
+				List<Predicate> list = new ArrayList<>();
+				for (String v : values) {
+					list.add(getEqualPredicate(cb, path, v));
+				}
+				predicates.add(cb.or(list.toArray(new Predicate[0])));
 			}
 			else {
-				predicates.add(cb.notEqual(path, value));
-			}
-		}
-		else if(isGreaterThanOrEqual(segment)) {
-			path = filterer.getPath(StringUtils.substringBefore(segment, PREDICATE_GTE));
-			if(path != null) {
-				predicates.add(cb.greaterThanOrEqualTo(path, value));
-			}
-		}
-		else if(isGreaterThan(segment)) {
-			path = filterer.getPath(StringUtils.substringBefore(segment, PREDICATE_GT));
-			predicates.add(cb.greaterThan(path, value));
-		}
-		else if(isLessThanOrEqual(segment)) {
-			path = filterer.getPath(StringUtils.substringBefore(segment, PREDICATE_LTE));
-			if(path != null) {
-				predicates.add(cb.lessThanOrEqualTo(path, value));
-			}
-		}
-		else if(isLessThan(segment)) {
-			path = filterer.getPath(StringUtils.substringBefore(segment, PREDICATE_LT));
-			if(path != null) {
-				predicates.add(cb.lessThan(path, value));
-			}
-		}
-		else if(isContains(segment)) {
-			path = filterer.getPath(StringUtils.substringBefore(segment, PREDICATE_CON));
-			if(StringUtils.contains(value, ",")) {
-				String[] valueSegments = StringUtils.split(value, ",");
-				List<Predicate> p = new ArrayList<>();
-				for (String valueSegment : valueSegments) {
-					p.add(cb.like(path, valueSegment));
-				}
-				Predicate and = cb.or(p.toArray(new Predicate[0]));
-				predicates.add(and);
-			}
-			else {
-				predicates.add(cb.like(path, "%" + value + "%"));
+				predicates.add(getEqualPredicate(cb, path, value));
 			}
 		}
 	}
 
-	// Note for tomorrow: First determine what the logical operator is, then the predicate.
-	// Value will always be wrapped in single quotes.
-	// Field will always be to the left of the predicate operator
+	private static String getValue(String filter) {
+		return StringUtils.substringBetween(filter, "'");
+	}
+
+	private static boolean isMultiValue(String value) {
+		return StringUtils.contains(value, ",");
+	}
+
+	private static Path getPath(BaseFilterer filterer, String filter, String predicate) throws InvalidFilterFieldException, InvalidDataException {
+		return filterer.getPath(StringUtils.substringBefore(filter, predicate));
+	}
+
+	private static boolean isPathTypeBoolean(Path path) {
+		return path.getJavaType().equals(Boolean.class);
+	}
+
+	private static boolean isPathTypeInteger(Path path) {
+		return path.getJavaType().equals(Integer.class);
+	}
+
+	private static String getPredicateKey(String filter) {
+		/* filterMinusValue means that we are looking to the left side of the value
+		* ie:   filter=someField='someValue'
+		*       becomes: filter=someField=
+		*       This way the predicate is at the end of the statement.
+		*/
+		String filterMinusValue = StringUtils.substringBefore(filter, "'");
+		if(StringUtils.endsWith(filterMinusValue, PREDICATE_GT)) {
+			return PREDICATE_GT;
+		}
+		else if(StringUtils.endsWith(filterMinusValue, PREDICATE_GTE)) {
+			return PREDICATE_GTE;
+		}
+		else if(StringUtils.endsWith(filterMinusValue, PREDICATE_LT)) {
+			return PREDICATE_LT;
+		}
+		else if(StringUtils.endsWith(filterMinusValue, PREDICATE_LTE)) {
+			return PREDICATE_LTE;
+		}
+		else if(StringUtils.endsWith(filterMinusValue, PREDICATE_NEQ)) {
+			return PREDICATE_NEQ;
+		}
+		else if(StringUtils.endsWith(filterMinusValue, PREDICATE_EQ)) {
+			return PREDICATE_EQ;
+		}
+		else if(StringUtils.endsWith(filterMinusValue, PREDICATE_CON)) {
+			return PREDICATE_CON;
+		}
+		return null;
+	}
+
+	// PREDICATE WITH CORRECT OBJECT TYPE
+	private static Predicate getGreaterThanOrEqualToPredicate(CriteriaBuilder cb, Path path, String value) throws InvalidDataException {
+		if(isPathTypeInteger(path)) {
+			if(NumberUtils.isCreatable(value)) {
+				return cb.greaterThanOrEqualTo(path, Integer.parseInt(value));
+			}
+			throw new InvalidDataException("Value: [" + value + "] is not a valid number");
+		}
+		else {
+			return cb.greaterThanOrEqualTo(path, value);
+		}
+	}
+
+	private static Predicate getGreaterThanToPredicate(CriteriaBuilder cb, Path path, String value) throws InvalidDataException {
+		if(isPathTypeInteger(path)) {
+			if(NumberUtils.isCreatable(value)) {
+				return cb.greaterThan(path, Integer.parseInt(value));
+			}
+			throw new InvalidDataException("Value: [" + value + "] is not a valid number");
+		}
+		else {
+			return cb.greaterThan(path, value);
+		}
+	}
+
+	private static Predicate getLessThanOrEqualToPredicate(CriteriaBuilder cb, Path path, String value) throws InvalidDataException {
+		if(isPathTypeInteger(path)) {
+			if(NumberUtils.isCreatable(value)) {
+				return cb.lessThanOrEqualTo(path, Integer.parseInt(value));
+			}
+			throw new InvalidDataException("Value: [" + value + "] is not a valid number");
+		}
+		else {
+			return cb.lessThanOrEqualTo(path, value);
+		}
+	}
+
+	private static Predicate getLessThanToPredicate(CriteriaBuilder cb, Path path, String value) throws InvalidDataException {
+		if(isPathTypeInteger(path)) {
+			if(NumberUtils.isCreatable(value)) {
+				return cb.lessThan(path, Integer.parseInt(value));
+			}
+			throw new InvalidDataException("Value: [" + value + "] is not a valid number");
+		}
+		else {
+			return cb.lessThan(path, value);
+		}
+	}
+
+	private static Predicate getNotEqualPredicate(CriteriaBuilder cb, Path path, String value) {
+		if(isPathTypeBoolean(path)) {
+			return cb.notEqual(path, BooleanUtils.toBoolean(value));
+		}
+		else {
+			return cb.notEqual(path, value);
+		}
+	}
+
+	private static Predicate getEqualPredicate(CriteriaBuilder cb, Path path, String value) {
+		if(isPathTypeBoolean(path)) {
+			return cb.equal(path, BooleanUtils.toBoolean(value));
+		}
+		else {
+			return cb.equal(path, value);
+		}
+	}
+
+	private static Predicate getLikePredicate(CriteriaBuilder cb, Path path, String value) {
+		if(isPathTypeBoolean(path)) {
+			return cb.like(path, "%" + BooleanUtils.toBoolean(value) + "%");
+		}
+		else {
+			return cb.like(path, value);
+		}
+	}
 
 	// LOGICAL OPERATOR
 	private boolean isAnd(){
@@ -185,31 +297,31 @@ public class FilteringDataTest {
 	}
 
 	//PREDICATE OPERATOR
-	private boolean isEqual(String segment) {
-		return StringUtils.contains(segment, PREDICATE_EQ);
+	private static boolean isEqual(String segment) {
+		return StringUtils.equals(segment, PREDICATE_EQ);
 	}
 
-	private boolean isNotEqual(String segment) {
-		return StringUtils.contains(segment, PREDICATE_NEQ);
+	private static boolean isNotEqual(String segment) {
+		return StringUtils.equals(segment, PREDICATE_NEQ);
 	}
 
-	private boolean isGreaterThan(String segment) {
-		return StringUtils.contains(segment, PREDICATE_GT);
+	private static boolean isGreaterThan(String segment) {
+		return StringUtils.equals(segment, PREDICATE_GT);
 	}
 
-	private boolean isGreaterThanOrEqual(String segment) {
-		return StringUtils.contains(segment, PREDICATE_GTE);
+	private static boolean isGreaterThanOrEqual(String segment) {
+		return StringUtils.equals(segment, PREDICATE_GTE);
 	}
 
-	private boolean isLessThan(String segment) {
-		return StringUtils.contains(segment, PREDICATE_LT);
+	private static boolean isLessThan(String segment) {
+		return StringUtils.equals(segment, PREDICATE_LT);
 	}
 
-	private boolean isLessThanOrEqual(String segment) {
-		return StringUtils.contains(segment, PREDICATE_LTE);
+	private static boolean isLessThanOrEqual(String segment) {
+		return StringUtils.equals(segment, PREDICATE_LTE);
 	}
 
-	private boolean isContains(String segment) {
-		return StringUtils.contains(segment, PREDICATE_CON);
+	private static boolean isContains(String segment) {
+		return StringUtils.equals(segment, PREDICATE_CON);
 	}
 }

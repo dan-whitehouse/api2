@@ -3,7 +3,6 @@ package org.ricone.api.oneroster.v1p1.request.users;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ricone.api.core.model.v1p1.*;
-import org.ricone.api.core.model.view.UserClassView;
 import org.ricone.api.oneroster.component.BaseDAOTest;
 import org.ricone.api.oneroster.component.ControllerData;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,29 +1,27 @@
 package org.ricone.api.oneroster.request.academicSessions;
 
-import org.ricone.api.core.model.view.AcademicSessionView;
-import org.ricone.api.core.model.wrapper.SchoolCalendarSessionWrapper;
-import org.ricone.api.oneroster.component.ControllerData;
-import org.ricone.api.oneroster.model.AcademicSession;
+import org.ricone.api.core.model.v1p1.QAcademicSession;
+import org.ricone.api.oneroster.component.RequestData;
 
 import java.util.List;
 
 interface AcademicSessionDAO {
 
-	AcademicSessionView getAcademicSession(ControllerData metadata, String refId) throws Exception;
+	QAcademicSession getAcademicSession(RequestData metadata, String refId) throws Exception;
 
-	List<AcademicSessionView> getAllAcademicSessions(ControllerData metadata) throws Exception;
+	List<QAcademicSession> getAllAcademicSessions(RequestData metadata) throws Exception;
 
-	AcademicSessionView getCalendar(ControllerData metadata, String refId) throws Exception;
+	QAcademicSession getCalendar(RequestData metadata, String refId) throws Exception;
 
-	List<AcademicSessionView> getAllCalendars(ControllerData metadata) throws Exception;
+	List<QAcademicSession> getAllCalendars(RequestData metadata) throws Exception;
 
-	AcademicSessionView getTerm(ControllerData metadata, String refId) throws Exception;
+	QAcademicSession getTerm(RequestData metadata, String refId) throws Exception;
 
-	List<AcademicSessionView> getAllTerms(ControllerData metadata) throws Exception;
+	List<QAcademicSession> getAllTerms(RequestData metadata) throws Exception;
 
-	int countAllAcademicSessions(ControllerData metadata) throws Exception;
+	int countAllAcademicSessions(RequestData metadata) throws Exception;
 
-	int countAllCalendars(ControllerData metadata) throws Exception;
+	int countAllCalendars(RequestData metadata) throws Exception;
 
-	int countAllTerms(ControllerData metadata) throws Exception;
+	int countAllTerms(RequestData metadata) throws Exception;
 }

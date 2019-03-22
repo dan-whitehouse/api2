@@ -17,13 +17,13 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@RestController("OneRoster:Demographics:DemographicController")
+@RestController("OneRoster2:Demographics:DemographicController")
 @Api(value = "Demographic", description = "One Roster - Demographics", tags = {"Demographic"})
 class DemographicController extends BaseController {
 	@Autowired
 	private DemographicService service;
 
-	@ResponseBody @GetMapping(value = "/ims/oneroster/v1p1/demographics/{id}")
+	@ResponseBody @GetMapping(value = "/ims/oneroster2/v1p1/demographics/{id}")
 	@ApiOperation(value = "getDemographic", tags = {"Demographic"})
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "Success", response = DemographicResponse.class),
@@ -38,7 +38,7 @@ class DemographicController extends BaseController {
 	}
 
 	@ResponseBody
-	@GetMapping(value = "/ims/oneroster/v1p1/demographics")
+	@GetMapping(value = "/ims/oneroster2/v1p1/demographics")
 	@ApiOperation(value = "getAllDemographics", tags = {"Demographic"})
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "Success", response = DemographicsResponse.class),

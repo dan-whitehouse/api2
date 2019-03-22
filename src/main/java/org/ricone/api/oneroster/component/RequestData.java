@@ -17,31 +17,27 @@ import javax.servlet.http.HttpServletResponse;
  */
 
 @SuppressWarnings({"unused", "FieldCanBeLocal"})
-public class ControllerData {
-	private Logger logger = LogManager.getLogger(ControllerData.class);
-	public static final String LEA_LOCAL_ID = "leaId";
-	public static final String SCHOOL_YEAR_KEY = "SchoolYear";
+public class RequestData {
+	private Logger logger = LogManager.getLogger(RequestData.class);
 
 	/* MetaData Vars */
 	private HttpServletRequest request;
 	private HttpServletResponse response;
-	private PagingData pageable;
-	private SortingData sortable;
-	private FieldSelectionData fieldSelection;
-	private FilteringData filterable;
-	private FilteringDataTest filterableTest;
+	private Paging pageable;
+	private Sorter sorter;
+	private FieldSelector fieldSelector;
+	private Filterer filterer;
 	private String providerId;
 	private Application application;
 
-	public ControllerData(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public RequestData(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		super();
 		this.request = request;
 		this.response = response;
-		this.pageable = new PagingData(request, response);
-		this.sortable = new SortingData(request);
-		this.fieldSelection = new FieldSelectionData(request);
-		this.filterable = new FilteringData(request);
-		this.filterableTest = new FilteringDataTest(request);
+		this.pageable = new Paging(request, response);
+		this.sorter = new Sorter(request);
+		this.fieldSelector = new FieldSelector(request);
+		this.filterer = new Filterer(request);
 		this.application = (Application) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 	}
 
@@ -55,17 +51,6 @@ public class ControllerData {
 	public boolean isRequestParameterValue(String param, String value) { return StringUtils.equalsIgnoreCase(request.getParameter(param), value); }
 
 	public boolean hasUrlQueryParameter(String param) { return StringUtils.isNotBlank(request.getParameter(param)); }
-
-	// Custom Methods - School Year Rollover
-	public boolean hasSchoolYear() {
-		String schoolYear = request.getHeader(SCHOOL_YEAR_KEY);
-		return StringUtils.isNotBlank(schoolYear) && Util.isValidSchoolYear(schoolYear);
-	}
-
-	public String getSchoolYear() {
-		return request.getHeader(SCHOOL_YEAR_KEY);
-	}
-	// Custom Methods - Basic_Single & Basic_Multi App
 
 
 	// GETTERS & SETTERS
@@ -89,19 +74,15 @@ public class ControllerData {
 		return application;
 	}
 
-	public PagingData getPaging() {
+	public Paging getPaging() {
 		return pageable;
 	}
 
-	public SortingData getSorting() { return sortable; }
+	public Sorter getSorter() { return sorter; }
 
-	public FieldSelectionData getFieldSelection() { return fieldSelection; }
+	public FieldSelector getFieldSelector() { return fieldSelector; }
 
-	public FilteringData getFiltering() {
-		return filterable;
-	}
-
-	public FilteringDataTest getFilterableTest() {
-		return filterableTest;
+	public Filterer getFilterer() {
+		return filterer;
 	}
 }

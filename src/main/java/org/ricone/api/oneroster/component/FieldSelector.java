@@ -5,14 +5,13 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ricone.api.oneroster.error.exception.BlankFieldSelectionException;
-import org.ricone.api.xpress.error.exception.BadRequestException;
 
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Field;
 import java.util.*;
 
-public class FieldSelectionData {
-	private Logger logger = LogManager.getLogger(FieldSelectionData.class);
+public class FieldSelector {
+	private Logger logger = LogManager.getLogger(FieldSelector.class);
 	private final String FIELDS = "fields";
 	private Set<String> fields = null;
 
@@ -47,7 +46,7 @@ public class FieldSelectionData {
 		NOTE: Field Selection must be supported for ALL read endpoints.
 	 */
 
-	FieldSelectionData(HttpServletRequest request) throws Exception {
+	FieldSelector(HttpServletRequest request) throws Exception {
 		if(request.getParameter(FIELDS) != null) {
 			if(StringUtils.isEmpty(request.getParameter(FIELDS))) {
 				throw new BlankFieldSelectionException();

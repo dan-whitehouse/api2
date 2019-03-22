@@ -3,22 +3,25 @@ package org.ricone.api.oneroster.request.classes;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ricone.api.core.model.view.ClassView;
+import org.ricone.api.core.model.v1p1.QClass;
 import org.ricone.api.oneroster.component.BaseMapper;
 import org.ricone.api.oneroster.model.Class;
 import org.ricone.api.oneroster.model.*;
 import org.ricone.api.oneroster.util.MappingUtil;
 import org.springframework.stereotype.Component;
 
-@Component("OneRoster:Classes:ClassMapper")
-class ClassMapper extends BaseMapper<ClassView, Class, ClassesResponse, ClassResponse> {
+import java.util.Arrays;
+import java.util.List;
+
+@Component("OneRoster2:Classes:ClassMapper")
+class ClassMapper extends BaseMapper<QClass, Class, ClassesResponse, ClassResponse> {
     private Logger logger = LogManager.getLogger(this.getClass());
 
     ClassMapper() throws NoSuchMethodException {
-        super(ClassView.class, Class.class, ClassesResponse.class, ClassResponse.class);
+        super(QClass.class, Class.class, ClassesResponse.class, ClassResponse.class);
     }
 
-    @Override protected Class map(ClassView instance) {
+    @Override protected Class map(QClass instance) {
         Class clazz = new Class();
         clazz.setSourcedId(instance.getSourcedId());
         clazz.setStatus(StatusType.active);
@@ -31,37 +34,60 @@ class ClassMapper extends BaseMapper<ClassView, Class, ClassesResponse, ClassRes
         clazz.setClassCode(instance.getClassCode());
 
         //Grades
-        instance.getGrades().forEach(grade -> {
-            clazz.getGrades().add(grade.getGradeLevel());
-        });
+        if(StringUtils.isNotBlank(instance.getGrades())) {
+            List<String> grades = Arrays.asList(StringUtils.splitByWholeSeparator(instance.getGrades(), ","));
+            grades.forEach(grade -> {
+                clazz.getGrades().add(grade);
+            });
+        }
 
         //Subjects
-        instance.getSubjects().forEach(subject -> {
-            clazz.getSubjects().add(StringUtils.isNotBlank(subject.getSubject()) ? subject.getSubject() : null);
-            clazz.getSubjectCodes().add(StringUtils.isNotBlank(subject.getSubjectCode()) ? subject.getSubjectCode() : null);
-        });
+        if(StringUtils.isNotBlank(instance.getSubjects())) {
+            List<String> subjects = Arrays.asList(StringUtils.splitByWholeSeparator(instance.getSubjects(), ","));
+            subjects.forEach(subject -> {
+                clazz.getSubjects().add(StringUtils.isNotBlank(subject) ? subject : null);
+            });
+        }
 
-        //Course & School GUIDRefs
-        clazz.setCourse(MappingUtil.buildGUIDRef("courses", instance.getCourseId(), GUIDType.course));
-        clazz.setSchool(MappingUtil.buildGUIDRef("schools", instance.getOrgId(), GUIDType.org));
+        //SubjectCodes
+        if(StringUtils.isNotBlank(instance.getSubjectCodes())) {
+            List<String> subjectCodes = Arrays.asList(StringUtils.splitByWholeSeparator(instance.getSubjectCodes(), ","));
+            subjectCodes.forEach(subjectCode -> {
+                clazz.getSubjectCodes().add(StringUtils.isNotBlank(subjectCode) ? subjectCode : null);
+            });
+        }
 
         //Periods
-        instance.getPeriods().forEach(period -> {
-            clazz.getPeriods().add(period.getPeriod());
-        });
+        if(StringUtils.isNotBlank(instance.getPeriods())) {
+            List<String> periods = Arrays.asList(StringUtils.splitByWholeSeparator(instance.getPeriods(), ","));
+            periods.forEach(period -> {
+                clazz.getPeriods().add(period);
+            });
+        }
 
-        //Terms
+        //Course GUIDRefs
+        if(instance.getCourse() != null) {
+            clazz.setCourse(MappingUtil.buildGUIDRef("courses", instance.getCourse().getSourcedId(), GUIDType.course));
+        }
+
+        //School GUIDRefs
+        if(instance.getOrg() != null) {
+            clazz.setSchool(MappingUtil.buildGUIDRef("schools", instance.getOrg().getSourcedId(), GUIDType.org));
+        }
+
+        //Terms GUIDRefs
         instance.getTerms().forEach(term -> {
-            clazz.getTerms().add(MappingUtil.buildGUIDRef("terms", term.getTermId(), GUIDType.valueOf(term.getType())));
+            if(term.getAcademicSession() != null) {
+                clazz.getTerms().add(MappingUtil.buildGUIDRef("terms", term.getAcademicSession().getSourcedId(), GUIDType.valueOf(term.getAcademicSession().getType())));
+            }
         });
 
         //Resources
         //clazz.setResources();
-
         return clazz;
     }
 
-    @Override protected Metadata mapMetadata(ClassView instance) {
+    @Override protected Metadata mapMetadata(QClass instance) {
         Metadata metadata = new Metadata();
         metadata.getAdditionalProperties().put("ricone.schoolYear", instance.getSourcedSchoolYear());
         metadata.getAdditionalProperties().put("ricone.districtId", instance.getDistrictId());

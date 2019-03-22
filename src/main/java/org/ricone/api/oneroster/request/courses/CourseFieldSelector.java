@@ -2,9 +2,10 @@ package org.ricone.api.oneroster.request.courses;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.ricone.api.oneroster.component.BaseFieldSelector;
-import org.ricone.api.oneroster.component.ControllerData;
-import org.ricone.api.oneroster.model.*;
-import org.ricone.api.oneroster.model.Class;
+import org.ricone.api.oneroster.component.RequestData;
+import org.ricone.api.oneroster.model.Course;
+import org.ricone.api.oneroster.model.CourseResponse;
+import org.ricone.api.oneroster.model.CoursesResponse;
 import org.springframework.stereotype.Component;
 
 /**
@@ -13,14 +14,14 @@ import org.springframework.stereotype.Component;
  * @since 2019-01-30
  */
 
-@Component("OneRoster:Courses:CourseFieldSelector")
+@Component("OneRoster2:Courses:CourseFieldSelector")
 public class CourseFieldSelector extends BaseFieldSelector<Course> {
 	public CourseFieldSelector() {
 		super(Course.class);
 	}
 
-	CoursesResponse apply(CoursesResponse response, ControllerData metadata) {
-		if(metadata.getFieldSelection().hasFieldSelection() && metadata.getFieldSelection().isValidFieldSelection(getModelClass())) {
+	CoursesResponse apply(CoursesResponse response, RequestData metadata) {
+		if(metadata.getFieldSelector().hasFieldSelection() && metadata.getFieldSelector().isValidFieldSelection(getModelClass())) {
 			for (Course c : response.getData()) {
 				selectBaseFields(c, metadata);
 			}
@@ -32,8 +33,8 @@ public class CourseFieldSelector extends BaseFieldSelector<Course> {
 		return response;
 	}
 
-	CourseResponse apply(CourseResponse response, ControllerData metadata) {
-		if(metadata.getFieldSelection().hasFieldSelection() && metadata.getFieldSelection().isValidFieldSelection(getModelClass())) {
+	CourseResponse apply(CourseResponse response, RequestData metadata) {
+		if(metadata.getFieldSelector().hasFieldSelection() && metadata.getFieldSelector().isValidFieldSelection(getModelClass())) {
 			selectBaseFields(response.getData(), metadata);
 			if (response.getData() == null) {
 				return null;
@@ -43,26 +44,26 @@ public class CourseFieldSelector extends BaseFieldSelector<Course> {
 	}
 
 	@Override
-	public void selectFields(Course instance, ControllerData metaData) {
-		if(!CollectionUtils.containsAny(metaData.getFieldSelection().getFields(), "title")) {
+	public void selectFields(Course instance, RequestData metaData) {
+		if(!CollectionUtils.containsAny(metaData.getFieldSelector().getFields(), "title")) {
 			instance.setTitle(null);
 		}
-		if(!CollectionUtils.containsAny(metaData.getFieldSelection().getFields(), "schoolYear")) {
+		if(!CollectionUtils.containsAny(metaData.getFieldSelector().getFields(), "schoolYear")) {
 			instance.setSchoolYear(null);
 		}
-		if(!CollectionUtils.containsAny(metaData.getFieldSelection().getFields(), "courseCode")) {
+		if(!CollectionUtils.containsAny(metaData.getFieldSelector().getFields(), "courseCode")) {
 			instance.setCourseCode(null);
 		}
-		if(!CollectionUtils.containsAny(metaData.getFieldSelection().getFields(), "grades")) {
+		if(!CollectionUtils.containsAny(metaData.getFieldSelector().getFields(), "grades")) {
 			instance.setGrades(null);
 		}
-		if(!CollectionUtils.containsAny(metaData.getFieldSelection().getFields(), "subjects")) {
+		if(!CollectionUtils.containsAny(metaData.getFieldSelector().getFields(), "subjects")) {
 			instance.setSubjects(null);
 		}
-		if(!CollectionUtils.containsAny(metaData.getFieldSelection().getFields(), "subjectCodes")) {
+		if(!CollectionUtils.containsAny(metaData.getFieldSelector().getFields(), "subjectCodes")) {
 			instance.setSubjectCodes(null);
 		}
-		if(!CollectionUtils.containsAny(metaData.getFieldSelection().getFields(), "org")) {
+		if(!CollectionUtils.containsAny(metaData.getFieldSelector().getFields(), "org")) {
 			instance.setOrg(null);
 		}
 	}

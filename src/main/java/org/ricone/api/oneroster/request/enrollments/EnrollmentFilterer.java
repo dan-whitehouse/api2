@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 import javax.persistence.criteria.Path;
 
-@Component("OneRoster:Enrollments:EnrollmentFilterer")
+@Component("OneRoster2:Enrollments:EnrollmentFilterer")
 public class EnrollmentFilterer extends BaseFilterer {
 	public EnrollmentFilterer() {
 	}
@@ -21,15 +21,15 @@ public class EnrollmentFilterer extends BaseFilterer {
 			case "role": return from.get(field);
 			case "primary": return from.get(field);
 
-			case "user.sourcedId": return from.get("userId");
+			case "user.sourcedId": return from.get("user").get("sourcedId");
 			case "user.href": throw new InvalidDataException(buildInvalidDataException(field));
 			case "user.type": throw new InvalidDataException(buildInvalidDataException(field));
 
-			case "class.sourcedId": return from.get("classId");
+			case "class.sourcedId": return from.get("clazz").get("sourcedId");
 			case "class.href": throw new InvalidDataException(buildInvalidDataException(field));
 			case "class.type": throw new InvalidDataException(buildInvalidDataException(field));
 
-			case "school.sourcedId": return from.get("orgId");
+			case "school.sourcedId": return from.get("org").get("sourcedId");
 			case "school.href": throw new InvalidDataException(buildInvalidDataException(field));
 			case "school.type": throw new InvalidDataException(buildInvalidDataException(field));
 

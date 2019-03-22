@@ -7,7 +7,7 @@ public abstract class BaseController {
     public BaseController() {
     }
 
-    protected ControllerData getMetaData(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        return new ControllerData(request, response);
+    protected RequestData getMetaData(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        return new RequestData(request, response);
     }
 }

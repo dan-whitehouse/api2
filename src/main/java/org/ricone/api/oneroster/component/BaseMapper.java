@@ -27,7 +27,7 @@ public abstract class BaseMapper<V, M extends Base, R1 extends BaseMultiResponse
 		this.r2Constructor = r2Class.getConstructor();
 	}
 
-	public R1 convert(List<V> instance, ControllerData metadata) throws IllegalAccessException, InvocationTargetException, InstantiationException {
+	public R1 convert(List<V> instance, RequestData metadata) throws IllegalAccessException, InvocationTargetException, InstantiationException {
 		List<M> list = new ArrayList<>();
 		for (V view : instance) {
 			M model = map(view);
@@ -42,7 +42,7 @@ public abstract class BaseMapper<V, M extends Base, R1 extends BaseMultiResponse
 		return r1;
 	}
 
-	public R2 convert(V view, ControllerData metadata) throws IllegalAccessException, InvocationTargetException, InstantiationException {
+	public R2 convert(V view, RequestData metadata) throws IllegalAccessException, InvocationTargetException, InstantiationException {
 		if(view != null) {
 			R2 r2 = r2Constructor.newInstance();
 			r2.setData(map(view));
@@ -54,9 +54,9 @@ public abstract class BaseMapper<V, M extends Base, R1 extends BaseMultiResponse
 
 	protected abstract M map(V instance);
 
-	protected abstract Metadata mapMetadata(V instance);
+	protected abstract org.ricone.api.oneroster.model.Metadata mapMetadata(V instance);
 
-	private List<Error> mapPartialErrors(ControllerData metadata, Class<?> table, Class<? extends Base> model) {
+	private List<Error> mapPartialErrors(RequestData metadata, Class<?> table, Class<? extends Base> model) {
 		List<Error> statusInfoSets = new ArrayList<>();
 
 		/*
@@ -68,8 +68,8 @@ public abstract class BaseMapper<V, M extends Base, R1 extends BaseMultiResponse
 				•  StatusCode value is the corresponding HTTP response code;
 				•  Description should contain the supplied unknown field.
 		*/
-		if(metadata.getFieldSelection().hasFieldSelection() && !metadata.getFieldSelection().isValidFieldSelection(model)) {
-			metadata.getFieldSelection().getInvalidFields(model).forEach(warning -> {
+		if(metadata.getFieldSelector().hasFieldSelection() && !metadata.getFieldSelector().isValidFieldSelection(model)) {
+			metadata.getFieldSelector().getInvalidFields(model).forEach(warning -> {
 				Error error = new Error();
 				error.setCodeMajor(CodeMajor.success);
 				error.setCodeMinor(CodeMinor.invalid_selection_field);
@@ -88,12 +88,12 @@ public abstract class BaseMapper<V, M extends Base, R1 extends BaseMultiResponse
 				•  CodeMinor value is 'invalid_sort_field';
 				•  Description should contain the supplied unknown field.
 		*/
-		if(metadata.getSorting().isSorted() && !metadata.getSorting().isValidField(table)) {
+		if(metadata.getSorter().isSorted() && !metadata.getSorter().isValidField(table)) {
 			Error error = new Error();
 			error.setCodeMajor(CodeMajor.success);
 			error.setCodeMinor(CodeMinor.invalid_sort_field);
 			error.setSeverity(Severity.warning);
-			error.setDescription("Invalid field: " + metadata.getSorting().getSort());
+			error.setDescription("Invalid field: " + metadata.getSorter().getSort());
 			statusInfoSets.add(error);
 		}
 

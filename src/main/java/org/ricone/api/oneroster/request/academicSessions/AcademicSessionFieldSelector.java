@@ -2,8 +2,10 @@ package org.ricone.api.oneroster.request.academicSessions;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.ricone.api.oneroster.component.BaseFieldSelector;
-import org.ricone.api.oneroster.component.ControllerData;
-import org.ricone.api.oneroster.model.*;
+import org.ricone.api.oneroster.component.RequestData;
+import org.ricone.api.oneroster.model.AcademicSession;
+import org.ricone.api.oneroster.model.AcademicSessionResponse;
+import org.ricone.api.oneroster.model.AcademicSessionsResponse;
 import org.springframework.stereotype.Component;
 
 /**
@@ -12,14 +14,14 @@ import org.springframework.stereotype.Component;
  * @since 2019-01-28
  */
 
-@Component("OneRoster:AcademicSessions:AcademicSessionFieldSelector")
+@Component("OneRoster2:AcademicSessions:AcademicSessionFieldSelector")
 public class AcademicSessionFieldSelector extends BaseFieldSelector<AcademicSession> {
 	public AcademicSessionFieldSelector() {
 		super(AcademicSession.class);
 	}
 
-	AcademicSessionsResponse apply(AcademicSessionsResponse response, ControllerData metadata) {
-		if(metadata.getFieldSelection().hasFieldSelection() && metadata.getFieldSelection().isValidFieldSelection(getModelClass())) {
+	AcademicSessionsResponse apply(AcademicSessionsResponse response, RequestData metadata) {
+		if(metadata.getFieldSelector().hasFieldSelection() && metadata.getFieldSelector().isValidFieldSelection(getModelClass())) {
 			for (AcademicSession academicSession : response.getData()) {
 				selectBaseFields(academicSession, metadata);
 			}
@@ -31,8 +33,8 @@ public class AcademicSessionFieldSelector extends BaseFieldSelector<AcademicSess
 		return response;
 	}
 
-	AcademicSessionResponse apply(AcademicSessionResponse response, ControllerData metadata) {
-		if(metadata.getFieldSelection().hasFieldSelection() && metadata.getFieldSelection().isValidFieldSelection(getModelClass())) {
+	AcademicSessionResponse apply(AcademicSessionResponse response, RequestData metadata) {
+		if(metadata.getFieldSelector().hasFieldSelection() && metadata.getFieldSelector().isValidFieldSelection(getModelClass())) {
 			selectBaseFields(response.getData(), metadata);
 			if (response.getData() == null) {
 				return null;
@@ -42,23 +44,23 @@ public class AcademicSessionFieldSelector extends BaseFieldSelector<AcademicSess
 	}
 
 	@Override
-	public void selectFields(AcademicSession instance, ControllerData metaData) {
-		if(!CollectionUtils.containsAny(metaData.getFieldSelection().getFields(), "title")) {
+	public void selectFields(AcademicSession instance, RequestData metaData) {
+		if(!CollectionUtils.containsAny(metaData.getFieldSelector().getFields(), "title")) {
 			instance.setTitle(null);
 		}
-		if(!CollectionUtils.containsAny(metaData.getFieldSelection().getFields(), "type")) {
+		if(!CollectionUtils.containsAny(metaData.getFieldSelector().getFields(), "type")) {
 			instance.setType(null);
 		}
-		if(!CollectionUtils.containsAny(metaData.getFieldSelection().getFields(), "schoolYear")) {
+		if(!CollectionUtils.containsAny(metaData.getFieldSelector().getFields(), "schoolYear")) {
 			instance.setSchoolYear(null);
 		}
-		if(!CollectionUtils.containsAny(metaData.getFieldSelection().getFields(), "beginDate")) {
+		if(!CollectionUtils.containsAny(metaData.getFieldSelector().getFields(), "beginDate")) {
 			instance.setStartDate(null);
 		}
-		if(!CollectionUtils.containsAny(metaData.getFieldSelection().getFields(), "endDate")) {
+		if(!CollectionUtils.containsAny(metaData.getFieldSelector().getFields(), "endDate")) {
 			instance.setEndDate(null);
 		}
-		if(!CollectionUtils.containsAny(metaData.getFieldSelection().getFields(), "parent")) {
+		if(!CollectionUtils.containsAny(metaData.getFieldSelector().getFields(), "parent")) {
 			instance.setParent(null);
 		}
 	}

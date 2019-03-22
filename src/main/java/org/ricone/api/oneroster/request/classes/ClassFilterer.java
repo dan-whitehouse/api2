@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 import javax.persistence.criteria.Path;
 
-@Component("OneRoster:Classes:ClassFilterer")
+@Component("OneRoster2:Classes:ClassFilterer")
 public class ClassFilterer extends BaseFilterer {
 	public ClassFilterer() {
 	}
@@ -22,20 +22,20 @@ public class ClassFilterer extends BaseFilterer {
 			case "classCode": return from.get(field);
 			case "classType": return from.get(field);
 			case "location": return from.get(field);
-			case "grades": return getJoin("grades").get("gradeLevel");
-			case "subjects": return getJoin("subjects").get("subject");
-			case "subjectCodes": return getJoin("subjects").get("subjectCode");
-			case "periods": return getJoin("periods").get("period");
+			case "grades": return from.get(field);
+			case "subjects": return from.get(field);
+			case "subjectCodes": return from.get(field);
+			case "periods": return from.get(field);
 
-			case "course.sourcedId": return from.get("courseId");
+			case "course.sourcedId": return from.get("course").get("sourcedId");
 			case "course.href": throw new InvalidDataException(buildInvalidDataException(field));
 			case "course.type": throw new InvalidDataException(buildInvalidDataException(field));
 
-			case "school.sourcedId": return from.get("orgId");
+			case "school.sourcedId": return from.get("org").get("sourcedId");
 			case "school.href": throw new InvalidDataException(buildInvalidDataException(field));
 			case "school.type": throw new InvalidDataException(buildInvalidDataException(field));
 
-			case "terms.sourcedId": return getJoin("terms").get("termId");
+			case "terms.sourcedId": return getJoin("terms").get("academicSession").get("sourcedId");
 			case "terms.href": throw new InvalidDataException(buildInvalidDataException(field));
 			case "terms.type": throw new InvalidDataException(buildInvalidDataException(field));
 			default: break;

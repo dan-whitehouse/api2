@@ -1,14 +1,14 @@
 package org.ricone.api.oneroster.request.demographics;
 
-import org.ricone.api.core.model.view.DemographicView;
-import org.ricone.api.oneroster.component.ControllerData;
+import org.ricone.api.core.model.v1p1.QDemographic;
+import org.ricone.api.oneroster.component.RequestData;
 
 import java.util.List;
 
 interface DemographicDAO {
-	DemographicView getDemographic(ControllerData metadata, String refId) throws Exception;
+	QDemographic getDemographic(RequestData metadata, String refId) throws Exception;
 
-	List<DemographicView> getAllDemographics(ControllerData metadata) throws Exception;
+	List<QDemographic> getAllDemographics(RequestData metadata) throws Exception;
 
-	int countAllDemographics(ControllerData metadata) throws Exception;
+	int countAllDemographics(RequestData metadata) throws Exception;
 }

@@ -1,57 +1,57 @@
 package org.ricone.api.oneroster.request.users;
 
-import org.ricone.api.core.model.view.UserView;
-import org.ricone.api.oneroster.component.ControllerData;
+import org.ricone.api.core.model.v1p1.QUser;
+import org.ricone.api.oneroster.component.RequestData;
 
 import java.util.List;
 
 interface UserDAO {
 	/* Find */
-	UserView getUser(ControllerData metadata, String refId) throws Exception;
+	QUser getUser(RequestData metadata, String refId) throws Exception;
 
-	List<UserView> getAllUsers(ControllerData metadata) throws Exception;
+	List<QUser> getAllUsers(RequestData metadata) throws Exception;
 
-	UserView getStudent(ControllerData metadata, String refId) throws Exception;
+	QUser getStudent(RequestData metadata, String refId) throws Exception;
 
-	List<UserView> getAllStudents(ControllerData metadata) throws Exception;
+	List<QUser> getAllStudents(RequestData metadata) throws Exception;
 
-	List<UserView> getStudentsForSchool(ControllerData metadata, String refId) throws Exception;
+	List<QUser> getStudentsForSchool(RequestData metadata, String refId) throws Exception;
 
-	List<UserView> getStudentsForClass(ControllerData metadata, String refId) throws Exception;
+	List<QUser> getStudentsForClass(RequestData metadata, String refId) throws Exception;
 
-	List<UserView> getStudentsForClassInSchool(ControllerData metadata, String refId, String classRefId) throws Exception;
+	List<QUser> getStudentsForClassInSchool(RequestData metadata, String refId, String classRefId) throws Exception;
 
-	UserView getTeacher(ControllerData metadata, String refId) throws Exception;
+	QUser getTeacher(RequestData metadata, String refId) throws Exception;
 
-	List<UserView> getAllTeachers(ControllerData metadata) throws Exception;
+	List<QUser> getAllTeachers(RequestData metadata) throws Exception;
 
-	List<UserView> getTeachersForSchool(ControllerData metadata, String refId) throws Exception;
+	List<QUser> getTeachersForSchool(RequestData metadata, String refId) throws Exception;
 
-	List<UserView> getTeachersForClass(ControllerData metadata, String refId) throws Exception;
+	List<QUser> getTeachersForClass(RequestData metadata, String refId) throws Exception;
 
-	List<UserView> getTeachersForClassInSchool(ControllerData metadata, String schoolRefId, String classRefId) throws Exception;
+	List<QUser> getTeachersForClassInSchool(RequestData metadata, String schoolRefId, String classRefId) throws Exception;
 
-	UserView getContact(ControllerData metadata, String refId) throws Exception;
+	QUser getContact(RequestData metadata, String refId) throws Exception;
 
-	List<UserView> getAllContacts(ControllerData metadata) throws Exception;
+	List<QUser> getAllContacts(RequestData metadata) throws Exception;
 
-	int countAllUsers(ControllerData metadata) throws Exception;
+	int countAllUsers(RequestData metadata) throws Exception;
 
-	int countAllStudents(ControllerData metadata) throws Exception;
+	int countAllStudents(RequestData metadata) throws Exception;
 
-	int countStudentsForSchool(ControllerData metadata, String refId) throws Exception;
+	int countStudentsForSchool(RequestData metadata, String refId) throws Exception;
 
-	int countStudentsForClass(ControllerData metadata, String refId) throws Exception;
+	int countStudentsForClass(RequestData metadata, String refId) throws Exception;
 
-	int countStudentsForClassInSchool(ControllerData metadata, String refId, String classRefId) throws Exception;
+	int countStudentsForClassInSchool(RequestData metadata, String refId, String classRefId) throws Exception;
 
-	int countAllTeachers(ControllerData metadata) throws Exception;
+	int countAllTeachers(RequestData metadata) throws Exception;
 
-	int countTeachersForSchool(ControllerData metadata, String refId) throws Exception;
+	int countTeachersForSchool(RequestData metadata, String refId) throws Exception;
 
-	int countTeachersForClass(ControllerData metadata, String refId) throws Exception;
+	int countTeachersForClass(RequestData metadata, String refId) throws Exception;
 
-	int countTeachersForClassInSchool(ControllerData metadata, String schoolRefId, String classRefId) throws Exception;
+	int countTeachersForClassInSchool(RequestData metadata, String schoolRefId, String classRefId) throws Exception;
 
-	int countAllContacts(ControllerData metadata) throws Exception;
+	int countAllContacts(RequestData metadata) throws Exception;
 }

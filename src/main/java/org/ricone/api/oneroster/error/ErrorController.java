@@ -1,11 +1,10 @@
 package org.ricone.api.oneroster.error;
 
-import io.swagger.annotations.Api;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ricone.api.oneroster.error.exception.*;
-import org.ricone.api.oneroster.model.*;
 import org.ricone.api.oneroster.model.Error;
+import org.ricone.api.oneroster.model.*;
 import org.ricone.error.NoContentException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

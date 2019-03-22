@@ -11,15 +11,15 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SortingData {
-	private Logger logger = LogManager.getLogger(SortingData.class);
+public class Sorter {
+	private Logger logger = LogManager.getLogger(Sorter.class);
 	private final String SORT = "sort";
 	private final String ORDER_BY = "orderBy";
 
 	private String sort = null;
 	private String orderBy = null;
 
-	SortingData(HttpServletRequest request) throws Exception {
+	Sorter(HttpServletRequest request) throws Exception {
 		if(StringUtils.isNotBlank(request.getParameter(SORT))) {
 			sort = request.getParameter(SORT);
 		}

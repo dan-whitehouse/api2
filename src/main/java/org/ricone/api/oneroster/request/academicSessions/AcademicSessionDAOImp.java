@@ -2,10 +2,10 @@ package org.ricone.api.oneroster.request.academicSessions;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ricone.api.core.model.view.AcademicSessionChildrenView;
-import org.ricone.api.core.model.view.AcademicSessionView;
-import org.ricone.api.oneroster.component.BaseDAOTest;
-import org.ricone.api.oneroster.component.ControllerData;
+import org.ricone.api.core.model.v1p1.QAcademicSession;
+import org.ricone.api.core.model.v1p1.QAcademicSessionChild;
+import org.ricone.api.oneroster.component.BaseDAO;
+import org.ricone.api.oneroster.component.RequestData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -16,28 +16,28 @@ import javax.persistence.Query;
 import javax.persistence.criteria.*;
 import java.util.List;
 
-@Repository("OneRoster:AcademicSessions:TermDAO")
+@Repository("OneRoster2:AcademicSessions:TermDAO")
 @SuppressWarnings({"unchecked", "unused"})
-class AcademicSessionDAOImp extends BaseDAOTest implements AcademicSessionDAO {
+class AcademicSessionDAOImp extends BaseDAO implements AcademicSessionDAO {
 	@PersistenceContext private EntityManager em;
 	@Autowired private AcademicSessionFilterer filterer;
 	private Logger logger = LogManager.getLogger(AcademicSessionDAOImp.class);
 
 	@Override
-	public AcademicSessionView getAcademicSession(ControllerData metadata, String refId) throws Exception {
+	public QAcademicSession getAcademicSession(RequestData metadata, String refId) throws Exception {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
-		final CriteriaQuery<AcademicSessionView> select = cb.createQuery(AcademicSessionView.class);
-		final Root<AcademicSessionView> from = select.from(AcademicSessionView.class);
-		final SetJoin<AcademicSessionView, AcademicSessionChildrenView> children = (SetJoin<AcademicSessionView, AcademicSessionChildrenView>) from.<AcademicSessionView, AcademicSessionChildrenView>join("children", JoinType.LEFT).alias("children");
+		final CriteriaQuery<QAcademicSession> select = cb.createQuery(QAcademicSession.class);
+		final Root<QAcademicSession> from = select.from(QAcademicSession.class);
+		final SetJoin<QAcademicSession, QAcademicSessionChild> children = (SetJoin<QAcademicSession, QAcademicSessionChild>) from.<QAcademicSession, QAcademicSessionChild>join(CHILDREN, JoinType.LEFT).alias(CHILDREN);
 
 		//Add Root Object & Joins to Filterer
 		filterer.addJoins(from, children);
 
 		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
-			cb.equal(from.get(PRIMARY_KEY), refId),
-			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
-			from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			cb.equal(from.get(SOURCED_ID), refId),
+			cb.equal(from.get(SOURCED_SCHOOL_YEAR), 2019),
+			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 		);
 
 		select.distinct(true);
@@ -46,26 +46,26 @@ class AcademicSessionDAOImp extends BaseDAOTest implements AcademicSessionDAO {
 
 		Query q = em.createQuery(select);
 		try {
-			return (AcademicSessionView) q.getSingleResult();
+			return (QAcademicSession) q.getSingleResult();
 		}
 		catch(NoResultException ignored) { }
 		return null;
 	}
 
 	@Override
-	public List<AcademicSessionView> getAllAcademicSessions(ControllerData metadata) throws Exception {
+	public List<QAcademicSession> getAllAcademicSessions(RequestData metadata) throws Exception {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
-		final CriteriaQuery<AcademicSessionView> select = cb.createQuery(AcademicSessionView.class);
-		final Root<AcademicSessionView> from = select.from(AcademicSessionView.class);
-		final SetJoin<AcademicSessionView, AcademicSessionChildrenView> children = (SetJoin<AcademicSessionView, AcademicSessionChildrenView>) from.<AcademicSessionView, AcademicSessionChildrenView>join("children", JoinType.LEFT).alias("children");
+		final CriteriaQuery<QAcademicSession> select = cb.createQuery(QAcademicSession.class);
+		final Root<QAcademicSession> from = select.from(QAcademicSession.class);
+		final SetJoin<QAcademicSession, QAcademicSessionChild> children = (SetJoin<QAcademicSession, QAcademicSessionChild>) from.<QAcademicSession, QAcademicSessionChild>join(CHILDREN, JoinType.LEFT).alias(CHILDREN);
 
 		//Add Root Object & Joins to Filterer
 		filterer.addJoins(from, children);
 
 		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
-			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
-			from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			cb.equal(from.get(SOURCED_SCHOOL_YEAR), 2019),
+			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 		);
 
 		select.distinct(true);
@@ -79,25 +79,25 @@ class AcademicSessionDAOImp extends BaseDAOTest implements AcademicSessionDAO {
 			q.setMaxResults(metadata.getPaging().getLimit());
 			metadata.getPaging().setPagingHeaders(countAllAcademicSessions(metadata));
 		}
-		return (List<AcademicSessionView>) q.getResultList();
+		return (List<QAcademicSession>) q.getResultList();
 	}
 
 	@Override
-	public AcademicSessionView getCalendar(ControllerData metadata, String refId) throws Exception {
+	public QAcademicSession getCalendar(RequestData metadata, String refId) throws Exception {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
-		final CriteriaQuery<AcademicSessionView> select = cb.createQuery(AcademicSessionView.class);
-		final Root<AcademicSessionView> from = select.from(AcademicSessionView.class);
-		final SetJoin<AcademicSessionView, AcademicSessionChildrenView> children = (SetJoin<AcademicSessionView, AcademicSessionChildrenView>) from.<AcademicSessionView, AcademicSessionChildrenView>join("children", JoinType.LEFT).alias("children");
+		final CriteriaQuery<QAcademicSession> select = cb.createQuery(QAcademicSession.class);
+		final Root<QAcademicSession> from = select.from(QAcademicSession.class);
+		final SetJoin<QAcademicSession, QAcademicSessionChild> children = (SetJoin<QAcademicSession, QAcademicSessionChild>) from.<QAcademicSession, QAcademicSessionChild>join(CHILDREN, JoinType.LEFT).alias(CHILDREN);
 
 		//Add Root Object & Joins to Filterer
 		filterer.addJoins(from, children);
 
 		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
-			cb.equal(from.get(PRIMARY_KEY), refId),
-			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
-			cb.equal(from.get(FIELD_TYPE), "schoolYear"),
-			from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			cb.equal(from.get(SOURCED_ID), refId),
+			cb.equal(from.get(SOURCED_SCHOOL_YEAR), 2019),
+			cb.equal(from.get(TYPE), SCHOOL_YEAR),
+			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 		);
 
 		select.distinct(true);
@@ -106,27 +106,27 @@ class AcademicSessionDAOImp extends BaseDAOTest implements AcademicSessionDAO {
 
 		Query q = em.createQuery(select);
 		try {
-			return (AcademicSessionView) q.getSingleResult();
+			return (QAcademicSession) q.getSingleResult();
 		}
 		catch(NoResultException ignored) { }
 		return null;
 	}
 
 	@Override
-	public List<AcademicSessionView> getAllCalendars(ControllerData metadata) throws Exception {
+	public List<QAcademicSession> getAllCalendars(RequestData metadata) throws Exception {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
-		final CriteriaQuery<AcademicSessionView> select = cb.createQuery(AcademicSessionView.class);
-		final Root<AcademicSessionView> from = select.from(AcademicSessionView.class);
-		final SetJoin<AcademicSessionView, AcademicSessionChildrenView> children = (SetJoin<AcademicSessionView, AcademicSessionChildrenView>) from.<AcademicSessionView, AcademicSessionChildrenView>join("children", JoinType.LEFT).alias("children");
+		final CriteriaQuery<QAcademicSession> select = cb.createQuery(QAcademicSession.class);
+		final Root<QAcademicSession> from = select.from(QAcademicSession.class);
+		final SetJoin<QAcademicSession, QAcademicSessionChild> children = (SetJoin<QAcademicSession, QAcademicSessionChild>) from.<QAcademicSession, QAcademicSessionChild>join(CHILDREN, JoinType.LEFT).alias(CHILDREN);
 
 		//Add Root Object & Joins to Filterer
 		filterer.addJoins(from, children);
 
 		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
-			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
-			cb.equal(from.get(FIELD_TYPE), "schoolYear"),
-			from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			cb.equal(from.get(SOURCED_SCHOOL_YEAR), 2019),
+			cb.equal(from.get(TYPE), SCHOOL_YEAR),
+			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 		);
 
 		select.distinct(true);
@@ -140,25 +140,25 @@ class AcademicSessionDAOImp extends BaseDAOTest implements AcademicSessionDAO {
 			q.setMaxResults(metadata.getPaging().getLimit());
 			metadata.getPaging().setPagingHeaders(countAllCalendars(metadata));
 		}
-		return (List<AcademicSessionView>) q.getResultList();
+		return (List<QAcademicSession>) q.getResultList();
 	}
 
 	@Override
-	public AcademicSessionView getTerm(ControllerData metadata, String refId) throws Exception {
+	public QAcademicSession getTerm(RequestData metadata, String refId) throws Exception {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
-		final CriteriaQuery<AcademicSessionView> select = cb.createQuery(AcademicSessionView.class);
-		final Root<AcademicSessionView> from = select.from(AcademicSessionView.class);
-		final SetJoin<AcademicSessionView, AcademicSessionChildrenView> children = (SetJoin<AcademicSessionView, AcademicSessionChildrenView>) from.<AcademicSessionView, AcademicSessionChildrenView>join("children", JoinType.LEFT).alias("children");
+		final CriteriaQuery<QAcademicSession> select = cb.createQuery(QAcademicSession.class);
+		final Root<QAcademicSession> from = select.from(QAcademicSession.class);
+		final SetJoin<QAcademicSession, QAcademicSessionChild> children = (SetJoin<QAcademicSession, QAcademicSessionChild>) from.<QAcademicSession, QAcademicSessionChild>join(CHILDREN, JoinType.LEFT).alias(CHILDREN);
 
 		//Add Root Object & Joins to Filterer
 		filterer.addJoins(from, children);
 
 		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
-			cb.equal(from.get(PRIMARY_KEY), refId),
-			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
-			cb.equal(from.get(FIELD_TYPE), "term"),
-			from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			cb.equal(from.get(SOURCED_ID), refId),
+			cb.equal(from.get(SOURCED_SCHOOL_YEAR), 2019),
+			cb.equal(from.get(TYPE), TERM),
+			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 		);
 
 		select.distinct(true);
@@ -167,27 +167,27 @@ class AcademicSessionDAOImp extends BaseDAOTest implements AcademicSessionDAO {
 
 		Query q = em.createQuery(select);
 		try {
-			return (AcademicSessionView) q.getSingleResult();
+			return (QAcademicSession) q.getSingleResult();
 		}
 		catch(NoResultException ignored) { }
 		return null;
 	}
 
 	@Override
-	public List<AcademicSessionView> getAllTerms(ControllerData metadata) throws Exception {
+	public List<QAcademicSession> getAllTerms(RequestData metadata) throws Exception {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
-		final CriteriaQuery<AcademicSessionView> select = cb.createQuery(AcademicSessionView.class);
-		final Root<AcademicSessionView> from = select.from(AcademicSessionView.class);
-		final SetJoin<AcademicSessionView, AcademicSessionChildrenView> children = (SetJoin<AcademicSessionView, AcademicSessionChildrenView>) from.<AcademicSessionView, AcademicSessionChildrenView>join("children", JoinType.LEFT).alias("children");
+		final CriteriaQuery<QAcademicSession> select = cb.createQuery(QAcademicSession.class);
+		final Root<QAcademicSession> from = select.from(QAcademicSession.class);
+		final SetJoin<QAcademicSession, QAcademicSessionChild> children = (SetJoin<QAcademicSession, QAcademicSessionChild>) from.<QAcademicSession, QAcademicSessionChild>join(CHILDREN, JoinType.LEFT).alias(CHILDREN);
 
 		//Add Root Object & Joins to Filterer
 		filterer.addJoins(from, children);
 
 		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
-			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
-			cb.equal(from.get(FIELD_TYPE), "term"),
-			from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			cb.equal(from.get(SOURCED_SCHOOL_YEAR), 2019),
+			cb.equal(from.get(TYPE), TERM),
+			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 		);
 
 		select.distinct(true);
@@ -201,23 +201,23 @@ class AcademicSessionDAOImp extends BaseDAOTest implements AcademicSessionDAO {
 			q.setMaxResults(metadata.getPaging().getLimit());
 			metadata.getPaging().setPagingHeaders(countAllTerms(metadata));
 		}
-		return (List<AcademicSessionView>) q.getResultList();
+		return (List<QAcademicSession>) q.getResultList();
 	}
 
 	@Override
-	public int countAllAcademicSessions(ControllerData metadata) throws Exception {
+	public int countAllAcademicSessions(RequestData metadata) throws Exception {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<Long> select = cb.createQuery(Long.class);
-		final Root<AcademicSessionView> from = select.from(AcademicSessionView.class);
-		final SetJoin<AcademicSessionView, AcademicSessionChildrenView> children = (SetJoin<AcademicSessionView, AcademicSessionChildrenView>) from.<AcademicSessionView, AcademicSessionChildrenView>join("children", JoinType.LEFT).alias("children");
+		final Root<QAcademicSession> from = select.from(QAcademicSession.class);
+		final SetJoin<QAcademicSession, QAcademicSessionChild> children = (SetJoin<QAcademicSession, QAcademicSessionChild>) from.<QAcademicSession, QAcademicSessionChild>join(CHILDREN, JoinType.LEFT).alias(CHILDREN);
 
 		//Add Root Object & Joins to Filterer
 		filterer.addJoins(from, children);
 
 		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
-			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
-			from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			cb.equal(from.get(SOURCED_SCHOOL_YEAR), 2019),
+			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 		);
 
 		select.select(cb.countDistinct(from));
@@ -227,20 +227,20 @@ class AcademicSessionDAOImp extends BaseDAOTest implements AcademicSessionDAO {
 	}
 
 	@Override
-	public int countAllCalendars(ControllerData metadata) throws Exception {
+	public int countAllCalendars(RequestData metadata) throws Exception {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<Long> select = cb.createQuery(Long.class);
-		final Root<AcademicSessionView> from = select.from(AcademicSessionView.class);
-		final SetJoin<AcademicSessionView, AcademicSessionChildrenView> children = (SetJoin<AcademicSessionView, AcademicSessionChildrenView>) from.<AcademicSessionView, AcademicSessionChildrenView>join("children", JoinType.LEFT).alias("children");
+		final Root<QAcademicSession> from = select.from(QAcademicSession.class);
+		final SetJoin<QAcademicSession, QAcademicSessionChild> children = (SetJoin<QAcademicSession, QAcademicSessionChild>) from.<QAcademicSession, QAcademicSessionChild>join(CHILDREN, JoinType.LEFT).alias(CHILDREN);
 
 		//Add Root Object & Joins to Filterer
 		filterer.addJoins(from, children);
 
 		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
-			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
-			cb.equal(from.get(FIELD_TYPE), "schoolYear"),
-			from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			cb.equal(from.get(SOURCED_SCHOOL_YEAR), 2019),
+			cb.equal(from.get(TYPE), SCHOOL_YEAR),
+			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 		);
 
 		select.select(cb.countDistinct(from));
@@ -250,20 +250,20 @@ class AcademicSessionDAOImp extends BaseDAOTest implements AcademicSessionDAO {
 	}
 
 	@Override
-	public int countAllTerms(ControllerData metadata) throws Exception {
+	public int countAllTerms(RequestData metadata) throws Exception {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<Long> select = cb.createQuery(Long.class);
-		final Root<AcademicSessionView> from = select.from(AcademicSessionView.class);
-		final SetJoin<AcademicSessionView, AcademicSessionChildrenView> children = (SetJoin<AcademicSessionView, AcademicSessionChildrenView>) from.<AcademicSessionView, AcademicSessionChildrenView>join("children", JoinType.LEFT).alias("children");
+		final Root<QAcademicSession> from = select.from(QAcademicSession.class);
+		final SetJoin<QAcademicSession, QAcademicSessionChild> children = (SetJoin<QAcademicSession, QAcademicSessionChild>) from.<QAcademicSession, QAcademicSessionChild>join(CHILDREN, JoinType.LEFT).alias(CHILDREN);
 
 		//Add Root Object & Joins to Filterer
 		filterer.addJoins(from, children);
 
 		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
-			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
-			cb.equal(from.get(FIELD_TYPE), "term"),
-			from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			cb.equal(from.get(SOURCED_SCHOOL_YEAR), 2019),
+			cb.equal(from.get(TYPE), TERM),
+			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 		);
 
 		select.select(cb.countDistinct(from));

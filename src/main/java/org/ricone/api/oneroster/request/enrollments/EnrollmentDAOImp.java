@@ -2,9 +2,9 @@ package org.ricone.api.oneroster.request.enrollments;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ricone.api.core.model.view.EnrollmentView;
-import org.ricone.api.oneroster.component.BaseDAOTest;
-import org.ricone.api.oneroster.component.ControllerData;
+import org.ricone.api.core.model.v1p1.QEnrollment;
+import org.ricone.api.oneroster.component.BaseDAO;
+import org.ricone.api.oneroster.component.RequestData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -18,27 +18,27 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.List;
 
-@Repository("OneRoster:Enrollments:EnrollmentDAO")
+@Repository("OneRoster2:Enrollments:EnrollmentDAO")
 @SuppressWarnings({"unchecked", "unused"})
-class EnrollmentDAOImp extends BaseDAOTest implements EnrollmentDAO {
+class EnrollmentDAOImp extends BaseDAO implements EnrollmentDAO {
 	@PersistenceContext private EntityManager em;
 	@Autowired private EnrollmentFilterer filterer;
 	private Logger logger = LogManager.getLogger(EnrollmentDAOImp.class);
 
 	@Override
-	public EnrollmentView getEnrollment(ControllerData metadata, String refId) throws Exception {
+	public QEnrollment getEnrollment(RequestData metadata, String refId) throws Exception {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
-		final CriteriaQuery<EnrollmentView> select = cb.createQuery(EnrollmentView.class);
-		final Root<EnrollmentView> from = select.from(EnrollmentView.class);
+		final CriteriaQuery<QEnrollment> select = cb.createQuery(QEnrollment.class);
+		final Root<QEnrollment> from = select.from(QEnrollment.class);
 
 		//Add Root Object & Joins to Filterer
 		filterer.addJoins(from);
 
 		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
-			cb.equal(from.get(PRIMARY_KEY), refId),
-			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
-			from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			cb.equal(from.get(SOURCED_ID), refId),
+			cb.equal(from.get(SOURCED_SCHOOL_YEAR), 2019),
+			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 		);
 
 		select.distinct(true);
@@ -47,25 +47,25 @@ class EnrollmentDAOImp extends BaseDAOTest implements EnrollmentDAO {
 
 		Query q = em.createQuery(select);
 		try {
-			return (EnrollmentView) q.getSingleResult();
+			return (QEnrollment) q.getSingleResult();
 		}
 		catch(NoResultException ignored) { }
 		return null;
 	}
 
 	@Override
-	public List<EnrollmentView> getAllEnrollments(ControllerData metadata) throws Exception {
+	public List<QEnrollment> getAllEnrollments(RequestData metadata) throws Exception {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
-		final CriteriaQuery<EnrollmentView> select = cb.createQuery(EnrollmentView.class);
-		final Root<EnrollmentView> from = select.from(EnrollmentView.class);
+		final CriteriaQuery<QEnrollment> select = cb.createQuery(QEnrollment.class);
+		final Root<QEnrollment> from = select.from(QEnrollment.class);
 
 		//Add Root Object & Joins to Filterer
 		filterer.addJoins(from);
 
 		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
-			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
-			from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			cb.equal(from.get(SOURCED_SCHOOL_YEAR), 2019),
+			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 		);
 
 		select.distinct(true);
@@ -79,23 +79,23 @@ class EnrollmentDAOImp extends BaseDAOTest implements EnrollmentDAO {
 			q.setMaxResults(metadata.getPaging().getLimit());
 			metadata.getPaging().setPagingHeaders(countAllEnrollments(metadata));
 		}
-		return (List<EnrollmentView>) q.getResultList();
+		return (List<QEnrollment>) q.getResultList();
 	}
 
 	@Override
-	public List<EnrollmentView> getEnrollmentsForSchool(ControllerData metadata, String refId) throws Exception {
+	public List<QEnrollment> getEnrollmentsForSchool(RequestData metadata, String refId) throws Exception {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
-		final CriteriaQuery<EnrollmentView> select = cb.createQuery(EnrollmentView.class);
-		final Root<EnrollmentView> from = select.from(EnrollmentView.class);
+		final CriteriaQuery<QEnrollment> select = cb.createQuery(QEnrollment.class);
+		final Root<QEnrollment> from = select.from(QEnrollment.class);
 
 		//Add Root Object & Joins to Filterer
 		filterer.addJoins(from);
 
 		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
-			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
-			cb.equal(from.get(FIELD_ORG_ID), refId),
-			from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			cb.equal(from.get(SOURCED_SCHOOL_YEAR), 2019),
+			cb.equal(from.get(ORG_ID), refId),
+			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 		);
 
 		select.distinct(true);
@@ -109,24 +109,24 @@ class EnrollmentDAOImp extends BaseDAOTest implements EnrollmentDAO {
 			q.setMaxResults(metadata.getPaging().getLimit());
 			metadata.getPaging().setPagingHeaders(countEnrollmentsForSchool(metadata, refId));
 		}
-		return (List<EnrollmentView>) q.getResultList();
+		return (List<QEnrollment>) q.getResultList();
 	}
 
 	@Override
-	public List<EnrollmentView> getEnrollmentsForClassInSchool(ControllerData metadata, String schoolId, String classId) throws Exception {
+	public List<QEnrollment> getEnrollmentsForClassInSchool(RequestData metadata, String schoolId, String classId) throws Exception {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
-		final CriteriaQuery<EnrollmentView> select = cb.createQuery(EnrollmentView.class);
-		final Root<EnrollmentView> from = select.from(EnrollmentView.class);
+		final CriteriaQuery<QEnrollment> select = cb.createQuery(QEnrollment.class);
+		final Root<QEnrollment> from = select.from(QEnrollment.class);
 
 		//Add Root Object & Joins to Filterer
 		filterer.addJoins(from);
 
 		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
-			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
-			cb.equal(from.get(FIELD_ORG_ID), schoolId),
-			cb.equal(from.get(FIELD_CLASS_ID), classId),
-			from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			cb.equal(from.get(SOURCED_SCHOOL_YEAR), 2019),
+			cb.equal(from.get(ORG_ID), schoolId),
+			cb.equal(from.get(CLASS_ID), classId),
+			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 		);
 
 		select.distinct(true);
@@ -140,22 +140,22 @@ class EnrollmentDAOImp extends BaseDAOTest implements EnrollmentDAO {
 			q.setMaxResults(metadata.getPaging().getLimit());
 			metadata.getPaging().setPagingHeaders(countEnrollmentsForClassInSchool(metadata, schoolId, classId));
 		}
-		return (List<EnrollmentView>) q.getResultList();
+		return (List<QEnrollment>) q.getResultList();
 	}
 
 	@Override
-	public int countAllEnrollments(ControllerData metadata) throws Exception {
+	public int countAllEnrollments(RequestData metadata) throws Exception {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<Long> select = cb.createQuery(Long.class);
-		final Root<EnrollmentView> from = select.from(EnrollmentView.class);
+		final Root<QEnrollment> from = select.from(QEnrollment.class);
 
 		//Add Root Object & Joins to Filterer
 		filterer.addJoins(from);
 
 		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
-			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
-			from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			cb.equal(from.get(SOURCED_SCHOOL_YEAR), 2019),
+			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 		);
 
 		select.select(cb.countDistinct(from));
@@ -165,19 +165,19 @@ class EnrollmentDAOImp extends BaseDAOTest implements EnrollmentDAO {
 	}
 
 	@Override
-	public int countEnrollmentsForSchool(ControllerData metadata, String refId) throws Exception {
+	public int countEnrollmentsForSchool(RequestData metadata, String refId) throws Exception {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<Long> select = cb.createQuery(Long.class);
-		final Root<EnrollmentView> from = select.from(EnrollmentView.class);
+		final Root<QEnrollment> from = select.from(QEnrollment.class);
 
 		//Add Root Object & Joins to Filterer
 		filterer.addJoins(from);
 
 		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
-			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
-			cb.equal(from.get(FIELD_ORG_ID), refId),
-			from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			cb.equal(from.get(SOURCED_SCHOOL_YEAR), 2019),
+			cb.equal(from.get(ORG_ID), refId),
+			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 		);
 
 		select.select(cb.countDistinct(from));
@@ -187,20 +187,20 @@ class EnrollmentDAOImp extends BaseDAOTest implements EnrollmentDAO {
 	}
 
 	@Override
-	public int countEnrollmentsForClassInSchool(ControllerData metadata, String schoolId, String classId) throws Exception {
+	public int countEnrollmentsForClassInSchool(RequestData metadata, String schoolId, String classId) throws Exception {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<Long> select = cb.createQuery(Long.class);
-		final Root<EnrollmentView> from = select.from(EnrollmentView.class);
+		final Root<QEnrollment> from = select.from(QEnrollment.class);
 
 		//Add Root Object & Joins to Filterer
 		filterer.addJoins(from);
 
 		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
-			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
-			cb.equal(from.get(FIELD_ORG_ID), schoolId),
-			cb.equal(from.get(FIELD_CLASS_ID), classId),
-			from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			cb.equal(from.get(SOURCED_SCHOOL_YEAR), 2019),
+			cb.equal(from.get(ORG_ID), schoolId),
+			cb.equal(from.get(CLASS_ID), classId),
+			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 		);
 
 		select.select(cb.countDistinct(from));

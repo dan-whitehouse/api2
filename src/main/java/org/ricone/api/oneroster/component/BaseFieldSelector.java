@@ -10,24 +10,24 @@ public abstract class BaseFieldSelector<T extends Base> {
 		this.model = model;
 	}
 
-	protected void selectBaseFields(T instance, ControllerData metaData) {
-		if(!CollectionUtils.containsAny(metaData.getFieldSelection().getFields(), "sourcedId")) {
+	protected void selectBaseFields(T instance, RequestData metaData) {
+		if(!CollectionUtils.containsAny(metaData.getFieldSelector().getFields(), "sourcedId")) {
 			instance.setSourcedId(null);
 		}
-		if(!CollectionUtils.containsAny(metaData.getFieldSelection().getFields(), "status")) {
+		if(!CollectionUtils.containsAny(metaData.getFieldSelector().getFields(), "status")) {
 			instance.setStatus(null);
 		}
-		if(!CollectionUtils.containsAny(metaData.getFieldSelection().getFields(), "dateLastModified")) {
+		if(!CollectionUtils.containsAny(metaData.getFieldSelector().getFields(), "dateLastModified")) {
 			instance.setDateLastModified(null);
 		}
-		if(!CollectionUtils.containsAny(metaData.getFieldSelection().getFields(), "metadata")) {
+		if(!CollectionUtils.containsAny(metaData.getFieldSelector().getFields(), "metadata")) {
 			instance.setMetadata(null);
 		}
 
 		selectFields(instance, metaData);
 	}
 
-	protected abstract void selectFields(T instance, ControllerData metaData);
+	protected abstract void selectFields(T instance, RequestData metaData);
 
 	protected Class<T> getModelClass() {
 		return model;

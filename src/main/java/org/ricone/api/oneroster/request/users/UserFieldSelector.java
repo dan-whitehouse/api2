@@ -2,8 +2,10 @@ package org.ricone.api.oneroster.request.users;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.ricone.api.oneroster.component.BaseFieldSelector;
-import org.ricone.api.oneroster.component.ControllerData;
-import org.ricone.api.oneroster.model.*;
+import org.ricone.api.oneroster.component.RequestData;
+import org.ricone.api.oneroster.model.User;
+import org.ricone.api.oneroster.model.UserResponse;
+import org.ricone.api.oneroster.model.UsersResponse;
 import org.springframework.stereotype.Component;
 
 /**
@@ -12,14 +14,14 @@ import org.springframework.stereotype.Component;
  * @since 2019-01-22
  */
 
-@Component("OneRoster:Users:UserFieldSelector")
+@Component("OneRoster2:Users:UserFieldSelector")
 public class UserFieldSelector extends BaseFieldSelector<User> {
 	public UserFieldSelector() {
 		super(User.class);
 	}
 
-	UsersResponse apply(UsersResponse response, ControllerData metadata) {
-		if(metadata.getFieldSelection().hasFieldSelection() && metadata.getFieldSelection().isValidFieldSelection(getModelClass())) {
+	UsersResponse apply(UsersResponse response, RequestData metadata) {
+		if(metadata.getFieldSelector().hasFieldSelection() && metadata.getFieldSelector().isValidFieldSelection(getModelClass())) {
 			for (User user : response.getData()) {
 				selectBaseFields(user, metadata);
 			}
@@ -31,8 +33,8 @@ public class UserFieldSelector extends BaseFieldSelector<User> {
 		return response;
 	}
 
-	UserResponse apply(UserResponse response, ControllerData metadata) {
-		if(metadata.getFieldSelection().hasFieldSelection() && metadata.getFieldSelection().isValidFieldSelection(getModelClass())) {
+	UserResponse apply(UserResponse response, RequestData metadata) {
+		if(metadata.getFieldSelector().hasFieldSelection() && metadata.getFieldSelector().isValidFieldSelection(getModelClass())) {
 			selectBaseFields(response.getData(), metadata);
 			if (response.getData() == null) {
 				return null;
@@ -42,50 +44,50 @@ public class UserFieldSelector extends BaseFieldSelector<User> {
 	}
 
 	@Override
-	public void selectFields(User instance, ControllerData metaData) {
-		if(!CollectionUtils.containsAny(metaData.getFieldSelection().getFields(), "username")) {
+	public void selectFields(User instance, RequestData metaData) {
+		if(!CollectionUtils.containsAny(metaData.getFieldSelector().getFields(), "username")) {
 			instance.setUsername(null);
 		}
-		if(!CollectionUtils.containsAny(metaData.getFieldSelection().getFields(), "userIds")) {
+		if(!CollectionUtils.containsAny(metaData.getFieldSelector().getFields(), "userIds")) {
 			instance.setUserIds(null);
 		}
-		if(!CollectionUtils.containsAny(metaData.getFieldSelection().getFields(), "enabledUser")) {
+		if(!CollectionUtils.containsAny(metaData.getFieldSelector().getFields(), "enabledUser")) {
 			instance.setEnabledUser(null);
 		}
-		if(!CollectionUtils.containsAny(metaData.getFieldSelection().getFields(), "givenName")) {
+		if(!CollectionUtils.containsAny(metaData.getFieldSelector().getFields(), "givenName")) {
 			instance.setGivenName(null);
 		}
-		if(!CollectionUtils.containsAny(metaData.getFieldSelection().getFields(), "familyName")) {
+		if(!CollectionUtils.containsAny(metaData.getFieldSelector().getFields(), "familyName")) {
 			instance.setFamilyName(null);
 		}
-		if(!CollectionUtils.containsAny(metaData.getFieldSelection().getFields(), "middleName")) {
+		if(!CollectionUtils.containsAny(metaData.getFieldSelector().getFields(), "middleName")) {
 			instance.setMiddleName(null);
 		}
-		if(!CollectionUtils.containsAny(metaData.getFieldSelection().getFields(), "role")) {
+		if(!CollectionUtils.containsAny(metaData.getFieldSelector().getFields(), "role")) {
 			instance.setRole(null);
 		}
-		if(!CollectionUtils.containsAny(metaData.getFieldSelection().getFields(), "identifier")) {
+		if(!CollectionUtils.containsAny(metaData.getFieldSelector().getFields(), "identifier")) {
 			instance.setIdentifier(null);
 		}
-		if(!CollectionUtils.containsAny(metaData.getFieldSelection().getFields(), "email")) {
+		if(!CollectionUtils.containsAny(metaData.getFieldSelector().getFields(), "email")) {
 			instance.setEmail(null);
 		}
-		if(!CollectionUtils.containsAny(metaData.getFieldSelection().getFields(), "sms")) {
+		if(!CollectionUtils.containsAny(metaData.getFieldSelector().getFields(), "sms")) {
 			instance.setSms(null);
 		}
-		if(!CollectionUtils.containsAny(metaData.getFieldSelection().getFields(), "phone")) {
+		if(!CollectionUtils.containsAny(metaData.getFieldSelector().getFields(), "phone")) {
 			instance.setPhone(null);
 		}
-		if(!CollectionUtils.containsAny(metaData.getFieldSelection().getFields(), "agents")) {
+		if(!CollectionUtils.containsAny(metaData.getFieldSelector().getFields(), "agents")) {
 			instance.setAgents(null);
 		}
-		if(!CollectionUtils.containsAny(metaData.getFieldSelection().getFields(), "orgs")) {
+		if(!CollectionUtils.containsAny(metaData.getFieldSelector().getFields(), "orgs")) {
 			instance.setOrgs(null);
 		}
-		if(!CollectionUtils.containsAny(metaData.getFieldSelection().getFields(), "grades")) {
+		if(!CollectionUtils.containsAny(metaData.getFieldSelector().getFields(), "grades")) {
 			instance.setGrades(null);
 		}
-		if(!CollectionUtils.containsAny(metaData.getFieldSelection().getFields(), "password")) {
+		if(!CollectionUtils.containsAny(metaData.getFieldSelector().getFields(), "password")) {
 			instance.setPassword(null);
 		}
 	}

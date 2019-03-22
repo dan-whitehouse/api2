@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 import javax.persistence.criteria.Path;
 
-@Component("OneRoster:Demographics:DemographicFilterer")
+@Component("OneRoster2:Demographics:DemographicFilterer")
 public class DemographicFilterer extends BaseFilterer {
 	public DemographicFilterer() {
 	}

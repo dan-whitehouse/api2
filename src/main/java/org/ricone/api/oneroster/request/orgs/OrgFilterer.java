@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 import javax.persistence.criteria.Path;
 
-@Component("OneRoster:Orgs:OrgFilterer")
+@Component("OneRoster2:Orgs:OrgFilterer")
 public class OrgFilterer extends BaseFilterer {
 	public OrgFilterer() {
 	}
@@ -27,10 +27,10 @@ public class OrgFilterer extends BaseFilterer {
 			case "name": return from.get(field);
 			case "type": return from.get(field);
 			case "identifier": return from.get(field);
-			case "parent.sourcedId": return from.get("parentId");
+			case "parent.sourcedId": return from.get("org").get("sourcedId");
 			case "parent.href": throw new InvalidDataException(buildInvalidDataException(field));
 			case "parent.type": throw new InvalidDataException(buildInvalidDataException(field));
-			case "children.sourcedId": return getJoin("children").get("childId");
+			case "children.sourcedId": return getJoin("children").get("child").get("sourcedId");
 			case "children.href": throw new InvalidDataException(buildInvalidDataException(field));
 			case "children.type": throw new InvalidDataException(buildInvalidDataException(field));
 			default: break;

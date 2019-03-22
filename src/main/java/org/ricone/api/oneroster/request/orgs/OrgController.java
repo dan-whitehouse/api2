@@ -17,12 +17,12 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@RestController("OneRoster:Orgs:OrgController")
+@RestController("OneRoster2:Orgs:OrgController")
 @Api(value = "Org", description = "One Roster - Orgs", tags = {"Org"})
 class OrgController extends BaseController {
 	@Autowired private OrgService service;
 
-	@ResponseBody @GetMapping(value = "/ims/oneroster/v1p1/orgs/{id}")
+	@ResponseBody @GetMapping(value = "/ims/oneroster2/v1p1/orgs/{id}")
 	@ApiOperation(value = "getOrg", tags = {"Org"})
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "Success", response = OrgResponse.class),
@@ -36,7 +36,7 @@ class OrgController extends BaseController {
 		return service.getOrg(getMetaData(request, response), id);
 	}
 
-	@ResponseBody @GetMapping(value = "/ims/oneroster/v1p1/orgs")
+	@ResponseBody @GetMapping(value = "/ims/oneroster2/v1p1/orgs")
 	@ApiOperation(value = "getAllOrgs", tags = {"Org"})
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "Success", response = OrgsResponse.class),
@@ -50,7 +50,7 @@ class OrgController extends BaseController {
 		return service.getAllOrgs(getMetaData(request, response));
 	}
 
-	@ResponseBody @GetMapping(value = "/ims/oneroster/v1p1/schools/{id}")
+	@ResponseBody @GetMapping(value = "/ims/oneroster2/v1p1/schools/{id}")
 	@ApiOperation(value = "getSchool", tags = {"Org"})
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "Success", response = OrgsResponse.class),
@@ -64,7 +64,7 @@ class OrgController extends BaseController {
 		return service.getSchool(getMetaData(request, response), id);
 	}
 
-	@ResponseBody @GetMapping(value = "/ims/oneroster/v1p1/schools")
+	@ResponseBody @GetMapping(value = "/ims/oneroster2/v1p1/schools")
 	@ApiOperation(value = "getAllSchools", tags = {"Org"})
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "Success", response = OrgsResponse.class),

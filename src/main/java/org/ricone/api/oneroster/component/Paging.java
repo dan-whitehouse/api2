@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PagingData {
+public class Paging {
 	private Logger logger = LogManager.getLogger(this.getClass());
 	private final String OFFSET = "offset";
 	private final String LIMIT = "limit";
@@ -22,7 +22,7 @@ public class PagingData {
 	private Integer offset = null;
 	private Integer limit = null;
 
-	PagingData(HttpServletRequest request, HttpServletResponse response) throws InvalidPagingException {
+	Paging(HttpServletRequest request, HttpServletResponse response) throws InvalidPagingException {
 		this.request = request;
 		this.response = response;
 

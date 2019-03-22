@@ -1,11 +1,11 @@
 package org.ricone.api.oneroster.request.users;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.ricone.api.core.model.view.UserView;
+import org.ricone.api.core.model.v1p1.QUser;
+import org.ricone.api.oneroster.component.RequestData;
 import org.ricone.api.oneroster.error.exception.UnknownObjectException;
 import org.ricone.api.oneroster.model.UserResponse;
 import org.ricone.api.oneroster.model.UsersResponse;
-import org.ricone.api.oneroster.component.ControllerData;
 import org.ricone.error.NoContentException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,14 +14,14 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 @Transactional
-@Service("OneRoster:Users:UserService")
+@Service("OneRoster2:Users:UserService")
 class UserServiceImp implements UserService {
 	@Autowired private UserDAO dao;
 	@Autowired private UserMapper mapper;
 	@Autowired private UserFieldSelector selector;
 
 	@Override
-	public UserResponse getUser(ControllerData metadata, String refId) throws Exception {
+	public UserResponse getUser(RequestData metadata, String refId) throws Exception {
 		UserResponse studentResponse = selector.apply(mapper.convert(dao.getStudent(metadata, refId), metadata), metadata);
 		if(studentResponse != null) {
 			return studentResponse;
@@ -30,8 +30,8 @@ class UserServiceImp implements UserService {
 	}
 
 	@Override
-	public UsersResponse getAllUsers(ControllerData metadata) throws Exception {
-		List<UserView> instance = dao.getAllUsers(metadata);
+	public UsersResponse getAllUsers(RequestData metadata) throws Exception {
+		List<QUser> instance = dao.getAllUsers(metadata);
 		if(CollectionUtils.isEmpty(instance)) {
 			throw new NoContentException();
 		}
@@ -39,7 +39,7 @@ class UserServiceImp implements UserService {
 	}
 
 	@Override
-	public UserResponse getStudent(ControllerData metadata, String refId) throws Exception {
+	public UserResponse getStudent(RequestData metadata, String refId) throws Exception {
 		UserResponse studentResponse = selector.apply(mapper.convert(dao.getStudent(metadata, refId), metadata), metadata);
 		if(studentResponse != null) {
 			return studentResponse;
@@ -48,8 +48,8 @@ class UserServiceImp implements UserService {
 	}
 
 	@Override
-	public UsersResponse getAllStudents(ControllerData metadata) throws Exception {
-		List<UserView> instance = dao.getAllStudents(metadata);
+	public UsersResponse getAllStudents(RequestData metadata) throws Exception {
+		List<QUser> instance = dao.getAllStudents(metadata);
 		if(CollectionUtils.isEmpty(instance)) {
 			throw new NoContentException();
 		}
@@ -57,8 +57,8 @@ class UserServiceImp implements UserService {
 	}
 
 	@Override
-	public UsersResponse getStudentsForSchool(ControllerData metadata, String refId) throws Exception {
-		List<UserView> instance = dao.getStudentsForSchool(metadata, refId);
+	public UsersResponse getStudentsForSchool(RequestData metadata, String refId) throws Exception {
+		List<QUser> instance = dao.getStudentsForSchool(metadata, refId);
 		if(CollectionUtils.isEmpty(instance)) {
 			throw new NoContentException();
 		}
@@ -66,8 +66,8 @@ class UserServiceImp implements UserService {
 	}
 
 	@Override
-	public UsersResponse getStudentsForClass(ControllerData metadata, String refId) throws Exception {
-		List<UserView> instance = dao.getStudentsForClass(metadata, refId);
+	public UsersResponse getStudentsForClass(RequestData metadata, String refId) throws Exception {
+		List<QUser> instance = dao.getStudentsForClass(metadata, refId);
 		if(CollectionUtils.isEmpty(instance)) {
 			throw new NoContentException();
 		}
@@ -75,8 +75,8 @@ class UserServiceImp implements UserService {
 	}
 
 	@Override
-	public UsersResponse getStudentsForClassInSchool(ControllerData metadata, String schoolId, String classId) throws Exception {
-		List<UserView> instance = dao.getStudentsForClassInSchool(metadata, schoolId, classId);
+	public UsersResponse getStudentsForClassInSchool(RequestData metadata, String schoolId, String classId) throws Exception {
+		List<QUser> instance = dao.getStudentsForClassInSchool(metadata, schoolId, classId);
 		if(CollectionUtils.isEmpty(instance)) {
 			throw new NoContentException();
 		}
@@ -84,7 +84,7 @@ class UserServiceImp implements UserService {
 	}
 
 	@Override
-	public UserResponse getTeacher(ControllerData metadata, String refId) throws Exception {
+	public UserResponse getTeacher(RequestData metadata, String refId) throws Exception {
 		UserResponse studentResponse = selector.apply(mapper.convert(dao.getTeacher(metadata, refId), metadata), metadata);
 		if(studentResponse != null) {
 			return studentResponse;
@@ -93,8 +93,8 @@ class UserServiceImp implements UserService {
 	}
 
 	@Override
-	public UsersResponse getAllTeachers(ControllerData metadata) throws Exception {
-		List<UserView> instance = dao.getAllTeachers(metadata);
+	public UsersResponse getAllTeachers(RequestData metadata) throws Exception {
+		List<QUser> instance = dao.getAllTeachers(metadata);
 		if(CollectionUtils.isEmpty(instance)) {
 			throw new NoContentException();
 		}
@@ -102,8 +102,8 @@ class UserServiceImp implements UserService {
 	}
 
 	@Override
-	public UsersResponse getTeachersForSchool(ControllerData metadata, String refId) throws Exception {
-		List<UserView> instance = dao.getTeachersForSchool(metadata, refId);
+	public UsersResponse getTeachersForSchool(RequestData metadata, String refId) throws Exception {
+		List<QUser> instance = dao.getTeachersForSchool(metadata, refId);
 		if(CollectionUtils.isEmpty(instance)) {
 			throw new NoContentException();
 		}
@@ -111,8 +111,8 @@ class UserServiceImp implements UserService {
 	}
 
 	@Override
-	public UsersResponse getTeachersForClass(ControllerData metadata, String refId) throws Exception {
-		List<UserView> instance = dao.getTeachersForClass(metadata, refId);
+	public UsersResponse getTeachersForClass(RequestData metadata, String refId) throws Exception {
+		List<QUser> instance = dao.getTeachersForClass(metadata, refId);
 		if(CollectionUtils.isEmpty(instance)) {
 			throw new NoContentException();
 		}
@@ -120,8 +120,8 @@ class UserServiceImp implements UserService {
 	}
 
 	@Override
-	public UsersResponse getTeachersForClassInSchool(ControllerData metadata, String schoolRefId, String classRefId) throws Exception {
-		List<UserView> instance = dao.getTeachersForClassInSchool(metadata, schoolRefId, classRefId);
+	public UsersResponse getTeachersForClassInSchool(RequestData metadata, String schoolRefId, String classRefId) throws Exception {
+		List<QUser> instance = dao.getTeachersForClassInSchool(metadata, schoolRefId, classRefId);
 		if(CollectionUtils.isEmpty(instance)) {
 			throw new NoContentException();
 		}

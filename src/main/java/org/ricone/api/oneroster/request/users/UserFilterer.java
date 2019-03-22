@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 import javax.persistence.criteria.Path;
 
-@Component("OneRoster:Users:UserFilterer")
+@Component("OneRoster2:Users:UserFilterer")
 public class UserFilterer extends BaseFilterer {
 	public UserFilterer() {
 	}
@@ -19,8 +19,8 @@ public class UserFilterer extends BaseFilterer {
 			case "metadata.ricone.districtId": return from.get("districtId");
 			case "sourcedId": return from.get(field);
 			case "username": return from.get(field);
-			case "userIds.type": return getJoin("userIds").get("code");
-			case "userIds.identifier": return getJoin("userIds").get("id");
+			case "userIds.type": return getJoin("identifiers").get("code");
+			case "userIds.identifier": return getJoin("identifiers").get("id");
 			case "enabledUser": return from.get(field);
 			case "givenName": return from.get(field);
 			case "familyName": return from.get(field);
@@ -31,15 +31,15 @@ public class UserFilterer extends BaseFilterer {
 			case "sms": return from.get(field);
 			case "phone": return from.get(field);
 
-			case "agents.sourcedId": return getJoin("agents").get("agentId");
+			case "agents.sourcedId": return getJoin("agents").get("agent").get("sourcedId");
 			case "agents.href": throw new InvalidDataException(buildInvalidDataException(field));
 			case "agents.type": throw new InvalidDataException(buildInvalidDataException(field));
 
-			case "orgs.sourcedId": return getJoin("orgs").get("orgId");
+			case "orgs.sourcedId": return getJoin("orgs").get("org").get("sourcedId");
 			case "orgs.href": throw new InvalidDataException(buildInvalidDataException(field));
 			case "orgs.type": throw new InvalidDataException(buildInvalidDataException(field));
 
-			case "grades": return getJoin("grades").get("gradeLevel");
+			case "grades": return from.get(field);
 			case "password": throw new InvalidDataException(buildInvalidDataException(field));
 			default: break;
 		}

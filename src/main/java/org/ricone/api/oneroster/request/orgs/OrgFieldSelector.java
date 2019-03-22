@@ -2,10 +2,10 @@ package org.ricone.api.oneroster.request.orgs;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.ricone.api.oneroster.component.BaseFieldSelector;
+import org.ricone.api.oneroster.component.RequestData;
 import org.ricone.api.oneroster.model.Org;
 import org.ricone.api.oneroster.model.OrgResponse;
 import org.ricone.api.oneroster.model.OrgsResponse;
-import org.ricone.api.oneroster.component.ControllerData;
 import org.springframework.stereotype.Component;
 
 /**
@@ -14,14 +14,14 @@ import org.springframework.stereotype.Component;
  * @since 2019-01-22
  */
 
-@Component("OneRoster:Orgs:OrgFieldSelector")
+@Component("OneRoster2:Orgs:OrgFieldSelector")
 public class OrgFieldSelector extends BaseFieldSelector<Org> {
 	public OrgFieldSelector() {
 		super(Org.class);
 	}
 
-	OrgsResponse apply(OrgsResponse response, ControllerData metadata) {
-		if(metadata.getFieldSelection().hasFieldSelection() && metadata.getFieldSelection().isValidFieldSelection(getModelClass())) {
+	OrgsResponse apply(OrgsResponse response, RequestData metadata) {
+		if(metadata.getFieldSelector().hasFieldSelection() && metadata.getFieldSelector().isValidFieldSelection(getModelClass())) {
 			for (Org org : response.getData()) {
 				selectBaseFields(org, metadata);
 			}
@@ -33,8 +33,8 @@ public class OrgFieldSelector extends BaseFieldSelector<Org> {
 		return response;
 	}
 
-	OrgResponse apply(OrgResponse response, ControllerData metadata) {
-		if(metadata.getFieldSelection().hasFieldSelection() && metadata.getFieldSelection().isValidFieldSelection(getModelClass())) {
+	OrgResponse apply(OrgResponse response, RequestData metadata) {
+		if(metadata.getFieldSelector().hasFieldSelection() && metadata.getFieldSelector().isValidFieldSelection(getModelClass())) {
 			selectBaseFields(response.getData(), metadata);
 			if (response.getData() == null) {
 				return null;
@@ -44,20 +44,20 @@ public class OrgFieldSelector extends BaseFieldSelector<Org> {
 	}
 
 	@Override
-	public void selectFields(Org instance, ControllerData metaData) {
-		if(!CollectionUtils.containsAny(metaData.getFieldSelection().getFields(), "name")) {
+	public void selectFields(Org instance, RequestData metaData) {
+		if(!CollectionUtils.containsAny(metaData.getFieldSelector().getFields(), "name")) {
 			instance.setName(null);
 		}
-		if(!CollectionUtils.containsAny(metaData.getFieldSelection().getFields(), "type")) {
+		if(!CollectionUtils.containsAny(metaData.getFieldSelector().getFields(), "type")) {
 			instance.setType(null);
 		}
-		if(!CollectionUtils.containsAny(metaData.getFieldSelection().getFields(), "identifier")) {
+		if(!CollectionUtils.containsAny(metaData.getFieldSelector().getFields(), "identifier")) {
 			instance.setIdentifier(null);
 		}
-		if(!CollectionUtils.containsAny(metaData.getFieldSelection().getFields(), "parent")) {
+		if(!CollectionUtils.containsAny(metaData.getFieldSelector().getFields(), "parent")) {
 			instance.setParent(null);
 		}
-		if(!CollectionUtils.containsAny(metaData.getFieldSelection().getFields(), "children")) {
+		if(!CollectionUtils.containsAny(metaData.getFieldSelector().getFields(), "children")) {
 			instance.setChildren(null);
 		}
 	}

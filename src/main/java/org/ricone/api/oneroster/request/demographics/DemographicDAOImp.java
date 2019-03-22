@@ -2,9 +2,9 @@ package org.ricone.api.oneroster.request.demographics;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ricone.api.core.model.view.DemographicView;
-import org.ricone.api.oneroster.component.BaseDAOTest;
-import org.ricone.api.oneroster.component.ControllerData;
+import org.ricone.api.core.model.v1p1.QDemographic;
+import org.ricone.api.oneroster.component.BaseDAO;
+import org.ricone.api.oneroster.component.RequestData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -18,27 +18,27 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.List;
 
-@Repository("OneRoster:Demographics:DemographicDAO")
+@Repository("OneRoster2:Demographics:DemographicDAO")
 @SuppressWarnings({"unchecked", "unused"})
-class DemographicDAOImp extends BaseDAOTest implements DemographicDAO {
+class DemographicDAOImp extends BaseDAO implements DemographicDAO {
 	@PersistenceContext private EntityManager em;
 	@Autowired private DemographicFilterer filterer;
 	private Logger logger = LogManager.getLogger(DemographicDAOImp.class);
 
 	@Override
-	public DemographicView getDemographic(ControllerData metadata, String refId) throws Exception {
+	public QDemographic getDemographic(RequestData metadata, String refId) throws Exception {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
-		final CriteriaQuery<DemographicView> select = cb.createQuery(DemographicView.class);
-		final Root<DemographicView> from = select.from(DemographicView.class);
+		final CriteriaQuery<QDemographic> select = cb.createQuery(QDemographic.class);
+		final Root<QDemographic> from = select.from(QDemographic.class);
 
 		//Add Root Object & Joins to Filterer
 		filterer.addJoins(from);
 
 		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
-			cb.equal(from.get(PRIMARY_KEY), refId),
-			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
-			from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			cb.equal(from.get(SOURCED_ID), refId),
+			cb.equal(from.get(SOURCED_SCHOOL_YEAR), 2019),
+			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 		);
 
 		select.distinct(true);
@@ -47,25 +47,25 @@ class DemographicDAOImp extends BaseDAOTest implements DemographicDAO {
 
 		Query q = em.createQuery(select);
 		try {
-			return (DemographicView) q.getSingleResult();
+			return (QDemographic) q.getSingleResult();
 		}
 		catch(NoResultException ignored) { }
 		return null;
 	}
 
 	@Override
-	public List<DemographicView> getAllDemographics(ControllerData metadata) throws Exception {
+	public List<QDemographic> getAllDemographics(RequestData metadata) throws Exception {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
-		final CriteriaQuery<DemographicView> select = cb.createQuery(DemographicView.class);
-		final Root<DemographicView> from = select.from(DemographicView.class);
+		final CriteriaQuery<QDemographic> select = cb.createQuery(QDemographic.class);
+		final Root<QDemographic> from = select.from(QDemographic.class);
 
 		//Add Root Object & Joins to Filterer
 		filterer.addJoins(from);
 
 		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
-			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
-			from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			cb.equal(from.get(SOURCED_SCHOOL_YEAR), 2019),
+			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 		);
 
 		select.distinct(true);
@@ -79,22 +79,22 @@ class DemographicDAOImp extends BaseDAOTest implements DemographicDAO {
 			q.setMaxResults(metadata.getPaging().getLimit());
 			metadata.getPaging().setPagingHeaders(countAllDemographics(metadata));
 		}
-		return (List<DemographicView>) q.getResultList();
+		return (List<QDemographic>) q.getResultList();
 	}
 
 	@Override
-	public int countAllDemographics(ControllerData metadata) throws Exception {
+	public int countAllDemographics(RequestData metadata) throws Exception {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<Long> select = cb.createQuery(Long.class);
-		final Root<DemographicView> from = select.from(DemographicView.class);
+		final Root<QDemographic> from = select.from(QDemographic.class);
 
 		//Add Root Object & Joins to Filterer
 		filterer.addJoins(from);
 
 		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
-			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
-			from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			cb.equal(from.get(SOURCED_SCHOOL_YEAR), 2019),
+			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 		);
 
 		select.select(cb.countDistinct(from));

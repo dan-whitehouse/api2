@@ -2,9 +2,10 @@ package org.ricone.api.oneroster.request.classes;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.ricone.api.oneroster.component.BaseFieldSelector;
-import org.ricone.api.oneroster.component.ControllerData;
-import org.ricone.api.oneroster.model.*;
+import org.ricone.api.oneroster.component.RequestData;
 import org.ricone.api.oneroster.model.Class;
+import org.ricone.api.oneroster.model.ClassResponse;
+import org.ricone.api.oneroster.model.ClassesResponse;
 import org.springframework.stereotype.Component;
 
 /**
@@ -13,14 +14,14 @@ import org.springframework.stereotype.Component;
  * @since 2019-01-22
  */
 
-@Component("OneRoster:Classes:ClassFieldSelector")
+@Component("OneRoster2:Classes:ClassFieldSelector")
 public class ClassFieldSelector extends BaseFieldSelector<Class> {
 	public ClassFieldSelector() {
 		super(Class.class);
 	}
 
-	ClassesResponse apply(ClassesResponse response, ControllerData metadata) {
-		if(metadata.getFieldSelection().hasFieldSelection() && metadata.getFieldSelection().isValidFieldSelection(getModelClass())) {
+	ClassesResponse apply(ClassesResponse response, RequestData metadata) {
+		if(metadata.getFieldSelector().hasFieldSelection() && metadata.getFieldSelector().isValidFieldSelection(getModelClass())) {
 			for (Class c : response.getData()) {
 				selectBaseFields(c, metadata);
 			}
@@ -32,8 +33,8 @@ public class ClassFieldSelector extends BaseFieldSelector<Class> {
 		return response;
 	}
 
-	ClassResponse apply(ClassResponse response, ControllerData metadata) {
-		if(metadata.getFieldSelection().hasFieldSelection() && metadata.getFieldSelection().isValidFieldSelection(getModelClass())) {
+	ClassResponse apply(ClassResponse response, RequestData metadata) {
+		if(metadata.getFieldSelector().hasFieldSelection() && metadata.getFieldSelector().isValidFieldSelection(getModelClass())) {
 			selectBaseFields(response.getData(), metadata);
 			if (response.getData() == null) {
 				return null;
@@ -43,38 +44,38 @@ public class ClassFieldSelector extends BaseFieldSelector<Class> {
 	}
 
 	@Override
-	public void selectFields(Class instance, ControllerData metaData) {
-		if(!CollectionUtils.containsAny(metaData.getFieldSelection().getFields(), "title")) {
+	public void selectFields(Class instance, RequestData metaData) {
+		if(!CollectionUtils.containsAny(metaData.getFieldSelector().getFields(), "title")) {
 			instance.setTitle(null);
 		}
-		if(!CollectionUtils.containsAny(metaData.getFieldSelection().getFields(), "classType")) {
+		if(!CollectionUtils.containsAny(metaData.getFieldSelector().getFields(), "classType")) {
 			instance.setClassType(null);
 		}
-		if(!CollectionUtils.containsAny(metaData.getFieldSelection().getFields(), "location")) {
+		if(!CollectionUtils.containsAny(metaData.getFieldSelector().getFields(), "location")) {
 			instance.setLocation(null);
 		}
-		if(!CollectionUtils.containsAny(metaData.getFieldSelection().getFields(), "classCode")) {
+		if(!CollectionUtils.containsAny(metaData.getFieldSelector().getFields(), "classCode")) {
 			instance.setClassCode(null);
 		}
-		if(!CollectionUtils.containsAny(metaData.getFieldSelection().getFields(), "grades")) {
+		if(!CollectionUtils.containsAny(metaData.getFieldSelector().getFields(), "grades")) {
 			instance.setGrades(null);
 		}
-		if(!CollectionUtils.containsAny(metaData.getFieldSelection().getFields(), "subjects")) {
+		if(!CollectionUtils.containsAny(metaData.getFieldSelector().getFields(), "subjects")) {
 			instance.setSubjects(null);
 		}
-		if(!CollectionUtils.containsAny(metaData.getFieldSelection().getFields(), "subjectCodes")) {
+		if(!CollectionUtils.containsAny(metaData.getFieldSelector().getFields(), "subjectCodes")) {
 			instance.setSubjectCodes(null);
 		}
-		if(!CollectionUtils.containsAny(metaData.getFieldSelection().getFields(), "course")) {
+		if(!CollectionUtils.containsAny(metaData.getFieldSelector().getFields(), "course")) {
 			instance.setCourse(null);
 		}
-		if(!CollectionUtils.containsAny(metaData.getFieldSelection().getFields(), "school")) {
+		if(!CollectionUtils.containsAny(metaData.getFieldSelector().getFields(), "school")) {
 			instance.setSchool(null);
 		}
-		if(!CollectionUtils.containsAny(metaData.getFieldSelection().getFields(), "periods")) {
+		if(!CollectionUtils.containsAny(metaData.getFieldSelector().getFields(), "periods")) {
 			instance.setPeriods(null);
 		}
-		if(!CollectionUtils.containsAny(metaData.getFieldSelection().getFields(), "terms")) {
+		if(!CollectionUtils.containsAny(metaData.getFieldSelector().getFields(), "terms")) {
 			instance.setTerms(null);
 		}
 	}

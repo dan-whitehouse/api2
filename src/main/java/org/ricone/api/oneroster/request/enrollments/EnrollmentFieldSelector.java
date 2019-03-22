@@ -2,8 +2,10 @@ package org.ricone.api.oneroster.request.enrollments;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.ricone.api.oneroster.component.BaseFieldSelector;
-import org.ricone.api.oneroster.component.ControllerData;
-import org.ricone.api.oneroster.model.*;
+import org.ricone.api.oneroster.component.RequestData;
+import org.ricone.api.oneroster.model.Enrollment;
+import org.ricone.api.oneroster.model.EnrollmentResponse;
+import org.ricone.api.oneroster.model.EnrollmentsResponse;
 import org.springframework.stereotype.Component;
 
 /**
@@ -12,14 +14,14 @@ import org.springframework.stereotype.Component;
  * @since 2019-01-22
  */
 
-@Component("OneRoster:Enrollments:EnrollmentFieldSelector")
+@Component("OneRoster2:Enrollments:EnrollmentFieldSelector")
 public class EnrollmentFieldSelector extends BaseFieldSelector<Enrollment> {
 	public EnrollmentFieldSelector() {
 		super(Enrollment.class);
 	}
 
-	EnrollmentsResponse apply(EnrollmentsResponse response, ControllerData metadata) {
-		if(metadata.getFieldSelection().hasFieldSelection() && metadata.getFieldSelection().isValidFieldSelection(getModelClass())) {
+	EnrollmentsResponse apply(EnrollmentsResponse response, RequestData metadata) {
+		if(metadata.getFieldSelector().hasFieldSelection() && metadata.getFieldSelector().isValidFieldSelection(getModelClass())) {
 			for (Enrollment enrollment : response.getData()) {
 				selectBaseFields(enrollment, metadata);
 			}
@@ -31,8 +33,8 @@ public class EnrollmentFieldSelector extends BaseFieldSelector<Enrollment> {
 		return response;
 	}
 
-	EnrollmentResponse apply(EnrollmentResponse response, ControllerData metadata) {
-		if(metadata.getFieldSelection().hasFieldSelection() && metadata.getFieldSelection().isValidFieldSelection(getModelClass())) {
+	EnrollmentResponse apply(EnrollmentResponse response, RequestData metadata) {
+		if(metadata.getFieldSelector().hasFieldSelection() && metadata.getFieldSelector().isValidFieldSelection(getModelClass())) {
 			selectBaseFields(response.getData(), metadata);
 			if (response.getData() == null) {
 				return null;
@@ -42,20 +44,20 @@ public class EnrollmentFieldSelector extends BaseFieldSelector<Enrollment> {
 	}
 
 	@Override
-	public void selectFields(Enrollment instance, ControllerData metaData) {
-		if(!CollectionUtils.containsAny(metaData.getFieldSelection().getFields(), "role")) {
+	public void selectFields(Enrollment instance, RequestData metaData) {
+		if(!CollectionUtils.containsAny(metaData.getFieldSelector().getFields(), "role")) {
 			instance.setRole(null);
 		}
-		if(!CollectionUtils.containsAny(metaData.getFieldSelection().getFields(), "primary")) {
+		if(!CollectionUtils.containsAny(metaData.getFieldSelector().getFields(), "primary")) {
 			instance.setPrimary(null);
 		}
-		if(!CollectionUtils.containsAny(metaData.getFieldSelection().getFields(), "user")) {
+		if(!CollectionUtils.containsAny(metaData.getFieldSelector().getFields(), "user")) {
 			instance.setUser(null);
 		}
-		if(!CollectionUtils.containsAny(metaData.getFieldSelection().getFields(), "class")) {
+		if(!CollectionUtils.containsAny(metaData.getFieldSelector().getFields(), "class")) {
 			instance.setClass_(null);
 		}
-		if(!CollectionUtils.containsAny(metaData.getFieldSelection().getFields(), "school")) {
+		if(!CollectionUtils.containsAny(metaData.getFieldSelector().getFields(), "school")) {
 			instance.setSchool(null);
 		}
 	}

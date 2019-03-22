@@ -17,8 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("unchecked")
-public class FilteringDataTest {
-	private static Logger logger = LogManager.getLogger(FilteringDataTest.class);
+public class Filterer {
+	private static Logger logger = LogManager.getLogger(Filterer.class);
 	private static final String FILTER = "filter";
 	private static final String LOGICAL_AND = " AND ";
 	private static final String LOGICAL_OR = " OR ";
@@ -33,13 +33,16 @@ public class FilteringDataTest {
 	private String filter = null;
 	private List<Predicate> predicates;
 
-	FilteringDataTest(HttpServletRequest request) {
+	Filterer(HttpServletRequest request) {
 		if(StringUtils.isNotBlank(request.getParameter(FILTER))) {
 			filter = request.getParameter(FILTER);
 			predicates = new ArrayList<>();
 		}
 	}
 
+	boolean isFiltered() {
+		return StringUtils.isNotBlank(filter);
+	}
 	/*
 		It MUST be possible to filter collections for elements matching a certain criteria.
 		It MUST be possible to filter collections based on any data element in the core description of the resource.
@@ -132,7 +135,8 @@ public class FilteringDataTest {
 		}
 		else if(isEqual(predicate)) {
 			path = getPath(filterer, filter, PREDICATE_EQ);
-			if(isMultiValue(value)) {
+			predicates.add(getEqualPredicate(cb, path, value));
+			/*if(isMultiValue(value)) {
 				String[] values = StringUtils.split(value, ",");
 				List<Predicate> list = new ArrayList<>();
 				for(String v : values) {
@@ -142,7 +146,7 @@ public class FilteringDataTest {
 			}
 			else {
 				predicates.add(getEqualPredicate(cb, path, value));
-			}
+			}*/
 		}
 		else if(isContains(predicate)) {
 			path = getPath(filterer, filter, PREDICATE_CON);
@@ -150,12 +154,13 @@ public class FilteringDataTest {
 				String[] values = StringUtils.split(value, ",");
 				List<Predicate> list = new ArrayList<>();
 				for (String v : values) {
-					list.add(getEqualPredicate(cb, path, v));
+					logger.debug("qclass0_.Grades=" + v);
+					list.add(getLikePredicate(cb, path, v));
 				}
 				predicates.add(cb.or(list.toArray(new Predicate[0])));
 			}
 			else {
-				predicates.add(getEqualPredicate(cb, path, value));
+				predicates.add(getLikePredicate(cb, path, value));
 			}
 		}
 	}
@@ -283,7 +288,7 @@ public class FilteringDataTest {
 			return cb.like(path, "%" + BooleanUtils.toBoolean(value) + "%");
 		}
 		else {
-			return cb.like(path, value);
+			return cb.like(path, "%" + value + "%");
 		}
 	}
 

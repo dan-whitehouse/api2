@@ -2,6 +2,7 @@ package org.ricone.api.oneroster.component;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.ricone.api.oneroster.error.exception.InvalidDataException;
 import org.ricone.api.oneroster.error.exception.InvalidFilterFieldException;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -13,29 +14,43 @@ import java.util.List;
 
 public abstract class BaseDAO {
     private Logger logger = LogManager.getLogger(this.getClass());
-    protected static final String PRIMARY_KEY = "sourcedId";
-    protected static final String SCHOOL_YEAR_KEY = "sourcedSchoolYear";
-    protected static final String FIELD_DISTRICT_ID = "districtId";
-    protected static final String FIELD_ORG_ID = "orgId";
-    protected static final String FIELD_ORG_TYPE = "orgType";
-    protected static final String FIELD_COURSE_ID = "courseId";
-    protected static final String FIELD_CLASS_ID = "classId";
-    protected static final String FIELD_TERM_ID = "termId";
-    protected static final String FIELD_USER_ID = "userId";
-    protected static final String FIELD_TYPE = "type";
-    protected static final String FIELD_ROLE = "role";
+    /* Composite PK */
+    protected static final String SOURCED_ID = "sourcedId";
+    protected static final String SOURCED_SCHOOL_YEAR = "sourcedSchoolYear";
 
-    /* Joins - Core - Views */
-    protected static final String JOIN_USER_ORGS = "userOrgs";
-    protected static final String JOIN_USER_CLASSES = "userClasses";
-    protected static final String JOIN_CLASS_TERMS = "terms";
-    protected static final String JOIN_CLASS_USERS = "users";
+    /* Model Fields */
+    protected static final String DISTRICT_ID = "districtId";
+    protected static final String ORG_ID = "orgId";
+    protected static final String COURSE_ID = "courseId";
+    protected static final String CLASS_ID = "classId";
+    protected static final String TERM_ID = "termId";
+    protected static final String USER_ID = "userId";
+    protected static final String TYPE = "type";
+    protected static final String ROLE = "role";
 
-    protected Predicate[] getWhereClause(ControllerData metadata, CriteriaBuilder cb, Root from, Predicate methodSpecificPredicate) throws InvalidFilterFieldException {
+    /* Model Field Values */
+    protected static final String SCHOOL = "school";
+    protected static final String SCHOOL_YEAR = "schoolYear";
+    protected static final String STUDENT = "student";
+    protected static final String TEACHER = "teacher";
+    protected static final String TERM = "term";
+
+    /* Join Fields */
+    protected static final String AGENTS = "agents";
+    protected static final String CLASSES = "classes";
+    protected static final String CHILDREN = "children";
+    protected static final String CONTACT = "contact";
+    protected static final String IDENTIFIERS = "identifiers";
+    protected static final String ORGS = "orgs";
+    protected static final String TERMS = "terms";
+    protected static final String USERS = "users";
+
+
+    protected Predicate[] getWhereClause(RequestData requestData, CriteriaBuilder cb, BaseFilterer filterer, Predicate methodSpecificPredicate) throws InvalidFilterFieldException, InvalidDataException {
         final List<Predicate> predicates = new ArrayList<>();
-        if(metadata.getFiltering().isFiltered()) {
+        if(requestData.getFilterer().isFiltered()) {
             predicates.add(methodSpecificPredicate);
-            predicates.add(metadata.getFiltering().getFiltering(cb, from));
+            predicates.add(requestData.getFilterer().getPredicate(cb, filterer));
         }
         else {
             predicates.add(methodSpecificPredicate);
@@ -43,12 +58,12 @@ public abstract class BaseDAO {
         return predicates.toArray(new Predicate[0]);
     }
 
-    protected Order getSortOrder(ControllerData metadata, CriteriaBuilder cb, Root from) {
-        if(metadata.getSorting().isSorted()) {
-            return metadata.getSorting().getSortOrder(cb, from);
+    protected Order getSortOrder(RequestData requestData, CriteriaBuilder cb, Root from) {
+        if(requestData.getSorter().isSorted()) {
+            return requestData.getSorter().getSortOrder(cb, from);
         }
         else {
-            return cb.asc(from.get(PRIMARY_KEY));
+            return cb.asc(from.get(SOURCED_ID));
         }
     }
 }

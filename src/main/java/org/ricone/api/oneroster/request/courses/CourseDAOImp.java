@@ -2,11 +2,9 @@ package org.ricone.api.oneroster.request.courses;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ricone.api.core.model.view.CourseGradeView;
-import org.ricone.api.core.model.view.CourseSubjectView;
-import org.ricone.api.core.model.view.CourseView;
-import org.ricone.api.oneroster.component.BaseDAOTest;
-import org.ricone.api.oneroster.component.ControllerData;
+import org.ricone.api.core.model.v1p1.QCourse;
+import org.ricone.api.oneroster.component.BaseDAO;
+import org.ricone.api.oneroster.component.RequestData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -17,29 +15,26 @@ import javax.persistence.Query;
 import javax.persistence.criteria.*;
 import java.util.List;
 
-@Repository("OneRoster:Courses:CourseDAO")
+@Repository("OneRoster2:Courses:CourseDAO")
 @SuppressWarnings({"unchecked", "unused"})
-class CourseDAOImp extends BaseDAOTest implements CourseDAO {
+class CourseDAOImp extends BaseDAO implements CourseDAO {
 	@PersistenceContext private EntityManager em;
 	@Autowired private CourseFilterer filterer;
 	private Logger logger = LogManager.getLogger(CourseDAOImp.class);
 
 	@Override
-	public CourseView getCourse(ControllerData metadata, String refId) throws Exception {
+	public QCourse getCourse(RequestData metadata, String refId) throws Exception {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
-		final CriteriaQuery<CourseView> select = cb.createQuery(CourseView.class);
-		final Root<CourseView> from = select.from(CourseView.class);
-		final SetJoin<CourseView, CourseSubjectView> subjects = (SetJoin<CourseView, CourseSubjectView>) from.<CourseView, CourseSubjectView>join("subjects", JoinType.LEFT).alias("subjects");
-		final SetJoin<CourseView, CourseGradeView> grades = (SetJoin<CourseView, CourseGradeView>) from.<CourseView, CourseGradeView>join("grades", JoinType.LEFT).alias("grades");
-
+		final CriteriaQuery<QCourse> select = cb.createQuery(QCourse.class);
+		final Root<QCourse> from = select.from(QCourse.class);
 		//Add Root Object & Joins to Filterer
-		filterer.addJoins(from, subjects, grades);
+		filterer.addJoins(from);
 
 		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
-			cb.equal(from.get(PRIMARY_KEY), refId),
-			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
-			from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			cb.equal(from.get(SOURCED_ID), refId),
+			cb.equal(from.get(SOURCED_SCHOOL_YEAR), 2019),
+			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 		);
 
 		select.distinct(true);
@@ -48,27 +43,25 @@ class CourseDAOImp extends BaseDAOTest implements CourseDAO {
 
 		Query q = em.createQuery(select);
 		try {
-			return (CourseView) q.getSingleResult();
+			return (QCourse) q.getSingleResult();
 		}
 		catch(NoResultException ignored) { }
 		return null;
 	}
 
 	@Override
-	public List<CourseView> getAllCourses(ControllerData metadata) throws Exception {
+	public List<QCourse> getAllCourses(RequestData metadata) throws Exception {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
-		final CriteriaQuery<CourseView> select = cb.createQuery(CourseView.class);
-		final Root<CourseView> from = select.from(CourseView.class);
-		final SetJoin<CourseView, CourseSubjectView> subjects = (SetJoin<CourseView, CourseSubjectView>) from.<CourseView, CourseSubjectView>join("subjects", JoinType.LEFT).alias("subjects");
-		final SetJoin<CourseView, CourseGradeView> grades = (SetJoin<CourseView, CourseGradeView>) from.<CourseView, CourseGradeView>join("grades", JoinType.LEFT).alias("grades");
+		final CriteriaQuery<QCourse> select = cb.createQuery(QCourse.class);
+		final Root<QCourse> from = select.from(QCourse.class);
 
 		//Add Root Object & Joins to Filterer
-		filterer.addJoins(from, subjects, grades);
+		filterer.addJoins(from);
 
 		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
-			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
-			from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			cb.equal(from.get(SOURCED_SCHOOL_YEAR), 2019),
+			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 		);
 
 		select.distinct(true);
@@ -82,25 +75,23 @@ class CourseDAOImp extends BaseDAOTest implements CourseDAO {
 			q.setMaxResults(metadata.getPaging().getLimit());
 			metadata.getPaging().setPagingHeaders(countAllCourses(metadata));
 		}
-		return (List<CourseView>) q.getResultList();
+		return (List<QCourse>) q.getResultList();
 	}
 
 	@Override
-	public List<CourseView> getCoursesForSchool(ControllerData metadata, String refId) throws Exception {
+	public List<QCourse> getCoursesForSchool(RequestData metadata, String refId) throws Exception {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
-		final CriteriaQuery<CourseView> select = cb.createQuery(CourseView.class);
-		final Root<CourseView> from = select.from(CourseView.class);
-		final SetJoin<CourseView, CourseSubjectView> subjects = (SetJoin<CourseView, CourseSubjectView>) from.<CourseView, CourseSubjectView>join("subjects", JoinType.LEFT).alias("subjects");
-		final SetJoin<CourseView, CourseGradeView> grades = (SetJoin<CourseView, CourseGradeView>) from.<CourseView, CourseGradeView>join("grades", JoinType.LEFT).alias("grades");
+		final CriteriaQuery<QCourse> select = cb.createQuery(QCourse.class);
+		final Root<QCourse> from = select.from(QCourse.class);
 
 		//Add Root Object & Joins to Filterer
-		filterer.addJoins(from, subjects, grades);
+		filterer.addJoins(from);
 
 		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
-			cb.equal(from.get(FIELD_ORG_ID), refId),
-			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
-			from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			cb.equal(from.get(ORG_ID), refId),
+			cb.equal(from.get(SOURCED_SCHOOL_YEAR), 2019),
+			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 		);
 
 		select.distinct(true);
@@ -114,24 +105,22 @@ class CourseDAOImp extends BaseDAOTest implements CourseDAO {
 			q.setMaxResults(metadata.getPaging().getLimit());
 			metadata.getPaging().setPagingHeaders(countCoursesForSchool(metadata, refId));
 		}
-		return (List<CourseView>) q.getResultList();
+		return (List<QCourse>) q.getResultList();
 	}
 
 	@Override
-	public int countAllCourses(ControllerData metadata) throws Exception {
+	public int countAllCourses(RequestData metadata) throws Exception {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<Long> select = cb.createQuery(Long.class);
-		final Root<CourseView> from = select.from(CourseView.class);
-		final SetJoin<CourseView, CourseSubjectView> subjects = (SetJoin<CourseView, CourseSubjectView>) from.<CourseView, CourseSubjectView>join("subjects", JoinType.LEFT).alias("subjects");
-		final SetJoin<CourseView, CourseGradeView> grades = (SetJoin<CourseView, CourseGradeView>) from.<CourseView, CourseGradeView>join("grades", JoinType.LEFT).alias("grades");
+		final Root<QCourse> from = select.from(QCourse.class);
 
 		//Add Root Object & Joins to Filterer
-		filterer.addJoins(from, subjects, grades);
+		filterer.addJoins(from);
 
 		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
-			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
-			from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			cb.equal(from.get(SOURCED_SCHOOL_YEAR), 2019),
+			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 		);
 
 		select.select(cb.countDistinct(from));
@@ -141,21 +130,19 @@ class CourseDAOImp extends BaseDAOTest implements CourseDAO {
 	}
 
 	@Override
-	public int countCoursesForSchool(ControllerData metadata, String refId) throws Exception {
+	public int countCoursesForSchool(RequestData metadata, String refId) throws Exception {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<Long> select = cb.createQuery(Long.class);
-		final Root<CourseView> from = select.from(CourseView.class);
-		final SetJoin<CourseView, CourseSubjectView> subjects = (SetJoin<CourseView, CourseSubjectView>) from.<CourseView, CourseSubjectView>join("subjects", JoinType.LEFT).alias("subjects");
-		final SetJoin<CourseView, CourseGradeView> grades = (SetJoin<CourseView, CourseGradeView>) from.<CourseView, CourseGradeView>join("grades", JoinType.LEFT).alias("grades");
+		final Root<QCourse> from = select.from(QCourse.class);
 
 		//Add Root Object & Joins to Filterer
-		filterer.addJoins(from, subjects, grades);
+		filterer.addJoins(from);
 
 		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
-				cb.equal(from.get(FIELD_ORG_ID), refId),
-				cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
-				from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			cb.equal(from.get(ORG_ID), refId),
+			cb.equal(from.get(SOURCED_SCHOOL_YEAR), 2019),
+			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 		);
 
 		select.select(cb.countDistinct(from));

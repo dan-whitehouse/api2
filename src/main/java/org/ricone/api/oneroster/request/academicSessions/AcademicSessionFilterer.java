@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 import javax.persistence.criteria.Path;
 
-@Component("OneRoster:AcademicSessions:AcademicSessionFilterer")
+@Component("OneRoster2:AcademicSessions:AcademicSessionFilterer")
 public class AcademicSessionFilterer extends BaseFilterer {
 	public AcademicSessionFilterer() {
 	}
@@ -24,11 +24,11 @@ public class AcademicSessionFilterer extends BaseFilterer {
 			case "type": return from.get(field);
 			case "schoolYear": return from.get(field);
 
-			case "parent.sourcedId": return from.get("parentId");
+			case "parent.sourcedId": return from.get("academicSession").get("sourcedId");
 			case "parent.href": throw new InvalidDataException(buildInvalidDataException(field));
 			case "parent.type": throw new InvalidDataException(buildInvalidDataException(field));
 
-			case "children.sourcedId": return getJoin("children").get("childId");
+			case "children.sourcedId": return getJoin("children").get("child").get("sourcedId");
 			case "children.href": throw new InvalidDataException(buildInvalidDataException(field));
 			case "children.type": throw new InvalidDataException(buildInvalidDataException(field));
 			default: break;

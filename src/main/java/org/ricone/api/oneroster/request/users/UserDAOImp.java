@@ -2,41 +2,43 @@ package org.ricone.api.oneroster.request.users;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ricone.api.core.model.view.*;
-import org.ricone.api.oneroster.component.BaseDAOTest;
-import org.ricone.api.oneroster.component.ControllerData;
+import org.ricone.api.core.model.v1p1.*;
+import org.ricone.api.oneroster.component.BaseDAO;
+import org.ricone.api.oneroster.component.RequestData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.*;
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.criteria.*;
 import java.util.List;
 
-@Repository("OneRoster:Users:UserDAO")
+@Repository("OneRoster2:Users:UserDAO")
 @SuppressWarnings({"unchecked", "unused"})
-class UserDAOImp extends BaseDAOTest implements UserDAO {
+class UserDAOImp extends BaseDAO implements UserDAO {
 	@PersistenceContext private EntityManager em;
 	@Autowired private UserFilterer filterer;
 	private Logger logger = LogManager.getLogger(UserDAOImp.class);
 
 	@Override
-	public UserView getUser(ControllerData metadata, String refId) throws Exception {
+	public QUser getUser(RequestData metadata, String refId) throws Exception {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
-		final CriteriaQuery<UserView> select = cb.createQuery(UserView.class);
-		final Root<UserView> from = select.from(UserView.class);
-		final SetJoin<UserView, UserIdentifierView> userIds = (SetJoin<UserView, UserIdentifierView>) from.<UserView, UserIdentifierView>join("userIds", JoinType.LEFT).alias("userIds");
-		final SetJoin<UserView, UserAgentView> agents = (SetJoin<UserView, UserAgentView>) from.<UserView, UserAgentView>join("userAgents", JoinType.LEFT).alias("agents");
-		final SetJoin<UserView, UserOrgView> orgs = (SetJoin<UserView, UserOrgView>) from.<UserView, UserOrgView>join("userOrgs", JoinType.LEFT).alias("orgs");
-		final SetJoin<UserView, UserGradeView> grades = (SetJoin<UserView, UserGradeView>) from.<UserView, UserGradeView>join("userGrades", JoinType.LEFT).alias("grades");
+		final CriteriaQuery<QUser> select = cb.createQuery(QUser.class);
+		final Root<QUser> from = select.from(QUser.class);
+		final SetJoin<QUser, QUserIdentifier> identifiers = (SetJoin<QUser, QUserIdentifier>) from.<QUser, QUserIdentifier>join(IDENTIFIERS, JoinType.LEFT).alias(IDENTIFIERS);
+		final SetJoin<QUser, QUserAgent> agents = (SetJoin<QUser, QUserAgent>) from.<QUser, QUserAgent>join(AGENTS, JoinType.LEFT).alias(AGENTS);
+		final SetJoin<QUser, QUserOrg> orgs = (SetJoin<QUser, QUserOrg>) from.<QUser, QUserOrg>join(ORGS, JoinType.LEFT).alias(ORGS);
 
 		//Add Root Object & Joins to Filterer
-		filterer.addJoins(from, userIds, agents, orgs, grades);
+		filterer.addJoins(from, identifiers, agents, orgs);
 
 		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
-			cb.equal(from.get(PRIMARY_KEY), refId),
-			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
-			from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			cb.equal(from.get(SOURCED_ID), refId),
+			cb.equal(from.get(SOURCED_SCHOOL_YEAR), 2019),
+			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 		);
 
 		select.distinct(true);
@@ -45,31 +47,29 @@ class UserDAOImp extends BaseDAOTest implements UserDAO {
 
 		Query q = em.createQuery(select);
 		try {
-			return (UserView) q.getSingleResult();
+			return (QUser) q.getSingleResult();
 		}
 		catch(NoResultException ignored) { }
 		return null;
 	}
 
 	@Override
-	public List<UserView> getAllUsers(ControllerData metadata) throws Exception {
+	public List<QUser> getAllUsers(RequestData metadata) throws Exception {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
-		final CriteriaQuery<UserView> select = cb.createQuery(UserView.class);
-		final Root<UserView> from = select.from(UserView.class);
-		final SetJoin<UserView, UserIdentifierView> userIds = (SetJoin<UserView, UserIdentifierView>) from.<UserView, UserIdentifierView>join("userIds", JoinType.LEFT).alias("userIds");
-		final SetJoin<UserView, UserAgentView> agents = (SetJoin<UserView, UserAgentView>) from.<UserView, UserAgentView>join("userAgents", JoinType.LEFT).alias("agents");
-		final SetJoin<UserView, UserOrgView> orgs = (SetJoin<UserView, UserOrgView>) from.<UserView, UserOrgView>join("userOrgs", JoinType.LEFT).alias("orgs");
-		final SetJoin<UserView, UserGradeView> grades = (SetJoin<UserView, UserGradeView>) from.<UserView, UserGradeView>join("userGrades", JoinType.LEFT).alias("grades");
+		final CriteriaQuery<QUser> select = cb.createQuery(QUser.class);
+		final Root<QUser> from = select.from(QUser.class);
+		final SetJoin<QUser, QUserIdentifier> identifiers = (SetJoin<QUser, QUserIdentifier>) from.<QUser, QUserIdentifier>join(IDENTIFIERS, JoinType.LEFT).alias(IDENTIFIERS);
+		final SetJoin<QUser, QUserAgent> agents = (SetJoin<QUser, QUserAgent>) from.<QUser, QUserAgent>join(AGENTS, JoinType.LEFT).alias(AGENTS);
+		final SetJoin<QUser, QUserOrg> orgs = (SetJoin<QUser, QUserOrg>) from.<QUser, QUserOrg>join(ORGS, JoinType.LEFT).alias(ORGS);
 
 		//Add Root Object & Joins to Filterer
-		filterer.addJoins(from, userIds, agents, orgs, grades);
+		filterer.addJoins(from, identifiers, agents, orgs);
 
 		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
-			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
-			from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			cb.equal(from.get(SOURCED_SCHOOL_YEAR), 2019),
+			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 		);
-
 
 		select.distinct(false);
 		select.select(from);
@@ -82,32 +82,27 @@ class UserDAOImp extends BaseDAOTest implements UserDAO {
 			q.setMaxResults(metadata.getPaging().getLimit());
 			metadata.getPaging().setPagingHeaders(countAllUsers(metadata));
 		}
-
-		logger.debug("q.toString: " + q.toString());
-
-
-		return (List<UserView>) q.getResultList();
+		return (List<QUser>) q.getResultList();
 	}
 
 	@Override
-	public UserView getStudent(ControllerData metadata, String refId) throws Exception {
+	public QUser getStudent(RequestData metadata, String refId) throws Exception {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
-		final CriteriaQuery<UserView> select = cb.createQuery(UserView.class);
-		final Root<UserView> from = select.from(UserView.class);
-		final SetJoin<UserView, UserIdentifierView> userIds = (SetJoin<UserView, UserIdentifierView>) from.<UserView, UserIdentifierView>join("userIds", JoinType.LEFT).alias("userIds");
-		final SetJoin<UserView, UserAgentView> agents = (SetJoin<UserView, UserAgentView>) from.<UserView, UserAgentView>join("userAgents", JoinType.LEFT).alias("agents");
-		final SetJoin<UserView, UserOrgView> orgs = (SetJoin<UserView, UserOrgView>) from.<UserView, UserOrgView>join("userOrgs", JoinType.LEFT).alias("orgs");
-		final SetJoin<UserView, UserGradeView> grades = (SetJoin<UserView, UserGradeView>) from.<UserView, UserGradeView>join("userGrades", JoinType.LEFT).alias("grades");
+		final CriteriaQuery<QUser> select = cb.createQuery(QUser.class);
+		final Root<QUser> from = select.from(QUser.class);
+		final SetJoin<QUser, QUserIdentifier> identifiers = (SetJoin<QUser, QUserIdentifier>) from.<QUser, QUserIdentifier>join(IDENTIFIERS, JoinType.LEFT).alias(IDENTIFIERS);
+		final SetJoin<QUser, QUserAgent> agents = (SetJoin<QUser, QUserAgent>) from.<QUser, QUserAgent>join(AGENTS, JoinType.LEFT).alias(AGENTS);
+		final SetJoin<QUser, QUserOrg> orgs = (SetJoin<QUser, QUserOrg>) from.<QUser, QUserOrg>join(ORGS, JoinType.LEFT).alias(ORGS);
 
 		//Add Root Object & Joins to Filterer
-		filterer.addJoins(from, userIds, agents, orgs, grades);
+		filterer.addJoins(from, identifiers, agents, orgs);
 
 		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
-			cb.equal(from.get(PRIMARY_KEY), refId),
-			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
-			cb.equal(from.get(FIELD_ROLE), "student"),
-			from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			cb.equal(from.get(SOURCED_ID), refId),
+			cb.equal(from.get(SOURCED_SCHOOL_YEAR), 2019),
+			cb.equal(from.get(ROLE), STUDENT),
+			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 		);
 
 		select.distinct(true);
@@ -116,30 +111,29 @@ class UserDAOImp extends BaseDAOTest implements UserDAO {
 
 		Query q = em.createQuery(select);
 		try {
-			return (UserView) q.getSingleResult();
+			return (QUser) q.getSingleResult();
 		}
 		catch(NoResultException ignored) { }
 		return null;
 	}
 
 	@Override
-	public List<UserView> getAllStudents(ControllerData metadata) throws Exception {
+	public List<QUser> getAllStudents(RequestData metadata) throws Exception {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
-		final CriteriaQuery<UserView> select = cb.createQuery(UserView.class);
-		final Root<UserView> from = select.from(UserView.class);
-		final SetJoin<UserView, UserIdentifierView> userIds = (SetJoin<UserView, UserIdentifierView>) from.<UserView, UserIdentifierView>join("userIds", JoinType.LEFT).alias("userIds");
-		final SetJoin<UserView, UserAgentView> agents = (SetJoin<UserView, UserAgentView>) from.<UserView, UserAgentView>join("userAgents", JoinType.LEFT).alias("agents");
-		final SetJoin<UserView, UserOrgView> orgs = (SetJoin<UserView, UserOrgView>) from.<UserView, UserOrgView>join("userOrgs", JoinType.LEFT).alias("orgs");
-		final SetJoin<UserView, UserGradeView> grades = (SetJoin<UserView, UserGradeView>) from.<UserView, UserGradeView>join("userGrades", JoinType.LEFT).alias("grades");
+		final CriteriaQuery<QUser> select = cb.createQuery(QUser.class);
+		final Root<QUser> from = select.from(QUser.class);
+		final SetJoin<QUser, QUserIdentifier> identifiers = (SetJoin<QUser, QUserIdentifier>) from.<QUser, QUserIdentifier>join(IDENTIFIERS, JoinType.LEFT).alias(IDENTIFIERS);
+		final SetJoin<QUser, QUserAgent> agents = (SetJoin<QUser, QUserAgent>) from.<QUser, QUserAgent>join(AGENTS, JoinType.LEFT).alias(AGENTS);
+		final SetJoin<QUser, QUserOrg> orgs = (SetJoin<QUser, QUserOrg>) from.<QUser, QUserOrg>join(ORGS, JoinType.LEFT).alias(ORGS);
 
 		//Add Root Object & Joins to Filterer
-		filterer.addJoins(from, userIds, agents, orgs, grades);
+		filterer.addJoins(from, identifiers, agents, orgs);
 
 		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
-			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
-			cb.equal(from.get(FIELD_ROLE), "student"),
-			from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			cb.equal(from.get(SOURCED_SCHOOL_YEAR), 2019),
+			cb.equal(from.get(ROLE), STUDENT),
+			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 		);
 
 		select.distinct(true);
@@ -153,30 +147,29 @@ class UserDAOImp extends BaseDAOTest implements UserDAO {
 			q.setMaxResults(metadata.getPaging().getLimit());
 			metadata.getPaging().setPagingHeaders(countAllStudents(metadata));
 		}
-		return (List<UserView>) q.getResultList();
+		return (List<QUser>) q.getResultList();
 	}
 
 	@Override
-	public List<UserView> getStudentsForSchool(ControllerData metadata, String refId) throws Exception {
+	public List<QUser> getStudentsForSchool(RequestData metadata, String refId) throws Exception {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
-		final CriteriaQuery<UserView> select = cb.createQuery(UserView.class);
-		final Root<UserView> from = select.from(UserView.class);
-		final SetJoin<UserView, UserIdentifierView> userIds = (SetJoin<UserView, UserIdentifierView>) from.<UserView, UserIdentifierView>join("userIds", JoinType.LEFT).alias("userIds");
-		final SetJoin<UserView, UserAgentView> agents = (SetJoin<UserView, UserAgentView>) from.<UserView, UserAgentView>join("userAgents", JoinType.LEFT).alias("agents");
-		final SetJoin<UserView, UserOrgView> orgs = (SetJoin<UserView, UserOrgView>) from.<UserView, UserOrgView>join("userOrgs", JoinType.LEFT).alias("orgs");
-		final SetJoin<UserView, UserGradeView> grades = (SetJoin<UserView, UserGradeView>) from.<UserView, UserGradeView>join("userGrades", JoinType.LEFT).alias("grades");
+		final CriteriaQuery<QUser> select = cb.createQuery(QUser.class);
+		final Root<QUser> from = select.from(QUser.class);
+		final SetJoin<QUser, QUserIdentifier> identifiers = (SetJoin<QUser, QUserIdentifier>) from.<QUser, QUserIdentifier>join(IDENTIFIERS, JoinType.LEFT).alias(IDENTIFIERS);
+		final SetJoin<QUser, QUserAgent> agents = (SetJoin<QUser, QUserAgent>) from.<QUser, QUserAgent>join(AGENTS, JoinType.LEFT).alias(AGENTS);
+		final SetJoin<QUser, QUserOrg> orgs = (SetJoin<QUser, QUserOrg>) from.<QUser, QUserOrg>join(ORGS, JoinType.LEFT).alias(ORGS);
 
 		//Add Root Object & Joins to Filterer
-		filterer.addJoins(from, userIds, agents, orgs, grades);
+		filterer.addJoins(from, identifiers, agents, orgs);
 
 		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
-			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
-			cb.equal(from.get(FIELD_ROLE), "student"),
-			from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()),
+			cb.equal(from.get(SOURCED_SCHOOL_YEAR), 2019),
+			cb.equal(from.get(ROLE), STUDENT),
+			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()),
 			cb.and(
-				cb.equal(orgs.get(FIELD_ORG_ID), refId),
-				cb.equal(orgs.get(FIELD_ORG_TYPE), "school")
+				cb.equal(orgs.get(ORG_ID), refId),
+				cb.equal(orgs.get(TYPE), SCHOOL)
 			)
 		);
 
@@ -191,29 +184,28 @@ class UserDAOImp extends BaseDAOTest implements UserDAO {
 			q.setMaxResults(metadata.getPaging().getLimit());
 			metadata.getPaging().setPagingHeaders(countStudentsForClass(metadata, refId));
 		}
-		return (List<UserView>) q.getResultList();
+		return (List<QUser>) q.getResultList();
 	}
 
 	@Override
-	public List<UserView> getStudentsForClass(ControllerData metadata, String refId) throws Exception {
+	public List<QUser> getStudentsForClass(RequestData metadata, String refId) throws Exception {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
-		final CriteriaQuery<UserView> select = cb.createQuery(UserView.class);
-		final Root<UserView> from = select.from(UserView.class);
-		final SetJoin<UserView, UserClassView> classes = (SetJoin<UserView, UserClassView>) from.<UserView, UserClassView>join(JOIN_USER_CLASSES, JoinType.LEFT);
-		final SetJoin<UserView, UserIdentifierView> userIds = (SetJoin<UserView, UserIdentifierView>) from.<UserView, UserIdentifierView>join("userIds", JoinType.LEFT).alias("userIds");
-		final SetJoin<UserView, UserAgentView> agents = (SetJoin<UserView, UserAgentView>) from.<UserView, UserAgentView>join("userAgents", JoinType.LEFT).alias("agents");
-		final SetJoin<UserView, UserOrgView> orgs = (SetJoin<UserView, UserOrgView>) from.<UserView, UserOrgView>join("userOrgs", JoinType.LEFT).alias("orgs");
-		final SetJoin<UserView, UserGradeView> grades = (SetJoin<UserView, UserGradeView>) from.<UserView, UserGradeView>join("userGrades", JoinType.LEFT).alias("grades");
+		final CriteriaQuery<QUser> select = cb.createQuery(QUser.class);
+		final Root<QUser> from = select.from(QUser.class);
+		final SetJoin<QUser, QUserClass> classes = (SetJoin<QUser, QUserClass>) from.<QUser, QUserClass>join(CLASSES, JoinType.LEFT);
+		final SetJoin<QUser, QUserIdentifier> identifiers = (SetJoin<QUser, QUserIdentifier>) from.<QUser, QUserIdentifier>join(IDENTIFIERS, JoinType.LEFT).alias(IDENTIFIERS);
+		final SetJoin<QUser, QUserAgent> agents = (SetJoin<QUser, QUserAgent>) from.<QUser, QUserAgent>join(AGENTS, JoinType.LEFT).alias(AGENTS);
+		final SetJoin<QUser, QUserOrg> orgs = (SetJoin<QUser, QUserOrg>) from.<QUser, QUserOrg>join(ORGS, JoinType.LEFT).alias(ORGS);
 
 		//Add Root Object & Joins to Filterer
-		filterer.addJoins(from, userIds, agents, orgs, grades);
+		filterer.addJoins(from, identifiers, agents, orgs);
 
 		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
-			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
-			cb.equal(from.get(FIELD_ROLE), "student"),
-			from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()),
-			cb.equal(classes.get(FIELD_CLASS_ID), refId)
+			cb.equal(from.get(SOURCED_SCHOOL_YEAR), 2019),
+			cb.equal(from.get(ROLE), STUDENT),
+			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()),
+			cb.equal(classes.get(CLASS_ID), refId)
 		);
 
 		select.distinct(true);
@@ -227,30 +219,29 @@ class UserDAOImp extends BaseDAOTest implements UserDAO {
 			q.setMaxResults(metadata.getPaging().getLimit());
 			metadata.getPaging().setPagingHeaders(countStudentsForClass(metadata, refId));
 		}
-		return (List<UserView>) q.getResultList();
+		return (List<QUser>) q.getResultList();
 	}
 
 	@Override
-	public List<UserView> getStudentsForClassInSchool(ControllerData metadata, String schoolId, String classId) throws Exception {
+	public List<QUser> getStudentsForClassInSchool(RequestData metadata, String schoolId, String classId) throws Exception {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
-		final CriteriaQuery<UserView> select = cb.createQuery(UserView.class);
-		final Root<UserView> from = select.from(UserView.class);
-		final SetJoin<UserView, UserClassView> classes = (SetJoin<UserView, UserClassView>) from.<UserView, UserClassView>join(JOIN_USER_CLASSES, JoinType.LEFT);
-		final SetJoin<UserView, UserIdentifierView> userIds = (SetJoin<UserView, UserIdentifierView>) from.<UserView, UserIdentifierView>join("userIds", JoinType.LEFT).alias("userIds");
-		final SetJoin<UserView, UserAgentView> agents = (SetJoin<UserView, UserAgentView>) from.<UserView, UserAgentView>join("userAgents", JoinType.LEFT).alias("agents");
-		final SetJoin<UserView, UserOrgView> orgs = (SetJoin<UserView, UserOrgView>) from.<UserView, UserOrgView>join("userOrgs", JoinType.LEFT).alias("orgs");
-		final SetJoin<UserView, UserGradeView> grades = (SetJoin<UserView, UserGradeView>) from.<UserView, UserGradeView>join("userGrades", JoinType.LEFT).alias("grades");
+		final CriteriaQuery<QUser> select = cb.createQuery(QUser.class);
+		final Root<QUser> from = select.from(QUser.class);
+		final SetJoin<QUser, QUserClass> classes = (SetJoin<QUser, QUserClass>) from.<QUser, QUserClass>join(CLASSES, JoinType.LEFT);
+		final SetJoin<QUser, QUserIdentifier> identifiers = (SetJoin<QUser, QUserIdentifier>) from.<QUser, QUserIdentifier>join(IDENTIFIERS, JoinType.LEFT).alias(IDENTIFIERS);
+		final SetJoin<QUser, QUserAgent> agents = (SetJoin<QUser, QUserAgent>) from.<QUser, QUserAgent>join(AGENTS, JoinType.LEFT).alias(AGENTS);
+		final SetJoin<QUser, QUserOrg> orgs = (SetJoin<QUser, QUserOrg>) from.<QUser, QUserOrg>join(ORGS, JoinType.LEFT).alias(ORGS);
 
 		//Add Root Object & Joins to Filterer
-		filterer.addJoins(from, userIds, agents, orgs, grades);
+		filterer.addJoins(from, identifiers, agents, orgs);
 
 		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
-			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
-			cb.equal(from.get(FIELD_ROLE), "student"),
-			from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()),
-			cb.equal(classes.get(FIELD_ORG_ID), schoolId),
-			cb.equal(classes.get(FIELD_CLASS_ID), classId)
+			cb.equal(from.get(SOURCED_SCHOOL_YEAR), 2019),
+			cb.equal(from.get(ROLE), STUDENT),
+			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()),
+			cb.equal(classes.get(ORG_ID), schoolId),
+			cb.equal(classes.get(CLASS_ID), classId)
 		);
 
 		select.distinct(true);
@@ -264,28 +255,27 @@ class UserDAOImp extends BaseDAOTest implements UserDAO {
 			q.setMaxResults(metadata.getPaging().getLimit());
 			metadata.getPaging().setPagingHeaders(countStudentsForClassInSchool(metadata, schoolId, classId));
 		}
-		return (List<UserView>) q.getResultList();
+		return (List<QUser>) q.getResultList();
 	}
 
 	@Override
-	public UserView getTeacher(ControllerData metadata, String refId) throws Exception {
+	public QUser getTeacher(RequestData metadata, String refId) throws Exception {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
-		final CriteriaQuery<UserView> select = cb.createQuery(UserView.class);
-		final Root<UserView> from = select.from(UserView.class);
-		final SetJoin<UserView, UserIdentifierView> userIds = (SetJoin<UserView, UserIdentifierView>) from.<UserView, UserIdentifierView>join("userIds", JoinType.LEFT).alias("userIds");
-		final SetJoin<UserView, UserAgentView> agents = (SetJoin<UserView, UserAgentView>) from.<UserView, UserAgentView>join("userAgents", JoinType.LEFT).alias("agents");
-		final SetJoin<UserView, UserOrgView> orgs = (SetJoin<UserView, UserOrgView>) from.<UserView, UserOrgView>join("userOrgs", JoinType.LEFT).alias("orgs");
-		final SetJoin<UserView, UserGradeView> grades = (SetJoin<UserView, UserGradeView>) from.<UserView, UserGradeView>join("userGrades", JoinType.LEFT).alias("grades");
+		final CriteriaQuery<QUser> select = cb.createQuery(QUser.class);
+		final Root<QUser> from = select.from(QUser.class);
+		final SetJoin<QUser, QUserIdentifier> identifiers = (SetJoin<QUser, QUserIdentifier>) from.<QUser, QUserIdentifier>join(IDENTIFIERS, JoinType.LEFT).alias(IDENTIFIERS);
+		final SetJoin<QUser, QUserAgent> agents = (SetJoin<QUser, QUserAgent>) from.<QUser, QUserAgent>join(AGENTS, JoinType.LEFT).alias(AGENTS);
+		final SetJoin<QUser, QUserOrg> orgs = (SetJoin<QUser, QUserOrg>) from.<QUser, QUserOrg>join(ORGS, JoinType.LEFT).alias(ORGS);
 
 		//Add Root Object & Joins to Filterer
-		filterer.addJoins(from, userIds, agents, orgs, grades);
+		filterer.addJoins(from, identifiers, agents, orgs);
 
 		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
-			cb.equal(from.get(PRIMARY_KEY), refId),
-			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
-			cb.equal(from.get(FIELD_ROLE), "teacher"),
-			from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			cb.equal(from.get(SOURCED_ID), refId),
+			cb.equal(from.get(SOURCED_SCHOOL_YEAR), 2019),
+			cb.equal(from.get(ROLE), TEACHER),
+			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 		);
 
 		select.distinct(true);
@@ -294,30 +284,29 @@ class UserDAOImp extends BaseDAOTest implements UserDAO {
 
 		Query q = em.createQuery(select);
 		try {
-			return (UserView) q.getSingleResult();
+			return (QUser) q.getSingleResult();
 		}
 		catch(NoResultException ignored) { }
 		return null;
 	}
 
 	@Override
-	public List<UserView> getAllTeachers(ControllerData metadata) throws Exception {
+	public List<QUser> getAllTeachers(RequestData metadata) throws Exception {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
-		final CriteriaQuery<UserView> select = cb.createQuery(UserView.class);
-		final Root<UserView> from = select.from(UserView.class);
-		final SetJoin<UserView, UserIdentifierView> userIds = (SetJoin<UserView, UserIdentifierView>) from.<UserView, UserIdentifierView>join("userIds", JoinType.LEFT).alias("userIds");
-		final SetJoin<UserView, UserAgentView> agents = (SetJoin<UserView, UserAgentView>) from.<UserView, UserAgentView>join("userAgents", JoinType.LEFT).alias("agents");
-		final SetJoin<UserView, UserOrgView> orgs = (SetJoin<UserView, UserOrgView>) from.<UserView, UserOrgView>join("userOrgs", JoinType.LEFT).alias("orgs");
-		final SetJoin<UserView, UserGradeView> grades = (SetJoin<UserView, UserGradeView>) from.<UserView, UserGradeView>join("userGrades", JoinType.LEFT).alias("grades");
+		final CriteriaQuery<QUser> select = cb.createQuery(QUser.class);
+		final Root<QUser> from = select.from(QUser.class);
+		final SetJoin<QUser, QUserIdentifier> identifiers = (SetJoin<QUser, QUserIdentifier>) from.<QUser, QUserIdentifier>join(IDENTIFIERS, JoinType.LEFT).alias(IDENTIFIERS);
+		final SetJoin<QUser, QUserAgent> agents = (SetJoin<QUser, QUserAgent>) from.<QUser, QUserAgent>join(AGENTS, JoinType.LEFT).alias(AGENTS);
+		final SetJoin<QUser, QUserOrg> orgs = (SetJoin<QUser, QUserOrg>) from.<QUser, QUserOrg>join(ORGS, JoinType.LEFT).alias(ORGS);
 
 		//Add Root Object & Joins to Filterer
-		filterer.addJoins(from, userIds, agents, orgs, grades);
+		filterer.addJoins(from, identifiers, agents, orgs);
 
 		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
-			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
-			cb.equal(from.get(FIELD_ROLE), "teacher"),
-			from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			cb.equal(from.get(SOURCED_SCHOOL_YEAR), 2019),
+			cb.equal(from.get(ROLE), TEACHER),
+			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 		);
 
 		select.distinct(true);
@@ -331,30 +320,29 @@ class UserDAOImp extends BaseDAOTest implements UserDAO {
 			q.setMaxResults(metadata.getPaging().getLimit());
 			metadata.getPaging().setPagingHeaders(countAllTeachers(metadata));
 		}
-		return (List<UserView>) q.getResultList();
+		return (List<QUser>) q.getResultList();
 	}
 
 	@Override
-	public List<UserView> getTeachersForSchool(ControllerData metadata, String refId) throws Exception {
+	public List<QUser> getTeachersForSchool(RequestData metadata, String refId) throws Exception {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
-		final CriteriaQuery<UserView> select = cb.createQuery(UserView.class);
-		final Root<UserView> from = select.from(UserView.class);
-		final SetJoin<UserView, UserIdentifierView> userIds = (SetJoin<UserView, UserIdentifierView>) from.<UserView, UserIdentifierView>join("userIds", JoinType.LEFT).alias("userIds");
-		final SetJoin<UserView, UserAgentView> agents = (SetJoin<UserView, UserAgentView>) from.<UserView, UserAgentView>join("userAgents", JoinType.LEFT).alias("agents");
-		final SetJoin<UserView, UserOrgView> orgs = (SetJoin<UserView, UserOrgView>) from.<UserView, UserOrgView>join("userOrgs", JoinType.LEFT).alias("orgs");
-		final SetJoin<UserView, UserGradeView> grades = (SetJoin<UserView, UserGradeView>) from.<UserView, UserGradeView>join("userGrades", JoinType.LEFT).alias("grades");
+		final CriteriaQuery<QUser> select = cb.createQuery(QUser.class);
+		final Root<QUser> from = select.from(QUser.class);
+		final SetJoin<QUser, QUserIdentifier> identifiers = (SetJoin<QUser, QUserIdentifier>) from.<QUser, QUserIdentifier>join(IDENTIFIERS, JoinType.LEFT).alias(IDENTIFIERS);
+		final SetJoin<QUser, QUserAgent> agents = (SetJoin<QUser, QUserAgent>) from.<QUser, QUserAgent>join(AGENTS, JoinType.LEFT).alias(AGENTS);
+		final SetJoin<QUser, QUserOrg> orgs = (SetJoin<QUser, QUserOrg>) from.<QUser, QUserOrg>join(ORGS, JoinType.LEFT).alias(ORGS);
 
 		//Add Root Object & Joins to Filterer
-		filterer.addJoins(from, userIds, agents, orgs, grades);
+		filterer.addJoins(from, identifiers, agents, orgs);
 
 		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
-			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
-			cb.equal(from.get(FIELD_ROLE), "teacher"),
-			from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()),
+			cb.equal(from.get(SOURCED_SCHOOL_YEAR), 2019),
+			cb.equal(from.get(ROLE), TEACHER),
+			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()),
 			cb.and(
-				cb.equal(orgs.get(FIELD_ORG_ID), refId),
-				cb.equal(orgs.get(FIELD_ORG_TYPE), "school")
+				cb.equal(orgs.get(ORG_ID), refId),
+				cb.equal(orgs.get(TYPE), SCHOOL)
 			)
 		);
 
@@ -369,29 +357,28 @@ class UserDAOImp extends BaseDAOTest implements UserDAO {
 			q.setMaxResults(metadata.getPaging().getLimit());
 			metadata.getPaging().setPagingHeaders(countTeachersForSchool(metadata, refId));
 		}
-		return (List<UserView>) q.getResultList();
+		return (List<QUser>) q.getResultList();
 	}
 
 	@Override
-	public List<UserView> getTeachersForClass(ControllerData metadata, String refId) throws Exception {
+	public List<QUser> getTeachersForClass(RequestData metadata, String refId) throws Exception {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
-		final CriteriaQuery<UserView> select = cb.createQuery(UserView.class);
-		final Root<UserView> from = select.from(UserView.class);
-		final SetJoin<UserView, UserClassView> classes = (SetJoin<UserView, UserClassView>) from.<UserView, UserClassView>join(JOIN_USER_CLASSES, JoinType.LEFT);
-		final SetJoin<UserView, UserIdentifierView> userIds = (SetJoin<UserView, UserIdentifierView>) from.<UserView, UserIdentifierView>join("userIds", JoinType.LEFT).alias("userIds");
-		final SetJoin<UserView, UserAgentView> agents = (SetJoin<UserView, UserAgentView>) from.<UserView, UserAgentView>join("userAgents", JoinType.LEFT).alias("agents");
-		final SetJoin<UserView, UserOrgView> orgs = (SetJoin<UserView, UserOrgView>) from.<UserView, UserOrgView>join("userOrgs", JoinType.LEFT).alias("orgs");
-		final SetJoin<UserView, UserGradeView> grades = (SetJoin<UserView, UserGradeView>) from.<UserView, UserGradeView>join("userGrades", JoinType.LEFT).alias("grades");
+		final CriteriaQuery<QUser> select = cb.createQuery(QUser.class);
+		final Root<QUser> from = select.from(QUser.class);
+		final SetJoin<QUser, QUserClass> classes = (SetJoin<QUser, QUserClass>) from.<QUser, QUserClass>join(CLASSES, JoinType.LEFT);
+		final SetJoin<QUser, QUserIdentifier> identifiers = (SetJoin<QUser, QUserIdentifier>) from.<QUser, QUserIdentifier>join(IDENTIFIERS, JoinType.LEFT).alias(IDENTIFIERS);
+		final SetJoin<QUser, QUserAgent> agents = (SetJoin<QUser, QUserAgent>) from.<QUser, QUserAgent>join(AGENTS, JoinType.LEFT).alias(AGENTS);
+		final SetJoin<QUser, QUserOrg> orgs = (SetJoin<QUser, QUserOrg>) from.<QUser, QUserOrg>join(ORGS, JoinType.LEFT).alias(ORGS);
 
 		//Add Root Object & Joins to Filterer
-		filterer.addJoins(from, userIds, agents, orgs, grades);
+		filterer.addJoins(from, identifiers, agents, orgs);
 
 		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
-			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
-			cb.equal(from.get(FIELD_ROLE), "teacher"),
-			from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()),
-			cb.equal(classes.get(FIELD_CLASS_ID), refId)
+			cb.equal(from.get(SOURCED_SCHOOL_YEAR), 2019),
+			cb.equal(from.get(ROLE), TEACHER),
+			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()),
+			cb.equal(classes.get(CLASS_ID), refId)
 		);
 
 		select.distinct(true);
@@ -405,30 +392,29 @@ class UserDAOImp extends BaseDAOTest implements UserDAO {
 			q.setMaxResults(metadata.getPaging().getLimit());
 			metadata.getPaging().setPagingHeaders(countTeachersForClass(metadata, refId));
 		}
-		return (List<UserView>) q.getResultList();
+		return (List<QUser>) q.getResultList();
 	}
 
 	@Override
-	public List<UserView> getTeachersForClassInSchool(ControllerData metadata, String schoolId, String classId) throws Exception {
+	public List<QUser> getTeachersForClassInSchool(RequestData metadata, String schoolId, String classId) throws Exception {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
-		final CriteriaQuery<UserView> select = cb.createQuery(UserView.class);
-		final Root<UserView> from = select.from(UserView.class);
-		final SetJoin<UserView, UserClassView> classes = (SetJoin<UserView, UserClassView>) from.<UserView, UserClassView>join(JOIN_USER_CLASSES, JoinType.LEFT);
-		final SetJoin<UserView, UserIdentifierView> userIds = (SetJoin<UserView, UserIdentifierView>) from.<UserView, UserIdentifierView>join("userIds", JoinType.LEFT).alias("userIds");
-		final SetJoin<UserView, UserAgentView> agents = (SetJoin<UserView, UserAgentView>) from.<UserView, UserAgentView>join("userAgents", JoinType.LEFT).alias("agents");
-		final SetJoin<UserView, UserOrgView> orgs = (SetJoin<UserView, UserOrgView>) from.<UserView, UserOrgView>join("userOrgs", JoinType.LEFT).alias("orgs");
-		final SetJoin<UserView, UserGradeView> grades = (SetJoin<UserView, UserGradeView>) from.<UserView, UserGradeView>join("userGrades", JoinType.LEFT).alias("grades");
+		final CriteriaQuery<QUser> select = cb.createQuery(QUser.class);
+		final Root<QUser> from = select.from(QUser.class);
+		final SetJoin<QUser, QUserClass> classes = (SetJoin<QUser, QUserClass>) from.<QUser, QUserClass>join(CLASSES, JoinType.LEFT);
+		final SetJoin<QUser, QUserIdentifier> identifiers = (SetJoin<QUser, QUserIdentifier>) from.<QUser, QUserIdentifier>join(IDENTIFIERS, JoinType.LEFT).alias(IDENTIFIERS);
+		final SetJoin<QUser, QUserAgent> agents = (SetJoin<QUser, QUserAgent>) from.<QUser, QUserAgent>join(AGENTS, JoinType.LEFT).alias(AGENTS);
+		final SetJoin<QUser, QUserOrg> orgs = (SetJoin<QUser, QUserOrg>) from.<QUser, QUserOrg>join(ORGS, JoinType.LEFT).alias(ORGS);
 
 		//Add Root Object & Joins to Filterer
-		filterer.addJoins(from, userIds, agents, orgs, grades);
+		filterer.addJoins(from, identifiers, agents, orgs);
 
 		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
-			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
-			cb.equal(from.get(FIELD_ROLE), "student"),
-			from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()),
-			cb.equal(classes.get(FIELD_ORG_ID), schoolId),
-			cb.equal(classes.get(FIELD_CLASS_ID), classId)
+			cb.equal(from.get(SOURCED_SCHOOL_YEAR), 2019),
+			cb.equal(from.get(ROLE), STUDENT),
+			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()),
+			cb.equal(classes.get(ORG_ID), schoolId),
+			cb.equal(classes.get(CLASS_ID), classId)
 		);
 
 		select.distinct(true);
@@ -442,28 +428,27 @@ class UserDAOImp extends BaseDAOTest implements UserDAO {
 			q.setMaxResults(metadata.getPaging().getLimit());
 			metadata.getPaging().setPagingHeaders(countTeachersForClassInSchool(metadata, schoolId, classId));
 		}
-		return (List<UserView>) q.getResultList();
+		return (List<QUser>) q.getResultList();
 	}
 
 	@Override
-	public UserView getContact(ControllerData metadata, String refId) throws Exception {
+	public QUser getContact(RequestData metadata, String refId) throws Exception {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
-		final CriteriaQuery<UserView> select = cb.createQuery(UserView.class);
-		final Root<UserView> from = select.from(UserView.class);
-		final SetJoin<UserView, UserIdentifierView> userIds = (SetJoin<UserView, UserIdentifierView>) from.<UserView, UserIdentifierView>join("userIds", JoinType.LEFT).alias("userIds");
-		final SetJoin<UserView, UserAgentView> agents = (SetJoin<UserView, UserAgentView>) from.<UserView, UserAgentView>join("userAgents", JoinType.LEFT).alias("agents");
-		final SetJoin<UserView, UserOrgView> orgs = (SetJoin<UserView, UserOrgView>) from.<UserView, UserOrgView>join("userOrgs", JoinType.LEFT).alias("orgs");
-		final SetJoin<UserView, UserGradeView> grades = (SetJoin<UserView, UserGradeView>) from.<UserView, UserGradeView>join("userGrades", JoinType.LEFT).alias("grades");
+		final CriteriaQuery<QUser> select = cb.createQuery(QUser.class);
+		final Root<QUser> from = select.from(QUser.class);
+		final SetJoin<QUser, QUserIdentifier> identifiers = (SetJoin<QUser, QUserIdentifier>) from.<QUser, QUserIdentifier>join(IDENTIFIERS, JoinType.LEFT).alias(IDENTIFIERS);
+		final SetJoin<QUser, QUserAgent> agents = (SetJoin<QUser, QUserAgent>) from.<QUser, QUserAgent>join(AGENTS, JoinType.LEFT).alias(AGENTS);
+		final SetJoin<QUser, QUserOrg> orgs = (SetJoin<QUser, QUserOrg>) from.<QUser, QUserOrg>join(ORGS, JoinType.LEFT).alias(ORGS);
 
 		//Add Root Object & Joins to Filterer
-		filterer.addJoins(from, userIds, agents, orgs, grades);
+		filterer.addJoins(from, identifiers, agents, orgs);
 
 		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
-			cb.equal(from.get(PRIMARY_KEY), refId),
-			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
-			cb.equal(from.get(FIELD_ROLE), "contact"),
-			from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			cb.equal(from.get(SOURCED_ID), refId),
+			cb.equal(from.get(SOURCED_SCHOOL_YEAR), 2019),
+			cb.equal(from.get(ROLE), CONTACT),
+			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 		);
 
 		select.distinct(true);
@@ -472,30 +457,29 @@ class UserDAOImp extends BaseDAOTest implements UserDAO {
 
 		Query q = em.createQuery(select);
 		try {
-			return (UserView) q.getSingleResult();
+			return (QUser) q.getSingleResult();
 		}
 		catch(NoResultException ignored) { }
 		return null;
 	}
 
 	@Override
-	public List<UserView> getAllContacts(ControllerData metadata) throws Exception {
+	public List<QUser> getAllContacts(RequestData metadata) throws Exception {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
-		final CriteriaQuery<UserView> select = cb.createQuery(UserView.class);
-		final Root<UserView> from = select.from(UserView.class);
-		final SetJoin<UserView, UserIdentifierView> userIds = (SetJoin<UserView, UserIdentifierView>) from.<UserView, UserIdentifierView>join("userIds", JoinType.LEFT).alias("userIds");
-		final SetJoin<UserView, UserAgentView> agents = (SetJoin<UserView, UserAgentView>) from.<UserView, UserAgentView>join("userAgents", JoinType.LEFT).alias("agents");
-		final SetJoin<UserView, UserOrgView> orgs = (SetJoin<UserView, UserOrgView>) from.<UserView, UserOrgView>join("userOrgs", JoinType.LEFT).alias("orgs");
-		final SetJoin<UserView, UserGradeView> grades = (SetJoin<UserView, UserGradeView>) from.<UserView, UserGradeView>join("userGrades", JoinType.LEFT).alias("grades");
+		final CriteriaQuery<QUser> select = cb.createQuery(QUser.class);
+		final Root<QUser> from = select.from(QUser.class);
+		final SetJoin<QUser, QUserIdentifier> identifiers = (SetJoin<QUser, QUserIdentifier>) from.<QUser, QUserIdentifier>join(IDENTIFIERS, JoinType.LEFT).alias(IDENTIFIERS);
+		final SetJoin<QUser, QUserAgent> agents = (SetJoin<QUser, QUserAgent>) from.<QUser, QUserAgent>join(AGENTS, JoinType.LEFT).alias(AGENTS);
+		final SetJoin<QUser, QUserOrg> orgs = (SetJoin<QUser, QUserOrg>) from.<QUser, QUserOrg>join(ORGS, JoinType.LEFT).alias(ORGS);
 
 		//Add Root Object & Joins to Filterer
-		filterer.addJoins(from, userIds, agents, orgs, grades);
+		filterer.addJoins(from, identifiers, agents, orgs);
 
 		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
-			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
-			cb.equal(from.get(FIELD_ROLE), "contact"),
-			from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			cb.equal(from.get(SOURCED_SCHOOL_YEAR), 2019),
+			cb.equal(from.get(ROLE), CONTACT),
+			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 		);
 
 		select.distinct(true);
@@ -509,26 +493,25 @@ class UserDAOImp extends BaseDAOTest implements UserDAO {
 			q.setMaxResults(metadata.getPaging().getLimit());
 			metadata.getPaging().setPagingHeaders(countAllContacts(metadata));
 		}
-		return (List<UserView>) q.getResultList();
+		return (List<QUser>) q.getResultList();
 	}
 
 	@Override
-	public int countAllUsers(ControllerData metadata) throws Exception {
+	public int countAllUsers(RequestData metadata) throws Exception {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<Long> select = cb.createQuery(Long.class);
-		final Root<UserView> from = select.from(UserView.class);
-		final SetJoin<UserView, UserIdentifierView> userIds = (SetJoin<UserView, UserIdentifierView>) from.<UserView, UserIdentifierView>join("userIds", JoinType.LEFT).alias("userIds");
-		final SetJoin<UserView, UserAgentView> agents = (SetJoin<UserView, UserAgentView>) from.<UserView, UserAgentView>join("userAgents", JoinType.LEFT).alias("agents");
-		final SetJoin<UserView, UserOrgView> orgs = (SetJoin<UserView, UserOrgView>) from.<UserView, UserOrgView>join("userOrgs", JoinType.LEFT).alias("orgs");
-		final SetJoin<UserView, UserGradeView> grades = (SetJoin<UserView, UserGradeView>) from.<UserView, UserGradeView>join("userGrades", JoinType.LEFT).alias("grades");
+		final Root<QUser> from = select.from(QUser.class);
+		final SetJoin<QUser, QUserIdentifier> identifiers = (SetJoin<QUser, QUserIdentifier>) from.<QUser, QUserIdentifier>join(IDENTIFIERS, JoinType.LEFT).alias(IDENTIFIERS);
+		final SetJoin<QUser, QUserAgent> agents = (SetJoin<QUser, QUserAgent>) from.<QUser, QUserAgent>join(AGENTS, JoinType.LEFT).alias(AGENTS);
+		final SetJoin<QUser, QUserOrg> orgs = (SetJoin<QUser, QUserOrg>) from.<QUser, QUserOrg>join(ORGS, JoinType.LEFT).alias(ORGS);
 
 		//Add Root Object & Joins to Filterer
-		filterer.addJoins(from, userIds, agents, orgs, grades);
+		filterer.addJoins(from, identifiers, agents, orgs);
 
 		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
-			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
-			from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			cb.equal(from.get(SOURCED_SCHOOL_YEAR), 2019),
+			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 		);
 
 		select.select(cb.countDistinct(from));
@@ -538,23 +521,22 @@ class UserDAOImp extends BaseDAOTest implements UserDAO {
 	}
 
 	@Override
-	public int countAllStudents(ControllerData metadata) throws Exception {
+	public int countAllStudents(RequestData metadata) throws Exception {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<Long> select = cb.createQuery(Long.class);
-		final Root<UserView> from = select.from(UserView.class);
-		final SetJoin<UserView, UserIdentifierView> userIds = (SetJoin<UserView, UserIdentifierView>) from.<UserView, UserIdentifierView>join("userIds", JoinType.LEFT).alias("userIds");
-		final SetJoin<UserView, UserAgentView> agents = (SetJoin<UserView, UserAgentView>) from.<UserView, UserAgentView>join("userAgents", JoinType.LEFT).alias("agents");
-		final SetJoin<UserView, UserOrgView> orgs = (SetJoin<UserView, UserOrgView>) from.<UserView, UserOrgView>join("userOrgs", JoinType.LEFT).alias("orgs");
-		final SetJoin<UserView, UserGradeView> grades = (SetJoin<UserView, UserGradeView>) from.<UserView, UserGradeView>join("userGrades", JoinType.LEFT).alias("grades");
+		final Root<QUser> from = select.from(QUser.class);
+		final SetJoin<QUser, QUserIdentifier> identifiers = (SetJoin<QUser, QUserIdentifier>) from.<QUser, QUserIdentifier>join(IDENTIFIERS, JoinType.LEFT).alias(IDENTIFIERS);
+		final SetJoin<QUser, QUserAgent> agents = (SetJoin<QUser, QUserAgent>) from.<QUser, QUserAgent>join(AGENTS, JoinType.LEFT).alias(AGENTS);
+		final SetJoin<QUser, QUserOrg> orgs = (SetJoin<QUser, QUserOrg>) from.<QUser, QUserOrg>join(ORGS, JoinType.LEFT).alias(ORGS);
 
 		//Add Root Object & Joins to Filterer
-		filterer.addJoins(from, userIds, agents, orgs, grades);
+		filterer.addJoins(from, identifiers, agents, orgs);
 
 		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
-			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
-			cb.equal(from.get(FIELD_ROLE), "student"),
-			from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			cb.equal(from.get(SOURCED_SCHOOL_YEAR), 2019),
+			cb.equal(from.get(ROLE), STUDENT),
+			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 		);
 
 		select.select(cb.countDistinct(from));
@@ -564,26 +546,25 @@ class UserDAOImp extends BaseDAOTest implements UserDAO {
 	}
 
 	@Override
-	public int countStudentsForSchool(ControllerData metadata, String refId) throws Exception {
+	public int countStudentsForSchool(RequestData metadata, String refId) throws Exception {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<Long> select = cb.createQuery(Long.class);
-		final Root<UserView> from = select.from(UserView.class);
-		final SetJoin<UserView, UserIdentifierView> userIds = (SetJoin<UserView, UserIdentifierView>) from.<UserView, UserIdentifierView>join("userIds", JoinType.LEFT).alias("userIds");
-		final SetJoin<UserView, UserAgentView> agents = (SetJoin<UserView, UserAgentView>) from.<UserView, UserAgentView>join("userAgents", JoinType.LEFT).alias("agents");
-		final SetJoin<UserView, UserOrgView> orgs = (SetJoin<UserView, UserOrgView>) from.<UserView, UserOrgView>join("userOrgs", JoinType.LEFT).alias("orgs");
-		final SetJoin<UserView, UserGradeView> grades = (SetJoin<UserView, UserGradeView>) from.<UserView, UserGradeView>join("userGrades", JoinType.LEFT).alias("grades");
+		final Root<QUser> from = select.from(QUser.class);
+		final SetJoin<QUser, QUserIdentifier> identifiers = (SetJoin<QUser, QUserIdentifier>) from.<QUser, QUserIdentifier>join(IDENTIFIERS, JoinType.LEFT).alias(IDENTIFIERS);
+		final SetJoin<QUser, QUserAgent> agents = (SetJoin<QUser, QUserAgent>) from.<QUser, QUserAgent>join(AGENTS, JoinType.LEFT).alias(AGENTS);
+		final SetJoin<QUser, QUserOrg> orgs = (SetJoin<QUser, QUserOrg>) from.<QUser, QUserOrg>join(ORGS, JoinType.LEFT).alias(ORGS);
 
 		//Add Root Object & Joins to Filterer
-		filterer.addJoins(from, userIds, agents, orgs, grades);
+		filterer.addJoins(from, identifiers, agents, orgs);
 
 		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
-			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
-			cb.equal(from.get(FIELD_ROLE), "student"),
-			from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()),
+			cb.equal(from.get(SOURCED_SCHOOL_YEAR), 2019),
+			cb.equal(from.get(ROLE), STUDENT),
+			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()),
 			cb.and(
-				cb.equal(orgs.get(FIELD_ORG_ID), refId),
-				cb.equal(orgs.get(FIELD_ORG_TYPE), "school")
+				cb.equal(orgs.get(ORG_ID), refId),
+				cb.equal(orgs.get(TYPE), SCHOOL)
 			)
 		);
 
@@ -594,25 +575,24 @@ class UserDAOImp extends BaseDAOTest implements UserDAO {
 	}
 
 	@Override
-	public int countStudentsForClass(ControllerData metadata, String refId) throws Exception {
+	public int countStudentsForClass(RequestData metadata, String refId) throws Exception {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<Long> select = cb.createQuery(Long.class);
-		final Root<UserView> from = select.from(UserView.class);
-		final SetJoin<UserView, UserClassView> classes = (SetJoin<UserView, UserClassView>) from.<UserView, UserClassView>join(JOIN_USER_CLASSES, JoinType.LEFT);
-		final SetJoin<UserView, UserIdentifierView> userIds = (SetJoin<UserView, UserIdentifierView>) from.<UserView, UserIdentifierView>join("userIds", JoinType.LEFT).alias("userIds");
-		final SetJoin<UserView, UserAgentView> agents = (SetJoin<UserView, UserAgentView>) from.<UserView, UserAgentView>join("userAgents", JoinType.LEFT).alias("agents");
-		final SetJoin<UserView, UserOrgView> orgs = (SetJoin<UserView, UserOrgView>) from.<UserView, UserOrgView>join("userOrgs", JoinType.LEFT).alias("orgs");
-		final SetJoin<UserView, UserGradeView> grades = (SetJoin<UserView, UserGradeView>) from.<UserView, UserGradeView>join("userGrades", JoinType.LEFT).alias("grades");
+		final Root<QUser> from = select.from(QUser.class);
+		final SetJoin<QUser, QUserClass> classes = (SetJoin<QUser, QUserClass>) from.<QUser, QUserClass>join(CLASSES, JoinType.LEFT);
+		final SetJoin<QUser, QUserIdentifier> identifiers = (SetJoin<QUser, QUserIdentifier>) from.<QUser, QUserIdentifier>join(IDENTIFIERS, JoinType.LEFT).alias(IDENTIFIERS);
+		final SetJoin<QUser, QUserAgent> agents = (SetJoin<QUser, QUserAgent>) from.<QUser, QUserAgent>join(AGENTS, JoinType.LEFT).alias(AGENTS);
+		final SetJoin<QUser, QUserOrg> orgs = (SetJoin<QUser, QUserOrg>) from.<QUser, QUserOrg>join(ORGS, JoinType.LEFT).alias(ORGS);
 
 		//Add Root Object & Joins to Filterer
-		filterer.addJoins(from, userIds, agents, orgs, grades);
+		filterer.addJoins(from, identifiers, agents, orgs);
 
 		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
-			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
-			cb.equal(from.get(FIELD_ROLE), "student"),
-			from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()),
-			cb.equal(classes.get(FIELD_CLASS_ID), refId)
+			cb.equal(from.get(SOURCED_SCHOOL_YEAR), 2019),
+			cb.equal(from.get(ROLE), STUDENT),
+			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()),
+			cb.equal(classes.get(CLASS_ID), refId)
 		);
 
 		select.select(cb.countDistinct(from));
@@ -622,26 +602,25 @@ class UserDAOImp extends BaseDAOTest implements UserDAO {
 	}
 
 	@Override
-	public int countStudentsForClassInSchool(ControllerData metadata, String schoolId, String classId) throws Exception {
+	public int countStudentsForClassInSchool(RequestData metadata, String schoolId, String classId) throws Exception {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<Long> select = cb.createQuery(Long.class);
-		final Root<UserView> from = select.from(UserView.class);
-		final SetJoin<UserView, UserClassView> classes = (SetJoin<UserView, UserClassView>) from.<UserView, UserClassView>join(JOIN_USER_CLASSES, JoinType.LEFT);
-		final SetJoin<UserView, UserIdentifierView> userIds = (SetJoin<UserView, UserIdentifierView>) from.<UserView, UserIdentifierView>join("userIds", JoinType.LEFT).alias("userIds");
-		final SetJoin<UserView, UserAgentView> agents = (SetJoin<UserView, UserAgentView>) from.<UserView, UserAgentView>join("userAgents", JoinType.LEFT).alias("agents");
-		final SetJoin<UserView, UserOrgView> orgs = (SetJoin<UserView, UserOrgView>) from.<UserView, UserOrgView>join("userOrgs", JoinType.LEFT).alias("orgs");
-		final SetJoin<UserView, UserGradeView> grades = (SetJoin<UserView, UserGradeView>) from.<UserView, UserGradeView>join("userGrades", JoinType.LEFT).alias("grades");
+		final Root<QUser> from = select.from(QUser.class);
+		final SetJoin<QUser, QUserClass> classes = (SetJoin<QUser, QUserClass>) from.<QUser, QUserClass>join(CLASSES, JoinType.LEFT);
+		final SetJoin<QUser, QUserIdentifier> identifiers = (SetJoin<QUser, QUserIdentifier>) from.<QUser, QUserIdentifier>join(IDENTIFIERS, JoinType.LEFT).alias(IDENTIFIERS);
+		final SetJoin<QUser, QUserAgent> agents = (SetJoin<QUser, QUserAgent>) from.<QUser, QUserAgent>join(AGENTS, JoinType.LEFT).alias(AGENTS);
+		final SetJoin<QUser, QUserOrg> orgs = (SetJoin<QUser, QUserOrg>) from.<QUser, QUserOrg>join(ORGS, JoinType.LEFT).alias(ORGS);
 
 		//Add Root Object & Joins to Filterer
-		filterer.addJoins(from, userIds, agents, orgs, grades);
+		filterer.addJoins(from, identifiers, agents, orgs);
 
 		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
-			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
-			cb.equal(from.get(FIELD_ROLE), "student"),
-			from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()),
-			cb.equal(classes.get(FIELD_ORG_ID), schoolId),
-			cb.equal(classes.get(FIELD_CLASS_ID), classId)
+			cb.equal(from.get(SOURCED_SCHOOL_YEAR), 2019),
+			cb.equal(from.get(ROLE), STUDENT),
+			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()),
+			cb.equal(classes.get(ORG_ID), schoolId),
+			cb.equal(classes.get(CLASS_ID), classId)
 		);
 
 		select.select(cb.countDistinct(from));
@@ -651,23 +630,22 @@ class UserDAOImp extends BaseDAOTest implements UserDAO {
 	}
 
 	@Override
-	public int countAllTeachers(ControllerData metadata) throws Exception {
+	public int countAllTeachers(RequestData metadata) throws Exception {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<Long> select = cb.createQuery(Long.class);
-		final Root<UserView> from = select.from(UserView.class);
-		final SetJoin<UserView, UserIdentifierView> userIds = (SetJoin<UserView, UserIdentifierView>) from.<UserView, UserIdentifierView>join("userIds", JoinType.LEFT).alias("userIds");
-		final SetJoin<UserView, UserAgentView> agents = (SetJoin<UserView, UserAgentView>) from.<UserView, UserAgentView>join("userAgents", JoinType.LEFT).alias("agents");
-		final SetJoin<UserView, UserOrgView> orgs = (SetJoin<UserView, UserOrgView>) from.<UserView, UserOrgView>join("userOrgs", JoinType.LEFT).alias("orgs");
-		final SetJoin<UserView, UserGradeView> grades = (SetJoin<UserView, UserGradeView>) from.<UserView, UserGradeView>join("userGrades", JoinType.LEFT).alias("grades");
+		final Root<QUser> from = select.from(QUser.class);
+		final SetJoin<QUser, QUserIdentifier> identifiers = (SetJoin<QUser, QUserIdentifier>) from.<QUser, QUserIdentifier>join(IDENTIFIERS, JoinType.LEFT).alias(IDENTIFIERS);
+		final SetJoin<QUser, QUserAgent> agents = (SetJoin<QUser, QUserAgent>) from.<QUser, QUserAgent>join(AGENTS, JoinType.LEFT).alias(AGENTS);
+		final SetJoin<QUser, QUserOrg> orgs = (SetJoin<QUser, QUserOrg>) from.<QUser, QUserOrg>join(ORGS, JoinType.LEFT).alias(ORGS);
 
 		//Add Root Object & Joins to Filterer
-		filterer.addJoins(from, userIds, agents, orgs, grades);
+		filterer.addJoins(from, identifiers, agents, orgs);
 
 		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
-			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
-			cb.equal(from.get(FIELD_ROLE), "teacher"),
-			from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			cb.equal(from.get(SOURCED_SCHOOL_YEAR), 2019),
+			cb.equal(from.get(ROLE), TEACHER),
+			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 		);
 
 		select.select(cb.countDistinct(from));
@@ -677,26 +655,25 @@ class UserDAOImp extends BaseDAOTest implements UserDAO {
 	}
 
 	@Override
-	public int countTeachersForSchool(ControllerData metadata, String refId) throws Exception {
+	public int countTeachersForSchool(RequestData metadata, String refId) throws Exception {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<Long> select = cb.createQuery(Long.class);
-		final Root<UserView> from = select.from(UserView.class);
-		final SetJoin<UserView, UserIdentifierView> userIds = (SetJoin<UserView, UserIdentifierView>) from.<UserView, UserIdentifierView>join("userIds", JoinType.LEFT).alias("userIds");
-		final SetJoin<UserView, UserAgentView> agents = (SetJoin<UserView, UserAgentView>) from.<UserView, UserAgentView>join("userAgents", JoinType.LEFT).alias("agents");
-		final SetJoin<UserView, UserOrgView> orgs = (SetJoin<UserView, UserOrgView>) from.<UserView, UserOrgView>join("userOrgs", JoinType.LEFT).alias("orgs");
-		final SetJoin<UserView, UserGradeView> grades = (SetJoin<UserView, UserGradeView>) from.<UserView, UserGradeView>join("userGrades", JoinType.LEFT).alias("grades");
+		final Root<QUser> from = select.from(QUser.class);
+		final SetJoin<QUser, QUserIdentifier> identifiers = (SetJoin<QUser, QUserIdentifier>) from.<QUser, QUserIdentifier>join(IDENTIFIERS, JoinType.LEFT).alias(IDENTIFIERS);
+		final SetJoin<QUser, QUserAgent> agents = (SetJoin<QUser, QUserAgent>) from.<QUser, QUserAgent>join(AGENTS, JoinType.LEFT).alias(AGENTS);
+		final SetJoin<QUser, QUserOrg> orgs = (SetJoin<QUser, QUserOrg>) from.<QUser, QUserOrg>join(ORGS, JoinType.LEFT).alias(ORGS);
 
 		//Add Root Object & Joins to Filterer
-		filterer.addJoins(from, userIds, agents, orgs, grades);
+		filterer.addJoins(from, identifiers, agents, orgs);
 
 		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
-			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
-			cb.equal(from.get(FIELD_ROLE), "teacher"),
-			from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()),
+			cb.equal(from.get(SOURCED_SCHOOL_YEAR), 2019),
+			cb.equal(from.get(ROLE), TEACHER),
+			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()),
 			cb.and(
-				cb.equal(orgs.get(FIELD_ORG_ID), refId),
-				cb.equal(orgs.get(FIELD_ORG_TYPE), "school")
+				cb.equal(orgs.get(ORG_ID), refId),
+				cb.equal(orgs.get(TYPE), SCHOOL)
 			)
 		);
 
@@ -707,25 +684,24 @@ class UserDAOImp extends BaseDAOTest implements UserDAO {
 	}
 
 	@Override
-	public int countTeachersForClass(ControllerData metadata, String refId) throws Exception {
+	public int countTeachersForClass(RequestData metadata, String refId) throws Exception {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<Long> select = cb.createQuery(Long.class);
-		final Root<UserView> from = select.from(UserView.class);
-		final SetJoin<UserView, UserClassView> classes = (SetJoin<UserView, UserClassView>) from.<UserView, UserClassView>join(JOIN_USER_CLASSES, JoinType.LEFT);
-		final SetJoin<UserView, UserIdentifierView> userIds = (SetJoin<UserView, UserIdentifierView>) from.<UserView, UserIdentifierView>join("userIds", JoinType.LEFT).alias("userIds");
-		final SetJoin<UserView, UserAgentView> agents = (SetJoin<UserView, UserAgentView>) from.<UserView, UserAgentView>join("userAgents", JoinType.LEFT).alias("agents");
-		final SetJoin<UserView, UserOrgView> orgs = (SetJoin<UserView, UserOrgView>) from.<UserView, UserOrgView>join("userOrgs", JoinType.LEFT).alias("orgs");
-		final SetJoin<UserView, UserGradeView> grades = (SetJoin<UserView, UserGradeView>) from.<UserView, UserGradeView>join("userGrades", JoinType.LEFT).alias("grades");
+		final Root<QUser> from = select.from(QUser.class);
+		final SetJoin<QUser, QUserClass> classes = (SetJoin<QUser, QUserClass>) from.<QUser, QUserClass>join(CLASSES, JoinType.LEFT);
+		final SetJoin<QUser, QUserIdentifier> identifiers = (SetJoin<QUser, QUserIdentifier>) from.<QUser, QUserIdentifier>join(IDENTIFIERS, JoinType.LEFT).alias(IDENTIFIERS);
+		final SetJoin<QUser, QUserAgent> agents = (SetJoin<QUser, QUserAgent>) from.<QUser, QUserAgent>join(AGENTS, JoinType.LEFT).alias(AGENTS);
+		final SetJoin<QUser, QUserOrg> orgs = (SetJoin<QUser, QUserOrg>) from.<QUser, QUserOrg>join(ORGS, JoinType.LEFT).alias(ORGS);
 
 		//Add Root Object & Joins to Filterer
-		filterer.addJoins(from, userIds, agents, orgs, grades);
+		filterer.addJoins(from, identifiers, agents, orgs);
 
 		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
-			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
-			cb.equal(from.get(FIELD_ROLE), "teacher"),
-			from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()),
-			cb.equal(classes.get(FIELD_CLASS_ID), refId)
+			cb.equal(from.get(SOURCED_SCHOOL_YEAR), 2019),
+			cb.equal(from.get(ROLE), TEACHER),
+			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()),
+			cb.equal(classes.get(CLASS_ID), refId)
 		);
 
 		select.select(cb.countDistinct(from));
@@ -735,26 +711,25 @@ class UserDAOImp extends BaseDAOTest implements UserDAO {
 	}
 
 	@Override
-	public int countTeachersForClassInSchool(ControllerData metadata, String schoolId, String classId) throws Exception {
+	public int countTeachersForClassInSchool(RequestData metadata, String schoolId, String classId) throws Exception {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<Long> select = cb.createQuery(Long.class);
-		final Root<UserView> from = select.from(UserView.class);
-		final SetJoin<UserView, UserClassView> classes = (SetJoin<UserView, UserClassView>) from.<UserView, UserClassView>join(JOIN_USER_CLASSES, JoinType.LEFT);
-		final SetJoin<UserView, UserIdentifierView> userIds = (SetJoin<UserView, UserIdentifierView>) from.<UserView, UserIdentifierView>join("userIds", JoinType.LEFT).alias("userIds");
-		final SetJoin<UserView, UserAgentView> agents = (SetJoin<UserView, UserAgentView>) from.<UserView, UserAgentView>join("userAgents", JoinType.LEFT).alias("agents");
-		final SetJoin<UserView, UserOrgView> orgs = (SetJoin<UserView, UserOrgView>) from.<UserView, UserOrgView>join("userOrgs", JoinType.LEFT).alias("orgs");
-		final SetJoin<UserView, UserGradeView> grades = (SetJoin<UserView, UserGradeView>) from.<UserView, UserGradeView>join("userGrades", JoinType.LEFT).alias("grades");
+		final Root<QUser> from = select.from(QUser.class);
+		final SetJoin<QUser, QUserClass> classes = (SetJoin<QUser, QUserClass>) from.<QUser, QUserClass>join(CLASSES, JoinType.LEFT);
+		final SetJoin<QUser, QUserIdentifier> identifiers = (SetJoin<QUser, QUserIdentifier>) from.<QUser, QUserIdentifier>join(IDENTIFIERS, JoinType.LEFT).alias(IDENTIFIERS);
+		final SetJoin<QUser, QUserAgent> agents = (SetJoin<QUser, QUserAgent>) from.<QUser, QUserAgent>join(AGENTS, JoinType.LEFT).alias(AGENTS);
+		final SetJoin<QUser, QUserOrg> orgs = (SetJoin<QUser, QUserOrg>) from.<QUser, QUserOrg>join(ORGS, JoinType.LEFT).alias(ORGS);
 
 		//Add Root Object & Joins to Filterer
-		filterer.addJoins(from, userIds, agents, orgs, grades);
+		filterer.addJoins(from, identifiers, agents, orgs);
 
 		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
-			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
-			cb.equal(from.get(FIELD_ROLE), "student"),
-			from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()),
-			cb.equal(classes.get(FIELD_ORG_ID), schoolId),
-			cb.equal(classes.get(FIELD_CLASS_ID), classId)
+			cb.equal(from.get(SOURCED_SCHOOL_YEAR), 2019),
+			cb.equal(from.get(ROLE), STUDENT),
+			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()),
+			cb.equal(classes.get(ORG_ID), schoolId),
+			cb.equal(classes.get(CLASS_ID), classId)
 		);
 
 		select.select(cb.countDistinct(from));
@@ -764,23 +739,22 @@ class UserDAOImp extends BaseDAOTest implements UserDAO {
 	}
 
 	@Override
-	public int countAllContacts(ControllerData metadata) throws Exception {
+	public int countAllContacts(RequestData metadata) throws Exception {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<Long> select = cb.createQuery(Long.class);
-		final Root<UserView> from = select.from(UserView.class);
-		final SetJoin<UserView, UserIdentifierView> userIds = (SetJoin<UserView, UserIdentifierView>) from.<UserView, UserIdentifierView>join("userIds", JoinType.LEFT).alias("userIds");
-		final SetJoin<UserView, UserAgentView> agents = (SetJoin<UserView, UserAgentView>) from.<UserView, UserAgentView>join("userAgents", JoinType.LEFT).alias("agents");
-		final SetJoin<UserView, UserOrgView> orgs = (SetJoin<UserView, UserOrgView>) from.<UserView, UserOrgView>join("userOrgs", JoinType.LEFT).alias("orgs");
-		final SetJoin<UserView, UserGradeView> grades = (SetJoin<UserView, UserGradeView>) from.<UserView, UserGradeView>join("userGrades", JoinType.LEFT).alias("grades");
+		final Root<QUser> from = select.from(QUser.class);
+		final SetJoin<QUser, QUserIdentifier> identifiers = (SetJoin<QUser, QUserIdentifier>) from.<QUser, QUserIdentifier>join(IDENTIFIERS, JoinType.LEFT).alias(IDENTIFIERS);
+		final SetJoin<QUser, QUserAgent> agents = (SetJoin<QUser, QUserAgent>) from.<QUser, QUserAgent>join(AGENTS, JoinType.LEFT).alias(AGENTS);
+		final SetJoin<QUser, QUserOrg> orgs = (SetJoin<QUser, QUserOrg>) from.<QUser, QUserOrg>join(ORGS, JoinType.LEFT).alias(ORGS);
 
 		//Add Root Object & Joins to Filterer
-		filterer.addJoins(from, userIds, agents, orgs, grades);
+		filterer.addJoins(from, identifiers, agents, orgs);
 
 		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
-			cb.equal(from.get(SCHOOL_YEAR_KEY), 2019),
-			cb.equal(from.get(FIELD_ROLE), "contact"),
-			from.get(FIELD_DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			cb.equal(from.get(SOURCED_SCHOOL_YEAR), 2019),
+			cb.equal(from.get(ROLE), CONTACT),
+			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 		);
 
 		select.select(cb.countDistinct(from));

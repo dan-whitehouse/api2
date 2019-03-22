@@ -3,24 +3,23 @@ package org.ricone.api.oneroster.request.orgs;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ricone.api.core.model.view.OrgView;
+import org.ricone.api.core.model.v1p1.QOrg;
 import org.ricone.api.oneroster.component.BaseMapper;
 import org.ricone.api.oneroster.model.*;
 import org.ricone.api.oneroster.util.MappingUtil;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 
-@Component("OneRoster:Orgs:OrgMapper")
-class OrgMapper extends BaseMapper<OrgView, Org, OrgsResponse, OrgResponse> {
+@Component("OneRoster2:Orgs:OrgMapper")
+class OrgMapper extends BaseMapper<QOrg, Org, OrgsResponse, OrgResponse> {
     private Logger logger = LogManager.getLogger(this.getClass());
 
     OrgMapper() throws NoSuchMethodException {
-        super(OrgView.class, Org.class, OrgsResponse.class, OrgResponse.class);
+        super(QOrg.class, Org.class, OrgsResponse.class, OrgResponse.class);
     }
 
-    @Override public Org map(OrgView instance) {
+    @Override public Org map(QOrg instance) {
         Org org = new Org();
         org.setSourcedId(instance.getSourcedId());
         org.setStatus(StatusType.active);
@@ -31,15 +30,17 @@ class OrgMapper extends BaseMapper<OrgView, Org, OrgsResponse, OrgResponse> {
         org.setName(instance.getName());
         org.setIdentifier(instance.getIdentifier());
 
-        org.setParent(MappingUtil.buildGUIDRef("orgs", instance.getParentId(), GUIDType.org));
+        if(instance.getOrg() != null) {
+            org.setParent(MappingUtil.buildGUIDRef("orgs", instance.getOrg().getSourcedId(), GUIDType.org));
+        }
         instance.getChildren().forEach(child -> {
-            org.getChildren().add(MappingUtil.buildGUIDRef("schools", child.getChildId(), GUIDType.org));
+            org.getChildren().add(MappingUtil.buildGUIDRef("schools", child.getChild().getSourcedId(), GUIDType.org));
         });
 
         return org;
     }
 
-    @Override public Metadata mapMetadata(OrgView instance) {
+    @Override public Metadata mapMetadata(QOrg instance) {
         Metadata metadata = new Metadata();
         metadata.getAdditionalProperties().put("ricone.schoolYear", instance.getSourcedSchoolYear());
         metadata.getAdditionalProperties().put("ricone.districtId", instance.getDistrictId());

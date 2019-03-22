@@ -1,15 +1,15 @@
 package org.ricone.api.oneroster.request.enrollments;
 
-import org.ricone.api.oneroster.component.ControllerData;
+import org.ricone.api.oneroster.component.RequestData;
 import org.ricone.api.oneroster.model.EnrollmentResponse;
 import org.ricone.api.oneroster.model.EnrollmentsResponse;
 
 interface EnrollmentService {
-	EnrollmentResponse getEnrollment(ControllerData metadata, String refId) throws Exception;
+	EnrollmentResponse getEnrollment(RequestData metadata, String refId) throws Exception;
 
-	EnrollmentsResponse getAllEnrollments(ControllerData metadata) throws Exception;
+	EnrollmentsResponse getAllEnrollments(RequestData metadata) throws Exception;
 
-	EnrollmentsResponse getEnrollmentsForSchool(ControllerData metadata, String refId) throws Exception;
+	EnrollmentsResponse getEnrollmentsForSchool(RequestData metadata, String refId) throws Exception;
 
-	EnrollmentsResponse getEnrollmentsForClassInSchool(ControllerData metadata, String schoolId, String classId) throws Exception;
+	EnrollmentsResponse getEnrollmentsForClassInSchool(RequestData metadata, String schoolId, String classId) throws Exception;
 }

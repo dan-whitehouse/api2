@@ -1,11 +1,11 @@
 package org.ricone.api.oneroster.request.demographics;
 
+import org.ricone.api.oneroster.component.RequestData;
 import org.ricone.api.oneroster.model.DemographicResponse;
 import org.ricone.api.oneroster.model.DemographicsResponse;
-import org.ricone.api.oneroster.component.ControllerData;
 
 interface DemographicService {
-	DemographicResponse getDemographic(ControllerData metadata, String refId) throws Exception;
+	DemographicResponse getDemographic(RequestData metadata, String refId) throws Exception;
 
-	DemographicsResponse getAllDemographics(ControllerData metadata) throws Exception;
+	DemographicsResponse getAllDemographics(RequestData metadata) throws Exception;
 }

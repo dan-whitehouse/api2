@@ -18,13 +18,13 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@RestController("OneRoster:AcademicSessions:AcademicSessionController")
+@RestController("OneRoster2:AcademicSessions:AcademicSessionController")
 @Api(value = "AcademicSession", description = "One Roster - Academic Sessions", tags = {"AcademicSession"})
 class AcademicSessionController extends BaseController {
 	@Autowired
 	private AcademicSessionService service;
 
-	@ResponseBody @GetMapping(value = "/ims/oneroster/v1p1/academicSessions/{id}")
+	@ResponseBody @GetMapping(value = "/ims/oneroster2/v1p1/academicSessions/{id}")
 	@ApiOperation(value = "getAcademicSession", tags = {"AcademicSession"})
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "Success", response = AcademicSessionResponse.class),
@@ -38,7 +38,7 @@ class AcademicSessionController extends BaseController {
 		return service.getAcademicSession(getMetaData(request, response), id);
 	}
 
-	@ResponseBody @GetMapping(value = "/ims/oneroster/v1p1/academicSessions")
+	@ResponseBody @GetMapping(value = "/ims/oneroster2/v1p1/academicSessions")
 	@ApiOperation(value = "getAllAcademicSessions", tags = {"AcademicSession"})
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "Success", response = AcademicSessionsResponse.class),
@@ -52,7 +52,7 @@ class AcademicSessionController extends BaseController {
 		return service.getAllAcademicSessions(getMetaData(request, response));
 	}
 
-	@ResponseBody @GetMapping(value = "/ims/oneroster/v1p1/terms/{id}")
+	@ResponseBody @GetMapping(value = "/ims/oneroster2/v1p1/terms/{id}")
 	@ApiOperation(value = "getTerm", tags = {"AcademicSession"})
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "Success", response = AcademicSessionResponse.class),
@@ -66,7 +66,7 @@ class AcademicSessionController extends BaseController {
 		return service.getTerm(getMetaData(request, response), id);
 	}
 
-	@ResponseBody @GetMapping(value = "/ims/oneroster/v1p1/terms")
+	@ResponseBody @GetMapping(value = "/ims/oneroster2/v1p1/terms")
 	@ApiOperation(value = "getAllTerms", tags = {"AcademicSession"})
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "Success", response = AcademicSessionsResponse.class),
@@ -80,7 +80,7 @@ class AcademicSessionController extends BaseController {
 		return service.getAllTerms(getMetaData(request, response));
 	}
 
-	@ResponseBody @GetMapping(value = "/ims/oneroster/v1p1/gradingPeriods/{id}")
+	@ResponseBody @GetMapping(value = "/ims/oneroster2/v1p1/gradingPeriods/{id}")
 	@ApiOperation(value = "getGradingPeriod", tags = {"AcademicSession"})
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "Success", response = AcademicSessionResponse.class),
@@ -94,7 +94,7 @@ class AcademicSessionController extends BaseController {
 		return service.getGradingPeriod(getMetaData(request, response), id);
 	}
 
-	@ResponseBody @GetMapping(value = "/ims/oneroster/v1p1/gradingPeriods")
+	@ResponseBody @GetMapping(value = "/ims/oneroster2/v1p1/gradingPeriods")
 	@ApiOperation(value = "getAllGradingPeriods", tags = {"AcademicSession"})
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "Success", response = AcademicSessionsResponse.class),
@@ -108,7 +108,7 @@ class AcademicSessionController extends BaseController {
 		return service.getAllGradingPeriods(getMetaData(request, response));
 	}
 
-	@ResponseBody @GetMapping(value = "/ims/oneroster/v1p1/terms/{id}/gradingPeriods")
+	@ResponseBody @GetMapping(value = "/ims/oneroster2/v1p1/terms/{id}/gradingPeriods")
 	@ApiOperation(value = "getGradingPeriodsForTerm", tags = {"AcademicSession"})
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "Success", response = AcademicSessionsResponse.class),

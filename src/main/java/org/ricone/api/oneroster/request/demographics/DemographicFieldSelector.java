@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
  * @since 2019-01-28
  */
 
-@Component("OneRoster2:Demographics:DemographicFieldSelector")
+@Component("OneRoster:Demographics:DemographicFieldSelector")
 public class DemographicFieldSelector extends BaseFieldSelector<Demographic> {
 	public DemographicFieldSelector() {
 		super(Demographic.class);

@@ -14,7 +14,7 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 @Transactional
-@Service("OneRoster2:AcademicSessions:AcademicSessionService")
+@Service("OneRoster:AcademicSessions:AcademicSessionService")
 class AcademicSessionServiceImp implements AcademicSessionService {
 	@Autowired private AcademicSessionDAO dao;
 	@Autowired private AcademicSessionMapper mapper;

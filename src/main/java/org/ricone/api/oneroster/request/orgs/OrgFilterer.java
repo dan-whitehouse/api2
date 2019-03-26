@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 import javax.persistence.criteria.Path;
 
-@Component("OneRoster2:Orgs:OrgFilterer")
+@Component("OneRoster:Orgs:OrgFilterer")
 public class OrgFilterer extends BaseFilterer {
 	public OrgFilterer() {
 	}
@@ -15,6 +15,9 @@ public class OrgFilterer extends BaseFilterer {
 	@Override
 	public Path getPath(String field) throws InvalidFilterFieldException, InvalidDataException {
 		switch(field) {
+			case "sourcedId": return from.get(field);
+			case "status": return from.get(field);
+			case "dateLastModified": return from.get(field);
 			case "metadata.ricone.schoolYear": return from.get("sourcedSchoolYear");
 			case "metadata.ricone.districtId": return from.get("districtId");
 			case "metadata.address1": return from.get("line1");
@@ -23,7 +26,6 @@ public class OrgFilterer extends BaseFilterer {
 			case "metadata.state": return from.get("state");
 			case "metadata.postCode": return from.get("postCode");
 			case "metadata.country": return from.get("country");
-			case "sourcedId": return from.get(field);
 			case "name": return from.get(field);
 			case "type": return from.get(field);
 			case "identifier": return from.get(field);

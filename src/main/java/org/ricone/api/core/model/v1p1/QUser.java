@@ -2,12 +2,13 @@ package org.ricone.api.core.model.v1p1;
 
 import org.hibernate.annotations.*;
 import org.hibernate.annotations.Cache;
-import org.ricone.api.core.model.v1p1.composite.SourcedComposite;
 
 import javax.persistence.*;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -24,6 +25,12 @@ public class QUser implements Serializable {
 
 	@Column(name = "SourcedSchoolYear", nullable = false, length = 6)
 	@Id private Integer sourcedSchoolYear;
+
+	@Column(name = "Status", length = 20)
+	private String status;
+
+	@Column(name = "DateLastModified")
+	private LocalDateTime dateLastModified;
 
 	@Column(name = "DistrictId", length = 30)
 	private String districtId;
@@ -77,9 +84,11 @@ public class QUser implements Serializable {
 	public QUser() {
 	}
 
-	public QUser(String sourcedId, Integer sourcedSchoolYear, String districtId, String role, Boolean enabledUser, String givenName, String familyName, String middleName, String identifier, String email, String phone, String sms, String grades, Set<QUserAgent> agents, Set<QUserClass> classes, Set<QUserIdentifier> identifiers, Set<QUserOrg> orgs) {
+	public QUser(String sourcedId, Integer sourcedSchoolYear, String status, LocalDateTime dateLastModified, String districtId, String role, Boolean enabledUser, String givenName, String familyName, String middleName, String identifier, String email, String phone, String sms, String grades, Set<QUserAgent> agents, Set<QUserClass> classes, Set<QUserIdentifier> identifiers, Set<QUserOrg> orgs) {
 		this.sourcedId = sourcedId;
 		this.sourcedSchoolYear = sourcedSchoolYear;
+		this.status = status;
+		this.dateLastModified = dateLastModified;
 		this.districtId = districtId;
 		this.role = role;
 		this.enabledUser = enabledUser;
@@ -111,6 +120,22 @@ public class QUser implements Serializable {
 
 	public void setSourcedSchoolYear(Integer sourcedSchoolYear) {
 		this.sourcedSchoolYear = sourcedSchoolYear;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public LocalDateTime getDateLastModified() {
+		return dateLastModified;
+	}
+
+	public void setDateLastModified(LocalDateTime dateLastModified) {
+		this.dateLastModified = dateLastModified;
 	}
 
 	public String getDistrictId() {

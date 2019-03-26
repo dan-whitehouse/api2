@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
  * @since 2019-01-22
  */
 
-@Component("OneRoster2:Enrollments:EnrollmentFieldSelector")
+@Component("OneRoster:Enrollments:EnrollmentFieldSelector")
 public class EnrollmentFieldSelector extends BaseFieldSelector<Enrollment> {
 	public EnrollmentFieldSelector() {
 		super(Enrollment.class);

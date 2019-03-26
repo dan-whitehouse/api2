@@ -18,7 +18,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.List;
 
-@Repository("OneRoster2:Demographics:DemographicDAO")
+@Repository("OneRoster:Demographics:DemographicDAO")
 @SuppressWarnings({"unchecked", "unused"})
 class DemographicDAOImp extends BaseDAO implements DemographicDAO {
 	@PersistenceContext private EntityManager em;

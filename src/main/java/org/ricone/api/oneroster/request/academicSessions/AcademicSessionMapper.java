@@ -8,7 +8,9 @@ import org.ricone.api.oneroster.model.*;
 import org.ricone.api.oneroster.util.MappingUtil;
 import org.springframework.stereotype.Component;
 
-@Component("OneRoster2:AcademicSessions:AcademicSessionMapper")
+import java.time.ZoneId;
+
+@Component("OneRoster:AcademicSessions:AcademicSessionMapper")
 class AcademicSessionMapper extends BaseMapper<QAcademicSession, AcademicSession, AcademicSessionsResponse, AcademicSessionResponse> {
     private Logger logger = LogManager.getLogger(this.getClass());
 
@@ -19,8 +21,8 @@ class AcademicSessionMapper extends BaseMapper<QAcademicSession, AcademicSession
     @Override protected AcademicSession map(QAcademicSession instance) {
         AcademicSession academicSession = new AcademicSession();
         academicSession.setSourcedId(instance.getSourcedId());
-        academicSession.setStatus(StatusType.active);
-        academicSession.setDateLastModified(null);
+        academicSession.setStatus(StatusType.valueOf(instance.getStatus()));
+        academicSession.setDateLastModified(instance.getDateLastModified().atZone(ZoneId.systemDefault()));
         academicSession.setMetadata(mapMetadata(instance));
 
         academicSession.setTitle(instance.getTitle());

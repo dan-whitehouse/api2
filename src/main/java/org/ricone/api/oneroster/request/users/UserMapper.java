@@ -10,10 +10,11 @@ import org.ricone.api.oneroster.model.*;
 import org.ricone.api.oneroster.util.MappingUtil;
 import org.springframework.stereotype.Component;
 
+import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.List;
 
-@Component("OneRoster2:Users:UserMapper")
+@Component("OneRoster:Users:UserMapper")
 class UserMapper extends BaseMapper<QUser, User, UsersResponse, UserResponse> {
     private Logger logger = LogManager.getLogger(this.getClass());
 
@@ -24,8 +25,8 @@ class UserMapper extends BaseMapper<QUser, User, UsersResponse, UserResponse> {
     @Override protected User map(QUser instance) {
         User user = new User();
         user.setSourcedId(instance.getSourcedId());
-        user.setStatus(StatusType.active);
-        user.setDateLastModified(null);
+        user.setStatus(StatusType.valueOf(instance.getStatus()));
+        user.setDateLastModified(instance.getDateLastModified().atZone(ZoneId.systemDefault()));
         user.setMetadata(mapMetadata(instance));
 
         if("student".equalsIgnoreCase(instance.getRole())) {

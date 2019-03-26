@@ -9,9 +9,10 @@ import org.ricone.api.oneroster.model.*;
 import org.ricone.api.oneroster.util.MappingUtil;
 import org.springframework.stereotype.Component;
 
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
-@Component("OneRoster2:Orgs:OrgMapper")
+@Component("OneRoster:Orgs:OrgMapper")
 class OrgMapper extends BaseMapper<QOrg, Org, OrgsResponse, OrgResponse> {
     private Logger logger = LogManager.getLogger(this.getClass());
 
@@ -22,8 +23,8 @@ class OrgMapper extends BaseMapper<QOrg, Org, OrgsResponse, OrgResponse> {
     @Override public Org map(QOrg instance) {
         Org org = new Org();
         org.setSourcedId(instance.getSourcedId());
-        org.setStatus(StatusType.active);
-        org.setDateLastModified(ZonedDateTime.now());
+        org.setStatus(StatusType.valueOf(instance.getStatus()));
+        org.setDateLastModified(instance.getDateLastModified().atZone(ZoneId.systemDefault()));
         org.setMetadata(mapMetadata(instance));
 
         org.setType(OrgType.valueOf(instance.getType()));

@@ -2,12 +2,13 @@ package org.ricone.api.core.model.v1p1;
 
 import org.hibernate.annotations.*;
 import org.hibernate.annotations.Cache;
-import org.ricone.api.core.model.v1p1.composite.SourcedComposite;
 
 import javax.persistence.*;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -24,6 +25,12 @@ public class QOrg implements Serializable {
 
 	@Column(name = "SourcedSchoolYear", nullable = false, length = 6)
 	@Id private Integer sourcedSchoolYear;
+
+	@Column(name = "Status", length = 20)
+	private String status;
+
+	@Column(name = "DateLastModified")
+	private LocalDateTime dateLastModified;
 
 	@Column(name = "DistrictId", length = 30)
 	private String districtId;
@@ -69,9 +76,11 @@ public class QOrg implements Serializable {
 	public QOrg() {
 	}
 
-	public QOrg(String sourcedId, Integer sourcedSchoolYear, String districtId, String type, String name, String identifier, String line1, String line2, String city, String state, String postCode, String country, QOrg org, Set<QOrgChild> children) {
+	public QOrg(String sourcedId, Integer sourcedSchoolYear, String status, LocalDateTime dateLastModified, String districtId, String type, String name, String identifier, String line1, String line2, String city, String state, String postCode, String country, QOrg org, Set<QOrgChild> children) {
 		this.sourcedId = sourcedId;
 		this.sourcedSchoolYear = sourcedSchoolYear;
+		this.status = status;
+		this.dateLastModified = dateLastModified;
 		this.districtId = districtId;
 		this.type = type;
 		this.name = name;
@@ -100,6 +109,22 @@ public class QOrg implements Serializable {
 
 	public void setSourcedSchoolYear(Integer sourcedSchoolYear) {
 		this.sourcedSchoolYear = sourcedSchoolYear;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public LocalDateTime getDateLastModified() {
+		return dateLastModified;
+	}
+
+	public void setDateLastModified(LocalDateTime dateLastModified) {
+		this.dateLastModified = dateLastModified;
 	}
 
 	public String getDistrictId() {

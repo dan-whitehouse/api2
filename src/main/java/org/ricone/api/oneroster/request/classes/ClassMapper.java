@@ -10,10 +10,11 @@ import org.ricone.api.oneroster.model.*;
 import org.ricone.api.oneroster.util.MappingUtil;
 import org.springframework.stereotype.Component;
 
+import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.List;
 
-@Component("OneRoster2:Classes:ClassMapper")
+@Component("OneRoster:Classes:ClassMapper")
 class ClassMapper extends BaseMapper<QClass, Class, ClassesResponse, ClassResponse> {
     private Logger logger = LogManager.getLogger(this.getClass());
 
@@ -24,8 +25,8 @@ class ClassMapper extends BaseMapper<QClass, Class, ClassesResponse, ClassRespon
     @Override protected Class map(QClass instance) {
         Class clazz = new Class();
         clazz.setSourcedId(instance.getSourcedId());
-        clazz.setStatus(StatusType.active);
-        clazz.setDateLastModified(null);
+        clazz.setStatus(StatusType.valueOf(instance.getStatus()));
+        clazz.setDateLastModified(instance.getDateLastModified().atZone(ZoneId.systemDefault()));
         clazz.setMetadata(mapMetadata(instance));
 
         clazz.setTitle(instance.getTitle());

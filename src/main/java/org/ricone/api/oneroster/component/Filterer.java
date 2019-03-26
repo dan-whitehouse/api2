@@ -13,6 +13,8 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -154,7 +156,6 @@ public class Filterer {
 				String[] values = StringUtils.split(value, ",");
 				List<Predicate> list = new ArrayList<>();
 				for (String v : values) {
-					logger.debug("qclass0_.Grades=" + v);
 					list.add(getLikePredicate(cb, path, v));
 				}
 				predicates.add(cb.or(list.toArray(new Predicate[0])));
@@ -179,6 +180,10 @@ public class Filterer {
 
 	private static boolean isPathTypeBoolean(Path path) {
 		return path.getJavaType().equals(Boolean.class);
+	}
+
+	private static boolean isPathTypeLocalDateTime(Path path) {
+		return path.getJavaType().equals(LocalDateTime.class);
 	}
 
 	private static boolean isPathTypeInteger(Path path) {
@@ -219,10 +224,10 @@ public class Filterer {
 	// PREDICATE WITH CORRECT OBJECT TYPE
 	private static Predicate getGreaterThanOrEqualToPredicate(CriteriaBuilder cb, Path path, String value) throws InvalidDataException {
 		if(isPathTypeInteger(path)) {
-			if(NumberUtils.isCreatable(value)) {
-				return cb.greaterThanOrEqualTo(path, Integer.parseInt(value));
-			}
-			throw new InvalidDataException("Value: [" + value + "] is not a valid number");
+			return cb.greaterThanOrEqualTo(path, toInteger(value));
+		}
+		else if(isPathTypeLocalDateTime(path)) {
+			return cb.greaterThanOrEqualTo(path, toLocalDateTime(value));
 		}
 		else {
 			return cb.greaterThanOrEqualTo(path, value);
@@ -231,10 +236,10 @@ public class Filterer {
 
 	private static Predicate getGreaterThanToPredicate(CriteriaBuilder cb, Path path, String value) throws InvalidDataException {
 		if(isPathTypeInteger(path)) {
-			if(NumberUtils.isCreatable(value)) {
-				return cb.greaterThan(path, Integer.parseInt(value));
-			}
-			throw new InvalidDataException("Value: [" + value + "] is not a valid number");
+			return cb.greaterThan(path, toInteger(value));
+		}
+		else if(isPathTypeLocalDateTime(path)) {
+			return cb.greaterThan(path, toLocalDateTime(value));
 		}
 		else {
 			return cb.greaterThan(path, value);
@@ -243,10 +248,10 @@ public class Filterer {
 
 	private static Predicate getLessThanOrEqualToPredicate(CriteriaBuilder cb, Path path, String value) throws InvalidDataException {
 		if(isPathTypeInteger(path)) {
-			if(NumberUtils.isCreatable(value)) {
-				return cb.lessThanOrEqualTo(path, Integer.parseInt(value));
-			}
-			throw new InvalidDataException("Value: [" + value + "] is not a valid number");
+			return cb.lessThanOrEqualTo(path, toInteger(value));
+		}
+		else if(isPathTypeLocalDateTime(path)) {
+			return cb.lessThanOrEqualTo(path, toLocalDateTime(value));
 		}
 		else {
 			return cb.lessThanOrEqualTo(path, value);
@@ -255,28 +260,34 @@ public class Filterer {
 
 	private static Predicate getLessThanToPredicate(CriteriaBuilder cb, Path path, String value) throws InvalidDataException {
 		if(isPathTypeInteger(path)) {
-			if(NumberUtils.isCreatable(value)) {
-				return cb.lessThan(path, Integer.parseInt(value));
-			}
-			throw new InvalidDataException("Value: [" + value + "] is not a valid number");
+			return cb.lessThan(path, toInteger(value));
+		}
+		else if(isPathTypeLocalDateTime(path)) {
+			return cb.lessThan(path, toLocalDateTime(value));
 		}
 		else {
 			return cb.lessThan(path, value);
 		}
 	}
 
-	private static Predicate getNotEqualPredicate(CriteriaBuilder cb, Path path, String value) {
+	private static Predicate getNotEqualPredicate(CriteriaBuilder cb, Path path, String value) throws InvalidDataException {
 		if(isPathTypeBoolean(path)) {
 			return cb.notEqual(path, BooleanUtils.toBoolean(value));
+		}
+		else if(isPathTypeLocalDateTime(path)) {
+			return cb.notEqual(path, toLocalDateTime(value));
 		}
 		else {
 			return cb.notEqual(path, value);
 		}
 	}
 
-	private static Predicate getEqualPredicate(CriteriaBuilder cb, Path path, String value) {
+	private static Predicate getEqualPredicate(CriteriaBuilder cb, Path path, String value) throws InvalidDataException {
 		if(isPathTypeBoolean(path)) {
 			return cb.equal(path, BooleanUtils.toBoolean(value));
+		}
+		else if(isPathTypeLocalDateTime(path)) {
+			return cb.equal(path, toLocalDateTime(value));
 		}
 		else {
 			return cb.equal(path, value);
@@ -328,5 +339,21 @@ public class Filterer {
 
 	private static boolean isContains(String segment) {
 		return StringUtils.equals(segment, PREDICATE_CON);
+	}
+
+	private static LocalDateTime toLocalDateTime(String value) throws InvalidDataException {
+		try {
+			return ZonedDateTime.parse(value).toLocalDateTime();
+		}
+		catch(Exception e) {
+			throw new InvalidDataException("Value: [" + value + "] is not a valid date");
+		}
+	}
+
+	private static Integer toInteger(String value) throws InvalidDataException {
+		if(NumberUtils.isCreatable(value)) {
+			return Integer.parseInt(value);
+		}
+		throw new InvalidDataException("Value: [" + value + "] is not a valid number");
 	}
 }

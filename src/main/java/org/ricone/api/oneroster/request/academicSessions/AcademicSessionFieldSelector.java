@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
  * @since 2019-01-28
  */
 
-@Component("OneRoster2:AcademicSessions:AcademicSessionFieldSelector")
+@Component("OneRoster:AcademicSessions:AcademicSessionFieldSelector")
 public class AcademicSessionFieldSelector extends BaseFieldSelector<AcademicSession> {
 	public AcademicSessionFieldSelector() {
 		super(AcademicSession.class);

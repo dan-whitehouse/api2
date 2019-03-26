@@ -1,4 +1,4 @@
-package org.ricone.api.core.model.v1p1.composite;
+package org.ricone.api.core.model.v1p1;
 
 import java.io.Serializable;
 

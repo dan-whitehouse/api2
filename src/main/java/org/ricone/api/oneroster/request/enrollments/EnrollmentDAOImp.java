@@ -18,7 +18,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.List;
 
-@Repository("OneRoster2:Enrollments:EnrollmentDAO")
+@Repository("OneRoster:Enrollments:EnrollmentDAO")
 @SuppressWarnings({"unchecked", "unused"})
 class EnrollmentDAOImp extends BaseDAO implements EnrollmentDAO {
 	@PersistenceContext private EntityManager em;
@@ -94,7 +94,7 @@ class EnrollmentDAOImp extends BaseDAO implements EnrollmentDAO {
 		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
 			cb.equal(from.get(SOURCED_SCHOOL_YEAR), 2019),
-			cb.equal(from.get(ORG_ID), refId),
+			cb.equal(from.get(ORG).get(SOURCED_ID), refId),
 			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 		);
 
@@ -124,8 +124,8 @@ class EnrollmentDAOImp extends BaseDAO implements EnrollmentDAO {
 		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
 			cb.equal(from.get(SOURCED_SCHOOL_YEAR), 2019),
-			cb.equal(from.get(ORG_ID), schoolId),
-			cb.equal(from.get(CLASS_ID), classId),
+			cb.equal(from.get(ORG).get(SOURCED_ID), schoolId),
+			cb.equal(from.get(CLASS).get(SOURCED_ID), classId),
 			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 		);
 
@@ -176,7 +176,7 @@ class EnrollmentDAOImp extends BaseDAO implements EnrollmentDAO {
 		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
 			cb.equal(from.get(SOURCED_SCHOOL_YEAR), 2019),
-			cb.equal(from.get(ORG_ID), refId),
+			cb.equal(from.get(ORG).get(SOURCED_ID), refId),
 			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 		);
 
@@ -198,8 +198,8 @@ class EnrollmentDAOImp extends BaseDAO implements EnrollmentDAO {
 		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
 			cb.equal(from.get(SOURCED_SCHOOL_YEAR), 2019),
-			cb.equal(from.get(ORG_ID), schoolId),
-			cb.equal(from.get(CLASS_ID), classId),
+			cb.equal(from.get(ORG).get(SOURCED_ID), schoolId),
+			cb.equal(from.get(CLASS).get(SOURCED_ID), classId),
 			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 		);
 

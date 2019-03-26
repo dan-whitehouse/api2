@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 import javax.persistence.criteria.Path;
 
-@Component("OneRoster2:AcademicSessions:AcademicSessionFilterer")
+@Component("OneRoster:AcademicSessions:AcademicSessionFilterer")
 public class AcademicSessionFilterer extends BaseFilterer {
 	public AcademicSessionFilterer() {
 	}
@@ -15,9 +15,12 @@ public class AcademicSessionFilterer extends BaseFilterer {
 	@Override
 	public Path getPath(String field) throws InvalidFilterFieldException, InvalidDataException {
 		switch(field) {
+			case "sourcedId": return from.get(field);
+			case "status": return from.get(field);
+			case "dateLastModified": return from.get(field);
 			case "metadata.ricone.schoolYear": return from.get("sourcedSchoolYear");
 			case "metadata.ricone.districtId": return from.get("districtId");
-			case "sourcedId": return from.get(field);
+
 			case "title": return from.get(field);
 			case "startDate": return from.get(field);
 			case "endDate": return from.get(field);

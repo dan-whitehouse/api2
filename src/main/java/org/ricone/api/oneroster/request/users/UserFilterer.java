@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 import javax.persistence.criteria.Path;
 
-@Component("OneRoster2:Users:UserFilterer")
+@Component("OneRoster:Users:UserFilterer")
 public class UserFilterer extends BaseFilterer {
 	public UserFilterer() {
 	}
@@ -15,9 +15,12 @@ public class UserFilterer extends BaseFilterer {
 	@Override
 	public Path getPath(String field) throws InvalidFilterFieldException, InvalidDataException {
 		switch(field) {
+			case "sourcedId": return from.get(field);
+			case "status": return from.get(field);
+			case "dateLastModified": return from.get(field);
 			case "metadata.ricone.schoolYear": return from.get("sourcedSchoolYear");
 			case "metadata.ricone.districtId": return from.get("districtId");
-			case "sourcedId": return from.get(field);
+
 			case "username": return from.get(field);
 			case "userIds.type": return getJoin("identifiers").get("code");
 			case "userIds.identifier": return getJoin("identifiers").get("id");
@@ -30,6 +33,8 @@ public class UserFilterer extends BaseFilterer {
 			case "email": return from.get(field);
 			case "sms": return from.get(field);
 			case "phone": return from.get(field);
+			case "grades": return from.get(field);
+			case "password": throw new InvalidDataException(buildInvalidDataException(field));
 
 			case "agents.sourcedId": return getJoin("agents").get("agent").get("sourcedId");
 			case "agents.href": throw new InvalidDataException(buildInvalidDataException(field));
@@ -39,8 +44,7 @@ public class UserFilterer extends BaseFilterer {
 			case "orgs.href": throw new InvalidDataException(buildInvalidDataException(field));
 			case "orgs.type": throw new InvalidDataException(buildInvalidDataException(field));
 
-			case "grades": return from.get(field);
-			case "password": throw new InvalidDataException(buildInvalidDataException(field));
+
 			default: break;
 		}
 		throw new InvalidFilterFieldException("The filter parameter [" + field + "] is a non-existent field");

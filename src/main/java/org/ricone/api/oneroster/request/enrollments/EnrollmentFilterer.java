@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 import javax.persistence.criteria.Path;
 
-@Component("OneRoster2:Enrollments:EnrollmentFilterer")
+@Component("OneRoster:Enrollments:EnrollmentFilterer")
 public class EnrollmentFilterer extends BaseFilterer {
 	public EnrollmentFilterer() {
 	}
@@ -15,11 +15,16 @@ public class EnrollmentFilterer extends BaseFilterer {
 	@Override
 	public Path getPath(String field) throws InvalidFilterFieldException, InvalidDataException {
 		switch(field) {
+			case "sourcedId": return from.get(field);
+			case "status": return from.get(field);
+			case "dateLastModified": return from.get(field);
 			case "metadata.ricone.schoolYear": return from.get("sourcedSchoolYear");
 			case "metadata.ricone.districtId": return from.get("districtId");
-			case "sourcedId": return from.get(field);
+
 			case "role": return from.get(field);
 			case "primary": return from.get(field);
+			case "beginDate": from.get(field);
+			case "endDate": from.get(field);
 
 			case "user.sourcedId": return from.get("user").get("sourcedId");
 			case "user.href": throw new InvalidDataException(buildInvalidDataException(field));
@@ -32,9 +37,6 @@ public class EnrollmentFilterer extends BaseFilterer {
 			case "school.sourcedId": return from.get("org").get("sourcedId");
 			case "school.href": throw new InvalidDataException(buildInvalidDataException(field));
 			case "school.type": throw new InvalidDataException(buildInvalidDataException(field));
-
-			case "beginDate": from.get(field);
-			case "endDate": from.get(field);
 			default: break;
 		}
 		throw new InvalidFilterFieldException("The filter parameter [" + field + "] is a non-existent field");

@@ -8,7 +8,9 @@ import org.ricone.api.oneroster.component.BaseMapper;
 import org.ricone.api.oneroster.model.*;
 import org.springframework.stereotype.Component;
 
-@Component("OneRoster2:Demographics:DemographicMapper")
+import java.time.ZoneId;
+
+@Component("OneRoster:Demographics:DemographicMapper")
 class DemographicMapper extends BaseMapper<QDemographic, Demographic, DemographicsResponse, DemographicResponse> {
     private Logger logger = LogManager.getLogger(this.getClass());
 
@@ -19,8 +21,8 @@ class DemographicMapper extends BaseMapper<QDemographic, Demographic, Demographi
     @Override protected Demographic map(QDemographic instance) {
         Demographic demographic = new Demographic();
         demographic.setSourcedId(instance.getSourcedId());
-        demographic.setStatus(StatusType.active);
-        demographic.setDateLastModified(null);
+        demographic.setStatus(StatusType.valueOf(instance.getStatus()));
+        demographic.setDateLastModified(instance.getDateLastModified().atZone(ZoneId.systemDefault()));
         demographic.setMetadata(mapMetadata(instance));
 
         //Birthdate

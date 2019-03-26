@@ -14,7 +14,7 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 @Transactional
-@Service("OneRoster2:Enrollments:EnrollmentService")
+@Service("OneRoster:Enrollments:EnrollmentService")
 class EnrollmentServiceImp implements EnrollmentService {
 	@Autowired private EnrollmentDAO dao;
 	@Autowired private EnrollmentMapper mapper;

@@ -16,7 +16,7 @@ import javax.persistence.Query;
 import javax.persistence.criteria.*;
 import java.util.List;
 
-@Repository("OneRoster2:Orgs:OrgDAO")
+@Repository("OneRoster:Orgs:OrgDAO")
 @SuppressWarnings({"unchecked", "unused"})
 class OrgDAOImp extends BaseDAO implements OrgDAO {
 	@PersistenceContext private EntityManager em;

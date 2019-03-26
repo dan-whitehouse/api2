@@ -14,7 +14,7 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 @Transactional
-@Service("OneRoster2:Courses:CourseService")
+@Service("OneRoster:Courses:CourseService")
 class CourseServiceImp implements CourseService {
 	@Autowired private CourseDAO dao;
 	@Autowired private CourseMapper mapper;

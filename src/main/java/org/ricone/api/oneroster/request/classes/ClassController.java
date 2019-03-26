@@ -17,13 +17,13 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@RestController("OneRoster2:Classes:ClassController")
+@RestController("OneRoster:Classes:ClassController")
 @Api(value = "Class", description = "One Roster - Classes", tags = {"Class"})
 class ClassController extends BaseController {
 	@Autowired
 	private ClassService service;
 
-	@ResponseBody @GetMapping(value = "/ims/oneroster2/v1p1/classes/{id}")
+	@ResponseBody @GetMapping(value = "/ims/oneroster/v1p1/classes/{id}")
 	@ApiOperation(value = "getClass", tags = {"Class"})
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "Success", response = ClassResponse.class),
@@ -37,7 +37,7 @@ class ClassController extends BaseController {
 		return service.getClass(getMetaData(request, response), id);
 	}
 
-	@ResponseBody @GetMapping(value = "/ims/oneroster2/v1p1/classes")
+	@ResponseBody @GetMapping(value = "/ims/oneroster/v1p1/classes")
 	@ApiOperation(value = "getAllClasses", tags = {"Class"})
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "Success", response = ClassesResponse.class),
@@ -51,7 +51,7 @@ class ClassController extends BaseController {
 		return service.getAllClasses(getMetaData(request, response));
 	}
 
-	@ResponseBody @GetMapping(value = "/ims/oneroster2/v1p1/terms/{id}/classes")
+	@ResponseBody @GetMapping(value = "/ims/oneroster/v1p1/terms/{id}/classes")
 	@ApiOperation(value = "getClassesForTerm", tags = {"Class"})
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "Success", response = ClassesResponse.class),
@@ -65,7 +65,7 @@ class ClassController extends BaseController {
 		return service.getClassesForTerm(getMetaData(request, response), id);
 	}
 
-	@ResponseBody @GetMapping(value = "/ims/oneroster2/v1p1/courses/{id}/classes")
+	@ResponseBody @GetMapping(value = "/ims/oneroster/v1p1/courses/{id}/classes")
 	@ApiOperation(value = "getClassesForCourse", tags = {"Class"})
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "Success", response = ClassesResponse.class),
@@ -79,7 +79,7 @@ class ClassController extends BaseController {
 		return service.getClassesForCourse(getMetaData(request, response), id);
 	}
 
-	@ResponseBody @GetMapping(value = "/ims/oneroster2/v1p1/students/{id}/classes")
+	@ResponseBody @GetMapping(value = "/ims/oneroster/v1p1/students/{id}/classes")
 	@ApiOperation(value = "getClassesForStudent", tags = {"Class"})
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "Success", response = ClassesResponse.class),
@@ -93,7 +93,7 @@ class ClassController extends BaseController {
 		return service.getClassesForStudent(getMetaData(request, response), id);
 	}
 
-	@ResponseBody @GetMapping(value = "/ims/oneroster2/v1p1/teachers/{id}/classes")
+	@ResponseBody @GetMapping(value = "/ims/oneroster/v1p1/teachers/{id}/classes")
 	@ApiOperation(value = "getClassesForTeacher", tags = {"Class"})
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "Success", response = ClassesResponse.class),
@@ -107,7 +107,7 @@ class ClassController extends BaseController {
 		return service.getClassesForTeacher(getMetaData(request, response), id);
 	}
 
-	@ResponseBody @GetMapping(value = "/ims/oneroster2/v1p1/schools/{id}/classes")
+	@ResponseBody @GetMapping(value = "/ims/oneroster/v1p1/schools/{id}/classes")
 	@ApiOperation(value = "getClassesForSchool", tags = {"Class"})
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "Success", response = ClassesResponse.class),
@@ -121,7 +121,7 @@ class ClassController extends BaseController {
 		return service.getClassesForSchool(getMetaData(request, response), id);
 	}
 
-	@ResponseBody @GetMapping(value = "/ims/oneroster2/v1p1/users/{id}/classes")
+	@ResponseBody @GetMapping(value = "/ims/oneroster/v1p1/users/{id}/classes")
 	@ApiOperation(value = "getClassesForUser", tags = {"Class"})
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "Success", response = ClassesResponse.class),

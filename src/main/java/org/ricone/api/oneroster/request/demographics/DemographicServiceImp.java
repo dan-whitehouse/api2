@@ -14,7 +14,7 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 @Transactional
-@Service("OneRoster2:Demographics:DemographicService")
+@Service("OneRoster:Demographics:DemographicService")
 class DemographicServiceImp implements DemographicService {
 	@Autowired private DemographicDAO dao;
 	@Autowired private DemographicMapper mapper;

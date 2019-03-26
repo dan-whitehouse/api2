@@ -3,11 +3,12 @@ package org.ricone.api.core.model.v1p1;
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.ricone.api.core.model.v1p1.composite.SourcedComposite;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 @Entity
 @Table(name = "onerosterv1p1_enrollment")
@@ -22,6 +23,12 @@ public class QEnrollment implements Serializable {
 
 	@Column(name = "SourcedSchoolYear", nullable = false, length = 6)
 	@Id private Integer sourcedSchoolYear;
+
+	@Column(name = "Status", length = 20)
+	private String status;
+
+	@Column(name = "DateLastModified")
+	private LocalDateTime dateLastModified;
 
 	@Column(name = "DistrictId", length = 30)
 	private String districtId;
@@ -59,9 +66,11 @@ public class QEnrollment implements Serializable {
 	public QEnrollment() {
 	}
 
-	public QEnrollment(String sourcedId, Integer sourcedSchoolYear, String districtId, QUser user, QClass clazz, Boolean primary, LocalDate beginDate, LocalDate endDate, QOrg org) {
+	public QEnrollment(String sourcedId, Integer sourcedSchoolYear, String status, LocalDateTime dateLastModified, String districtId, QUser user, QClass clazz, Boolean primary, LocalDate beginDate, LocalDate endDate, QOrg org) {
 		this.sourcedId = sourcedId;
 		this.sourcedSchoolYear = sourcedSchoolYear;
+		this.status = status;
+		this.dateLastModified = dateLastModified;
 		this.districtId = districtId;
 		this.user = user;
 		this.clazz = clazz;
@@ -85,6 +94,22 @@ public class QEnrollment implements Serializable {
 
 	public void setSourcedSchoolYear(Integer sourcedSchoolYear) {
 		this.sourcedSchoolYear = sourcedSchoolYear;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public LocalDateTime getDateLastModified() {
+		return dateLastModified;
+	}
+
+	public void setDateLastModified(LocalDateTime dateLastModified) {
+		this.dateLastModified = dateLastModified;
 	}
 
 	public String getDistrictId() {

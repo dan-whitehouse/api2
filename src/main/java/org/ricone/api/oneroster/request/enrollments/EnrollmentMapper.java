@@ -8,7 +8,9 @@ import org.ricone.api.oneroster.model.*;
 import org.ricone.api.oneroster.util.MappingUtil;
 import org.springframework.stereotype.Component;
 
-@Component("OneRoster2:Enrollments:EnrollmentMapper")
+import java.time.ZoneId;
+
+@Component("OneRoster:Enrollments:EnrollmentMapper")
 class EnrollmentMapper extends BaseMapper<QEnrollment, Enrollment, EnrollmentsResponse, EnrollmentResponse> {
     private Logger logger = LogManager.getLogger(this.getClass());
 
@@ -19,8 +21,8 @@ class EnrollmentMapper extends BaseMapper<QEnrollment, Enrollment, EnrollmentsRe
     @Override protected Enrollment map(QEnrollment instance) {
         Enrollment enrollment = new Enrollment();
         enrollment.setSourcedId(instance.getSourcedId());
-        enrollment.setStatus(StatusType.active);
-        enrollment.setDateLastModified(null);
+        enrollment.setStatus(StatusType.valueOf(instance.getStatus()));
+        enrollment.setDateLastModified(instance.getDateLastModified().atZone(ZoneId.systemDefault()));
         enrollment.setMetadata(mapMetadata(instance));
 
         if(instance.getUser() != null) {

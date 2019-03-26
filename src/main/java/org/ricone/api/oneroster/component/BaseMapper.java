@@ -14,23 +14,23 @@ import java.util.List;
  * https://stackoverflow.com/questions/299998/instantiating-object-of-type-parameter
  */
 
-public abstract class BaseMapper<V, M extends Base, R1 extends BaseMultiResponse<M>, R2 extends BaseSingleResponse<M>> {
-	private Class<V> viewClass;
+public abstract class BaseMapper<T, M extends Base, R1 extends BaseMultiResponse<M>, R2 extends BaseSingleResponse<M>> {
+	private Class<T> tableClass;
 	private Class<M> modelClass;
 	private final Constructor<? extends R1> r1Constructor;
 	private final Constructor<? extends R2> r2Constructor;
 
-	public BaseMapper(Class<V> viewClass, Class<M> modelClass, Class<? extends R1> r1Class, Class<? extends R2> r2Class) throws NoSuchMethodException {
-		this.viewClass = viewClass;
+	public BaseMapper(Class<T> tableClass, Class<M> modelClass, Class<? extends R1> r1Class, Class<? extends R2> r2Class) throws NoSuchMethodException {
+		this.tableClass = tableClass;
 		this.modelClass = modelClass;
 		this.r1Constructor = r1Class.getConstructor();
 		this.r2Constructor = r2Class.getConstructor();
 	}
 
-	public R1 convert(List<V> instance, RequestData metadata) throws IllegalAccessException, InvocationTargetException, InstantiationException {
+	public R1 convert(List<T> instance, RequestData metadata) throws IllegalAccessException, InvocationTargetException, InstantiationException {
 		List<M> list = new ArrayList<>();
-		for (V view : instance) {
-			M model = map(view);
+		for (T table : instance) {
+			M model = map(table);
 			if(model != null) {
 				list.add(model);
 			}
@@ -38,23 +38,23 @@ public abstract class BaseMapper<V, M extends Base, R1 extends BaseMultiResponse
 
 		R1 r1 = r1Constructor.newInstance();
 		r1.setData(list);
-		r1.setWarnings(mapPartialErrors(metadata, viewClass, modelClass));
+		r1.setWarnings(mapPartialErrors(metadata, tableClass, modelClass));
 		return r1;
 	}
 
-	public R2 convert(V view, RequestData metadata) throws IllegalAccessException, InvocationTargetException, InstantiationException {
-		if(view != null) {
+	public R2 convert(T table, RequestData metadata) throws IllegalAccessException, InvocationTargetException, InstantiationException {
+		if(table != null) {
 			R2 r2 = r2Constructor.newInstance();
-			r2.setData(map(view));
-			r2.setWarnings(mapPartialErrors(metadata, viewClass, modelClass));
+			r2.setData(map(table));
+			r2.setWarnings(mapPartialErrors(metadata, tableClass, modelClass));
 			return r2;
 		}
 		return null;
 	}
 
-	protected abstract M map(V instance);
+	protected abstract M map(T instance);
 
-	protected abstract org.ricone.api.oneroster.model.Metadata mapMetadata(V instance);
+	protected abstract Metadata mapMetadata(T instance);
 
 	private List<Error> mapPartialErrors(RequestData metadata, Class<?> table, Class<? extends Base> model) {
 		List<Error> statusInfoSets = new ArrayList<>();

@@ -2,6 +2,8 @@
 create table OneRosterV1P1_Org (
 	SourcedId varchar(64),
 	SourcedSchoolYear smallint(6), 
+    Status varchar(20), 
+    DateLastModified datetime,
 	DistrictId varchar(30), 
 	Type varchar(8),
 	Name varchar(75), 
@@ -24,6 +26,8 @@ insert into OneRosterV1P1_Org
 	select distinct	
 		l.LEARefId as SourcedId,
         l.LEASchoolYear as SourcedSchoolYear,
+        'active',
+        now(),
         l.leaId as DistrictId,
 		'district' as Type, 
 		l.LEAName as Name, 
@@ -43,6 +47,8 @@ union all
 	select distinct	 	
 		sch.SchoolRefId, 
         sch.SchoolSchoolYear,
+        'active',
+        now(),
         l.leaId,
 		'school', 
 		sch.SchoolName, 
@@ -97,6 +103,8 @@ and  o.OrgSchoolYear is null;
 CREATE TABLE OneRosterV1P1_AcademicSession (
 	SourcedId varchar(64) NOT NULL,
     SourcedSchoolYear smallint(6) NOT NULL,
+    Status varchar(20), 
+    DateLastModified datetime,
     DistrictId varchar(30),
 	Title longtext, 
 	Type varchar(10), 
@@ -158,6 +166,8 @@ insert into OneRosterV1P1_AcademicSession
 	select distinct
 		t3.uuid as SourcedId,
 		sch.SchoolSchoolYear as SourcedSchoolYear,
+		'active',
+        now(),
 		l.leaId as DistrictId,
 		'Full Year' as Title,
 		'schoolYear' as Type,
@@ -206,6 +216,8 @@ insert into OneRosterV1P1_AcademicSession
 	select distinct
 		schcs.SchoolCalendarSessionRefId as SourcedId, 
 		schcs.SchoolCalendarSessionSchoolYear as SourcedSchoolYear,
+        'active',
+        now(),
         l.leaId as DistrictId,
 		schcs.Description as Title,
 		case when LOWER(schcs.SessionTypeCode) = 'semester' then 'semester' else 'term' end as Type, 
@@ -258,6 +270,8 @@ join OneRosterV1P1_AcademicSession as asv on asv.SourcedId = scs.SchoolCalendarS
 CREATE TABLE OneRosterV1P1_Course (
 	SourcedId varchar(64),
 	SourcedSchoolYear smallint(6), 
+    Status varchar(20), 
+    DateLastModified datetime,
 	DistrictId varchar(30), 
 	Title varchar(75), 
 	CourseCode varchar(50), 
@@ -278,6 +292,8 @@ insert into OneRosterV1P1_Course
 select distinct
 	c.CourseRefId as SourcedId, 
 	c.CourseSchoolYear as SourcedSchoolYear,
+    'active',
+	now(),
     l.leaId as DistrictId,
 	c.Title as Title,
     ci.CourseId as CourseCode,
@@ -328,7 +344,9 @@ left join OneRosterV1P1_AcademicSession asv
 /* Class */
 CREATE TABLE OneRosterV1P1_Class (
 	SourcedId varchar(64),
-	SourcedSchoolYear smallint(6), 
+	SourcedSchoolYear smallint(6),
+    Status varchar(20), 
+    DateLastModified datetime,
 	DistrictId varchar(30), 
 	Title varchar(75),
 	ClassCode varchar(50), 
@@ -352,6 +370,8 @@ insert into OneRosterV1P1_Class
 select distinct
 	cs.CourseSectionRefId as SourcedId, 
 	cs.CourseSectionSchoolYear as SourcedSchoolYear,
+    'active',
+	now(),
 	l.leaId as DistrictId,
 	c.Title as Title,
     ci.CourseId as ClassCode,
@@ -445,6 +465,8 @@ join OneRosterV1P1_AcademicSession as asv
 CREATE TABLE OneRosterV1P1_User (
 	SourcedId varchar(64), 
 	SourcedSchoolYear smallint(6), 
+    Status varchar(20), 
+    DateLastModified datetime,
 	Role varchar(7), 
 	DistrictId varchar(30),
 	EnabledUser bigint(20), 
@@ -466,6 +488,8 @@ insert into OneRosterV1P1_User
 	select distinct
 		s.StudentRefId as SourcedId, 
 		s.StudentSchoolYear as SourcedSchoolYear,
+        'active',
+		now(),
 		'student' as Role,
 		l.leaId as DistrictId,
 		true as EnabledUser,
@@ -539,6 +563,8 @@ union all
 	select distinct
 		t.StaffRefId, 
 		t.StaffSchoolYear,
+        'active',
+		now(),
 		'teacher',
         l.leaId as DistrictId,
 		true,
@@ -593,6 +619,8 @@ union all
 	select distinct
 		sc.StudentContactRefId, 
 		sc.StudentContactSchoolYear,
+        'active',
+		now(),
 		'contact',
         l.leaId as DistrictId,
 		true,
@@ -970,7 +998,9 @@ union all
 /* Demographic */
 CREATE TABLE OneRosterV1P1_Demographic (
 	SourcedId varchar(64), 
-	SourcedSchoolYear smallint(6), 
+	SourcedSchoolYear smallint(6),
+    Status varchar(20), 
+    DateLastModified datetime,
 	DistrictId varchar(30), 
 	BirthDate date,
 	Sex varchar(50) ,
@@ -994,6 +1024,8 @@ insert into OneRosterV1P1_Demographic
 	select distinct
 		s.StudentRefId as SourcedId, 
 		s.StudentSchoolYear as SourcedSchoolYear,
+        'active',
+		now(),
         l.leaId as DistrictId,
 		s.Birthdate as BirthDate,
 		s.SexCode as Sex,
@@ -1048,7 +1080,9 @@ insert into OneRosterV1P1_Demographic
 /* Enrollment */
 CREATE TABLE OneRosterV1P1_Enrollment (
 	SourcedId varchar(64),
-	SourcedSchoolYear smallint(6), 
+	SourcedSchoolYear smallint(6),
+    Status varchar(20), 
+    DateLastModified datetime,
 	DistrictId varchar(30), 
 	UserId varchar(64), 
 	UserSchoolYear smallint(6), 
@@ -1071,6 +1105,8 @@ insert into OneRosterV1P1_Enrollment
 	select distinct
 		scs.StudentCourseSectionRefId as SourcedId,
         scs.StudentCourseSectionSchoolYear as SourcedSchoolYear,
+        'active',
+		now(),
         l.leaId as DistrictId,
         scs.StudentRefId as UserId,
 		scs.StudentSchoolYear as UserSchoolYear,
@@ -1111,6 +1147,8 @@ union all
 	select distinct
 		scs.StaffCourseSectionRefId,
         scs.StaffCourseSectionSchoolYear,
+        'active',
+		now(),
         l.leaId as DistrictId,
         scs.StaffRefId,
 		scs.StaffSchoolYear,

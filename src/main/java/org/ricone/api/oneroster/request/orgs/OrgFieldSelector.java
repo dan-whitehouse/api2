@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
  * @since 2019-01-22
  */
 
-@Component("OneRoster2:Orgs:OrgFieldSelector")
+@Component("OneRoster:Orgs:OrgFieldSelector")
 public class OrgFieldSelector extends BaseFieldSelector<Org> {
 	public OrgFieldSelector() {
 		super(Org.class);

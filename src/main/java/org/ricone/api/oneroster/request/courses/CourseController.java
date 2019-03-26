@@ -17,13 +17,13 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@RestController("OneRoster2:Courses:AcademicSessionController")
+@RestController("OneRoster:Courses:AcademicSessionController")
 @Api(value = "Course", description = "One Roster - Courses", tags = {"Course"})
 class CourseController extends BaseController {
 	@Autowired
 	private CourseService service;
 
-	@ResponseBody @GetMapping(value = "/ims/oneroster2/v1p1/courses/{id}")
+	@ResponseBody @GetMapping(value = "/ims/oneroster/v1p1/courses/{id}")
 	@ApiOperation(value = "getCourse", tags = {"Course"})
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "Success", response = CourseResponse.class),
@@ -37,7 +37,7 @@ class CourseController extends BaseController {
 		return service.getCourse(getMetaData(request, response), id);
 	}
 
-	@ResponseBody @GetMapping(value = "/ims/oneroster2/v1p1/courses")
+	@ResponseBody @GetMapping(value = "/ims/oneroster/v1p1/courses")
 	@ApiOperation(value = "getAllCourses", tags = {"Course"})
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "Success", response = CoursesResponse.class),
@@ -51,7 +51,7 @@ class CourseController extends BaseController {
 		return service.getAllCourses(getMetaData(request, response));
 	}
 
-	@ResponseBody @GetMapping(value = "/ims/oneroster2/v1p1/schools/{id}/courses")
+	@ResponseBody @GetMapping(value = "/ims/oneroster/v1p1/schools/{id}/courses")
 	@ApiOperation(value = "getCoursesForSchool", tags = {"Course"})
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "Success", response = CoursesResponse.class),

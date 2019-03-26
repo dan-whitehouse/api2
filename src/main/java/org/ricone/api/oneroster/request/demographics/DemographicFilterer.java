@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 import javax.persistence.criteria.Path;
 
-@Component("OneRoster2:Demographics:DemographicFilterer")
+@Component("OneRoster:Demographics:DemographicFilterer")
 public class DemographicFilterer extends BaseFilterer {
 	public DemographicFilterer() {
 	}
@@ -14,9 +14,12 @@ public class DemographicFilterer extends BaseFilterer {
 	@Override
 	public Path getPath(String field) throws InvalidFilterFieldException {
 		switch(field) {
+			case "sourcedId": return from.get(field);
+			case "status": return from.get(field);
+			case "dateLastModified": return from.get(field);
 			case "metadata.ricone.schoolYear": return from.get("sourcedSchoolYear");
 			case "metadata.ricone.districtId": return from.get("districtId");
-			case "sourcedId": return from.get(field);
+
 			case "birthDate": return from.get(field);
 			case "sex": return from.get(field);
 			case "americanIndianOrAlaskaNative": return from.get(field);

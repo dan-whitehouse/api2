@@ -14,7 +14,7 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 @Transactional
-@Service("OneRoster2:Orgs:OrgService")
+@Service("OneRoster:Orgs:OrgService")
 class OrgServiceImp implements OrgService {
 	@Autowired private OrgDAO dao;
 	@Autowired private OrgMapper mapper;
@@ -31,17 +31,11 @@ class OrgServiceImp implements OrgService {
 
 	@Override
 	public OrgsResponse getAllOrgs(RequestData metadata) throws Exception {
-		try {
-			List<QOrg> instance = dao.getAllOrgs(metadata);
-			if(CollectionUtils.isEmpty(instance)) {
-				throw new NoContentException();
-			}
-			return selector.apply(mapper.convert(instance, metadata), metadata);
+		List<QOrg> instance = dao.getAllOrgs(metadata);
+		if(CollectionUtils.isEmpty(instance)) {
+			throw new NoContentException();
 		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-		return null;
+		return selector.apply(mapper.convert(instance, metadata), metadata);
 	}
 
 	@Override

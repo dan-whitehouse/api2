@@ -16,7 +16,7 @@ import javax.persistence.Query;
 import javax.persistence.criteria.*;
 import java.util.List;
 
-@Repository("OneRoster2:AcademicSessions:TermDAO")
+@Repository("OneRoster:AcademicSessions:TermDAO")
 @SuppressWarnings({"unchecked", "unused"})
 class AcademicSessionDAOImp extends BaseDAO implements AcademicSessionDAO {
 	@PersistenceContext private EntityManager em;

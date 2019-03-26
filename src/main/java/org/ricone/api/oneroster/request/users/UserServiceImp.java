@@ -14,7 +14,7 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 @Transactional
-@Service("OneRoster2:Users:UserService")
+@Service("OneRoster:Users:UserService")
 class UserServiceImp implements UserService {
 	@Autowired private UserDAO dao;
 	@Autowired private UserMapper mapper;
@@ -22,7 +22,7 @@ class UserServiceImp implements UserService {
 
 	@Override
 	public UserResponse getUser(RequestData metadata, String refId) throws Exception {
-		UserResponse studentResponse = selector.apply(mapper.convert(dao.getStudent(metadata, refId), metadata), metadata);
+		UserResponse studentResponse = selector.apply(mapper.convert(dao.getUser(metadata, refId), metadata), metadata);
 		if(studentResponse != null) {
 			return studentResponse;
 		}

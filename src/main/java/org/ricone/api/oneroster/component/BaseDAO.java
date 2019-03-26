@@ -20,11 +20,12 @@ public abstract class BaseDAO {
 
     /* Model Fields */
     protected static final String DISTRICT_ID = "districtId";
-    protected static final String ORG_ID = "orgId";
-    protected static final String COURSE_ID = "courseId";
-    protected static final String CLASS_ID = "classId";
-    protected static final String TERM_ID = "termId";
-    protected static final String USER_ID = "userId";
+    protected static final String ORG = "org";
+    protected static final String COURSE = "course";
+    protected static final String CLASS = "clazz";
+    protected static final String USER = "user";
+    protected static final String ACADEMIC_SESSION = "academicSession";
+
     protected static final String TYPE = "type";
     protected static final String ROLE = "role";
 

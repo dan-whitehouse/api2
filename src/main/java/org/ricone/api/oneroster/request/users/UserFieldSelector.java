@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
  * @since 2019-01-22
  */
 
-@Component("OneRoster2:Users:UserFieldSelector")
+@Component("OneRoster:Users:UserFieldSelector")
 public class UserFieldSelector extends BaseFieldSelector<User> {
 	public UserFieldSelector() {
 		super(User.class);

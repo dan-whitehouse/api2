@@ -9,10 +9,11 @@ import org.ricone.api.oneroster.model.*;
 import org.ricone.api.oneroster.util.MappingUtil;
 import org.springframework.stereotype.Component;
 
+import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.List;
 
-@Component("OneRoster2:Courses:CourseMapper")
+@Component("OneRoster:Courses:CourseMapper")
 class CourseMapper extends BaseMapper<QCourse, Course, CoursesResponse, CourseResponse> {
     private Logger logger = LogManager.getLogger(this.getClass());
 
@@ -23,8 +24,8 @@ class CourseMapper extends BaseMapper<QCourse, Course, CoursesResponse, CourseRe
     @Override protected Course map(QCourse instance) {
         Course course = new Course();
         course.setSourcedId(instance.getSourcedId());
-        course.setStatus(StatusType.active);
-        course.setDateLastModified(null);
+        course.setStatus(StatusType.valueOf(instance.getStatus()));
+        course.setDateLastModified(instance.getDateLastModified().atZone(ZoneId.systemDefault()));
         course.setMetadata(mapMetadata(instance));
 
         course.setTitle(instance.getTitle());

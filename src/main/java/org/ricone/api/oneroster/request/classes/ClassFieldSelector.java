@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
  * @since 2019-01-22
  */
 
-@Component("OneRoster2:Classes:ClassFieldSelector")
+@Component("OneRoster:Classes:ClassFieldSelector")
 public class ClassFieldSelector extends BaseFieldSelector<Class> {
 	public ClassFieldSelector() {
 		super(Class.class);

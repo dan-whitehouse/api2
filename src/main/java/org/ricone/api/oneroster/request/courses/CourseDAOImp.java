@@ -15,7 +15,7 @@ import javax.persistence.Query;
 import javax.persistence.criteria.*;
 import java.util.List;
 
-@Repository("OneRoster2:Courses:CourseDAO")
+@Repository("OneRoster:Courses:CourseDAO")
 @SuppressWarnings({"unchecked", "unused"})
 class CourseDAOImp extends BaseDAO implements CourseDAO {
 	@PersistenceContext private EntityManager em;
@@ -27,6 +27,7 @@ class CourseDAOImp extends BaseDAO implements CourseDAO {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<QCourse> select = cb.createQuery(QCourse.class);
 		final Root<QCourse> from = select.from(QCourse.class);
+
 		//Add Root Object & Joins to Filterer
 		filterer.addJoins(from);
 
@@ -89,7 +90,7 @@ class CourseDAOImp extends BaseDAO implements CourseDAO {
 
 		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
-			cb.equal(from.get(ORG_ID), refId),
+			cb.equal(from.get(ORG).get(SOURCED_ID), refId),
 			cb.equal(from.get(SOURCED_SCHOOL_YEAR), 2019),
 			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 		);
@@ -140,7 +141,7 @@ class CourseDAOImp extends BaseDAO implements CourseDAO {
 
 		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
-			cb.equal(from.get(ORG_ID), refId),
+			cb.equal(from.get(ORG).get(SOURCED_ID), refId),
 			cb.equal(from.get(SOURCED_SCHOOL_YEAR), 2019),
 			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 		);

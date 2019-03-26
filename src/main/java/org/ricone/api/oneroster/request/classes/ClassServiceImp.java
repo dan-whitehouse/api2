@@ -14,7 +14,7 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 @Transactional
-@Service("OneRoster2:Classes:ClassService")
+@Service("OneRoster:Classes:ClassService")
 class ClassServiceImp implements ClassService {
 	@Autowired private ClassDAO dao;
 	@Autowired private ClassMapper mapper;

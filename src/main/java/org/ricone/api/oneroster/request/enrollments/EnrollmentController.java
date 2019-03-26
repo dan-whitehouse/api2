@@ -17,13 +17,13 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@RestController("OneRoster2:Enrollments:EnrollmentController")
+@RestController("OneRoster:Enrollments:EnrollmentController")
 @Api(value = "Enrollment", description = "One Roster - Enrollments", tags = {"Enrollment"})
 class EnrollmentController extends BaseController {
 	@Autowired
 	private EnrollmentService service;
 
-	@ResponseBody @GetMapping(value = "/ims/oneroster2/v1p1/enrollments/{id}")
+	@ResponseBody @GetMapping(value = "/ims/oneroster/v1p1/enrollments/{id}")
 	@ApiOperation(value = "getEnrollment", tags = {"Enrollment"})
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "Success", response = EnrollmentResponse.class),
@@ -37,7 +37,7 @@ class EnrollmentController extends BaseController {
 		return service.getEnrollment(getMetaData(request, response), id);
 	}
 
-	@ResponseBody @GetMapping(value = "/ims/oneroster2/v1p1/enrollments")
+	@ResponseBody @GetMapping(value = "/ims/oneroster/v1p1/enrollments")
 	@ApiOperation(value = "getAllEnrollments", tags = {"Enrollment"})
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "Success", response = EnrollmentsResponse.class),
@@ -51,7 +51,7 @@ class EnrollmentController extends BaseController {
 		return service.getAllEnrollments(getMetaData(request, response));
 	}
 
-	@ResponseBody @GetMapping(value = "/ims/oneroster2/v1p1/schools/{id}/enrollments")
+	@ResponseBody @GetMapping(value = "/ims/oneroster/v1p1/schools/{id}/enrollments")
 	@ApiOperation(value = "getEnrollmentsForSchool", tags = {"Enrollment"})
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "Success", response = EnrollmentsResponse.class),
@@ -62,11 +62,10 @@ class EnrollmentController extends BaseController {
 			@ApiResponse(code = 500, message = "Internal Server Error", response = ErrorResponse.class)
 	})
 	EnrollmentsResponse getEnrollmentsForSchool(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "id") String id) throws Exception {
-		//TODO - Implement
-		return null;
+		return service.getEnrollmentsForSchool(getMetaData(request, response), id);
 	}
 
-	@ResponseBody @GetMapping(value = "/ims/oneroster2/v1p1/schools/{schoolId}/classes/{classId}/enrollments")
+	@ResponseBody @GetMapping(value = "/ims/oneroster/v1p1/schools/{schoolId}/classes/{classId}/enrollments")
 	@ApiOperation(value = "getEnrollmentsForClassInSchool", tags = {"Enrollment"})
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "Success", response = EnrollmentsResponse.class),
@@ -77,7 +76,6 @@ class EnrollmentController extends BaseController {
 			@ApiResponse(code = 500, message = "Internal Server Error", response = ErrorResponse.class)
 	})
 	EnrollmentsResponse getEnrollmentsForClassInSchool(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "schoolId") String schoolId, @PathVariable(value = "classId") String classId) throws Exception {
-		//TODO - Implement
-		return null;
+		return service.getEnrollmentsForClassInSchool(getMetaData(request, response), schoolId, classId);
 	}
 }

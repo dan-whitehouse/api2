@@ -4,7 +4,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ricone.api.core.model.v1p1.QUser;
+import org.ricone.api.core.model.oneroster.QUser;
 import org.ricone.api.oneroster.component.BaseMapper;
 import org.ricone.api.oneroster.model.*;
 import org.ricone.api.oneroster.util.MappingUtil;
@@ -29,16 +29,7 @@ class UserMapper extends BaseMapper<QUser, User, UsersResponse, UserResponse> {
         user.setDateLastModified(instance.getDateLastModified().atZone(ZoneId.systemDefault()));
         user.setMetadata(mapMetadata(instance));
 
-        if("student".equalsIgnoreCase(instance.getRole())) {
-            user.setRole(RoleType.student);
-        }
-        else if("teacher".equalsIgnoreCase(instance.getRole())) {
-            user.setRole(RoleType.teacher);
-        }
-        else if("contact".equalsIgnoreCase(instance.getRole())) {
-            user.setRole(RoleType.parent);
-        }
-
+        user.setRole(RoleType.valueOf(instance.getRole()));
         user.setGivenName(instance.getGivenName());
         user.setFamilyName(instance.getFamilyName());
         user.setMiddleName(instance.getMiddleName());
@@ -91,7 +82,7 @@ class UserMapper extends BaseMapper<QUser, User, UsersResponse, UserResponse> {
 
     @Override protected Metadata mapMetadata(QUser instance) {
         Metadata metadata = new Metadata();
-        metadata.getAdditionalProperties().put("ricone.schoolYear", instance.getSourcedSchoolYear());
+        metadata.getAdditionalProperties().put("ricone.schoolYear", instance.getSourcedSchoolYear().toString());
         metadata.getAdditionalProperties().put("ricone.districtId", instance.getDistrictId());
         return metadata;
     }

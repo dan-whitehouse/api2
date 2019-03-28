@@ -1,6 +1,6 @@
 package org.ricone.api.oneroster.request.courses;
 
-import org.ricone.api.core.model.v1p1.QCourse;
+import org.ricone.api.core.model.oneroster.QCourse;
 import org.ricone.api.oneroster.component.RequestData;
 
 import java.util.List;

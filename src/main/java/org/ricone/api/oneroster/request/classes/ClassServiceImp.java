@@ -1,7 +1,7 @@
 package org.ricone.api.oneroster.request.classes;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.ricone.api.core.model.v1p1.QClass;
+import org.ricone.api.core.model.oneroster.QClass;
 import org.ricone.api.oneroster.component.RequestData;
 import org.ricone.api.oneroster.error.exception.UnknownObjectException;
 import org.ricone.api.oneroster.model.ClassResponse;

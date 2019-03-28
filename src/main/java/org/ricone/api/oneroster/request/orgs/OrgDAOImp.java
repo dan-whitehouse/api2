@@ -2,8 +2,8 @@ package org.ricone.api.oneroster.request.orgs;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ricone.api.core.model.v1p1.QOrg;
-import org.ricone.api.core.model.v1p1.QOrgChild;
+import org.ricone.api.core.model.oneroster.QOrg;
+import org.ricone.api.core.model.oneroster.QOrgChild;
 import org.ricone.api.oneroster.component.BaseDAO;
 import org.ricone.api.oneroster.component.RequestData;
 import org.springframework.beans.factory.annotation.Autowired;

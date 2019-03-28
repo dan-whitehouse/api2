@@ -1,4 +1,4 @@
-package org.ricone.api.core.model.v1p1;
+package org.ricone.api.core.model.oneroster;
 
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Cache;
@@ -8,7 +8,6 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
 
 @Entity
 @Table(name = "onerosterv1p1_enrollment")

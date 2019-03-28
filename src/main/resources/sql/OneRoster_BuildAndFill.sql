@@ -1,3 +1,21 @@
+DROP TABLE IF EXISTS 
+	OneRosterV1P1_Enrollment, 
+	OneRosterV1P1_Demographic, 
+	OneRosterV1P1_UserAgent,
+	OneRosterV1P1_UserIdentifier,
+	OneRosterV1P1_UserOrg, 
+	OneRosterV1P1_UserClass,
+	OneRosterV1P1_User, 
+	onerosterv1p1_classacademicsession, 
+	onerosterv1p1_class, 
+	onerosterv1p1_course, 
+	onerosterv1p1_academicsessionchild,
+	onerosterv1p1_academicsession,
+	onerosterv1p1_orgchild,
+	onerosterv1p1_org;
+     
+
+
 /* Org */
 create table OneRosterV1P1_Org (
 	SourcedId varchar(64),
@@ -26,8 +44,8 @@ insert into OneRosterV1P1_Org
 	select distinct	
 		l.LEARefId as SourcedId,
         l.LEASchoolYear as SourcedSchoolYear,
-        'active',
-        now(),
+        'active', #Idk how we want to determine this value. As we delete records every night without marking them for future deletion (same for every top level table)
+        now(), #This should probably come from staging. (same for every top level table)
         l.leaId as DistrictId,
 		'district' as Type, 
 		l.LEAName as Name, 
@@ -108,8 +126,8 @@ CREATE TABLE OneRosterV1P1_AcademicSession (
     DistrictId varchar(30),
 	Title longtext, 
 	Type varchar(10), 
-	SchoolYear char(4),
-	BeginDate date,
+	SchoolYear smallint(4),
+	StartDate date,
 	EndDate date,
 	AcademicSessionId varchar(64), 
 	AcademicSessionSchoolYear smallint(6),
@@ -147,7 +165,7 @@ from schoolcalendar schc
 where schc.SchoolCalendarSchoolYear = 2019;
 
 
-# Table 3 - Mergers T1 & T2 so that each SchoolCalendar with the same SchoolRefId is associated to the same UUID created in T2
+# Table 3 - Merge T1 & T2 so that each SchoolCalendar with the same SchoolRefId is associated to the same UUID created in T2
 CREATE TEMPORARY TABLE t3 
 select 	t1.uuid, 
 		t1.uuidSchoolYear, 
@@ -169,7 +187,7 @@ insert into OneRosterV1P1_AcademicSession
 		'active',
         now(),
 		l.leaId as DistrictId,
-		'Full Year' as Title,
+		'Full Year' as Title, #These are made up full year calendars
 		'schoolYear' as Type,
 		(
 			select schc.CalendarYear as SchoolYear
@@ -220,7 +238,7 @@ insert into OneRosterV1P1_AcademicSession
         now(),
         l.leaId as DistrictId,
 		schcs.Description as Title,
-		case when LOWER(schcs.SessionTypeCode) = 'semester' then 'semester' else 'term' end as Type, 
+		case when LOWER(schcs.SessionTypeCode) = 'semester' then 'semester' else 'term' end as Type, #Not sure this will cover every value that should be a semester
 		t3.CalendarYear as SchoolYear,
 		schcs.BeginDate,
 		schcs.EndDate,
@@ -375,7 +393,23 @@ select distinct
 	l.leaId as DistrictId,
 	c.Title as Title,
     ci.CourseId as ClassCode,
-    'scheduled' as ClassType,
+    case #Assumption that this should even be done... Maybe everything should just be scheduled.
+		when c.Title like '%Homeroom%' 
+			or c.Title like '%Home room%'
+            or c.Title like '%HMRM%'
+            or c.Title like '%HM RM%'
+            or ci.CourseId like '%Homeroom%' 
+			or ci.CourseId like '%Home room%' 
+			or ci.CourseId like '%HMRM%'
+			or ci.CourseId like '%HM RM%'
+            or (c.Title like 'HR%' and ci.CourseId like '%HR%')
+            or (c.Title like 'HR%' and ci.CourseId like '%HMRM%')
+            or (c.Title like 'HR%' and ci.CourseId like '%HM RM%')
+			or (c.Title like 'HR%' and ci.CourseId like '%Homeroom%')
+            or (c.Title like 'HR%' and ci.CourseId like '%Home room%')
+		then 'homeroom'
+		else 'scheduled'
+	END as ClassType,
     (
 		select GROUP_CONCAT(replace(css.ClassroomIdentifier, ',', ''))
 		from coursesectionschedule as css 
@@ -383,7 +417,7 @@ select distinct
         and css.CourseSectionSchoolYear = cs.CourseSectionSchoolYear
         group by css.CourseSectionRefId
         order by css.CourseSectionScheduleRefId
-    ) as Location,
+    ) as Location, # Should we be listing these, OneRoster only displays 1 value. We could also distinct the grouping, eliminating values like 03,03,03,03
     (
 		select GROUP_CONCAT( replace(GradeLevelCode, ',', ''))
         from coursegrade as sub_cg 
@@ -467,7 +501,7 @@ CREATE TABLE OneRosterV1P1_User (
 	SourcedSchoolYear smallint(6), 
     Status varchar(20), 
     DateLastModified datetime,
-	Role varchar(7), 
+	Role varchar(16), 
 	DistrictId varchar(30),
 	EnabledUser bigint(20), 
 	GivenName varchar(35),
@@ -565,7 +599,25 @@ union all
 		t.StaffSchoolYear,
         'active',
 		now(),
-		'teacher',
+		/*case 
+			when ta.PositionTitle like '%admin%' 
+				or ta.PositionTitle like '%principal%'
+				then 'administrator'
+			when ta.PositionTitle = 'aide' 
+				or ta.PositionTitle = 'TA' 
+				or ta.PositionTitle like '%aide%' 
+				or ta.PositionTitle like '%teach%ass%'
+				then 'aide'
+			when ta.PositionTitle = 'proctor' 
+				then 'proctor'
+			when ta.PositionTitle = 'teacher' 
+				or ta.PositionTitle like '%tchr%'
+				or ta.PositionTitle like '%sub%teach%'
+				or ta.PositionTitle like '%teacher%'
+				then 'teacher'
+			else 'other'
+		END as Role,*/
+        'teacher' as Role,#This isn't right, as busdrivers, cleaners, maintenance, mechanic, etc... will need to be handled in ingestion -- SELECT distinct positiontitle FROM core3.staffassignment;
         l.leaId as DistrictId,
 		true,
 		t.FirstName, 
@@ -621,7 +673,23 @@ union all
 		sc.StudentContactSchoolYear,
         'active',
 		now(),
-		'contact',
+		/*case 
+			when scr.RelationshipCode = 'Father' 
+				or scr.RelationshipCode = 'Mother'
+				or scr.RelationshipCode like '%parent%' 
+			then 'parent'
+			when scr.RelationshipCode like '%Uncle%' 
+				or scr.RelationshipCode like '%Aunt%'
+				or scr.RelationshipCode like '%Sibling%'
+				or scr.RelationshipCode like '%Brother%'
+				or scr.RelationshipCode like '%Sister%'
+				or scr.RelationshipCode like 'step%'
+				or scr.RelationshipCode like 'grand%'
+			then 'relative'
+			when scr.RelationshipCode like '%Guardian%' then 'Guardian'
+			else 'other'
+		END as Role,*/ #Needs to be figured out by ingestion, right now this is just not enough
+        'parent' as Role,
         l.leaId as DistrictId,
 		true,
 		sc.FirstName, 
@@ -749,7 +817,7 @@ union all
 		on c.CourseRefId = cs.CourseRefId
         and c.CourseSchoolYear = cs.CourseSchoolYear
 	where u.SourcedSchoolYear = 2019
-    and u.Role = 'teacher'
+    and (u.Role = 'administrator' or u.Role = 'aide' or u.Role = 'proctor' or u.Role = 'teacher')
 );
 
 
@@ -799,7 +867,7 @@ union all
 	join onerosterv1p1_user u2
 		on u2.SourcedId = scr.StudentRefId
         and u2.SourcedSchoolYear = scr.StudentSchoolYear
-	where u.Role = 'contact'
+	where (u.Role = 'guardian' or u.Role = 'parent' or u.Role = 'relative')
     and u.SourcedSchoolYear = 2019
     and scr.RelationshipCode is not null
 );
@@ -864,7 +932,7 @@ union all
 		on ta.StaffRefId = u.SourcedId
         and ta.StaffSchoolYear = u.SourcedSchoolYear
 	where u.SourcedSchoolYear = 2019
-    and u.Role = 'teacher'
+    and (u.Role = 'administrator' or u.Role = 'aide' or u.Role = 'proctor' or u.Role = 'teacher')
 )
 union all
 (
@@ -882,7 +950,7 @@ union all
 		on sch.SchoolRefId = ta.SchoolRefId 
         and sch.SchoolSchoolYear = ta.SchoolSchoolYear
 	where u.SourcedSchoolYear = 2019
-    and u.Role = 'teacher'
+    and (u.Role = 'administrator' or u.Role = 'aide' or u.Role = 'proctor' or u.Role = 'teacher')
 )
 union all
 (
@@ -906,7 +974,7 @@ union all
 		on se.StudentRefId = s.StudentRefId 
         and se.StudentSchoolYear = s.StudentSchoolYear
 	where u.SourcedSchoolYear = 2019
-    and u.Role = 'contact'
+    and (u.Role = 'guardian' or u.Role = 'parent' or u.Role = 'relative')
 )
 union all
 (
@@ -932,6 +1000,8 @@ union all
 	join school as sch 
 		on sch.SchoolRefId = se.SchoolRefId 
         and sch.SchoolSchoolYear = se.SchoolSchoolYear
+	where u.SourcedSchoolYear = 2019
+    and (u.Role = 'guardian' or u.Role = 'parent' or u.Role = 'relative')
 );
 
 /* User Identifier */
@@ -973,7 +1043,7 @@ union all
 	join staffidentifier as si
 		on si.StaffRefId = u.SourcedId
         and si.StaffSchoolYear = u.SourcedSchoolYear
-	where u.Role = 'teacher'
+	where (u.Role = 'administrator' or u.Role = 'aide' or u.Role = 'proctor' or u.Role = 'teacher')
     and u.SourcedSchoolYear = 2019
     and si.IdentificationSystemCode != 'SchoolToolRefId'
 )
@@ -989,7 +1059,7 @@ union all
 	join studentcontactidentifier as si
 		on si.StudentContactRefId = u.SourcedId
         and si.StudentContactSchoolYear = u.SourcedSchoolYear
-	where u.Role = 'contact'
+	where (u.Role = 'guardian' or u.Role = 'parent' or u.Role = 'relative')
     and u.SourcedSchoolYear = 2019
     and si.IdentificationSystemCode != 'SchoolToolRefId'
 );
@@ -1176,5 +1246,5 @@ union all
 		on l.LEARefId = sch.LEARefId 
 		and l.LEASchoolYear = sch.LEASchoolYear  
 	where u.SourcedSchoolYear = 2019
-		and u.Role = 'teacher'
+		and (u.Role = 'administrator' or u.Role = 'aide' or u.Role = 'proctor' or u.Role = 'teacher')
 );

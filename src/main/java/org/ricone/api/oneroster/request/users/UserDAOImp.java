@@ -2,7 +2,7 @@ package org.ricone.api.oneroster.request.users;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ricone.api.core.model.v1p1.*;
+import org.ricone.api.core.model.oneroster.*;
 import org.ricone.api.oneroster.component.BaseDAO;
 import org.ricone.api.oneroster.component.RequestData;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,6 +69,7 @@ class UserDAOImp extends BaseDAO implements UserDAO {
 		final Predicate methodSpecificPredicate = cb.and(
 			cb.equal(from.get(SOURCED_SCHOOL_YEAR), 2019),
 			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			//cb.notEqual(from.get(ROLE), "other")
 		);
 
 		select.distinct(false);

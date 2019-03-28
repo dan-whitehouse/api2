@@ -1,23 +1,22 @@
-package org.ricone.api.core.model.v1p1;
+package org.ricone.api.core.model.oneroster;
 
-import org.hibernate.annotations.*;
 import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.*;
 
-import javax.persistence.*;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "onerosterv1p1_course")
+@Table(name = "onerosterv1p1_class")
 @IdClass(SourcedComposite.class)
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @BatchSize(size = 100)
-public class QCourse implements Serializable {
+public class QClass implements Serializable {
 	private static final long serialVersionUID = -2620417938122940193L;
 
 	@Column(name = "SourcedId", unique = true, nullable = false, length = 64)
@@ -38,8 +37,14 @@ public class QCourse implements Serializable {
 	@Column(name = "Title", length = 8)
 	private String title;
 
-	@Column(name = "CourseCode", length = 75)
-	private String courseCode;
+	@Column(name = "ClassCode", length = 75)
+	private String classCode;
+
+	@Column(name = "ClassType", length = 75)
+	private String classType;
+
+	@Column(name = "Location", length = 75)
+	private String location;
 
 	@Column(name = "Grades", length = 50)
 	private String grades;
@@ -50,12 +55,15 @@ public class QCourse implements Serializable {
 	@Column(name = "SubjectCodes", length = 40)
 	private String subjectCodes;
 
+	@Column(name = "Periods", length = 40)
+	private String periods;
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumns({
-			@JoinColumn(name = "AcademicSessionId", referencedColumnName = "sourcedId"),
-			@JoinColumn(name = "AcademicSessionSchoolYear", referencedColumnName = "sourcedSchoolYear")
+			@JoinColumn(name = "CourseId", referencedColumnName = "sourcedId"),
+			@JoinColumn(name = "CourseSchoolYear", referencedColumnName = "sourcedSchoolYear")
 	})
-	private QAcademicSession academicSession;
+	private QCourse course;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumns({
@@ -64,27 +72,35 @@ public class QCourse implements Serializable {
 	})
 	private QOrg org;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "course")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "clazz")
 	@Fetch(FetchMode.SELECT) @BatchSize(size = 100)
-	private Set<QClass> classes = new HashSet<>();
+	private Set<QClassAcademicSession> terms = new HashSet<>();
 
-	public QCourse() {
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "clazz")
+	@Fetch(FetchMode.SELECT) @BatchSize(size = 100)
+	private Set<QUserClass> users = new HashSet<>();
+
+	public QClass() {
 	}
 
-	public QCourse(String sourcedId, Integer sourcedSchoolYear, String status, LocalDateTime dateLastModified, String districtId, String title, String courseCode, String grades, String subjects, String subjectCodes, QAcademicSession academicSession, QOrg org, Set<QClass> classes) {
+	public QClass(String sourcedId, Integer sourcedSchoolYear, String status, LocalDateTime dateLastModified, String districtId, String title, String classCode, String classType, String location, String grades, String subjects, String subjectCodes, String periods, QCourse course, QOrg org, Set<QClassAcademicSession> terms, Set<QUserClass> users) {
 		this.sourcedId = sourcedId;
 		this.sourcedSchoolYear = sourcedSchoolYear;
 		this.status = status;
 		this.dateLastModified = dateLastModified;
 		this.districtId = districtId;
 		this.title = title;
-		this.courseCode = courseCode;
+		this.classCode = classCode;
+		this.classType = classType;
+		this.location = location;
 		this.grades = grades;
 		this.subjects = subjects;
 		this.subjectCodes = subjectCodes;
-		this.academicSession = academicSession;
+		this.periods = periods;
+		this.course = course;
 		this.org = org;
-		this.classes = classes;
+		this.terms = terms;
+		this.users = users;
 	}
 
 	public String getSourcedId() {
@@ -135,12 +151,28 @@ public class QCourse implements Serializable {
 		this.title = title;
 	}
 
-	public String getCourseCode() {
-		return courseCode;
+	public String getClassCode() {
+		return classCode;
 	}
 
-	public void setCourseCode(String courseCode) {
-		this.courseCode = courseCode;
+	public void setClassCode(String classCode) {
+		this.classCode = classCode;
+	}
+
+	public String getClassType() {
+		return classType;
+	}
+
+	public void setClassType(String classType) {
+		this.classType = classType;
+	}
+
+	public String getLocation() {
+		return location;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
 	}
 
 	public String getGrades() {
@@ -167,12 +199,20 @@ public class QCourse implements Serializable {
 		this.subjectCodes = subjectCodes;
 	}
 
-	public QAcademicSession getAcademicSession() {
-		return academicSession;
+	public String getPeriods() {
+		return periods;
 	}
 
-	public void setAcademicSession(QAcademicSession academicSession) {
-		this.academicSession = academicSession;
+	public void setPeriods(String periods) {
+		this.periods = periods;
+	}
+
+	public QCourse getCourse() {
+		return course;
+	}
+
+	public void setCourse(QCourse course) {
+		this.course = course;
 	}
 
 	public QOrg getOrg() {
@@ -183,11 +223,19 @@ public class QCourse implements Serializable {
 		this.org = org;
 	}
 
-	public Set<QClass> getClasses() {
-		return classes;
+	public Set<QClassAcademicSession> getTerms() {
+		return terms;
 	}
 
-	public void setClasses(Set<QClass> classes) {
-		this.classes = classes;
+	public void setTerms(Set<QClassAcademicSession> terms) {
+		this.terms = terms;
+	}
+
+	public Set<QUserClass> getUsers() {
+		return users;
+	}
+
+	public void setUsers(Set<QUserClass> users) {
+		this.users = users;
 	}
 }

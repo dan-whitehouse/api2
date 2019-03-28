@@ -1,7 +1,7 @@
 package org.ricone.api.oneroster.request.users;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.ricone.api.core.model.v1p1.QUser;
+import org.ricone.api.core.model.oneroster.QUser;
 import org.ricone.api.oneroster.component.RequestData;
 import org.ricone.api.oneroster.error.exception.UnknownObjectException;
 import org.ricone.api.oneroster.model.UserResponse;

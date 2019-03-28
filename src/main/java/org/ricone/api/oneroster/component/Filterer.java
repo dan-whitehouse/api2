@@ -13,13 +13,14 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("unchecked")
-public class Filterer {
+class Filterer {
 	private static Logger logger = LogManager.getLogger(Filterer.class);
 	private static final String FILTER = "filter";
 	private static final String LOGICAL_AND = " AND ";
@@ -107,6 +108,7 @@ public class Filterer {
 
 	private void fillPredicatesList(CriteriaBuilder cb, BaseFilterer filterer, String filter) throws InvalidFilterFieldException, InvalidDataException {
 		Path path;
+		String field;
 		String value = getValue(filter); //All values must be wrapped in single quotes
 		String predicate = getPredicateKey(filter);
 
@@ -116,28 +118,34 @@ public class Filterer {
 
 		//Determine Predicate Type
 		if(isGreaterThanOrEqual(predicate)) {
-			path = getPath(filterer, filter, PREDICATE_GTE);
-			predicates.add(getGreaterThanOrEqualToPredicate(cb, path, value));
+			field = getField(filter, PREDICATE_GTE);
+			path = getPath(filterer, field);
+			predicates.add(getGreaterThanOrEqualToPredicate(cb, path, field, value));
 		}
 		else if(isGreaterThan(predicate)) {
-			path = getPath(filterer, filter, PREDICATE_GT);
-			predicates.add(getGreaterThanToPredicate(cb, path, value));
+			field = getField(filter, PREDICATE_GT);
+			path = getPath(filterer, field);
+			predicates.add(getGreaterThanToPredicate(cb, path, field, value));
 		}
 		else if(isLessThanOrEqual(predicate)) {
-			path = getPath(filterer, filter, PREDICATE_LTE);
-			predicates.add(getLessThanOrEqualToPredicate(cb, path, value));
+			field = getField(filter, PREDICATE_LTE);
+			path = getPath(filterer, field);
+			predicates.add(getLessThanOrEqualToPredicate(cb, path, field, value));
 		}
 		else if(isLessThan(predicate)) {
-			path = getPath(filterer, filter, PREDICATE_LT);
-			predicates.add(getLessThanToPredicate(cb, path, value));
+			field = getField(filter, PREDICATE_LT);
+			path = getPath(filterer, field);
+			predicates.add(getLessThanToPredicate(cb, path, field, value));
 		}
 		else if(isNotEqual(predicate)) {
-			path = getPath(filterer, filter, PREDICATE_NEQ);
-			predicates.add(getNotEqualPredicate(cb, path, value));
+			field = getField(filter, PREDICATE_NEQ);
+			path = getPath(filterer, field);
+			predicates.add(getNotEqualPredicate(cb, path, field, value));
 		}
 		else if(isEqual(predicate)) {
-			path = getPath(filterer, filter, PREDICATE_EQ);
-			predicates.add(getEqualPredicate(cb, path, value));
+			field = getField(filter, PREDICATE_EQ);
+			path = getPath(filterer, field);
+			predicates.add(getEqualPredicate(cb, path, field, value));
 			/*if(isMultiValue(value)) {
 				String[] values = StringUtils.split(value, ",");
 				List<Predicate> list = new ArrayList<>();
@@ -151,17 +159,18 @@ public class Filterer {
 			}*/
 		}
 		else if(isContains(predicate)) {
-			path = getPath(filterer, filter, PREDICATE_CON);
+			field = getField(filter, PREDICATE_CON);
+			path = getPath(filterer, field);
 			if(isMultiValue(value)) {
 				String[] values = StringUtils.split(value, ",");
 				List<Predicate> list = new ArrayList<>();
 				for (String v : values) {
-					list.add(getLikePredicate(cb, path, v));
+					list.add(getLikePredicate(cb, path, field, v));
 				}
 				predicates.add(cb.or(list.toArray(new Predicate[0])));
 			}
 			else {
-				predicates.add(getLikePredicate(cb, path, value));
+				predicates.add(getLikePredicate(cb, path, field, value));
 			}
 		}
 	}
@@ -174,20 +183,12 @@ public class Filterer {
 		return StringUtils.contains(value, ",");
 	}
 
-	private static Path getPath(BaseFilterer filterer, String filter, String predicate) throws InvalidFilterFieldException, InvalidDataException {
-		return filterer.getPath(StringUtils.substringBefore(filter, predicate));
+	private static Path getPath(BaseFilterer filterer, String field) throws InvalidFilterFieldException, InvalidDataException {
+		return filterer.getPath(field);
 	}
 
-	private static boolean isPathTypeBoolean(Path path) {
-		return path.getJavaType().equals(Boolean.class);
-	}
-
-	private static boolean isPathTypeLocalDateTime(Path path) {
-		return path.getJavaType().equals(LocalDateTime.class);
-	}
-
-	private static boolean isPathTypeInteger(Path path) {
-		return path.getJavaType().equals(Integer.class);
+	private static String getField(String filter, String predicate) {
+		return StringUtils.substringBefore(filter, predicate);
 	}
 
 	private static String getPredicateKey(String filter) {
@@ -221,85 +222,144 @@ public class Filterer {
 		return null;
 	}
 
+
+	// PATH TYPE CHECK
+	private static boolean isPathTypeBoolean(Path path) {
+		return path.getJavaType().equals(Boolean.class);
+	}
+
+	private static boolean isPathTypeLocalDateTime(Path path) {
+		return path.getJavaType().equals(LocalDateTime.class);
+	}
+
+	private static boolean isPathTypeLocalDate(Path path) {
+		return path.getJavaType().equals(LocalDate.class);
+	}
+
+	private static boolean isPathTypeInteger(Path path) {
+		return path.getJavaType().equals(Integer.class);
+	}
+
+	private static boolean isPathTypeString(Path path) {
+		return path.getJavaType().equals(String.class);
+	}
+
+
 	// PREDICATE WITH CORRECT OBJECT TYPE
-	private static Predicate getGreaterThanOrEqualToPredicate(CriteriaBuilder cb, Path path, String value) throws InvalidDataException {
+	private static Predicate getGreaterThanOrEqualToPredicate(CriteriaBuilder cb, Path path, String field, String value) throws InvalidDataException {
 		if(isPathTypeInteger(path)) {
 			return cb.greaterThanOrEqualTo(path, toInteger(value));
 		}
 		else if(isPathTypeLocalDateTime(path)) {
 			return cb.greaterThanOrEqualTo(path, toLocalDateTime(value));
 		}
+		else if(isPathTypeLocalDate(path)) {
+			return cb.greaterThanOrEqualTo(path, toLocalDate(value));
+		}
 		else {
-			return cb.greaterThanOrEqualTo(path, value);
+			throw new InvalidDataException("The predicate [>=] can not be used on field [" + field + "]");
 		}
 	}
 
-	private static Predicate getGreaterThanToPredicate(CriteriaBuilder cb, Path path, String value) throws InvalidDataException {
+	private static Predicate getGreaterThanToPredicate(CriteriaBuilder cb, Path path, String field, String value) throws InvalidDataException {
 		if(isPathTypeInteger(path)) {
 			return cb.greaterThan(path, toInteger(value));
 		}
 		else if(isPathTypeLocalDateTime(path)) {
 			return cb.greaterThan(path, toLocalDateTime(value));
 		}
+		else if(isPathTypeLocalDate(path)) {
+			return cb.greaterThan(path, toLocalDate(value));
+		}
 		else {
-			return cb.greaterThan(path, value);
+			throw new InvalidDataException("The predicate [>] can not be used on field [" + field + "]");
 		}
 	}
 
-	private static Predicate getLessThanOrEqualToPredicate(CriteriaBuilder cb, Path path, String value) throws InvalidDataException {
+	private static Predicate getLessThanOrEqualToPredicate(CriteriaBuilder cb, Path path, String field, String value) throws InvalidDataException {
 		if(isPathTypeInteger(path)) {
 			return cb.lessThanOrEqualTo(path, toInteger(value));
 		}
 		else if(isPathTypeLocalDateTime(path)) {
 			return cb.lessThanOrEqualTo(path, toLocalDateTime(value));
 		}
+		else if(isPathTypeLocalDate(path)) {
+			return cb.lessThanOrEqualTo(path, toLocalDate(value));
+		}
 		else {
-			return cb.lessThanOrEqualTo(path, value);
+			throw new InvalidDataException("The predicate [<=] can not be used on field [" + field + "]");
 		}
 	}
 
-	private static Predicate getLessThanToPredicate(CriteriaBuilder cb, Path path, String value) throws InvalidDataException {
+	private static Predicate getLessThanToPredicate(CriteriaBuilder cb, Path path, String field, String value) throws InvalidDataException {
 		if(isPathTypeInteger(path)) {
 			return cb.lessThan(path, toInteger(value));
 		}
 		else if(isPathTypeLocalDateTime(path)) {
 			return cb.lessThan(path, toLocalDateTime(value));
 		}
+		else if(isPathTypeLocalDate(path)) {
+			return cb.lessThan(path, toLocalDate(value));
+		}
 		else {
-			return cb.lessThan(path, value);
+			throw new InvalidDataException("The predicate [<] can not be used on field [" + field + "]");
 		}
 	}
 
-	private static Predicate getNotEqualPredicate(CriteriaBuilder cb, Path path, String value) throws InvalidDataException {
-		if(isPathTypeBoolean(path)) {
+	private static Predicate getNotEqualPredicate(CriteriaBuilder cb, Path path, String field, String value) throws InvalidDataException {
+		if(isPathTypeString(path)) {
+			return cb.notEqual(path, value);
+		}
+		else if(isPathTypeInteger(path)) {
+			return cb.notEqual(path, toInteger(value));
+		}
+		else if(isPathTypeBoolean(path)) {
 			return cb.notEqual(path, BooleanUtils.toBoolean(value));
 		}
 		else if(isPathTypeLocalDateTime(path)) {
 			return cb.notEqual(path, toLocalDateTime(value));
 		}
+		else if(isPathTypeLocalDate(path)) {
+			return cb.notEqual(path, toLocalDate(value));
+		}
 		else {
-			return cb.notEqual(path, value);
+			throw new InvalidDataException("The predicate [!=] can not be used on field [" + field + "]");
 		}
 	}
 
-	private static Predicate getEqualPredicate(CriteriaBuilder cb, Path path, String value) throws InvalidDataException {
-		if(isPathTypeBoolean(path)) {
+	private static Predicate getEqualPredicate(CriteriaBuilder cb, Path path, String field, String value) throws InvalidDataException {
+		if(isPathTypeString(path)) {
+			return cb.equal(path, value);
+		}
+		if(isPathTypeInteger(path)) {
+			return cb.equal(path, toInteger(value));
+		}
+		else if(isPathTypeBoolean(path)) {
 			return cb.equal(path, BooleanUtils.toBoolean(value));
 		}
 		else if(isPathTypeLocalDateTime(path)) {
 			return cb.equal(path, toLocalDateTime(value));
 		}
+		else if(isPathTypeLocalDate(path)) {
+			return cb.equal(path, toLocalDate(value));
+		}
 		else {
-			return cb.equal(path, value);
+			throw new InvalidDataException("The predicate [=] can not be used on field [" + field + "]");
 		}
 	}
 
-	private static Predicate getLikePredicate(CriteriaBuilder cb, Path path, String value) {
-		if(isPathTypeBoolean(path)) {
+	private static Predicate getLikePredicate(CriteriaBuilder cb, Path path, String field, String value) throws InvalidDataException {
+		if(isPathTypeString(path)) {
+			return cb.like(path, "%" + value + "%");
+		}
+		if(isPathTypeInteger(path)) {
+			return cb.like(path.as(String.class), "%" + toInteger(value) + "%");
+		}
+		else if(isPathTypeBoolean(path)) {
 			return cb.like(path, "%" + BooleanUtils.toBoolean(value) + "%");
 		}
 		else {
-			return cb.like(path, "%" + value + "%");
+			throw new InvalidDataException("The predicate [~] can not be used on field [" + field + "]");
 		}
 	}
 
@@ -341,9 +401,19 @@ public class Filterer {
 		return StringUtils.equals(segment, PREDICATE_CON);
 	}
 
+	//CONVERTERS
 	private static LocalDateTime toLocalDateTime(String value) throws InvalidDataException {
 		try {
 			return ZonedDateTime.parse(value).toLocalDateTime();
+		}
+		catch(Exception e) {
+			throw new InvalidDataException("Value: [" + value + "] is not a valid datetime");
+		}
+	}
+
+	private static LocalDate toLocalDate(String value) throws InvalidDataException {
+		try {
+			return LocalDate.parse(value);
 		}
 		catch(Exception e) {
 			throw new InvalidDataException("Value: [" + value + "] is not a valid date");

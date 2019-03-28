@@ -3,7 +3,7 @@ package org.ricone.api.oneroster.request.demographics;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ricone.api.core.model.v1p1.QDemographic;
+import org.ricone.api.core.model.oneroster.QDemographic;
 import org.ricone.api.oneroster.component.BaseMapper;
 import org.ricone.api.oneroster.model.*;
 import org.springframework.stereotype.Component;
@@ -53,7 +53,7 @@ class DemographicMapper extends BaseMapper<QDemographic, Demographic, Demographi
 
     @Override protected Metadata mapMetadata(QDemographic instance) {
         Metadata metadata = new Metadata();
-        metadata.getAdditionalProperties().put("ricone.schoolYear", instance.getSourcedSchoolYear());
+        metadata.getAdditionalProperties().put("ricone.schoolYear", instance.getSourcedSchoolYear().toString());
         metadata.getAdditionalProperties().put("ricone.districtId", instance.getDistrictId());
         return metadata;
     }

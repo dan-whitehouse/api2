@@ -1,4 +1,4 @@
-package org.ricone.api.core.model.v1p1;
+package org.ricone.api.core.model.oneroster;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -6,13 +6,13 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "onerosterv1p1_userorg")
+@Table(name = "onerosterv1p1_userclass")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class QUserOrg implements java.io.Serializable {
+public class QUserClass implements java.io.Serializable {
 	private static final long serialVersionUID = -2033689116210795367L;
 
-	@Column(name = "UserOrgId", unique = true, nullable = false, length = 64)
-	@Id private String userOrgId;
+	@Column(name = "UserClassId", unique = true, nullable = false, length = 64)
+	@Id private String userClassId;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumns({
@@ -23,26 +23,34 @@ public class QUserOrg implements java.io.Serializable {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumns({
+			@JoinColumn(name = "ClassId", referencedColumnName = "sourcedId", nullable = false),
+			@JoinColumn(name = "ClassSchoolYear", referencedColumnName = "sourcedSchoolYear", nullable = false)
+	})
+	private QClass clazz;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumns({
 			@JoinColumn(name = "OrgId", referencedColumnName = "sourcedId", nullable = false),
 			@JoinColumn(name = "OrgSchoolYear", referencedColumnName = "sourcedSchoolYear", nullable = false)
 	})
 	private QOrg org;
 
-	public QUserOrg() {
+	public QUserClass() {
 	}
 
-	public QUserOrg(String userOrgId, QUser user, QOrg org) {
-		this.userOrgId = userOrgId;
+	public QUserClass(String userClassId, QUser user, QClass clazz, QOrg org) {
+		this.userClassId = userClassId;
 		this.user = user;
+		this.clazz = clazz;
 		this.org = org;
 	}
 
-	public String getUserOrgId() {
-		return userOrgId;
+	public String getUserClassId() {
+		return userClassId;
 	}
 
-	public void setUserOrgId(String userOrgId) {
-		this.userOrgId = userOrgId;
+	public void setUserClassId(String userClassId) {
+		this.userClassId = userClassId;
 	}
 
 	public QUser getUser() {
@@ -51,6 +59,14 @@ public class QUserOrg implements java.io.Serializable {
 
 	public void setUser(QUser user) {
 		this.user = user;
+	}
+
+	public QClass getClazz() {
+		return clazz;
+	}
+
+	public void setClazz(QClass clazz) {
+		this.clazz = clazz;
 	}
 
 	public QOrg getOrg() {

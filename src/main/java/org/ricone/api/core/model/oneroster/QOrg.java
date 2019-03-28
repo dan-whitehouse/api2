@@ -1,4 +1,4 @@
-package org.ricone.api.core.model.v1p1;
+package org.ricone.api.core.model.oneroster;
 
 import org.hibernate.annotations.*;
 import org.hibernate.annotations.Cache;
@@ -8,7 +8,6 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
 import java.util.HashSet;
 import java.util.Set;
 

@@ -1,6 +1,6 @@
 package org.ricone.api.oneroster.request.users;
 
-import org.ricone.api.core.model.v1p1.QUser;
+import org.ricone.api.core.model.oneroster.QUser;
 import org.ricone.api.oneroster.component.RequestData;
 
 import java.util.List;

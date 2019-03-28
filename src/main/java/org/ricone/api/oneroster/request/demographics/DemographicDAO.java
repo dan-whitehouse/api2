@@ -1,6 +1,6 @@
 package org.ricone.api.oneroster.request.demographics;
 
-import org.ricone.api.core.model.v1p1.QDemographic;
+import org.ricone.api.core.model.oneroster.QDemographic;
 import org.ricone.api.oneroster.component.RequestData;
 
 import java.util.List;

@@ -1,4 +1,4 @@
-package org.ricone.api.core.model.v1p1;
+package org.ricone.api.core.model.oneroster;
 
 import java.io.Serializable;
 

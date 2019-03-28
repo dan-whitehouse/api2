@@ -2,7 +2,7 @@ package org.ricone.api.oneroster.request.enrollments;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ricone.api.core.model.v1p1.QEnrollment;
+import org.ricone.api.core.model.oneroster.QEnrollment;
 import org.ricone.api.oneroster.component.BaseMapper;
 import org.ricone.api.oneroster.model.*;
 import org.ricone.api.oneroster.util.MappingUtil;
@@ -46,7 +46,7 @@ class EnrollmentMapper extends BaseMapper<QEnrollment, Enrollment, EnrollmentsRe
 
     @Override protected Metadata mapMetadata(QEnrollment instance) {
         Metadata metadata = new Metadata();
-        metadata.getAdditionalProperties().put("ricone.schoolYear", instance.getSourcedSchoolYear());
+        metadata.getAdditionalProperties().put("ricone.schoolYear", instance.getSourcedSchoolYear().toString());
         metadata.getAdditionalProperties().put("ricone.districtId", instance.getDistrictId());
         return metadata;
     }

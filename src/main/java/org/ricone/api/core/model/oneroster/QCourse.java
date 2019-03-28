@@ -1,4 +1,4 @@
-package org.ricone.api.core.model.v1p1;
+package org.ricone.api.core.model.oneroster;
 
 import org.hibernate.annotations.*;
 import org.hibernate.annotations.Cache;
@@ -7,18 +7,16 @@ import javax.persistence.*;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "onerosterv1p1_academicsession")
+@Table(name = "onerosterv1p1_course")
 @IdClass(SourcedComposite.class)
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @BatchSize(size = 100)
-public class QAcademicSession implements Serializable {
+public class QCourse implements Serializable {
 	private static final long serialVersionUID = -2620417938122940193L;
 
 	@Column(name = "SourcedId", unique = true, nullable = false, length = 64)
@@ -36,28 +34,27 @@ public class QAcademicSession implements Serializable {
 	@Column(name = "DistrictId", length = 30)
 	private String districtId;
 
-	@Column(name = "Title", length = 1000)
+	@Column(name = "Title", length = 8)
 	private String title;
 
-	@Column(name = "Type", length = 10)
-	private String type;
+	@Column(name = "CourseCode", length = 75)
+	private String courseCode;
 
-	@Column(name = "SchoolYear", length = 50)
-	private Integer schoolYear;
+	@Column(name = "Grades", length = 50)
+	private String grades;
 
-	@Column(name = "BeginDate", length = 40)
-	private LocalDate beginDate;
+	@Column(name = "Subjects", length = 40)
+	private String subjects;
 
-	@Column(name = "EndDate", length = 40)
-	private LocalDate endDate;
+	@Column(name = "SubjectCodes", length = 40)
+	private String subjectCodes;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumns({
-			@JoinColumn(name = "AcademicSessionId"),
-			@JoinColumn(name = "AcademicSessionSchoolYear")
+			@JoinColumn(name = "AcademicSessionId", referencedColumnName = "sourcedId"),
+			@JoinColumn(name = "AcademicSessionSchoolYear", referencedColumnName = "sourcedSchoolYear")
 	})
 	private QAcademicSession academicSession;
-
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumns({
@@ -66,27 +63,27 @@ public class QAcademicSession implements Serializable {
 	})
 	private QOrg org;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "academicSession")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "course")
 	@Fetch(FetchMode.SELECT) @BatchSize(size = 100)
-	private Set<QAcademicSessionChild> children = new HashSet<>();
+	private Set<QClass> classes = new HashSet<>();
 
-	public QAcademicSession() {
+	public QCourse() {
 	}
 
-	public QAcademicSession(String sourcedId, Integer sourcedSchoolYear, String status, LocalDateTime dateLastModified, String districtId, String title, String type, Integer schoolYear, LocalDate beginDate, LocalDate endDate, QAcademicSession academicSession, QOrg org, Set<QAcademicSessionChild> children) {
+	public QCourse(String sourcedId, Integer sourcedSchoolYear, String status, LocalDateTime dateLastModified, String districtId, String title, String courseCode, String grades, String subjects, String subjectCodes, QAcademicSession academicSession, QOrg org, Set<QClass> classes) {
 		this.sourcedId = sourcedId;
 		this.sourcedSchoolYear = sourcedSchoolYear;
 		this.status = status;
 		this.dateLastModified = dateLastModified;
 		this.districtId = districtId;
 		this.title = title;
-		this.type = type;
-		this.schoolYear = schoolYear;
-		this.beginDate = beginDate;
-		this.endDate = endDate;
+		this.courseCode = courseCode;
+		this.grades = grades;
+		this.subjects = subjects;
+		this.subjectCodes = subjectCodes;
 		this.academicSession = academicSession;
 		this.org = org;
-		this.children = children;
+		this.classes = classes;
 	}
 
 	public String getSourcedId() {
@@ -137,36 +134,36 @@ public class QAcademicSession implements Serializable {
 		this.title = title;
 	}
 
-	public String getType() {
-		return type;
+	public String getCourseCode() {
+		return courseCode;
 	}
 
-	public void setType(String type) {
-		this.type = type;
+	public void setCourseCode(String courseCode) {
+		this.courseCode = courseCode;
 	}
 
-	public Integer getSchoolYear() {
-		return schoolYear;
+	public String getGrades() {
+		return grades;
 	}
 
-	public void setSchoolYear(Integer schoolYear) {
-		this.schoolYear = schoolYear;
+	public void setGrades(String grades) {
+		this.grades = grades;
 	}
 
-	public LocalDate getBeginDate() {
-		return beginDate;
+	public String getSubjects() {
+		return subjects;
 	}
 
-	public void setBeginDate(LocalDate beginDate) {
-		this.beginDate = beginDate;
+	public void setSubjects(String subjects) {
+		this.subjects = subjects;
 	}
 
-	public LocalDate getEndDate() {
-		return endDate;
+	public String getSubjectCodes() {
+		return subjectCodes;
 	}
 
-	public void setEndDate(LocalDate endDate) {
-		this.endDate = endDate;
+	public void setSubjectCodes(String subjectCodes) {
+		this.subjectCodes = subjectCodes;
 	}
 
 	public QAcademicSession getAcademicSession() {
@@ -185,11 +182,11 @@ public class QAcademicSession implements Serializable {
 		this.org = org;
 	}
 
-	public Set<QAcademicSessionChild> getChildren() {
-		return children;
+	public Set<QClass> getClasses() {
+		return classes;
 	}
 
-	public void setChildren(Set<QAcademicSessionChild> children) {
-		this.children = children;
+	public void setClasses(Set<QClass> classes) {
+		this.classes = classes;
 	}
 }

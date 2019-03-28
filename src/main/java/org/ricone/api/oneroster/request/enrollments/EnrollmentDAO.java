@@ -1,6 +1,6 @@
 package org.ricone.api.oneroster.request.enrollments;
 
-import org.ricone.api.core.model.v1p1.QEnrollment;
+import org.ricone.api.core.model.oneroster.QEnrollment;
 import org.ricone.api.oneroster.component.RequestData;
 
 import java.util.List;

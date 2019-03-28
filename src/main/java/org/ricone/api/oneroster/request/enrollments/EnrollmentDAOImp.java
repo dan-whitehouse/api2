@@ -2,7 +2,7 @@ package org.ricone.api.oneroster.request.enrollments;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ricone.api.core.model.v1p1.QEnrollment;
+import org.ricone.api.core.model.oneroster.QEnrollment;
 import org.ricone.api.oneroster.component.BaseDAO;
 import org.ricone.api.oneroster.component.RequestData;
 import org.springframework.beans.factory.annotation.Autowired;

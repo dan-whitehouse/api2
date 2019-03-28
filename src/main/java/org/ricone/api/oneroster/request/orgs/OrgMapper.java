@@ -3,14 +3,13 @@ package org.ricone.api.oneroster.request.orgs;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ricone.api.core.model.v1p1.QOrg;
+import org.ricone.api.core.model.oneroster.QOrg;
 import org.ricone.api.oneroster.component.BaseMapper;
 import org.ricone.api.oneroster.model.*;
 import org.ricone.api.oneroster.util.MappingUtil;
 import org.springframework.stereotype.Component;
 
 import java.time.ZoneId;
-import java.time.ZonedDateTime;
 
 @Component("OneRoster:Orgs:OrgMapper")
 class OrgMapper extends BaseMapper<QOrg, Org, OrgsResponse, OrgResponse> {
@@ -43,7 +42,7 @@ class OrgMapper extends BaseMapper<QOrg, Org, OrgsResponse, OrgResponse> {
 
     @Override public Metadata mapMetadata(QOrg instance) {
         Metadata metadata = new Metadata();
-        metadata.getAdditionalProperties().put("ricone.schoolYear", instance.getSourcedSchoolYear());
+        metadata.getAdditionalProperties().put("ricone.schoolYear", instance.getSourcedSchoolYear().toString());
         metadata.getAdditionalProperties().put("ricone.districtId", instance.getDistrictId());
 
         if(StringUtils.isNotBlank(instance.getLine1())) {

@@ -2,9 +2,9 @@ package org.ricone.api.oneroster.request.classes;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ricone.api.core.model.v1p1.QClass;
-import org.ricone.api.core.model.v1p1.QClassAcademicSession;
-import org.ricone.api.core.model.v1p1.QUserClass;
+import org.ricone.api.core.model.oneroster.QClass;
+import org.ricone.api.core.model.oneroster.QClassAcademicSession;
+import org.ricone.api.core.model.oneroster.QUserClass;
 import org.ricone.api.oneroster.component.BaseDAO;
 import org.ricone.api.oneroster.component.RequestData;
 import org.springframework.beans.factory.annotation.Autowired;

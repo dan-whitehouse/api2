@@ -1,6 +1,6 @@
 package org.ricone.api.oneroster.request.orgs;
 
-import org.ricone.api.core.model.v1p1.QOrg;
+import org.ricone.api.core.model.oneroster.QOrg;
 import org.ricone.api.oneroster.component.RequestData;
 
 import java.util.List;

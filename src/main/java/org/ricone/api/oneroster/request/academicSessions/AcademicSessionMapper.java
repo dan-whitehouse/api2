@@ -2,7 +2,7 @@ package org.ricone.api.oneroster.request.academicSessions;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ricone.api.core.model.v1p1.QAcademicSession;
+import org.ricone.api.core.model.oneroster.QAcademicSession;
 import org.ricone.api.oneroster.component.BaseMapper;
 import org.ricone.api.oneroster.model.*;
 import org.ricone.api.oneroster.util.MappingUtil;
@@ -37,17 +37,17 @@ class AcademicSessionMapper extends BaseMapper<QAcademicSession, AcademicSession
         });
 
         if(instance.getSchoolYear() != null) {
-            academicSession.setSchoolYear(instance.getSchoolYear().toString());
+            academicSession.setSchoolYear(instance.getSchoolYear());
         }
 
-        academicSession.setStartDate(instance.getBeginDate());
+        academicSession.setStartDate(instance.getStartDate());
         academicSession.setEndDate(instance.getEndDate());
         return academicSession;
     }
 
     @Override protected Metadata mapMetadata(QAcademicSession instance) {
         Metadata metadata = new Metadata();
-        metadata.getAdditionalProperties().put("ricone.schoolYear", instance.getSourcedSchoolYear());
+        metadata.getAdditionalProperties().put("ricone.schoolYear", instance.getSourcedSchoolYear().toString());
         metadata.getAdditionalProperties().put("ricone.districtId", instance.getDistrictId());
         return metadata;
     }

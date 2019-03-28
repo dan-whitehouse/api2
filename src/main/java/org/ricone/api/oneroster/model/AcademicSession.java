@@ -3,6 +3,8 @@ package org.ricone.api.oneroster.model;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import io.swagger.annotations.ApiModelProperty;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -30,7 +32,8 @@ public class AcademicSession extends Base implements Serializable {
 	@JsonProperty("children")
 	private List<GUIDRef> children = new ArrayList<>();
 	@JsonProperty("schoolYear")
-	private String schoolYear;
+	@JsonSerialize(using = ToStringSerializer.class)
+	private Integer schoolYear;
 
 	/**
 	 * No args constructor for use in serialization
@@ -47,7 +50,7 @@ public class AcademicSession extends Base implements Serializable {
 	 * @param endDate
 	 * @param type
 	 */
-	public AcademicSession(String title, LocalDate startDate, LocalDate endDate, SessionType type, GUIDRef parent, List<GUIDRef> children, String schoolYear) {
+	public AcademicSession(String title, LocalDate startDate, LocalDate endDate, SessionType type, GUIDRef parent, List<GUIDRef> children, Integer schoolYear) {
 		super();
 		this.title = title;
 		this.startDate = startDate;
@@ -119,12 +122,12 @@ public class AcademicSession extends Base implements Serializable {
 	}
 
 	@JsonProperty("schoolYear")
-	public String getSchoolYear() {
+	public Integer getSchoolYear() {
 		return schoolYear;
 	}
 
 	@JsonProperty("schoolYear")
-	public void setSchoolYear(String schoolYear) {
+	public void setSchoolYear(Integer schoolYear) {
 		this.schoolYear = schoolYear;
 	}
 }

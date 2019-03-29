@@ -3,9 +3,6 @@ package org.ricone.api.oneroster.model;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import org.ricone.api.oneroster.model.serializer.StringBooleanSerializer;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -17,7 +14,6 @@ public class Enrollment extends Base implements Serializable {
 	@JsonProperty("role")
 	private RoleType role;
 	@JsonProperty("primary")
-	@JsonSerialize(using=StringBooleanSerializer.class)
 	private Boolean primary;
 	@JsonProperty("user")
 	private GUIDRef user;
@@ -26,10 +22,8 @@ public class Enrollment extends Base implements Serializable {
 	@JsonProperty("school")
 	private GUIDRef school;
 	@JsonProperty("beginDate")
-	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
 	private LocalDate beginDate;
 	@JsonProperty("endDate")
-	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
 	private LocalDate endDate;
 
 	/**

@@ -3,8 +3,6 @@ package org.ricone.api.oneroster.model;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import org.ricone.api.oneroster.model.serializer.StringBooleanSerializer;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
@@ -15,30 +13,22 @@ import java.time.LocalDate;
 public class Demographic extends Base implements Serializable {
 	private final static long serialVersionUID = 2904493540623173207L;
 	@JsonProperty("birthDate")
-	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
 	private LocalDate birthDate;
 	@JsonProperty("sex")
 	private Gender sex;
 	@JsonProperty("americanIndianOrAlaskaNative")
-	@JsonSerialize(using=StringBooleanSerializer.class)
 	private Boolean americanIndianOrAlaskaNative;
 	@JsonProperty("asian")
-	@JsonSerialize(using=StringBooleanSerializer.class)
 	private Boolean asian;
 	@JsonProperty("blackOrAfricanAmerican")
-	@JsonSerialize(using=StringBooleanSerializer.class)
 	private Boolean blackOrAfricanAmerican;
 	@JsonProperty("nativeHawaiianOrOtherPacificIslander")
-	@JsonSerialize(using=StringBooleanSerializer.class)
 	private Boolean nativeHawaiianOrOtherPacificIslander;
 	@JsonProperty("white")
-	@JsonSerialize(using=StringBooleanSerializer.class)
 	private Boolean white;
 	@JsonProperty("demographicRaceTwoOrMoreRaces")
-	@JsonSerialize(using=StringBooleanSerializer.class)
 	private Boolean demographicRaceTwoOrMoreRaces;
 	@JsonProperty("hispanicOrLatinoEthnicity")
-	@JsonSerialize(using=StringBooleanSerializer.class)
 	private Boolean hispanicOrLatinoEthnicity;
 	@JsonProperty("countryOfBirthCode")
 	private String countryOfBirthCode;

@@ -82,7 +82,7 @@ class UserMapper extends BaseMapper<QUser, User, UsersResponse, UserResponse> {
 
     @Override protected Metadata mapMetadata(QUser instance) {
         Metadata metadata = new Metadata();
-        metadata.getAdditionalProperties().put("ricone.schoolYear", instance.getSourcedSchoolYear().toString());
+        metadata.getAdditionalProperties().put("ricone.schoolYear", instance.getSourcedSchoolYear());
         metadata.getAdditionalProperties().put("ricone.districtId", instance.getDistrictId());
         return metadata;
     }

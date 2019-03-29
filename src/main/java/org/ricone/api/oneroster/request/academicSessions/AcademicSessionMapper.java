@@ -47,7 +47,7 @@ class AcademicSessionMapper extends BaseMapper<QAcademicSession, AcademicSession
 
     @Override protected Metadata mapMetadata(QAcademicSession instance) {
         Metadata metadata = new Metadata();
-        metadata.getAdditionalProperties().put("ricone.schoolYear", instance.getSourcedSchoolYear().toString());
+        metadata.getAdditionalProperties().put("ricone.schoolYear", instance.getSourcedSchoolYear());
         metadata.getAdditionalProperties().put("ricone.districtId", instance.getDistrictId());
         return metadata;
     }

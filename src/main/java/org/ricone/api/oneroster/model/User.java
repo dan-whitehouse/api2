@@ -3,8 +3,6 @@ package org.ricone.api.oneroster.model;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import org.ricone.api.oneroster.model.serializer.StringBooleanSerializer;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -19,7 +17,6 @@ public class User extends Base implements Serializable {
 	@JsonProperty("userIds")
 	private List<UserId> userIds = new ArrayList<UserId>();
 	@JsonProperty("enabledUser")
-	@JsonSerialize(using = StringBooleanSerializer.class)
 	private Boolean enabledUser;
 	@JsonProperty("givenName")
 	private String givenName;

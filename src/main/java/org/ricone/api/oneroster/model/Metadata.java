@@ -17,7 +17,7 @@ public class Metadata implements Serializable {
 	@JsonProperty("http://www.nbrs.org")
 	private String httpWwwNbrsOrg;
 	@JsonIgnore
-	private LinkedHashMap<String, String> additionalProperties = new LinkedHashMap<>();
+	private LinkedHashMap<String, Object> additionalProperties = new LinkedHashMap<>();
 	private final static long serialVersionUID = -210985162537038327L;
 
 	/**
@@ -69,12 +69,12 @@ public class Metadata implements Serializable {
 	}
 
 	@JsonAnyGetter
-	public Map<String, String> getAdditionalProperties() {
+	public Map<String, Object> getAdditionalProperties() {
 		return this.additionalProperties;
 	}
 
 	@JsonAnySetter
-	public void setAdditionalProperty(String name, String value) {
+	public void setAdditionalProperty(String name, Object value) {
 		this.additionalProperties.put(name, value);
 	}
 }

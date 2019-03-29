@@ -68,7 +68,7 @@ class CourseMapper extends BaseMapper<QCourse, Course, CoursesResponse, CourseRe
 
     @Override protected Metadata mapMetadata(QCourse instance) {
         Metadata metadata = new Metadata();
-        metadata.getAdditionalProperties().put("ricone.schoolYear", instance.getSourcedSchoolYear().toString());
+        metadata.getAdditionalProperties().put("ricone.schoolYear", instance.getSourcedSchoolYear());
         metadata.getAdditionalProperties().put("ricone.districtId", instance.getDistrictId());
         return metadata;
     }

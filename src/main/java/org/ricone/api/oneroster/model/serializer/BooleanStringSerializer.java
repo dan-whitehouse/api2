@@ -3,10 +3,15 @@ package org.ricone.api.oneroster.model.serializer;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 
 import java.io.IOException;
 
-public class StringBooleanSerializer extends JsonSerializer<Boolean> {
+public class BooleanStringSerializer extends StdSerializer<Boolean> {
+
+    public BooleanStringSerializer(Class<Boolean> t) {
+        super(t);
+    }
 
     @Override
     public void serialize(Boolean bool, JsonGenerator generator, SerializerProvider provider) throws IOException {

@@ -42,7 +42,7 @@ class OrgMapper extends BaseMapper<QOrg, Org, OrgsResponse, OrgResponse> {
 
     @Override public Metadata mapMetadata(QOrg instance) {
         Metadata metadata = new Metadata();
-        metadata.getAdditionalProperties().put("ricone.schoolYear", instance.getSourcedSchoolYear().toString());
+        metadata.getAdditionalProperties().put("ricone.schoolYear", instance.getSourcedSchoolYear());
         metadata.getAdditionalProperties().put("ricone.districtId", instance.getDistrictId());
 
         if(StringUtils.isNotBlank(instance.getLine1())) {

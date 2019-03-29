@@ -20,7 +20,6 @@ public abstract class Base implements Serializable {
 	@JsonProperty("status")
 	private StatusType status;
 	@JsonProperty("dateLastModified")
-	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone="America/New_York")
 	private ZonedDateTime dateLastModified;
 	@JsonProperty("metadata")
 	private Metadata metadata;

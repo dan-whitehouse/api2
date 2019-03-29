@@ -20,10 +20,8 @@ public class AcademicSession extends Base implements Serializable {
 	@JsonProperty("title")
 	private String title;
 	@JsonProperty("startDate")
-	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
 	private LocalDate startDate;
 	@JsonProperty("endDate")
-	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
 	private LocalDate endDate;
 	@JsonProperty("type")
 	private SessionType type;
@@ -32,7 +30,6 @@ public class AcademicSession extends Base implements Serializable {
 	@JsonProperty("children")
 	private List<GUIDRef> children = new ArrayList<>();
 	@JsonProperty("schoolYear")
-	@JsonSerialize(using = ToStringSerializer.class)
 	private Integer schoolYear;
 
 	/**

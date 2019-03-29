@@ -46,7 +46,7 @@ class EnrollmentMapper extends BaseMapper<QEnrollment, Enrollment, EnrollmentsRe
 
     @Override protected Metadata mapMetadata(QEnrollment instance) {
         Metadata metadata = new Metadata();
-        metadata.getAdditionalProperties().put("ricone.schoolYear", instance.getSourcedSchoolYear().toString());
+        metadata.getAdditionalProperties().put("ricone.schoolYear", instance.getSourcedSchoolYear());
         metadata.getAdditionalProperties().put("ricone.districtId", instance.getDistrictId());
         return metadata;
     }

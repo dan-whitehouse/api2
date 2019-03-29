@@ -72,7 +72,7 @@ class UserDAOImp extends BaseDAO implements UserDAO {
 			//cb.notEqual(from.get(ROLE), "other")
 		);
 
-		select.distinct(false);
+		select.distinct(true);
 		select.select(from);
 		select.where(getWhereClause(metadata, cb, filterer, methodSpecificPredicate));
 		select.orderBy(getSortOrder(metadata, cb, from));

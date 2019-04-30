@@ -19,13 +19,12 @@ import javax.persistence.*;
 public class StudentAddress implements java.io.Serializable {
     private static final long serialVersionUID = -526601546736413275L;
 
-    @Id
     @Column(name = "StudentAddressRefId", unique = true, nullable = false, length = 64)
-    private String studentAddressRefId;
+    @Id private String studentAddressRefId;
 
-    @Id
+
     @Column(name = "StudentAddressSchoolYear", nullable = false, length = 6)
-    private Integer studentAddressSchoolYear;
+    @Id private Integer studentAddressSchoolYear;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumns({ @JoinColumn(name = "StudentRefId", referencedColumnName = "studentRefId", nullable = false),

@@ -13,8 +13,8 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.List;
 
-@Service
 @Transactional
+@Service("XPress:XCalendars:XCalendarService")
 public class XCalendarServiceImp implements XCalendarService {
     @Autowired private XCalendarDAO dao;
     @Autowired private XCalendarMapper mapper;

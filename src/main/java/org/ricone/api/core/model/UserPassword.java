@@ -14,19 +14,16 @@ public class UserPassword implements Serializable {
 	private static final long serialVersionUID = 8607824899883665976L;
 
 	@Column(name = "entityRefId", nullable = false)
-	@Id
-    private String entityRefId;
+	@Id private String entityRefId;
 	
 	/*@Column(name = "entitySchoolYear", length = 6)
 	@Id private Integer entitySchoolYear;*/
 	
 	@Column(name = "entityType", nullable = false)
-	@Id
-    private String entityType;
+	@Id private String entityType;
 	
 	@Column(name = "appId", nullable = false)
-	@Id
-    private String appId;
+	@Id private String appId;
 
 	@Column(name = "tempPassword", nullable = false)
 	private String tempPassword;

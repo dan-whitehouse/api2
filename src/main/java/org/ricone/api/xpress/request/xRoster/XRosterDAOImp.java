@@ -17,7 +17,7 @@ import javax.persistence.Query;
 import javax.persistence.criteria.*;
 import java.util.List;
 
-@Repository
+@Repository("XPress:XRosters:XRosterDAO")
 @SuppressWarnings({"unchecked", "unused", "RedundantTypeArguments"})
 public class XRosterDAOImp extends BaseDAO implements XRosterDAO {
 	@PersistenceContext private EntityManager em;

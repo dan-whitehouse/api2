@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Iterator;
 
-@Component("XCourseFilterer")
+@Component("XPress:XCourses:XCourseFilterer")
 public class XCourseFilterer {
     public XCourseFilterer() {
     }

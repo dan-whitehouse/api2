@@ -19,7 +19,7 @@ import javax.persistence.Query;
 import javax.persistence.criteria.*;
 import java.util.List;
 
-@Repository
+@Repository("XPress:XContacts:XContactDAO")
 @SuppressWarnings({"unchecked", "unused", "RedundantTypeArguments"})
 public class XContactDAOImp extends BaseDAO implements XContactDAO {
 	@PersistenceContext private EntityManager em;

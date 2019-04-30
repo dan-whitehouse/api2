@@ -14,7 +14,7 @@ import java.util.stream.Stream;
 public class Metadata implements Serializable {
 
     @JsonProperty("schoolYear")
-    private String schoolYear;
+    private Integer schoolYear;
     private final static long serialVersionUID = -7504765401152453898L;
 
     /**
@@ -26,18 +26,18 @@ public class Metadata implements Serializable {
     /**
      * @param schoolYear
      */
-    public Metadata(String schoolYear) {
+    public Metadata(Integer schoolYear) {
         super();
         this.schoolYear = schoolYear;
     }
 
     @JsonProperty("schoolYear")
-    public String getSchoolYear() {
+    public Integer getSchoolYear() {
         return schoolYear;
     }
 
     @JsonProperty("schoolYear")
-    public void setSchoolYear(String schoolYear) {
+    public void setSchoolYear(Integer schoolYear) {
         this.schoolYear = schoolYear;
     }
 

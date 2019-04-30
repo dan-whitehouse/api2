@@ -13,8 +13,8 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.List;
 
-@Service
 @Transactional
+@Service("XPress:XContacts:XContactService")
 public class XContactServiceImp implements XContactService {
     @Autowired private XContactDAO dao;
     @Autowired private XContactMapper mapper;

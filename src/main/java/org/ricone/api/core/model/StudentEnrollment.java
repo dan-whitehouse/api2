@@ -7,6 +7,7 @@ import org.ricone.api.core.model.composite.StudentEnrollmentComposite;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -16,7 +17,7 @@ import java.util.Set;
 @IdClass(StudentEnrollmentComposite.class)
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @BatchSize(size = 100)
-public class StudentEnrollment implements java.io.Serializable {
+public class StudentEnrollment implements Serializable {
     private static final long serialVersionUID = -7894349036867529032L;
 
     @Column(name = "StudentEnrollmentRefId", unique = true, nullable = false, length = 64)

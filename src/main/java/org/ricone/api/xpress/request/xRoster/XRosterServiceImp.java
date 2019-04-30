@@ -13,8 +13,8 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.List;
 
-@Service
 @Transactional
+@Service("XPress:XRosters:XRosterService")
 public class XRosterServiceImp implements XRosterService {
     @Autowired private XRosterDAO dao;
     @Autowired private XRosterMapper mapper;

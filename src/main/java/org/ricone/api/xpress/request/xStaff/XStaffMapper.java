@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 
-@Component("XStaffMapper")
+@Component("XPress:XStaffs:XStaffMapper")
 public class XStaffMapper {
 
     private final String LOCAL_ID = "District";
@@ -122,6 +122,9 @@ public class XStaffMapper {
                 xStaff.setOtherAssignments(otherAssignments);
             }
 
+            //Metadata
+            xStaff.setMetadata(mapMetadata(instance));
+
             return xStaff;
         }
         catch (Exception ex) {
@@ -199,5 +202,9 @@ public class XStaffMapper {
             return null;
         }
         return email;
+    }
+
+    private Metadata mapMetadata(Staff staff) {
+        return new Metadata(staff.getStaffSchoolYear());
     }
 }

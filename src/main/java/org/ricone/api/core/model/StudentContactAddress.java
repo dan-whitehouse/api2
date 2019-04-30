@@ -14,12 +14,10 @@ public class StudentContactAddress implements java.io.Serializable {
 	private static final long serialVersionUID = -4100803613028097486L;
 	
 	@Column(name = "StudentContactAddressRefId", unique = true, nullable = false, length = 64)
-	@Id
-    private String studentContactAddressRefId;
+	@Id private String studentContactAddressRefId;
 	
 	@Column(name = "StudentContactAddressSchoolYear", length = 6)
-	@Id
-    private Integer studentContactAddressSchoolYear;
+	@Id private Integer studentContactAddressSchoolYear;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumns({

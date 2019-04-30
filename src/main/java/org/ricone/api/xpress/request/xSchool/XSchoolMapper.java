@@ -2,6 +2,7 @@ package org.ricone.api.xpress.request.xSchool;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
+import org.hibernate.MappingException;
 import org.ricone.api.core.model.School;
 import org.ricone.api.core.model.SchoolGrade;
 import org.ricone.api.core.model.SchoolIdentifier;
@@ -14,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-@Component("XSchoolMapper")
+@Component("XPress:XSchools:XSchoolMapper")
 public class XSchoolMapper {
 
     private final String LOCAL_ID = "LEA";
@@ -51,70 +52,79 @@ public class XSchoolMapper {
 
 
     public XSchool map(School instance, String districtId) {
-        XSchool xSchool = new XSchool();
-        xSchool.setDistrictId(districtId); //Required by Filtering
-        xSchool.setRefId(instance.getSchoolRefId());
-        xSchool.setSchoolName(instance.getSchoolName());
-        xSchool.setLeaRefId(instance.getLea().getLeaRefId());
+        try {
+            XSchool xSchool = new XSchool();
+            xSchool.setDistrictId(districtId); //Required by Filtering
+            xSchool.setRefId(instance.getSchoolRefId());
+            xSchool.setSchoolName(instance.getSchoolName());
+            xSchool.setLeaRefId(instance.getLea().getLeaRefId());
 
-        //Address
-        Address address = mapAddress(instance);
-        if(address != null) {
-            xSchool.setAddress(address);
-        }
+            //Address
+            Address address = mapAddress(instance);
+            if(address != null) {
+                xSchool.setAddress(address);
+            }
 
-        //PhoneNumber - Primary
-        List<PhoneNumber> phoneNumbers = new ArrayList<>();
-        for (SchoolTelephone telephone : instance.getSchoolTelephones()) {
-            PhoneNumber phone = mapPhone(telephone);
-            if(phone != null) {
-                if(BooleanUtils.isTrue(telephone.getPrimaryTelephoneNumberIndicator())) {
-                    xSchool.setPhoneNumber(phone);
+            //PhoneNumber - Primary
+            List<PhoneNumber> phoneNumbers = new ArrayList<>();
+            for (SchoolTelephone telephone : instance.getSchoolTelephones()) {
+                PhoneNumber phone = mapPhone(telephone);
+                if(phone != null) {
+                    if(BooleanUtils.isTrue(telephone.getPrimaryTelephoneNumberIndicator())) {
+                        xSchool.setPhoneNumber(phone);
+                    }
+                    else {
+                        phoneNumbers.add(phone);
+                    }
+                }
+            }
+
+            //PhoneNumbers - Other
+            if(CollectionUtils.isNotEmpty(phoneNumbers)) {
+                OtherPhoneNumbers otherPhoneNumbers = new OtherPhoneNumbers();
+                otherPhoneNumbers.setPhoneNumber(phoneNumbers);
+                xSchool.setOtherPhoneNumbers(otherPhoneNumbers);
+            }
+
+            //Grade Levels
+            GradeLevels gradeLevels = mapGrades(instance.getSchoolGrades());
+            if(gradeLevels != null) {
+                xSchool.setGradeLevels(gradeLevels);
+            }
+
+            //Identifiers
+            List<OtherId> otherIdList = new ArrayList<>();
+            for (SchoolIdentifier id : instance.getSchoolIdentifiers()) {
+                if(LOCAL_ID.equals(id.getIdentificationSystemCode())) {
+                    xSchool.setLocalId(id.getSchoolId());
+                }
+                else if(STATE_ID.equals(id.getIdentificationSystemCode())) {
+                    xSchool.setStateProvinceId(id.getSchoolId());
                 }
                 else {
-                    phoneNumbers.add(phone);
+                    OtherId otherId = mapOtherId(id);
+                    if(otherId != null) {
+                        otherIdList.add(otherId);
+                    }
                 }
             }
-        }
 
-        //PhoneNumbers - Other
-        if(CollectionUtils.isNotEmpty(phoneNumbers)) {
-            OtherPhoneNumbers otherPhoneNumbers = new OtherPhoneNumbers();
-            otherPhoneNumbers.setPhoneNumber(phoneNumbers);
-            xSchool.setOtherPhoneNumbers(otherPhoneNumbers);
-        }
-
-        //Grade Levels
-        GradeLevels gradeLevels = mapGrades(instance.getSchoolGrades());
-        if(gradeLevels != null) {
-            xSchool.setGradeLevels(gradeLevels);
-        }
-
-        //Identifiers
-        List<OtherId> otherIdList = new ArrayList<>();
-        for (SchoolIdentifier id : instance.getSchoolIdentifiers()) {
-            if(LOCAL_ID.equals(id.getIdentificationSystemCode())) {
-                xSchool.setLocalId(id.getSchoolId());
+            //Other Identifiers
+            if(CollectionUtils.isNotEmpty(otherIdList)) {
+                OtherIds otherIds = new OtherIds();
+                otherIds.setOtherId(otherIdList);
+                xSchool.setOtherIds(otherIds);
             }
-            else if(STATE_ID.equals(id.getIdentificationSystemCode())) {
-                xSchool.setStateProvinceId(id.getSchoolId());
-            }
-            else {
-                OtherId otherId = mapOtherId(id);
-                if(otherId != null) {
-                    otherIdList.add(otherId);
-                }
-            }
-        }
 
-        //Other Identifiers
-        if(CollectionUtils.isNotEmpty(otherIdList)) {
-            OtherIds otherIds = new OtherIds();
-            otherIds.setOtherId(otherIdList);
-            xSchool.setOtherIds(otherIds);
-        }
+            //Metadata
+            xSchool.setMetadata(mapMetadata(instance));
 
-        return xSchool;
+            return xSchool;
+        }
+        catch (Exception ex) {
+            ex.printStackTrace();
+            throw new MappingException("Mapping Exception: " + ex.getLocalizedMessage());
+        }
     }
 
     private OtherId mapOtherId(SchoolIdentifier id) {
@@ -166,5 +176,9 @@ public class XSchoolMapper {
             return null;
         }
         return gradeLevels;
+    }
+
+    private Metadata mapMetadata(School school) {
+        return new Metadata(school.getSchoolSchoolYear());
     }
 }

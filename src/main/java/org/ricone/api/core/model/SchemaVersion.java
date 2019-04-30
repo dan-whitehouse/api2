@@ -3,12 +3,13 @@ package org.ricone.api.core.model;
 import org.ricone.api.core.model.composite.SchemaVersionComposite;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
 @Entity
 @Table(name = "schemaversion")
 @IdClass(SchemaVersionComposite.class)
-public class SchemaVersion implements java.io.Serializable {
+public class SchemaVersion implements Serializable {
 	private static final long serialVersionUID = -5220447978182945197L;
 	
 	@Column(name = "Major")

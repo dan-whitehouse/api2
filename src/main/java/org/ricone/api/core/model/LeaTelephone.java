@@ -5,12 +5,13 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.ricone.api.core.model.composite.LeaTelephoneComposite;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "leatelephone")
 @IdClass(LeaTelephoneComposite.class)
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class LeaTelephone implements java.io.Serializable {
+public class LeaTelephone implements Serializable {
 	private static final long serialVersionUID = -2033689116210795367L;
 
 	@Column(name = "LEATelephoneRefId", unique = true, nullable = false, length = 64)

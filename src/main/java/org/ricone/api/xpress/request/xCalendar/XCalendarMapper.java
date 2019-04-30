@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 
-@Component("XCalendarMapper")
+@Component("XPress:XCalendars:XCalendarMapper")
 public class XCalendarMapper {
 
     public XCalendarMapper() {
@@ -46,13 +46,14 @@ public class XCalendarMapper {
     }
 
     public XCalendar map(SchoolCalendar instance, String districtId) {
-        XCalendar xCalendar = new XCalendar();
         try {
+            XCalendar xCalendar = new XCalendar();
             xCalendar.setDistrictId(districtId); //Required by Filtering
             xCalendar.setRefId(instance.getSchoolCalendarRefId());
             xCalendar.setSchoolRefId(instance.getSchool().getSchoolRefId());
             xCalendar.setSchoolYear(instance.getCalendarYear());
 
+            //Sessions
             List<SessionList> sessionsList = new ArrayList<>();
             for (SchoolCalendarSession calendarSession : instance.getSchoolCalendarSessions()) {
                 SessionList sessionList = mapSessionList(calendarSession);
@@ -66,13 +67,16 @@ public class XCalendarMapper {
                 sessions.setSessionList(sessionsList);
                 xCalendar.setSessions(sessions);
             }
+
+            //Metadata
+            xCalendar.setMetadata(mapMetadata(instance));
+
+            return xCalendar;
         }
-        catch (Exception e) {
-            xCalendar = null;
-            e.printStackTrace();
-            throw new MappingException("Mapping Exception: " + e.getLocalizedMessage());
+        catch (Exception ex) {
+            ex.printStackTrace();
+            throw new MappingException("Mapping Exception: " + ex.getLocalizedMessage());
         }
-        return xCalendar;
     }
 
     private SessionList mapSessionList(SchoolCalendarSession calendarSession) {
@@ -96,5 +100,9 @@ public class XCalendarMapper {
             return null;
         }
         return sessionList;
+    }
+
+    private Metadata mapMetadata(SchoolCalendar schoolCalendar) {
+        return new Metadata(schoolCalendar.getSchoolCalendarSchoolYear());
     }
 }

@@ -13,7 +13,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 //https://stackoverflow.com/questions/44375435/spring-auto-add-x-total-count-header
 
-@ControllerAdvice
+@ControllerAdvice("XPress:XRosters:XRosterControllerAdvice")
 public class XRosterControllerAdvice implements ResponseBodyAdvice<XRostersResponse> {
 
 	@Override

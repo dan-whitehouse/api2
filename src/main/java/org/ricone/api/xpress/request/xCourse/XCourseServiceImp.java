@@ -13,8 +13,8 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.List;
 
-@Service
 @Transactional
+@Service("XPress:XCourses:XCourseService")
 public class XCourseServiceImp implements XCourseService {
     @Autowired private XCourseDAO dao;
     @Autowired private XCourseMapper mapper;

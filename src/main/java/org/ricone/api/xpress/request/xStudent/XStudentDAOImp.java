@@ -17,7 +17,7 @@ import javax.persistence.Query;
 import javax.persistence.criteria.*;
 import java.util.List;
 
-@Repository
+@Repository("XPress:XStudents:XStudentDAO")
 @SuppressWarnings({"unchecked", "unused", "RedundantTypeArguments"})
 public class XStudentDAOImp extends BaseDAO implements XStudentDAO {
 	@PersistenceContext private EntityManager em;

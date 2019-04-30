@@ -3,6 +3,7 @@ package org.ricone.api.xpress.request.xRoster;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
+import org.hibernate.MappingException;
 import org.ricone.api.core.model.*;
 import org.ricone.api.core.model.wrapper.CourseSectionWrapper;
 import org.ricone.api.xpress.model.*;
@@ -10,9 +11,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
-@Component("XRosterMapper")
+@Component("XPress:XRosters:XRosterMapper")
 public class XRosterMapper {
 
     private final String LOCAL_ID = "District";
@@ -48,12 +48,12 @@ public class XRosterMapper {
 
 
     public XRoster map(CourseSection instance, String districtId) {
-        XRoster xRoster = new XRoster();
         try {
+            XRoster xRoster = new XRoster();
             xRoster.setDistrictId(districtId); //Required by Filtering
             xRoster.setRefId(instance.getCourseSectionRefId());
 
-            /* Course & School Data */
+            //Course & School Data
             if(instance.getCourse() != null) {
                 xRoster.setCourseRefId(instance.getCourse().getCourseRefId());
                 xRoster.setCourseTitle(instance.getCourse().getTitle());
@@ -64,7 +64,7 @@ public class XRosterMapper {
                 }
             }
 
-            /* Calendar */
+            //Calendar
             if(instance.getSchoolCalendarSession() != null) {
                 if(instance.getSchoolCalendarSession().getSchoolCalendar() != null) {
                     xRoster.setSchoolYear(instance.getSchoolCalendarSession().getSchoolCalendar().getCalendarYear());
@@ -72,7 +72,7 @@ public class XRosterMapper {
                 }
             }
 
-            /* Meeting Times */
+            //Meeting Times
             if(CollectionUtils.isNotEmpty(instance.getCourseSectionSchedules())) {
                 List<MeetingTime> meetingTimeList = new ArrayList<>();
                 for (CourseSectionSchedule courseSectionSchedule : instance.getCourseSectionSchedules()) {
@@ -90,7 +90,7 @@ public class XRosterMapper {
             }
 
 
-            /* Students */
+            //Students
             if(CollectionUtils.isNotEmpty(instance.getStudentCourseSections())) {
                 List<StudentReference> studentList = new ArrayList<>();
                 for (StudentCourseSection studentCourseSection : instance.getStudentCourseSections()) {
@@ -107,7 +107,7 @@ public class XRosterMapper {
                 }
             }
 
-            /* Staff */ //TODO: There is an error in here. Line 121
+            //Staffs
             if(CollectionUtils.isNotEmpty(instance.getStaffCourseSections())) {
                 List<OtherStaff> otherStaffList = new ArrayList<>();
                 for (StaffCourseSection staffCourseSection : instance.getStaffCourseSections()) {
@@ -116,8 +116,8 @@ public class XRosterMapper {
                         if(BooleanUtils.isTrue(staffCourseSection.getTeacherOfRecord())) {
                             PrimaryStaff staff = new PrimaryStaff();
                             staff.setStaffPersonReference(staffPersonReference);
-                            staff.setTeacherOfRecord(BooleanUtils.toStringTrueFalse(staffCourseSection.getTeacherOfRecord()));
-                            staff.setPercentResponsible(Objects.toString(staffCourseSection.getContributionPercentage())); //TODO: Objects.toString() displays 'null' on output
+                            staff.setTeacherOfRecord(staffCourseSection.getTeacherOfRecord());
+                            staff.setPercentResponsible(staffCourseSection.getContributionPercentage());
 
                             if(!staff.isEmptyObject()) {
                                 xRoster.setPrimaryStaff(staff);
@@ -126,8 +126,8 @@ public class XRosterMapper {
                         else {
                             OtherStaff otherStaff = new OtherStaff();
                             otherStaff.setStaffPersonReference(staffPersonReference);
-                            otherStaff.setTeacherOfRecord(BooleanUtils.toStringTrueFalse(staffCourseSection.getTeacherOfRecord()));
-                            otherStaff.setPercentResponsible(Objects.toString(staffCourseSection.getContributionPercentage(), null)); //TODO: Objects.toString() displays 'null' on output
+                            otherStaff.setTeacherOfRecord(staffCourseSection.getTeacherOfRecord());
+                            otherStaff.setPercentResponsible(staffCourseSection.getContributionPercentage());
 
                             if(!otherStaff.isEmptyObject()) {
                                 otherStaffList.add(otherStaff);
@@ -143,12 +143,16 @@ public class XRosterMapper {
                     xRoster.setOtherStaffs(otherStaffs);
                 }
             }
+
+            //Metadata
+            xRoster.setMetadata(mapMetadata(instance));
+
+            return xRoster;
         }
-        catch (Exception e) {
-            xRoster = null;
-            e.printStackTrace();
+        catch (Exception ex) {
+            ex.printStackTrace();
+            throw new MappingException("Mapping Exception: " + ex.getLocalizedMessage());
         }
-        return xRoster;
     }
 
     private MeetingTime mapMeetingTime(CourseSectionSchedule courseSectionSchedule, CourseSection instance) {
@@ -231,5 +235,9 @@ public class XRosterMapper {
             return null;
         }
         return studentReference;
+    }
+
+    private Metadata mapMetadata(CourseSection courseSection) {
+        return new Metadata(courseSection.getCourseSectionSchoolYear());
     }
 }

@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.*;
 
-@Component("XStudentMapper")
+@Component("XPress:XStudents:XStudentMapper")
 public class XStudentMapper {
 
     private final String LOCAL_ID = "District";
@@ -190,6 +190,9 @@ public class XStudentMapper {
             if(studentContacts != null) {
                 xStudent.setStudentContacts(studentContacts);
             }
+
+            //Metadata
+            xStudent.setMetadata(mapMetadata(instance));
 
             return xStudent;
         }
@@ -551,5 +554,9 @@ public class XStudentMapper {
             }
         }
         return primaryEnrollment;
+    }
+
+    private Metadata mapMetadata(Student student) {
+        return new Metadata(student.getStudentSchoolYear());
     }
 }

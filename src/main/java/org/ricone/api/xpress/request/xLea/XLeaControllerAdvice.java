@@ -14,7 +14,7 @@ import java.util.Objects;
 
 //https://stackoverflow.com/questions/44375435/spring-auto-add-x-total-count-header
 
-@ControllerAdvice
+@ControllerAdvice("XPress:XLeas:XLeaControllerAdvice")
 public class XLeaControllerAdvice implements ResponseBodyAdvice<XLeasResponse> {
 
 	@Override

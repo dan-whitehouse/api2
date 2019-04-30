@@ -5,6 +5,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.ricone.api.core.model.composite.StaffCourseSectionComposite;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 
@@ -12,7 +13,7 @@ import java.math.BigDecimal;
 @Table(name = "staffcoursesection")
 @IdClass(StaffCourseSectionComposite.class)
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class StaffCourseSection implements java.io.Serializable {	
+public class StaffCourseSection implements Serializable {
 	private static final long serialVersionUID = -180003633066217606L;
 	
 	@Column(name = "StaffCourseSectionRefId", unique = true, nullable = false, length = 64)

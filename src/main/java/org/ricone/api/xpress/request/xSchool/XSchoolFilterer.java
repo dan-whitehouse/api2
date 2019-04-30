@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Iterator;
 
-@Component("XSchoolFilterer")
+@Component("XPress:XSchools:XSchoolFilterer")
 public class XSchoolFilterer {
     public XSchoolFilterer() {
     }

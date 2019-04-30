@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Iterator;
 
-@Component("XContactFilterer")
+@Component("XPress:XContacts:XContactFilterer")
 public class XContactFilterer {
     public XContactFilterer() {
     }

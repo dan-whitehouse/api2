@@ -15,7 +15,7 @@ import org.springframework.util.CollectionUtils;
  * @since 2018-02-16
  */
 
-@Component
+@Component("XPress:XLeas:XLeaFilterer")
 public class XLeaFilterer {
 	public XLeaFilterer() {
 	}

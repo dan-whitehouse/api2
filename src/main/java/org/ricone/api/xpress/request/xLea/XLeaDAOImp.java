@@ -15,7 +15,7 @@ import javax.persistence.Query;
 import javax.persistence.criteria.*;
 import java.util.List;
 
-@Repository
+@Repository("XPress:XLeas:XLeaDAO")
 @SuppressWarnings({"unchecked", "unused", "RedundantTypeArguments"})
 public class XLeaDAOImp extends BaseDAO implements XLeaDAO {
 	@PersistenceContext private EntityManager em;

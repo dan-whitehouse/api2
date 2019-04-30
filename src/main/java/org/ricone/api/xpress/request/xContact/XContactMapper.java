@@ -2,6 +2,7 @@ package org.ricone.api.xpress.request.xContact;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
+import org.hibernate.MappingException;
 import org.ricone.api.core.model.*;
 import org.ricone.api.core.model.wrapper.StudentContactWrapper;
 import org.ricone.api.xpress.model.*;
@@ -11,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-@Component("XContactMapper")
+@Component("XPress:XContacts:XContactMapper")
 public class XContactMapper {
     private final String LOCAL_ID = "District";
     private final String PRIMARY_ADDRESS_TYPE = "Mailing";
@@ -46,114 +47,122 @@ public class XContactMapper {
     }
 
     public XContact map(StudentContact instance, String districtId) {
-        XContact xContact = new XContact();
-        xContact.setDistrictId(districtId); //Required by Filtering
-        xContact.setRefId(instance.getStudentContactRefId());
-        xContact.setEmployerType(instance.getEmployerType());
-        xContact.setSex(instance.getSexCode());
+        try {
+            XContact xContact = new XContact();
+            xContact.setDistrictId(districtId); //Required by Filtering
+            xContact.setRefId(instance.getStudentContactRefId());
+            xContact.setEmployerType(instance.getEmployerType());
+            xContact.setSex(instance.getSexCode());
 
-        //Name
-        Name name = mapName(instance);
-        if(name != null) {
-            xContact.setName(name);
-        }
-
-        //Other Names
-        List<Name> otherNameList = new ArrayList<>();
-        for (StudentContactOtherName contactOtherName : instance.getStudentContactOtherNames()) {
-            Name otherName = mapOtherName(contactOtherName);
-            if(otherName != null) {
-                otherNameList.add(otherName);
+            //Name
+            Name name = mapName(instance);
+            if(name != null) {
+                xContact.setName(name);
             }
-        }
-        if(CollectionUtils.isNotEmpty(otherNameList)) {
-            OtherNames otherNames = new OtherNames();
-            otherNames.setName(otherNameList);
-            xContact.setOtherNames(otherNames);
-        }
+
+            //Other Names
+            List<Name> otherNameList = new ArrayList<>();
+            for (StudentContactOtherName contactOtherName : instance.getStudentContactOtherNames()) {
+                Name otherName = mapOtherName(contactOtherName);
+                if(otherName != null) {
+                    otherNameList.add(otherName);
+                }
+            }
+            if(CollectionUtils.isNotEmpty(otherNameList)) {
+                OtherNames otherNames = new OtherNames();
+                otherNames.setName(otherNameList);
+                xContact.setOtherNames(otherNames);
+            }
 
 
-        //Email
-        List<Email> emailList = new ArrayList<>();
-        for (StudentContactEmail contactEmail : instance.getStudentContactEmails()) {
-            Email email = mapEmail(contactEmail);
-            if(email != null) {
-                if(BooleanUtils.isTrue(contactEmail.getPrimaryEmailAddressIndicator())) {
-                    xContact.setEmail(email);
+            //Email
+            List<Email> emailList = new ArrayList<>();
+            for (StudentContactEmail contactEmail : instance.getStudentContactEmails()) {
+                Email email = mapEmail(contactEmail);
+                if(email != null) {
+                    if(BooleanUtils.isTrue(contactEmail.getPrimaryEmailAddressIndicator())) {
+                        xContact.setEmail(email);
+                    }
+                    else {
+                        emailList.add(email);
+                    }
+                }
+            }
+
+            //Other Emails
+            if(CollectionUtils.isNotEmpty(emailList)) {
+                OtherEmails otherEmails = new OtherEmails();
+                otherEmails.setEmail(emailList);
+                xContact.setOtherEmails(otherEmails);
+            }
+
+
+            //Identifiers
+            List<OtherId> otherIdList = new ArrayList<>();
+            for (StudentContactIdentifier id : instance.getStudentContactIdentifiers()) {
+                if(LOCAL_ID.equals(id.getIdentificationSystemCode())) {
+                    xContact.setLocalId(id.getStudentContactId());
                 }
                 else {
-                    emailList.add(email);
+                    OtherId otherId = mapOtherId(id);
+                    if(otherId != null) {
+                        otherIdList.add(otherId);
+                    }
                 }
             }
-        }
-
-        //Other Emails
-        if(CollectionUtils.isNotEmpty(emailList)) {
-            OtherEmails otherEmails = new OtherEmails();
-            otherEmails.setEmail(emailList);
-            xContact.setOtherEmails(otherEmails);
-        }
-
-
-        //Identifiers
-        List<OtherId> otherIdList = new ArrayList<>();
-        for (StudentContactIdentifier id : instance.getStudentContactIdentifiers()) {
-            if(LOCAL_ID.equals(id.getIdentificationSystemCode())) {
-                xContact.setLocalId(id.getStudentContactId());
+            //Other Identifiers
+            if(CollectionUtils.isNotEmpty(otherIdList)) {
+                OtherIds otherIds = new OtherIds();
+                otherIds.setOtherId(otherIdList);
+                xContact.setOtherIds(otherIds);
             }
-            else {
-                OtherId otherId = mapOtherId(id);
-                if(otherId != null) {
-                    otherIdList.add(otherId);
+
+
+            //Address
+            for (StudentContactAddress contactAddress : instance.getStudentContactAddresses()) {
+                if(PRIMARY_ADDRESS_TYPE.equalsIgnoreCase(contactAddress.getAddressTypeCode())) {
+                    Address address = mapAddress(contactAddress);
+                    if(address != null) {
+                        xContact.setAddress(address);
+                        break;
+                    }
                 }
             }
-        }
-        //Other Identifiers
-        if(CollectionUtils.isNotEmpty(otherIdList)) {
-            OtherIds otherIds = new OtherIds();
-            otherIds.setOtherId(otherIdList);
-            xContact.setOtherIds(otherIds);
-        }
 
-
-        //Address
-        for (StudentContactAddress contactAddress : instance.getStudentContactAddresses()) {
-            if(PRIMARY_ADDRESS_TYPE.equalsIgnoreCase(contactAddress.getAddressTypeCode())) {
-                Address address = mapAddress(contactAddress);
-                if(address != null) {
-                    xContact.setAddress(address);
-                    break;
+            //Phone
+            for (StudentContactTelephone telephone : instance.getStudentContactTelephones()) {
+                if(telephone.getPrimaryTelephoneNumberIndicator()) {
+                    PhoneNumber phoneNumber = mapPhone(telephone);
+                    if(phoneNumber != null) {
+                        xContact.setPhoneNumber(phoneNumber);
+                        break;
+                    }
                 }
             }
-        }
 
-        //Phone
-        for (StudentContactTelephone telephone : instance.getStudentContactTelephones()) {
-            if(telephone.getPrimaryTelephoneNumberIndicator()) {
-                PhoneNumber phoneNumber = mapPhone(telephone);
-                if(phoneNumber != null) {
-                    xContact.setPhoneNumber(phoneNumber);
-                    break;
+            //Relationships
+            List<Relationship> relationshipList = new ArrayList<>();
+            for (StudentContactRelationship studentContactRelationship : instance.getStudentContactRelationships()) {
+                Relationship relationship = mapRelationship(studentContactRelationship);
+                if(relationship != null) {
+                    relationshipList.add(relationship);
                 }
             }
-        }
-
-        //Relationships
-        List<Relationship> relationshipList = new ArrayList<>();
-        for (StudentContactRelationship studentContactRelationship : instance.getStudentContactRelationships()) {
-            Relationship relationship = mapRelationship(studentContactRelationship);
-            if(relationship != null) {
-                relationshipList.add(relationship);
+            if(CollectionUtils.isNotEmpty(relationshipList)) {
+                Relationships relationships = new Relationships();
+                relationships.setRelationship(relationshipList);
+                xContact.setRelationships(relationships);
             }
-        }
-        if(CollectionUtils.isNotEmpty(relationshipList)) {
-            Relationships relationships = new Relationships();
-            relationships.setRelationship(relationshipList);
-            xContact.setRelationships(relationships);
-        }
 
+            //Metadata
+            xContact.setMetadata(mapMetadata(instance));
 
-        return xContact;
+            return xContact;
+        }
+        catch (Exception ex) {
+            ex.printStackTrace();
+            throw new MappingException("Mapping Exception: " + ex.getLocalizedMessage());
+        }
     }
 
 
@@ -254,5 +263,9 @@ public class XContactMapper {
             return null;
         }
         return relationship;
+    }
+
+    private Metadata mapMetadata(StudentContact contact) {
+        return new Metadata(contact.getStudentContactSchoolYear());
     }
 }

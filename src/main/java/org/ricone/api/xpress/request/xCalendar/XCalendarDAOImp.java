@@ -20,7 +20,7 @@ import javax.persistence.Query;
 import javax.persistence.criteria.*;
 import java.util.List;
 
-@Repository
+@Repository("XPress:XCalendars:XCalendarDAO")
 @SuppressWarnings({"unchecked", "unused", "RedundantTypeArguments"})
 public class XCalendarDAOImp extends BaseDAO implements XCalendarDAO {
 	@PersistenceContext private EntityManager em;

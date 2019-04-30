@@ -5,12 +5,13 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.ricone.api.core.model.composite.EntryExitCodeComposite;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "entryexitcode")
 @IdClass(EntryExitCodeComposite.class)
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class EntryExitCode implements java.io.Serializable {
+public class EntryExitCode implements Serializable {
 	private static final long serialVersionUID = -6732821891680730343L;
 	
 	@Column(name = "EntryExitCodeRefId", unique = true, nullable = false, length = 64)

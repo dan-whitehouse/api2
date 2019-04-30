@@ -9,6 +9,7 @@ package org.ricone.api.xpress.model;
 
 import com.fasterxml.jackson.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.stream.Stream;
 
@@ -20,14 +21,14 @@ public class OtherStaff {
 	@JsonProperty("staffPersonReference")
 	private StaffPersonReference staffPersonReference;
 	@JsonProperty("teacherOfRecord")
-	private String teacherOfRecord;
+	private Boolean teacherOfRecord;
 	@JsonProperty("percentResponsible")
-	private String percentResponsible;
+	private BigDecimal percentResponsible;
 
 	public OtherStaff() {
 	}
 
-	public OtherStaff(StaffPersonReference staffPersonReference, String teacherOfRecord, String percentResponsible) {
+	public OtherStaff(StaffPersonReference staffPersonReference, Boolean teacherOfRecord, BigDecimal percentResponsible) {
 		super();
 		this.staffPersonReference = staffPersonReference;
 		this.teacherOfRecord = teacherOfRecord;
@@ -45,22 +46,22 @@ public class OtherStaff {
 	}
 
 	@JsonProperty("teacherOfRecord")
-	public String getTeacherOfRecord() {
+	public Boolean getTeacherOfRecord() {
 		return teacherOfRecord;
 	}
 
 	@JsonProperty("teacherOfRecord")
-	public void setTeacherOfRecord(String teacherOfRecord) {
+	public void setTeacherOfRecord(Boolean teacherOfRecord) {
 		this.teacherOfRecord = teacherOfRecord;
 	}
 
 	@JsonProperty("percentResponsible")
-	public String getPercentResponsible() {
+	public BigDecimal getPercentResponsible() {
 		return percentResponsible;
 	}
 
 	@JsonProperty("percentResponsible")
-	public void setPercentResponsible(String percentResponsible) {
+	public void setPercentResponsible(BigDecimal percentResponsible) {
 		this.percentResponsible = percentResponsible;
 	}
 

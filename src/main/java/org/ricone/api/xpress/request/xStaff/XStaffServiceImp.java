@@ -13,8 +13,8 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.List;
 
-@Service
 @Transactional
+@Service("XPress:XStaffs:XStaffService")
 public class XStaffServiceImp implements XStaffService {
     @Autowired private XStaffDAO dao;
     @Autowired private XStaffMapper mapper;

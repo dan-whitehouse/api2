@@ -2,6 +2,7 @@ package org.ricone.api.xpress.request.xLea;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
+import org.hibernate.MappingException;
 import org.ricone.api.core.model.Lea;
 import org.ricone.api.core.model.LeaTelephone;
 import org.ricone.api.core.model.wrapper.LeaWrapper;
@@ -11,7 +12,7 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
+@Component("XPress:XLeas:XLeaMapper")
 public class XLeaMapper {
 
     public XLeaMapper() {
@@ -41,43 +42,52 @@ public class XLeaMapper {
     }
 
     public XLea map(Lea instance, String districtId) {
-        XLea xLea = new XLea();
-        xLea.setDistrictId(districtId); // Required By Wrapper
-        xLea.setRefId(instance.getLeaRefId());
-        xLea.setLeaName(instance.getLeaName());
-        xLea.setLocalId(instance.getLeaId());
-        xLea.setStateProvinceId(instance.getLeaSeaId());
-        xLea.setNcesId(instance.getLeaNcesId());
+        try {
+            XLea xLea = new XLea();
+            xLea.setDistrictId(districtId); // Required By Wrapper
+            xLea.setRefId(instance.getLeaRefId());
+            xLea.setLeaName(instance.getLeaName());
+            xLea.setLocalId(instance.getLeaId());
+            xLea.setStateProvinceId(instance.getLeaSeaId());
+            xLea.setNcesId(instance.getLeaNcesId());
 
 
-        //Address
-        Address address = mapAddress(instance);
-        if(address != null) {
-            xLea.setAddress(address);
-        }
+            //Address
+            Address address = mapAddress(instance);
+            if(address != null) {
+                xLea.setAddress(address);
+            }
 
-        //PhoneNumber - Primary
-        List<PhoneNumber> phoneNumbers = new ArrayList<>();
-        for (LeaTelephone telephone : instance.getLeaTelephones()) {
-            PhoneNumber phone = mapPhone(telephone);
-            if(phone != null) {
-                if(BooleanUtils.isTrue(telephone.getPrimaryTelephoneNumberIndicator())) {
-                    xLea.setPhoneNumber(phone);
-                }
-                else {
-                    phoneNumbers.add(phone);
+            //PhoneNumber - Primary
+            List<PhoneNumber> phoneNumbers = new ArrayList<>();
+            for (LeaTelephone telephone : instance.getLeaTelephones()) {
+                PhoneNumber phone = mapPhone(telephone);
+                if(phone != null) {
+                    if(BooleanUtils.isTrue(telephone.getPrimaryTelephoneNumberIndicator())) {
+                        xLea.setPhoneNumber(phone);
+                    }
+                    else {
+                        phoneNumbers.add(phone);
+                    }
                 }
             }
-        }
 
-        //PhoneNumbers - Other
-        if(CollectionUtils.isNotEmpty(phoneNumbers)) {
-            OtherPhoneNumbers otherPhoneNumbers = new OtherPhoneNumbers();
-            otherPhoneNumbers.setPhoneNumber(phoneNumbers);
-            xLea.setOtherPhoneNumbers(otherPhoneNumbers);
-        }
+            //PhoneNumbers - Other
+            if(CollectionUtils.isNotEmpty(phoneNumbers)) {
+                OtherPhoneNumbers otherPhoneNumbers = new OtherPhoneNumbers();
+                otherPhoneNumbers.setPhoneNumber(phoneNumbers);
+                xLea.setOtherPhoneNumbers(otherPhoneNumbers);
+            }
 
-        return xLea;
+            //Metadata
+            xLea.setMetadata(mapMetadata(instance));
+
+            return xLea;
+        }
+        catch (Exception ex) {
+            ex.printStackTrace();
+            throw new MappingException("Mapping Exception: " + ex.getLocalizedMessage());
+        }
     }
 
     private Address mapAddress(Lea lea) {
@@ -106,5 +116,9 @@ public class XLeaMapper {
             return null;
         }
         return phone;
+    }
+
+    private Metadata mapMetadata(Lea lea) {
+        return new Metadata(lea.getLeaSchoolYear());
     }
 }

@@ -19,7 +19,7 @@ import javax.persistence.Query;
 import javax.persistence.criteria.*;
 import java.util.List;
 
-@Repository
+@Repository("XPress:XCourses:XCourseDAO")
 @SuppressWarnings({"unchecked", "unused", "RedundantTypeArguments"})
 public class XCourseDAOImp extends BaseDAO implements XCourseDAO {
 	@PersistenceContext private EntityManager em;

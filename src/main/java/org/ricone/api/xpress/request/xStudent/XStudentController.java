@@ -2,11 +2,14 @@ package org.ricone.api.xpress.request.xStudent;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ricone.api.xpress.component.BaseController;
 import org.ricone.api.xpress.component.acl.XStudentsACL;
 import org.ricone.api.xpress.error.exception.NotFoundException;
+import org.ricone.api.xpress.model.XErrorResponse;
 import org.ricone.api.xpress.model.XStudentResponse;
 import org.ricone.api.xpress.model.XStudentsResponse;
 import org.ricone.api.xpress.request.xStaff.XStaffController;
@@ -19,10 +22,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
-import java.util.Map;
 import java.util.Optional;
 
-@RestController
+@RestController("XPress:XStudents:XStudentController")
 @Api(value = "xStudents", description = "REST API for xStudents", tags = {"xStudents"})
 public class XStudentController extends BaseController {
 	@Autowired private XStudentService service;
@@ -31,6 +33,14 @@ public class XStudentController extends BaseController {
 	@XStudentsACL.Get.ById
 	@ResponseBody @GetMapping(value = "/requests/xStudents/{id}")
 	@ApiOperation(value = "Return xStudent by refId", tags = {"xStudents"})
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "Success", response = XStudentResponse.class),
+			@ApiResponse(code = 400, message = "Bad Request", response = XErrorResponse.class),
+			@ApiResponse(code = 401, message = "Unauthorized", response = XErrorResponse.class),
+			@ApiResponse(code = 403, message = "Forbidden", response = XErrorResponse.class),
+			@ApiResponse(code = 404, message = "Not Found", response = XErrorResponse.class),
+			@ApiResponse(code = 500, message = "Internal Server Error", response = XErrorResponse.class)
+	})
 	public XStudentResponse getXStaffById(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "id") String id) throws Exception {
 		if(Util.isRefId(id)) {
 			return service.findByRefId(getMetaData(request, response), id);
@@ -47,6 +57,14 @@ public class XStudentController extends BaseController {
 	@XStudentsACL.Get.All
 	@ResponseBody @GetMapping(value = "/requests/xStudents")
 	@ApiOperation(value = "Return all xStudents", tags = {"xStudents"})
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "Success", response = XStudentsResponse.class),
+			@ApiResponse(code = 400, message = "Bad Request", response = XErrorResponse.class),
+			@ApiResponse(code = 401, message = "Unauthorized", response = XErrorResponse.class),
+			@ApiResponse(code = 403, message = "Forbidden", response = XErrorResponse.class),
+			@ApiResponse(code = 404, message = "Not Found", response = XErrorResponse.class),
+			@ApiResponse(code = 500, message = "Internal Server Error", response = XErrorResponse.class)
+	})
 	public XStudentsResponse getXStaffs(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		return service.findAll(getMetaData(request, response));
 	}
@@ -54,6 +72,14 @@ public class XStudentController extends BaseController {
 	@XStudentsACL.Get.ByXLea
 	@ResponseBody @GetMapping(value = "/requests/xLeas/{refId}/xStudents")
 	@ApiOperation(value = "Return all xStudents by xLea refId", tags = {"xStudents"})
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "Success", response = XStudentsResponse.class),
+			@ApiResponse(code = 400, message = "Bad Request", response = XErrorResponse.class),
+			@ApiResponse(code = 401, message = "Unauthorized", response = XErrorResponse.class),
+			@ApiResponse(code = 403, message = "Forbidden", response = XErrorResponse.class),
+			@ApiResponse(code = 404, message = "Not Found", response = XErrorResponse.class),
+			@ApiResponse(code = 500, message = "Internal Server Error", response = XErrorResponse.class)
+	})
 	public XStudentsResponse getXStudentsByXLea(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "refId") String refId) throws Exception {
 		return service.findAllByLea(getMetaData(request, response), refId);
 	}
@@ -61,6 +87,14 @@ public class XStudentController extends BaseController {
 	@XStudentsACL.Get.ByXSchool
 	@ResponseBody @GetMapping(value = "/requests/xSchools/{refId}/xStudents")
 	@ApiOperation(value = "Return all xStudents by xSchool refId", tags = {"xStudents"})
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "Success", response = XStudentsResponse.class),
+			@ApiResponse(code = 400, message = "Bad Request", response = XErrorResponse.class),
+			@ApiResponse(code = 401, message = "Unauthorized", response = XErrorResponse.class),
+			@ApiResponse(code = 403, message = "Forbidden", response = XErrorResponse.class),
+			@ApiResponse(code = 404, message = "Not Found", response = XErrorResponse.class),
+			@ApiResponse(code = 500, message = "Internal Server Error", response = XErrorResponse.class)
+	})
 	public XStudentsResponse getXStudentsByXSchool(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "refId") String refId, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Optional<LocalDateTime> changesSinceMarker) throws Exception {
 		if(changesSinceMarker.isPresent()) {
 			//Todo: Create service for getting AUPP
@@ -71,6 +105,14 @@ public class XStudentController extends BaseController {
 	@XStudentsACL.Get.ByXRoster
 	@ResponseBody @GetMapping(value = "/requests/xRosters/{refId}/xStudents")
 	@ApiOperation(value = "Return all xStudents by xRoster refId", tags = {"xStudents"})
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "Success", response = XStudentsResponse.class),
+			@ApiResponse(code = 400, message = "Bad Request", response = XErrorResponse.class),
+			@ApiResponse(code = 401, message = "Unauthorized", response = XErrorResponse.class),
+			@ApiResponse(code = 403, message = "Forbidden", response = XErrorResponse.class),
+			@ApiResponse(code = 404, message = "Not Found", response = XErrorResponse.class),
+			@ApiResponse(code = 500, message = "Internal Server Error", response = XErrorResponse.class)
+	})
 	public XStudentsResponse getXStudentsByXRoster(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "refId") String refId) throws Exception {
 		return service.findAllByRoster(getMetaData(request, response), refId);
 	}
@@ -78,6 +120,14 @@ public class XStudentController extends BaseController {
 	@XStudentsACL.Get.ByXStaff
 	@ResponseBody @GetMapping(value = "/requests/xStaffs/{refId}/xStudents")
 	@ApiOperation(value = "Return all xStudents by xStaff refId", tags = {"xStudents"})
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "Success", response = XStudentsResponse.class),
+			@ApiResponse(code = 400, message = "Bad Request", response = XErrorResponse.class),
+			@ApiResponse(code = 401, message = "Unauthorized", response = XErrorResponse.class),
+			@ApiResponse(code = 403, message = "Forbidden", response = XErrorResponse.class),
+			@ApiResponse(code = 404, message = "Not Found", response = XErrorResponse.class),
+			@ApiResponse(code = 500, message = "Internal Server Error", response = XErrorResponse.class)
+	})
 	public XStudentsResponse getXStudentsByXStaff(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "refId") String refId) throws Exception {
 		return service.findAllByStaff(getMetaData(request, response), refId);
 	}
@@ -85,6 +135,14 @@ public class XStudentController extends BaseController {
 	@XStudentsACL.Get.ByXContact
 	@ResponseBody @GetMapping(value = "/requests/xContacts/{refId}/xStudents")
 	@ApiOperation(value = "Return all xStudents by xContact refId", tags = {"xStudents"})
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "Success", response = XStudentsResponse.class),
+			@ApiResponse(code = 400, message = "Bad Request", response = XErrorResponse.class),
+			@ApiResponse(code = 401, message = "Unauthorized", response = XErrorResponse.class),
+			@ApiResponse(code = 403, message = "Forbidden", response = XErrorResponse.class),
+			@ApiResponse(code = 404, message = "Not Found", response = XErrorResponse.class),
+			@ApiResponse(code = 500, message = "Internal Server Error", response = XErrorResponse.class)
+	})
 	public XStudentsResponse getXStudentsByXContact(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "refId") String refId) throws Exception {
 		return service.findAllByContact(getMetaData(request, response), refId);
 	}

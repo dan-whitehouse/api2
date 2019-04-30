@@ -1,6 +1,7 @@
 package org.ricone.api.xpress.request.xCourse;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.hibernate.MappingException;
 import org.ricone.api.core.model.Course;
 import org.ricone.api.core.model.CourseGrade;
 import org.ricone.api.core.model.CourseIdentifier;
@@ -12,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-@Component("XCourseMapper")
+@Component("XPress:XCourses:XCourseMapper")
 public class XCourseMapper {
 
     private final String LEA_COURSE_ID = "LEA";
@@ -49,53 +50,62 @@ public class XCourseMapper {
 
 
     public XCourse map(Course instance, String districtId) {
-        XCourse xCourse = new XCourse();
-        xCourse.setDistrictId(districtId); //Required by Filtering
-        xCourse.setRefId(instance.getCourseRefId());
-        xCourse.setCourseTitle(instance.getTitle());
-        xCourse.setSubject(instance.getSubjectCode());
-        xCourse.setDescription(instance.getDescription());
+        try {
+            XCourse xCourse = new XCourse();
+            xCourse.setDistrictId(districtId); //Required by Filtering
+            xCourse.setRefId(instance.getCourseRefId());
+            xCourse.setCourseTitle(instance.getTitle());
+            xCourse.setSubject(instance.getSubjectCode());
+            xCourse.setDescription(instance.getDescription());
 
-        if(instance.getSchool() != null) {
-            xCourse.setSchoolRefId(instance.getSchool().getSchoolRefId());
-        }
-
-        xCourse.setScedCourseCode(instance.getScedCourseCode());
-        xCourse.setScedCourseLevelCode(instance.getScedCourseLevelCode());
-        xCourse.setScedCourseSubjectAreaCode(instance.getScedCourseSubjectAreaCode());
-
-
-        //Identifiers
-        List<OtherId> otherIdList = new ArrayList<>();
-        for (CourseIdentifier id : instance.getCourseIdentifiers()) {
-            if(LEA_COURSE_ID.equalsIgnoreCase(id.getIdentificationSystemCode())) {
-                xCourse.setLeaCourseId(id.getCourseId());
+            if(instance.getSchool() != null) {
+                xCourse.setSchoolRefId(instance.getSchool().getSchoolRefId());
             }
-            else if(SCHOOL_COURSE_ID.equalsIgnoreCase(id.getIdentificationSystemCode())) {
-                xCourse.setSchoolCourseId(id.getCourseId());
-            }
-            else {
-                OtherId otherId = mapOtherId(id);
-                if(otherId != null) {
-                    otherIdList.add(otherId);
+
+            xCourse.setScedCourseCode(instance.getScedCourseCode());
+            xCourse.setScedCourseLevelCode(instance.getScedCourseLevelCode());
+            xCourse.setScedCourseSubjectAreaCode(instance.getScedCourseSubjectAreaCode());
+
+            //Identifiers
+            List<OtherId> otherIdList = new ArrayList<>();
+            for (CourseIdentifier id : instance.getCourseIdentifiers()) {
+                if(LEA_COURSE_ID.equalsIgnoreCase(id.getIdentificationSystemCode())) {
+                    xCourse.setLeaCourseId(id.getCourseId());
+                }
+                else if(SCHOOL_COURSE_ID.equalsIgnoreCase(id.getIdentificationSystemCode())) {
+                    xCourse.setSchoolCourseId(id.getCourseId());
+                }
+                else {
+                    OtherId otherId = mapOtherId(id);
+                    if(otherId != null) {
+                        otherIdList.add(otherId);
+                    }
                 }
             }
-        }
 
-        //Other Identifiers
-        if(CollectionUtils.isNotEmpty(otherIdList)) {
-            OtherIds otherIds = new OtherIds();
-            otherIds.setOtherId(otherIdList);
-            xCourse.setOtherIds(otherIds);
-        }
+            //Other Identifiers
+            if(CollectionUtils.isNotEmpty(otherIdList)) {
+                OtherIds otherIds = new OtherIds();
+                otherIds.setOtherId(otherIdList);
+                xCourse.setOtherIds(otherIds);
+            }
 
-        //Applicable Education Levels
-        ApplicableEducationLevels applicableEducationLevels = mapApplicableEducationLevels(instance.getCourseGrades());
-        if(applicableEducationLevels != null) {
-            xCourse.setApplicableEducationLevels(applicableEducationLevels);
-        }
+            //Applicable Education Levels
+            ApplicableEducationLevels applicableEducationLevels = mapApplicableEducationLevels(instance.getCourseGrades());
+            if(applicableEducationLevels != null) {
+                xCourse.setApplicableEducationLevels(applicableEducationLevels);
+            }
 
-        return xCourse;
+            //Metadata
+            xCourse.setMetadata(mapMetadata(instance));
+
+
+            return xCourse;
+        }
+        catch (Exception ex) {
+            ex.printStackTrace();
+            throw new MappingException("Mapping Exception: " + ex.getLocalizedMessage());
+        }
     }
 
     private ApplicableEducationLevels mapApplicableEducationLevels(Set<CourseGrade> courseGrades) {
@@ -119,5 +129,9 @@ public class XCourseMapper {
             return null;
         }
         return otherId;
+    }
+
+    private Metadata mapMetadata(Course course) {
+        return new Metadata(course.getCourseSchoolYear());
     }
 }

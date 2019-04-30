@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Iterator;
 
-@Component("XCalendarFilterer")
+@Component("XPress:XCalendars:XCalendarFilterer")
 public class XCalendarFilterer {
     public XCalendarFilterer() {
     }

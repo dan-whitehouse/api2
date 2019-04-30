@@ -17,7 +17,7 @@ import javax.persistence.Query;
 import javax.persistence.criteria.*;
 import java.util.List;
 
-@Repository
+@Repository("XPress:XStaffs:XStaffDAOImp")
 @SuppressWarnings({"unchecked", "unused", "RedundantTypeArguments"})
 public class XStaffDAOImp extends BaseDAO implements XStaffDAO {
 	@PersistenceContext private EntityManager em;

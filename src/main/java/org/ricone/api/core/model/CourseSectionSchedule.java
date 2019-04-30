@@ -5,22 +5,21 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.ricone.api.core.model.composite.CourseSectionScheduleComposite;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
 @Entity
 @Table(name = "coursesectionschedule")
 @IdClass(CourseSectionScheduleComposite.class)
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class CourseSectionSchedule implements java.io.Serializable {
+public class CourseSectionSchedule implements Serializable {
 	private static final long serialVersionUID = 3034286521311489646L;
 	
 	@Column(name = "CourseSectionScheduleRefId", unique = true, nullable = false, length = 64)
-	@Id
-    private String courseSectionScheduleRefId;
+	@Id private String courseSectionScheduleRefId;
 	
 	@Column(name = "CourseSectionScheduleSchoolYear", nullable = false, length = 6)
-	@Id
-    private Integer courseSectionScheduleSchoolYear;
+	@Id private Integer courseSectionScheduleSchoolYear;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumns({

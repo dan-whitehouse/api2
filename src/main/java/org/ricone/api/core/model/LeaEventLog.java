@@ -2,6 +2,7 @@ package org.ricone.api.core.model;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import java.io.Serializable;
 
 /**
  * @author Dan Whitehouse <daniel.whitehouse@neric.org>
@@ -12,7 +13,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "leaeventlog")
-public class LeaEventLog extends EventLog{
+public class LeaEventLog extends EventLog implements Serializable {
     private static final long serialVersionUID = 2954727154531497019L;
 
     /*@ManyToOne(fetch = FetchType.LAZY)

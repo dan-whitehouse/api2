@@ -14,12 +14,10 @@ public class StaffIdentifier implements java.io.Serializable {
 	private static final long serialVersionUID = -4307876689810647938L;
 	
 	@Column(name = "StaffIdentifierRefId", unique = true, nullable = false, length = 64)
-	@Id
-    private String staffIdentifierRefId;
+	@Id private String staffIdentifierRefId;
 	
 	@Column(name = "StaffIdentifierSchoolYear", length = 6)
-	@Id
-    private Integer staffIdentifierSchoolYear;
+	@Id private Integer staffIdentifierSchoolYear;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumns({

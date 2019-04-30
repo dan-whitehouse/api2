@@ -4,6 +4,7 @@ import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -14,7 +15,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "contacteventlog")
-public class ContactEventLog extends EventLog{
+public class ContactEventLog extends EventLog implements Serializable {
     private static final long serialVersionUID = 3438435272684287814L;
 
     @ManyToOne(fetch = FetchType.LAZY)

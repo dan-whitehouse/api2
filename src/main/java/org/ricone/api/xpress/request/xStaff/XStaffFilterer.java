@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Iterator;
 
-@Component("XStaffFilterer")
+@Component("XPress:XStaffs:XStaffFilterer")
 public class XStaffFilterer {
     public XStaffFilterer() {
     }

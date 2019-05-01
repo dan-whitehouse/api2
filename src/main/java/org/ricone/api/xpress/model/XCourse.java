@@ -9,6 +9,7 @@ package org.ricone.api.xpress.model;
 
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -20,30 +21,55 @@ import java.util.stream.Stream;
 public class XCourse extends XWrapper {
 	@JsonProperty("@refId")
 	@JacksonXmlProperty(localName = "refId", isAttribute = true)
+	@ApiModelProperty(position = 1, value = "The refId of the course")
 	private String refId;
+
 	@JsonProperty("schoolRefId")
+	@ApiModelProperty(position = 2, value = "RefId of the school in which the course is delivered")
 	private String schoolRefId;
+
 	@JsonProperty("schoolCourseId")
+	@ApiModelProperty(position = 3, value = "The actual code, defined at the school level, that identifies the organization of subject matter and related learning experiences provided for the instruction of students")
 	private String schoolCourseId;
+
 	@JsonProperty("leaCourseId")
+	@ApiModelProperty(position = 4, value = "The actual code, defined at the LEA/district level, that identifies the organization of subject matter and related learning experiences provided for the instruction of students as defined at the district level (i.e. district course code)")
 	private String leaCourseId;
+
 	@JsonProperty("otherIds")
+	@ApiModelProperty(position = 5, value = "A system that is used to identify the organization of subject matter and related learning experiences provided for the instruction of students")
 	private OtherIds otherIds;
+
 	@JsonProperty("courseTitle")
+	@ApiModelProperty(position = 6, value = "The descriptive name given to a course of study offered in a school or other institution or organization. In departmentalized classes at the elementary, secondary, and postsecondary levels (and for staff development activities), this refers to the name by which a course is identified (e.g., American History, English III). For elementary and other non-departmentalized classes, it refers to any portion of the instruction for which a grade or report is assigned (e.g., reading, composition, spelling, and language arts)")
 	private String courseTitle;
+
 	@JsonProperty("description")
+	@ApiModelProperty(position = 7, value = "A description of the course content and/or goals. Reference may be made to state or national content standards")
 	private String description;
+
 	@JsonProperty("subject")
+	@ApiModelProperty(position = 8, value = "The subject of the course")
 	private String subject;
+
 	@JsonProperty("applicableEducationLevels")
+	@ApiModelProperty(position = 9, value = "The education level, grade level or primary instructional level at which a course is intended")
 	private ApplicableEducationLevels applicableEducationLevels;
+
 	@JsonProperty("scedCourseCode")
+	@ApiModelProperty(position = 10, value = "SCED code for the course")
 	private String scedCourseCode;
+
 	@JsonProperty("scedCourseLevelCode")
+	@ApiModelProperty(position = 11, value = "SCED course level code")
 	private String scedCourseLevelCode;
+
 	@JsonProperty("scedCourseSubjectAreaCode")
+	@ApiModelProperty(position = 12, value = "SCED course subject area code")
 	private String scedCourseSubjectAreaCode;
+
 	@JsonProperty("metadata")
+	@ApiModelProperty(position = 13, value = "")
 	private Metadata metadata;
 
 	public XCourse() {

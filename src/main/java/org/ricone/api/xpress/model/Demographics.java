@@ -8,6 +8,7 @@
 package org.ricone.api.xpress.model;
 
 import com.fasterxml.jackson.annotation.*;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -16,18 +17,28 @@ import java.util.stream.Stream;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"races", "hispanicLatinoEthnicity", "sex", "birthDate", "countryOfBirth", "usCitizenshipStatus"})
 public class Demographics {
-
 	@JsonProperty("races")
+	@ApiModelProperty(position = 1, value = "A list of races")
 	private Races races;
+
 	@JsonProperty("hispanicLatinoEthnicity")
+	@ApiModelProperty(position = 2, value = "An indication that the person traces his or her origin or descent to Mexico, Puerto Rico, Cuba, Central and South America, and other Spanish cultures, regardless of race")
 	private String hispanicLatinoEthnicity;
+
 	@JsonProperty("sex")
+	@ApiModelProperty(position = 3, value = "The concept describing the biological traits that distinguish the males and females of a species")
 	private String sex;
+
 	@JsonProperty("birthDate")
+	@ApiModelProperty(position = 4, value = "The year, month and day on which a person was born")
 	private String birthDate;
+
 	@JsonProperty("countryOfBirth")
+	@ApiModelProperty(position = 5, value = "The Country in which a person was born")
 	private String countryOfBirth;
+
 	@JsonProperty("usCitizenshipStatus")
+	@ApiModelProperty(position = 6, value = "An indicator of whether or not the person is a US citizen")
 	private String usCitizenshipStatus;
 
 	public Demographics() {

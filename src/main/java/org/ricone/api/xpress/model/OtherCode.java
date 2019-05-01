@@ -8,6 +8,7 @@
 package org.ricone.api.xpress.model;
 
 import com.fasterxml.jackson.annotation.*;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -16,10 +17,12 @@ import java.util.stream.Stream;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"codesetName", "otherCodeValue"})
 public class OtherCode {
-
 	@JsonProperty("codesetName")
+	@ApiModelProperty(position = 1, value = "The system code type")
 	private String codesetName;
+
 	@JsonProperty("otherCodeValue")
+	@ApiModelProperty(position = 2, value = "Value of the system type code")
 	private String otherCodeValue;
 
 	public OtherCode() {

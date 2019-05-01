@@ -47,14 +47,6 @@
             <version>5.1.3.RELEASE</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/org.springframework.hateoas/spring-hateoas -->
-        <dependency>
-            <groupId>org.springframework.hateoas</groupId>
-            <artifactId>spring-hateoas</artifactId>
-            <version>0.25.0.RELEASE</version>
-        </dependency>
-
-
         <!-- https://mvnrepository.com/artifact/com.auth0/auth0-spring-security-api -->
         <dependency>
             <groupId>com.auth0</groupId>

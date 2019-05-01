@@ -9,7 +9,7 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"xLea"})
-@JsonRootName(value = "xLea")
+@JsonRootName(value = "xLeas")
 public class XLeas {
 	@JsonProperty("xLea")
 	@JacksonXmlElementWrapper(useWrapping = false)

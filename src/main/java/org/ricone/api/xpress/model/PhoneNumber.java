@@ -1,6 +1,7 @@
 package org.ricone.api.xpress.model;
 
 import com.fasterxml.jackson.annotation.*;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -9,12 +10,16 @@ import java.util.stream.Stream;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"phoneNumberType", "number", "primaryIndicator"})
 public class PhoneNumber {
-
 	@JsonProperty("phoneNumberType")
+	@ApiModelProperty(value = "The type of communication number listed for a person", position = 1)
 	private String phoneNumberType;
+
 	@JsonProperty("number")
+	@ApiModelProperty(value = "The telephone number including the area code, and extension, if applicable", position = 2)
 	private String number;
+
 	@JsonProperty("primaryIndicator")
+	@ApiModelProperty(value = " An indication that the telephone number should be used as the principal number for a person or organization", position = 3)
 	private String primaryIndicator;
 
 	public PhoneNumber() {

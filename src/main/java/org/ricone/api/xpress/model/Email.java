@@ -8,6 +8,7 @@
 package org.ricone.api.xpress.model;
 
 import com.fasterxml.jackson.annotation.*;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -16,10 +17,12 @@ import java.util.stream.Stream;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"emailType", "emailAddress"})
 public class Email {
-
 	@JsonProperty("emailType")
+	@ApiModelProperty(position = 1, value = "The type of electronic mail (e-mail) address listed for a person or organization")
 	private String emailType;
+
 	@JsonProperty("emailAddress")
+	@ApiModelProperty(position = 2, value = "The numbers, letters, and symbols used to identify an electronic mail (e-mail) user within the network to which the person or organization belongs")
 	private String emailAddress;
 
 	public Email() {

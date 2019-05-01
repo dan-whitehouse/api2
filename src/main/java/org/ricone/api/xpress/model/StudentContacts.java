@@ -8,6 +8,7 @@
 package org.ricone.api.xpress.model;
 
 import com.fasterxml.jackson.annotation.*;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,8 +17,8 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"contactPersonRefId"})
 public class StudentContacts {
-
 	@JsonProperty("contactPersonRefId")
+	@ApiModelProperty(position = 1, value = "The RefId of the contact object")
 	private List<String> contactPersonRefId;
 
 	public StudentContacts() {

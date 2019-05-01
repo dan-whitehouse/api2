@@ -8,6 +8,7 @@
 package org.ricone.api.xpress.model;
 
 import com.fasterxml.jackson.annotation.*;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -16,14 +17,20 @@ import java.util.stream.Stream;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"refId", "localId", "givenName", "familyName"})
 public class Counselor {
-
 	@JsonProperty("refId")
+	@ApiModelProperty(position = 1, value = "The refId of the staff person")
 	private String refId;
+
 	@JsonProperty("localId")
+	@ApiModelProperty(position = 2, value = "A unique number or alphanumeric code assigned to a staff member by a district or LEA")
 	private String localId;
+
 	@JsonProperty("givenName")
+	@ApiModelProperty(position = 3, value = "The full legal first name given to a staff person at birth, baptism, or through legal change")
 	private String givenName;
+
 	@JsonProperty("familyName")
+	@ApiModelProperty(position = 4, value = "The full legal last name borne in common by members of a family")
 	private String familyName;
 
 	public Counselor() {

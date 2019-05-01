@@ -8,6 +8,7 @@
 package org.ricone.api.xpress.model;
 
 import com.fasterxml.jackson.annotation.*;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,10 +17,9 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"applicableEducationLevel"})
 public class ApplicableEducationLevels {
-
 	@JsonProperty("applicableEducationLevel")
+	@ApiModelProperty(position = 1, value = "The education level, grade level or primary instructional level at which a course is intended")
 	private List<String> applicableEducationLevel;
-
 
 	public ApplicableEducationLevels() {
 		applicableEducationLevel = new ArrayList<>();

@@ -8,6 +8,7 @@
 package org.ricone.api.xpress.model;
 
 import com.fasterxml.jackson.annotation.*;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -16,10 +17,12 @@ import java.util.stream.Stream;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"type", "code"})
 public class Language {
-
 	@JsonProperty("type")
+	@ApiModelProperty(position = 1, value = "An indication of the function and context in which a person uses a language to communicate. The possible values are: Correspondence, Dominant, Home, Native, OtherLanguageProficiency, Other")
 	private String type;
+
 	@JsonProperty("code")
+	@ApiModelProperty(position = 2, value = "The code for the specific language or dialect that a person uses to communicate. Language Code option set comes from the ISO 639-2 standard")
 	private String code;
 
 	public Language() {

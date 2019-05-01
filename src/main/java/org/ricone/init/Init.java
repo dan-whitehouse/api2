@@ -5,6 +5,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.builders.PathSelectors;
@@ -17,6 +20,8 @@ import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static com.google.common.collect.Lists.newArrayList;
@@ -37,6 +42,19 @@ public class Init {
 		http://localhost:8080/docs/swagger.json?group=OneRoster
 		http://localhost:8080/docs/swagger.json?group=XPress
 	 */
+
+	@Bean
+	public CorsFilter corsFilter() {
+		//https://stackoverflow.com/questions/51720552/enabling-cors-globally-in-spring-boot
+		final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		final CorsConfiguration config = new CorsConfiguration();
+		config.setAllowCredentials(true);
+		config.setAllowedOrigins(Collections.singletonList("*"));
+		config.setAllowedHeaders(Arrays.asList("Origin", "Content-Type", "Accept"));
+		config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "OPTIONS", "DELETE", "PATCH"));
+		source.registerCorsConfiguration("/**", config);
+		return new CorsFilter(source);
+	}
 
 	@Bean
 	public Docket xPressAPI() {
@@ -82,7 +100,7 @@ public class Init {
 			.version("2.0.0")
 			.license("Apache License Version 2.0")
 			.licenseUrl("https://www.apache.org/licenses/LICENSE-2.0\"")
-			.contact(new Contact("Dan Whitehouse", "http://www.ricone.org/", "support@ricone.org"))
+			.contact(new Contact("RIC One", "http://www.ricone.org/", "support@ricone.org"))
 			.build();
 	}
 
@@ -94,13 +112,13 @@ public class Init {
 			.license("Apache License Version 2.0")
 			.licenseUrl("https://www.apache.org/licenses/LICENSE-2.0\"")
 			//.termsOfServiceUrl("https://www.imsglobal.org/oneroster-v11-final-specification")
-			.contact(new Contact("Dan Whitehouse", "http://www.ricone.org/", "support@ricone.org"))
+			.contact(new Contact("RIC One", "http://www.ricone.org/", "support@ricone.org"))
 			.build();
 	}
 
 	private List<ApiKey> getSecuritySchemes() {
 		List<ApiKey> list = new ArrayList<>();
-		list.add(new ApiKey("mykey", "api_key", "header"));
+		list.add(new ApiKey("Bearer", "Authorization", "header"));
 		return list;
 	}
 
@@ -119,7 +137,7 @@ public class Init {
 		authorizationScopes[0] = authorizationScope;
 
 		List<SecurityReference> list = new ArrayList<>();
-		list.add(new SecurityReference("mykey", authorizationScopes));
+		list.add(new SecurityReference("Bearer", authorizationScopes));
 		return list;
 	}
 }

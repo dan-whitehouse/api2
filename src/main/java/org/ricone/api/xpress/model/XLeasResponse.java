@@ -12,11 +12,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"xLea"})
+@JsonPropertyOrder({"xLeas"})
 public class XLeasResponse {
 
-    @JsonProperty("xLea")
-    @JacksonXmlProperty(localName = "xLea")
+    @JsonProperty("xLeas")
+    @JacksonXmlProperty(localName = "xLeas")
     private XLeas xLeas;
 
     public XLeasResponse() {
@@ -27,18 +27,18 @@ public class XLeasResponse {
         this.xLeas = xLeas;
     }
 
-    @JsonProperty("xLea")
+    @JsonProperty("xLeas")
     public XLeas getXLeas() {
         return xLeas;
     }
 
-    @JsonProperty("xLea")
+    @JsonProperty("xLeas")
     public void setXLeas(XLeas xLeas) {
         this.xLeas = xLeas;
     }
 
     @Override
     public String toString() {
-        return "XLeasResponse{" + "xLea=" + xLeas + '}';
+        return "XLeasResponse{" + "xLeas=" + xLeas + '}';
     }
 }

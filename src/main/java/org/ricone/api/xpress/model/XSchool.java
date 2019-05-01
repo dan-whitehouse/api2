@@ -9,6 +9,7 @@ package org.ricone.api.xpress.model;
 
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -20,26 +21,47 @@ import java.util.stream.Stream;
 public class XSchool extends XWrapper {
 	@JsonProperty("@refId")
 	@JacksonXmlProperty(localName = "refId", isAttribute = true)
+	@ApiModelProperty(position = 1, value = "The refId for the School")
 	private String refId;
+
 	@JsonProperty("leaRefId")
+	@ApiModelProperty(position = 2, value = "Refid of the LEA of which the school is a part")
 	private String leaRefId;
+
 	@JsonProperty("localId")
+	@ApiModelProperty(position = 3, value = "A unique number or alphanumeric code assigned to a school by a district or LEA")
 	private String localId;
+
 	@JsonProperty("stateProvinceId")
+	@ApiModelProperty(position = 4, value = "A unique number or alphanumeric code assigned to a school by a state")
 	private String stateProvinceId;
+
 	@JsonProperty("otherIds")
+	@ApiModelProperty(position = 5, value = "A list of other Ids for the school")
 	private OtherIds otherIds;
+
 	@JsonProperty("schoolName")
+	@ApiModelProperty(position = 6, value = "The full legally accepted name of the institution")
 	private String schoolName;
+
 	@JsonProperty("gradeLevels")
+	@ApiModelProperty(position = 7, value = "The specific grade or combination of grades offered by an education institution")
 	private GradeLevels gradeLevels;
+
 	@JsonProperty("address")
+	@ApiModelProperty(position = 8, value = "Address of the school")
 	private Address address;
+
 	@JsonProperty("phoneNumber")
+	@ApiModelProperty(position = 9, value = "Phone number of the school")
 	private PhoneNumber phoneNumber;
+
 	@JsonProperty("otherPhoneNumbers")
+	@ApiModelProperty(position = 10, value = "A list of other phone numbers for the school")
 	private OtherPhoneNumbers otherPhoneNumbers;
+
 	@JsonProperty("metadata")
+	@ApiModelProperty(position = 11, value = "")
 	private Metadata metadata;
 
 	public XSchool() {

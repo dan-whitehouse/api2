@@ -9,6 +9,7 @@ package org.ricone.api.xpress.model;
 
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -20,42 +21,79 @@ import java.util.stream.Stream;
 public class XStudent extends XWrapper {
 	@JsonProperty("@refId")
 	@JacksonXmlProperty(localName = "refId", isAttribute = true)
+	@ApiModelProperty(position = 1, value = "The refId of the student.")
 	private String refId;
+
 	@JsonProperty("name")
+	@ApiModelProperty(position = 2, value = "Name of Student")
 	private Name name;
+
 	@JsonProperty("otherNames")
+	@ApiModelProperty(position = 3, value = "Other names the student may be known by")
 	private OtherNames otherNames;
+
 	@JsonProperty("localId")
+	@ApiModelProperty(position = 4, value = "A unique number or alphanumeric code assigned to a student by a district or LEA")
 	private String localId;
+
 	@JsonProperty("stateProvinceId")
+	@ApiModelProperty(position = 5, value = "A unique number or alphanumeric code assigned to a student by a state")
 	private String stateProvinceId;
+
 	@JsonProperty("otherIds")
+	@ApiModelProperty(position = 6, value = "Other Ids for the student")
 	private OtherIds otherIds;
+
 	@JsonProperty("address")
+	@ApiModelProperty(position = 7, value = "Address of the student")
 	private Address address;
+
 	@JsonProperty("phoneNumber")
+	@ApiModelProperty(position = 8, value = "Phone number of the student")
 	private PhoneNumber phoneNumber;
+
 	@JsonProperty("otherPhoneNumbers")
+	@ApiModelProperty(position = 9, value = "Other phone numbers for the student")
 	private OtherPhoneNumbers otherPhoneNumbers;
+
 	@JsonProperty("email")
+	@ApiModelProperty(position = 10, value = "Email of the student")
 	private Email email;
+
 	@JsonProperty("otherEmails")
+	@ApiModelProperty(position = 11, value = "Other emails for the student")
 	private OtherEmails otherEmails;
+
 	@JsonProperty("demographics")
+	@ApiModelProperty(position = 12, value = "Demographic information about the student")
 	private Demographics demographics;
+
 	@JsonProperty("enrollment")
+	@ApiModelProperty(position = 13, value = "Current enrollment information for the student")
 	private Enrollment enrollment;
+
 	@JsonProperty("otherEnrollments")
+	@ApiModelProperty(position = 14, value = "Other enrollment information for the student")
 	private OtherEnrollments otherEnrollments;
+
 	@JsonProperty("academicSummary")
+	@ApiModelProperty(position = 15, value = "Academic summary of the student")
 	private AcademicSummary academicSummary;
+
 	@JsonProperty("studentContacts")
+	@ApiModelProperty(position = 16, value = "Persons who are contacts of the student")
 	private StudentContacts studentContacts;
+
 	@JsonProperty("languages")
+	@ApiModelProperty(position = 17, value = "Languages of the student")
 	private Languages languages;
+
 	@JsonProperty("appProvisioningInfo")
+	@ApiModelProperty(position = 18, value = "")
 	private AppProvisioningInfo appProvisioningInfo;
+
 	@JsonProperty("metadata")
+	@ApiModelProperty(position = 19, value = "")
 	private Metadata metadata;
 
 	public XStudent() {

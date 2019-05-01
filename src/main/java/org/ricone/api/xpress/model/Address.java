@@ -1,6 +1,7 @@
 package org.ricone.api.xpress.model;
 
 import com.fasterxml.jackson.annotation.*;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -9,20 +10,32 @@ import java.util.stream.Stream;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"addressType", "line1", "line2", "city", "stateProvince", "countryCode", "postalCode"})
 public class Address {
-
 	@JsonProperty("addressType")
+	@ApiModelProperty(value = "The type of address listed", position = 1)
 	private String addressType;
+
 	@JsonProperty("line1")
+	@ApiModelProperty(value = "The first line of the address", position = 2)
 	private String line1;
+
 	@JsonProperty("line2")
+	@ApiModelProperty(value = "The second line of the address", position = 3)
 	private String line2;
+
 	@JsonProperty("city")
+	@ApiModelProperty(value = "The name of the city in which an address is located", position = 4)
 	private String city;
+
 	@JsonProperty("stateProvince")
+	@ApiModelProperty(value = "The abbreviation for the state, province or outlying area in which an address is located", position = 5)
 	private String stateProvince;
+
 	@JsonProperty("countryCode")
+	@ApiModelProperty(value = "The unique two character International Organization for Standardization (ISO) code for the country in which an address is located", position = 6)
 	private String countryCode;
+
 	@JsonProperty("postalCode")
+	@ApiModelProperty(value = "A number that identifies each postal delivery area in the locale used as a portion of an address", position = 7)
 	private String postalCode;
 
 	public Address() {

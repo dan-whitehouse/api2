@@ -9,6 +9,7 @@ package org.ricone.api.xpress.model;
 
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -20,30 +21,55 @@ import java.util.stream.Stream;
 public class XRoster extends XWrapper {
 	@JsonProperty("@refId")
 	@JacksonXmlProperty(localName = "refId", isAttribute = true)
+	@ApiModelProperty(position = 1, value = "The refId of the roster instance, which coincides with the refId of the corresponding section object")
 	private String refId;
+
 	@JsonProperty("courseRefId")
+	@ApiModelProperty(position = 2, value = "the refId of the course for this section")
 	private String courseRefId;
+
 	@JsonProperty("courseTitle")
+	@ApiModelProperty(position = 3, value = "The descriptive name given to a course of study offered in a school or other institution or organization. In departmentalized classes at the elementary, secondary, and postsecondary levels (and for staff development activities), this refers to the name by which a course is identified (e.g., American History, English III). For elementary and other non-departmentalized classes, it refers to any portion of the instruction for which a grade or report is assigned (e.g., reading, composition, spelling, and language arts)")
 	private String courseTitle;
+
 	@JsonProperty("sectionRefId")
+	@ApiModelProperty(position = 4, value = "The refId of the section")
 	private String sectionRefId;
+
 	@JsonProperty("subject")
+	@ApiModelProperty(position = 5, value = "The subject of the course")
 	private String subject;
+
 	@JsonProperty("schoolRefId")
+	@ApiModelProperty(position = 6, value = "The refId of the school at which the roster/section convenes")
 	private String schoolRefId;
+
 	@JsonProperty("schoolSectionId")
+	@ApiModelProperty(position = 7, value = "A unique number or alphanumeric code assigned by an institution, school, school system, state, or other agency or entity for a particular course section")
 	private String schoolSectionId;
+
 	@JsonProperty("schoolYear")
+	@ApiModelProperty(position = 8, value = "The year for a reported school session")
 	private String schoolYear;
+
 	@JsonProperty("meetingTimes")
+	@ApiModelProperty(position = 9, value = "A list of meeting times for the section")
 	private MeetingTimes meetingTimes;
+
 	@JsonProperty("students")
+	@ApiModelProperty(position = 10, value = "A list of students associated with the roster")
 	private Students students;
+
 	@JsonProperty("primaryStaff")
+	@ApiModelProperty(position = 11, value = "The primary staff person for the section")
 	private PrimaryStaff primaryStaff;
+
 	@JsonProperty("otherStaffs")
+	@ApiModelProperty(position = 12, value = "Other staff persons associated with the section")
 	private OtherStaffs otherStaffs;
+
 	@JsonProperty("metadata")
+	@ApiModelProperty(position = 13, value = "")
 	private Metadata metadata;
 
 	public XRoster() {

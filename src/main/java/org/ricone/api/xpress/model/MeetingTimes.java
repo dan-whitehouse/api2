@@ -11,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,10 +20,9 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"meetingTime"})
 public class MeetingTimes {
-
 	@JsonProperty("meetingTime")
+	@ApiModelProperty(position = 1, value = "Information about the periodic days and meeting times of a section")
 	private List<MeetingTime> meetingTime;
-
 
 	public MeetingTimes() {
 		meetingTime = new ArrayList<>();

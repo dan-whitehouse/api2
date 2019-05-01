@@ -8,6 +8,7 @@
 package org.ricone.api.xpress.model;
 
 import com.fasterxml.jackson.annotation.*;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -16,34 +17,60 @@ import java.util.stream.Stream;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"leaRefId", "schoolRefId", "studentSchoolAssociationRefId", "responsibleSchoolType", "membershipType", "entryDate", "entryType", "exitDate", "exitType", "homeRoomNumber", "homeRoomTeacher", "gradeLevel", "projectedGraduationYear", "counselor"})
 public class Enrollment {
-
 	@JsonProperty("leaRefId")
+	@ApiModelProperty(position = 1, value = "RefId of the LEA")
 	private String leaRefId;
+
 	@JsonProperty("schoolRefId")
+	@ApiModelProperty(position = 2, value = "RefId of the school")
 	private String schoolRefId;
+
 	@JsonProperty("studentSchoolAssociationRefId")
+	@ApiModelProperty(position = 3, value = "RefId of the school")
 	private String studentSchoolAssociationRefId;
+
 	@JsonProperty("responsibleSchoolType")
+	@ApiModelProperty(position = 4, value = "The type of services/instruction the school is responsible for providing to the student")
 	private String responsibleSchoolType;
+
 	@JsonProperty("membershipType")
+	@ApiModelProperty(position = 5, value = "The student's type of membership in the system")
 	private String membershipType;
+
 	@JsonProperty("entryDate")
+	@ApiModelProperty(position = 6, value = "The month, day, and year on which a person enters and begins to receive instructional services in a school, institution, program, or class-section during a given session")
 	private String entryDate;
+
 	@JsonProperty("entryType")
+	@ApiModelProperty(position = 7, value = "Enrollment entry type codes")
 	private EntryType entryType;
+
 	@JsonProperty("exitDate")
+	@ApiModelProperty(position = 8, value = "The year, month and day on which the student officially withdrew or graduated, i.e. the date on which the student's enrollment ended")
 	private String exitDate;
+
 	@JsonProperty("exitType")
+	@ApiModelProperty(position = 9, value = "Enrollment exit type codes")
 	private ExitType exitType;
+
 	@JsonProperty("homeRoomNumber")
+	@ApiModelProperty(position = 10, value = "Home Room number")
 	private String homeRoomNumber;
+
 	@JsonProperty("homeRoomTeacher")
+	@ApiModelProperty(position = 11, value = "Students home room teacher")
 	private HomeRoomTeacher homeRoomTeacher;
+
 	@JsonProperty("gradeLevel")
+	@ApiModelProperty(position = 12, value = "The current grade or academic level of the student within a school")
 	private String gradeLevel;
+
 	@JsonProperty("projectedGraduationYear")
+	@ApiModelProperty(position = 13, value = "The year and month the student is projected to graduate")
 	private String projectedGraduationYear;
+
 	@JsonProperty("counselor")
+	@ApiModelProperty(position = 14, value = "RefId of the counselor")
 	private Counselor counselor;
 
 	public Enrollment() {

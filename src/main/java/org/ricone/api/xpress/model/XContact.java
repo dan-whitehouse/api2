@@ -9,6 +9,7 @@ package org.ricone.api.xpress.model;
 
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -20,32 +21,59 @@ import java.util.stream.Stream;
 public class XContact extends XWrapper {
 	@JsonProperty("@refId")
 	@JacksonXmlProperty(localName = "refId", isAttribute = true)
+	@ApiModelProperty(position = 1, value = "The refId of the contact")
 	private String refId;
+
 	@JsonProperty("name")
+	@ApiModelProperty(position = 2, value = "Name of the contact")
 	private Name name;
+
 	@JsonProperty("otherNames")
+	@ApiModelProperty(position = 3, value = "Other names of the contact")
 	private OtherNames otherNames;
+
 	@JsonProperty("localId")
+	@ApiModelProperty(position = 4, value = "A unique number or alphanumeric code assigned to a staff member by a district or LEA")
 	private String localId;
+
 	@JsonProperty("otherIds")
+	@ApiModelProperty(position = 5, value = "Other Ids of the contact")
 	private OtherIds otherIds;
+
 	@JsonProperty("address")
+	@ApiModelProperty(position = 6, value = "Address of the contact")
 	private Address address;
+
 	@JsonProperty("phoneNumber")
+	@ApiModelProperty(position = 7, value = "Phone number of the contact")
 	private PhoneNumber phoneNumber;
+
 	@JsonProperty("otherPhoneNumbers")
+	@ApiModelProperty(position = 8, value = "Other phone numbers for the contact")
 	private OtherPhoneNumbers otherPhoneNumbers;
+
 	@JsonProperty("email")
+	@ApiModelProperty(position = 9, value = "The email address of the person")
 	private Email email;
+
 	@JsonProperty("otherEmails")
+	@ApiModelProperty(position = 10, value = "Other email addresses associated with the person")
 	private OtherEmails otherEmails;
+
 	@JsonProperty("sex")
+	@ApiModelProperty(position = 11, value = "The concept describing the biological traits that distinguish the males and females of a species")
 	private String sex;
+
 	@JsonProperty("employerType")
+	@ApiModelProperty(position = 12, value = "A code that defines the employer type")
 	private String employerType;
+
 	@JsonProperty("relationships")
+	@ApiModelProperty(position = 13, value = "")
 	private Relationships relationships;
+
 	@JsonProperty("metadata")
+	@ApiModelProperty(position = 14, value = "Relationships that this contact has with one or more students")
 	private Metadata metadata;
 
 	public XContact() {

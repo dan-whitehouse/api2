@@ -8,6 +8,7 @@
 package org.ricone.api.xpress.model;
 
 import com.fasterxml.jackson.annotation.*;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -16,22 +17,36 @@ import java.util.stream.Stream;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"timeTableDay", "classMeetingDays", "timeTablePeriod", "roomNumber", "classBeginningTime", "classEndingTime", "sessionCode", "schoolCalendarRefId"})
 public class MeetingTime {
-
 	@JsonProperty("timeTableDay")
+	@ApiModelProperty(position = 1, value = "The unique identifier for the locally defined rotation cycle date code when the class meets (e.g., in a two day schedule, valid values could be 'A' and 'B', or '1' and '2')")
 	private String timeTableDay;
+
 	@JsonProperty("classMeetingDays")
+	@ApiModelProperty(position = 2, value = "The day(s) of the week (e.g., Monday, Wednesday) that the class meets or an indication that a class meets 'out-of-school' or 'self-paced'")
 	private ClassMeetingDays classMeetingDays;
+
 	@JsonProperty("timeTablePeriod")
+	@ApiModelProperty(position = 3, value = "An indication of the portion of a typical daily session in which students receive instruction in a specified subject (e.g., morning, sixth period, block period, or AB schedules)")
 	private String timeTablePeriod;
+
 	@JsonProperty("roomNumber")
+	@ApiModelProperty(position = 4, value = "A unique number or alphanumeric code assigned to a room by a school, school system, state, or other agency or entity")
 	private String roomNumber;
+
 	@JsonProperty("classBeginningTime")
+	@ApiModelProperty(position = 5, value = "An indication of the time of day the class begins")
 	private String classBeginningTime;
+
 	@JsonProperty("classEndingTime")
+	@ApiModelProperty(position = 6, value = "An indication of the time of day the class ends")
 	private String classEndingTime;
+
 	@JsonProperty("sessionCode")
+	@ApiModelProperty(position = 7, value = "A local code given to the session, usually for a session that represents a term within the school year such as a marking term")
 	private String sessionCode;
+
 	@JsonProperty("schoolCalendarRefId")
+	@ApiModelProperty(position = 8, value = "The RefId of the school calendar")
 	private String schoolCalendarRefId;
 
 	public MeetingTime() {

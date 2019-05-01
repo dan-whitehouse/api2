@@ -8,6 +8,7 @@
 package org.ricone.api.xpress.model;
 
 import com.fasterxml.jackson.annotation.*;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -17,12 +18,16 @@ import java.util.stream.Stream;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"staffPersonReference", "teacherOfRecord", "percentResponsible"})
 public class OtherStaff {
-
 	@JsonProperty("staffPersonReference")
+	@ApiModelProperty(position = 1, value = "A collection of information about a staff person")
 	private StaffPersonReference staffPersonReference;
+
 	@JsonProperty("teacherOfRecord")
+	@ApiModelProperty(position = 2, value = "Staff member who has a Teacher of Record responsibility for a Class Section based upon the state's definition of Teacher of Record")
 	private Boolean teacherOfRecord;
+
 	@JsonProperty("percentResponsible")
+	@ApiModelProperty(position = 3, value = "A percentage used to weight the educator's assigned responsibility for student learning in a Class Section, particularly when more than one educator is assigned to the class section")
 	private BigDecimal percentResponsible;
 
 	public OtherStaff() {

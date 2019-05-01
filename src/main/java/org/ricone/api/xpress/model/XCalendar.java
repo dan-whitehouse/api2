@@ -9,6 +9,7 @@ package org.ricone.api.xpress.model;
 
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -20,14 +21,23 @@ import java.util.stream.Stream;
 public class XCalendar extends XWrapper {
 	@JsonProperty("@refId")
 	@JacksonXmlProperty(localName = "refId", isAttribute = true)
+	@ApiModelProperty(position = 1, value = "The refId of the calendar")
 	private String refId;
+
 	@JsonProperty("schoolRefId")
+	@ApiModelProperty(position = 2, value = "The refId of the school to which this calendar applies. ")
 	private String schoolRefId;
+
 	@JsonProperty("schoolYear")
+	@ApiModelProperty(position = 3, value = "The school year for the calendar")
 	private String schoolYear;
+
 	@JsonProperty("sessions")
+	@ApiModelProperty(position = 4, value = "A list of sessions for the calendar")
 	private Sessions sessions;
+
 	@JsonProperty("metadata")
+	@ApiModelProperty(position = 5, value = "")
 	private Metadata metadata;
 
 	public XCalendar() {

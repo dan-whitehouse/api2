@@ -9,6 +9,7 @@ package org.ricone.api.xpress.model;
 
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -20,26 +21,47 @@ import java.util.stream.Stream;
 public class XStaff extends XWrapper {
 	@JsonProperty("@refId")
 	@JacksonXmlProperty(localName = "refId", isAttribute = true)
+	@ApiModelProperty(position = 1, value = "The refId of the staff person")
 	private String refId;
+
 	@JsonProperty("name")
+	@ApiModelProperty(position = 2, value = " Name of the staff person")
 	private Name name;
+
 	@JsonProperty("localId")
+	@ApiModelProperty(position = 3, value = "A unique number or alphanumeric code assigned to a staff member by a district or LEA")
 	private String localId;
+
 	@JsonProperty("stateProvinceId")
+	@ApiModelProperty(position = 4, value = "A unique number or alphanumeric code assigned to a staff member by a state")
 	private String stateProvinceId;
+
 	@JsonProperty("otherIds")
+	@ApiModelProperty(position = 5, value = " Other Ids for the person")
 	private OtherIds otherIds;
+
 	@JsonProperty("sex")
+	@ApiModelProperty(position = 6, value = "The concept describing the biological traits that distinguish the males and females of a species")
 	private String sex;
+
 	@JsonProperty("email")
+	@ApiModelProperty(position = 7, value = "The email address of the person")
 	private Email email;
+
 	@JsonProperty("primaryAssignment")
+	@ApiModelProperty(position = 8, value = "The primary district, school, and function to which the person is assigned")
 	private PrimaryAssignment primaryAssignment;
+
 	@JsonProperty("otherAssignments")
+	@ApiModelProperty(position = 9, value = "Other locations and functions to which the person is assigned")
 	private OtherAssignments otherAssignments;
+
 	@JsonProperty("appProvisioningInfo")
+	@ApiModelProperty(position = 10, value = "")
 	private AppProvisioningInfo appProvisioningInfo;
+
 	@JsonProperty("metadata")
+	@ApiModelProperty(position = 11, value = "")
 	private Metadata metadata;
 
 	public XStaff() {

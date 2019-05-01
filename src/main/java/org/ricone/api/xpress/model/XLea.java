@@ -2,6 +2,7 @@ package org.ricone.api.xpress.model;
 
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -13,22 +14,39 @@ import java.util.stream.Stream;
 public class XLea extends XWrapper {
 	@JsonProperty("@refId")
 	@JacksonXmlProperty(localName = "refId", isAttribute = true)
+	@ApiModelProperty(position = 1, value = "The refId for the LEA")
 	private String refId;
+
 	@JsonProperty("localId")
+	@ApiModelProperty(position = 2, value = "A unique number or alphanumeric code assigned to a local education agency by a school system")
 	private String localId;
+
 	@JsonProperty("stateProvinceId")
+	@ApiModelProperty(position = 3, value = "A unique number or alphanumeric code assigned to a local education agency by a state")
 	private String stateProvinceId;
+
 	@JsonProperty("ncesId")
+	@ApiModelProperty(position = 4, value = "A unique number or alphanumeric code assigned to a local education agency by NCES")
 	private String ncesId;
+
 	@JsonProperty("leaName")
+	@ApiModelProperty(position = 5, value = "The name of a non-person entity such as an organization, institution, agency or business; in this case, a Local Education Agency")
 	private String leaName;
+
 	@JsonProperty("address")
+	@ApiModelProperty(position = 6, value = "The address of the LEA")
 	private Address address;
+
 	@JsonProperty("phoneNumber")
+	@ApiModelProperty(position = 7, value = "The phone number of the LEA")
 	private PhoneNumber phoneNumber;
+
 	@JsonProperty("otherPhoneNumbers")
+	@ApiModelProperty(position = 8, value = "A list of other phone numbers for the LEA")
 	private OtherPhoneNumbers otherPhoneNumbers;
+
 	@JsonProperty("metadata")
+	@ApiModelProperty(position = 9, value = "The id")
 	private Metadata metadata;
 
 	public XLea() {

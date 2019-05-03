@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -11,11 +12,10 @@ import java.util.stream.Stream;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"schoolYear"})
-public class Metadata implements Serializable {
-
+public class Metadata {
     @JsonProperty("schoolYear")
+    @ApiModelProperty(position = 1, value = "")
     private Integer schoolYear;
-    private final static long serialVersionUID = -7504765401152453898L;
 
     /**
      * No args constructor for use in serialization

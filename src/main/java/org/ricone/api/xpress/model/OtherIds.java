@@ -21,7 +21,7 @@ import java.util.List;
 @JsonPropertyOrder({"otherId"})
 public class OtherIds {
 	@JsonProperty("otherId")
-	@ApiModelProperty(position = 1, value = "Another Id for the person or organization")
+	@ApiModelProperty(position = 1, value = "Other Ids for the person or organization")
 	private List<OtherId> otherId;
 
 	public OtherIds() {

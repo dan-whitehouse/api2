@@ -18,15 +18,15 @@ import java.util.stream.Stream;
 @JsonPropertyOrder({"leaRefId", "schoolRefId", "studentSchoolAssociationRefId", "responsibleSchoolType", "membershipType", "entryDate", "entryType", "exitDate", "exitType", "homeRoomNumber", "homeRoomTeacher", "gradeLevel", "projectedGraduationYear", "counselor"})
 public class Enrollment {
 	@JsonProperty("leaRefId")
-	@ApiModelProperty(position = 1, value = "RefId of the LEA")
+	@ApiModelProperty(position = 1, value = "The refId of the LEA")
 	private String leaRefId;
 
 	@JsonProperty("schoolRefId")
-	@ApiModelProperty(position = 2, value = "RefId of the school")
+	@ApiModelProperty(position = 2, value = "The refId of the school")
 	private String schoolRefId;
 
 	@JsonProperty("studentSchoolAssociationRefId")
-	@ApiModelProperty(position = 3, value = "RefId of the school")
+	@ApiModelProperty(position = 3, value = "The refId of the school")
 	private String studentSchoolAssociationRefId;
 
 	@JsonProperty("responsibleSchoolType")

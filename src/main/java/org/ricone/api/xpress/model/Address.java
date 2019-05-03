@@ -11,31 +11,31 @@ import java.util.stream.Stream;
 @JsonPropertyOrder({"addressType", "line1", "line2", "city", "stateProvince", "countryCode", "postalCode"})
 public class Address {
 	@JsonProperty("addressType")
-	@ApiModelProperty(value = "The type of address listed", position = 1)
+	@ApiModelProperty( position = 1, value = "The type of address listed")
 	private String addressType;
 
 	@JsonProperty("line1")
-	@ApiModelProperty(value = "The first line of the address", position = 2)
+	@ApiModelProperty(position = 2, value = "The first line of the address")
 	private String line1;
 
 	@JsonProperty("line2")
-	@ApiModelProperty(value = "The second line of the address", position = 3)
+	@ApiModelProperty(position = 3, value = "The second line of the address")
 	private String line2;
 
 	@JsonProperty("city")
-	@ApiModelProperty(value = "The name of the city in which an address is located", position = 4)
+	@ApiModelProperty(position = 4, value = "The name of the city in which an address is located")
 	private String city;
 
 	@JsonProperty("stateProvince")
-	@ApiModelProperty(value = "The abbreviation for the state, province or outlying area in which an address is located", position = 5)
+	@ApiModelProperty(position = 5, value = "The abbreviation for the state, province or outlying area in which an address is located")
 	private String stateProvince;
 
 	@JsonProperty("countryCode")
-	@ApiModelProperty(value = "The unique two character International Organization for Standardization (ISO) code for the country in which an address is located", position = 6)
+	@ApiModelProperty(position = 6, value = "The unique two character International Organization for Standardization (ISO) code for the country in which an address is located")
 	private String countryCode;
 
 	@JsonProperty("postalCode")
-	@ApiModelProperty(value = "A number that identifies each postal delivery area in the locale used as a portion of an address", position = 7)
+	@ApiModelProperty(position = 7, value = "A number that identifies each postal delivery area in the locale used as a portion of an address")
 	private String postalCode;
 
 	public Address() {

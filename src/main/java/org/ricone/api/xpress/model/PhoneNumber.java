@@ -11,15 +11,15 @@ import java.util.stream.Stream;
 @JsonPropertyOrder({"phoneNumberType", "number", "primaryIndicator"})
 public class PhoneNumber {
 	@JsonProperty("phoneNumberType")
-	@ApiModelProperty(value = "The type of communication number listed for a person", position = 1)
+	@ApiModelProperty(position = 1, value = "The type of communication number listed for a person")
 	private String phoneNumberType;
 
 	@JsonProperty("number")
-	@ApiModelProperty(value = "The telephone number including the area code, and extension, if applicable", position = 2)
+	@ApiModelProperty(position = 2, value = "The telephone number including the area code, and extension, if applicable")
 	private String number;
 
 	@JsonProperty("primaryIndicator")
-	@ApiModelProperty(value = " An indication that the telephone number should be used as the principal number for a person or organization", position = 3)
+	@ApiModelProperty(position = 3, value = " An indication that the telephone number should be used as the principal number for a person or organization")
 	private String primaryIndicator;
 
 	public PhoneNumber() {

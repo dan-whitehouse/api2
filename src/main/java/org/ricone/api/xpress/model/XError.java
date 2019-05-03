@@ -9,7 +9,6 @@ import java.util.Map;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"@id", "code", "message", "description"})
 public class XError implements Serializable {
-
 	@JsonProperty("@id")
 	private String id;
 	@JsonProperty("code")

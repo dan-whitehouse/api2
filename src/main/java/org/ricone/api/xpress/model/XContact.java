@@ -25,7 +25,7 @@ public class XContact extends XWrapper {
 	private String refId;
 
 	@JsonProperty("name")
-	@ApiModelProperty(position = 2, value = "Name of the contact")
+	@ApiModelProperty(position = 2, value = "The name of the contact")
 	private Name name;
 
 	@JsonProperty("otherNames")
@@ -69,11 +69,11 @@ public class XContact extends XWrapper {
 	private String employerType;
 
 	@JsonProperty("relationships")
-	@ApiModelProperty(position = 13, value = "")
+	@ApiModelProperty(position = 13, value = "Relationships that this contact has with one or more students")
 	private Relationships relationships;
 
 	@JsonProperty("metadata")
-	@ApiModelProperty(position = 14, value = "Relationships that this contact has with one or more students")
+	@ApiModelProperty(position = 14, value = "")
 	private Metadata metadata;
 
 	public XContact() {

@@ -18,7 +18,7 @@ import java.util.List;
 @JsonPropertyOrder({"gradeLevel"})
 public class GradeLevels {
 	@JsonProperty("gradeLevel")
-	@ApiModelProperty(position = 7, value = "The grade level or primary instructional level at which a student enters and receives services in a school or an educational institution during a given academic session")
+	@ApiModelProperty(position = 1, value = "The grade level or primary instructional level at which a student enters and receives services in a school or an educational institution during a given academic session")
 	private List<String> gradeLevel;
 
 	public GradeLevels() {

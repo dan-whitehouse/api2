@@ -4,21 +4,25 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"loginId", "tempPassword", "tempPasswordExpiryDate"})
-public class AppProvisioningInfo implements Serializable {
-
+public class AppProvisioningInfo {
 	@JsonProperty("loginId")
+	@ApiModelProperty(position = 1, value = "The username associated to a person")
 	private String loginId;
+
 	@JsonProperty("tempPassword")
+	@ApiModelProperty(position = 2, value = "A temporary password defined by the district")
 	private String tempPassword;
+
 	@JsonProperty("tempPasswordExpiryDate")
+	@ApiModelProperty(position = 3, value = "A date in which the temporary password is set to expire")
 	private String tempPasswordExpiryDate;
-	private final static long serialVersionUID = 6144160832199171697L;
 
 	public AppProvisioningInfo() {
 	}

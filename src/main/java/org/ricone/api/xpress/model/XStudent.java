@@ -21,11 +21,11 @@ import java.util.stream.Stream;
 public class XStudent extends XWrapper {
 	@JsonProperty("@refId")
 	@JacksonXmlProperty(localName = "refId", isAttribute = true)
-	@ApiModelProperty(position = 1, value = "The refId of the student.")
+	@ApiModelProperty(position = 1, value = "The refId of the student")
 	private String refId;
 
 	@JsonProperty("name")
-	@ApiModelProperty(position = 2, value = "Name of Student")
+	@ApiModelProperty(position = 2, value = "The name of student")
 	private Name name;
 
 	@JsonProperty("otherNames")

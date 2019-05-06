@@ -17,6 +17,7 @@ import springfox.documentation.service.*;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
+import springfox.documentation.swagger.web.*;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.util.ArrayList;
@@ -50,10 +51,30 @@ public class Init {
 		final CorsConfiguration config = new CorsConfiguration();
 		config.setAllowCredentials(true);
 		config.setAllowedOrigins(Collections.singletonList("*"));
-		config.setAllowedHeaders(Arrays.asList("Origin", "Content-Type", "Accept"));
-		config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "OPTIONS", "DELETE", "PATCH"));
+		config.setAllowedHeaders(Arrays.asList("Origin", "Content-Type", "Accept", "Authorization", "SchoolYear", "IdType", "NavigationPage", "NavigationPageSize"));
+		config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "HEAD", "OPTIONS", "DELETE", "PATCH"));
 		source.registerCorsConfiguration("/**", config);
 		return new CorsFilter(source);
+	}
+
+	@Bean
+	UiConfiguration uiConfig() {
+		return UiConfigurationBuilder.builder()
+				/*.deepLinking(true)
+				.displayOperationId(false)
+				.defaultModelsExpandDepth(1)
+				.defaultModelExpandDepth(1)
+				.defaultModelRendering(ModelRendering.EXAMPLE)
+				.displayRequestDuration(false)
+				.docExpansion(DocExpansion.NONE)
+				.filter(false)
+				.maxDisplayedTags(null)*/
+				.operationsSorter(OperationsSorter.ALPHA)
+				/*.showExtensions(false)
+				.tagsSorter(TagsSorter.ALPHA)
+				.supportedSubmitMethods(UiConfiguration.Constants.DEFAULT_SUBMIT_METHODS)
+				.validatorUrl(null)*/
+				.build();
 	}
 
 	@Bean
@@ -65,8 +86,9 @@ public class Init {
 				.build()
 				.apiInfo(xPressMetaData())
 				.groupName("xPress")
-			.securitySchemes(getSecuritySchemes())
-			.securityContexts(getSecurityContexts())
+				.securitySchemes(Collections.singletonList(apiKey()))
+			//.securitySchemes(getSecuritySchemes())
+			//.securityContexts(getSecurityContexts())
 		;
 	}
 
@@ -79,8 +101,9 @@ public class Init {
 				.build()
 				.apiInfo(oneRosterMetaData())
 				.groupName("OneRoster")
-			.securitySchemes(getSecuritySchemes())
-			.securityContexts(getSecurityContexts())
+			//.securitySchemes(getSecuritySchemes())
+			//.securityContexts(getSecurityContexts())
+				.securitySchemes(Collections.singletonList(apiKey()))
 			/*.globalOperationParameters(
 				newArrayList(new ParameterBuilder()
 						.name("sort")
@@ -116,7 +139,12 @@ public class Init {
 			.build();
 	}
 
-	private List<ApiKey> getSecuritySchemes() {
+	private ApiKey apiKey() {
+		//`apiKey` is the name of the APIKey, `Authorization` is the key in the request header
+		return new ApiKey("Bearer", "Authorization", "header");
+	}
+
+	/*private List<ApiKey> getSecuritySchemes() {
 		List<ApiKey> list = new ArrayList<>();
 		list.add(new ApiKey("Bearer", "Authorization", "header"));
 		return list;
@@ -140,4 +168,17 @@ public class Init {
 		list.add(new SecurityReference("Bearer", authorizationScopes));
 		return list;
 	}
+
+	@Bean
+	public SecurityConfiguration security() {
+		return SecurityConfigurationBuilder.builder()
+				.clientId("test-app-client-id")
+				.clientSecret("test-app-client-secret")
+				.realm("test-app-realm")
+				.appName("test-app")
+				.scopeSeparator(",")
+				.additionalQueryStringParams(null)
+				.useBasicAuthenticationWithAccessCodeGrant(false)
+				.build();
+	}*/
 }

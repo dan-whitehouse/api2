@@ -1,13 +1,11 @@
 package org.ricone.api.xpress.request.xStudent;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ricone.api.xpress.component.BaseController;
 import org.ricone.api.xpress.component.acl.XStudentsACL;
+import org.ricone.api.xpress.component.swagger.SwaggerParam;
 import org.ricone.api.xpress.error.exception.NotFoundException;
 import org.ricone.api.xpress.model.XErrorResponse;
 import org.ricone.api.xpress.model.XStudentResponse;
@@ -31,8 +29,8 @@ public class XStudentController extends BaseController {
 	private final Logger logger = LogManager.getLogger(XStaffController.class);
 
 	@XStudentsACL.Get.ById
-	@ResponseBody @GetMapping(value = "/requests/xStudents/{id}")
-	@ApiOperation(value = "Return xStudent by refId", tags = {"xStudents"})
+	@GetMapping(value = "/requests/xStudents/{id}", produces = {"application/json", "application/xml"})
+	@ApiOperation(value = "Return xStudent by refId", tags = {"xStudents"}, authorizations = {@Authorization(value="Bearer")})
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "Success", response = XStudentResponse.class),
 			@ApiResponse(code = 400, message = "Bad Request", response = XErrorResponse.class),
@@ -41,7 +39,7 @@ public class XStudentController extends BaseController {
 			@ApiResponse(code = 404, message = "Not Found", response = XErrorResponse.class),
 			@ApiResponse(code = 500, message = "Internal Server Error", response = XErrorResponse.class)
 	})
-	public XStudentResponse getXStaffById(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "id") String id) throws Exception {
+	public XStudentResponse getXStaffById(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "id") String id, @SwaggerParam.SchoolYear Integer schoolYear, @SwaggerParam.IdType String idType) throws Exception {
 		if(Util.isRefId(id)) {
 			return service.findByRefId(getMetaData(request, response), id);
 		}
@@ -55,8 +53,8 @@ public class XStudentController extends BaseController {
 	}
 
 	@XStudentsACL.Get.All
-	@ResponseBody @GetMapping(value = "/requests/xStudents")
-	@ApiOperation(value = "Return all xStudents", tags = {"xStudents"})
+	@GetMapping(value = "/requests/xStudents", produces = {"application/json", "application/xml"})
+	@ApiOperation(value = "Return all xStudents", tags = {"xStudents"}, authorizations = {@Authorization(value="Bearer")})
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "Success", response = XStudentsResponse.class),
 			@ApiResponse(code = 400, message = "Bad Request", response = XErrorResponse.class),
@@ -65,13 +63,13 @@ public class XStudentController extends BaseController {
 			@ApiResponse(code = 404, message = "Not Found", response = XErrorResponse.class),
 			@ApiResponse(code = 500, message = "Internal Server Error", response = XErrorResponse.class)
 	})
-	public XStudentsResponse getXStaffs(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public XStudentsResponse getXStaffs(HttpServletRequest request, HttpServletResponse response, @SwaggerParam.SchoolYear Integer schoolYear, @SwaggerParam.NavigationPage Integer navigationPage, @SwaggerParam.NavigationPageSize Integer navigationPageSize) throws Exception {
 		return service.findAll(getMetaData(request, response));
 	}
 
 	@XStudentsACL.Get.ByXLea
-	@ResponseBody @GetMapping(value = "/requests/xLeas/{refId}/xStudents")
-	@ApiOperation(value = "Return all xStudents by xLea refId", tags = {"xStudents"})
+	@GetMapping(value = "/requests/xLeas/{refId}/xStudents", produces = {"application/json", "application/xml"})
+	@ApiOperation(value = "Return all xStudents by xLea refId", tags = {"xStudents"}, authorizations = {@Authorization(value="Bearer")})
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "Success", response = XStudentsResponse.class),
 			@ApiResponse(code = 400, message = "Bad Request", response = XErrorResponse.class),
@@ -80,13 +78,13 @@ public class XStudentController extends BaseController {
 			@ApiResponse(code = 404, message = "Not Found", response = XErrorResponse.class),
 			@ApiResponse(code = 500, message = "Internal Server Error", response = XErrorResponse.class)
 	})
-	public XStudentsResponse getXStudentsByXLea(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "refId") String refId) throws Exception {
+	public XStudentsResponse getXStudentsByXLea(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "refId") String refId, @SwaggerParam.SchoolYear Integer schoolYear, @SwaggerParam.NavigationPage Integer navigationPage, @SwaggerParam.NavigationPageSize Integer navigationPageSize) throws Exception {
 		return service.findAllByLea(getMetaData(request, response), refId);
 	}
 
 	@XStudentsACL.Get.ByXSchool
-	@ResponseBody @GetMapping(value = "/requests/xSchools/{refId}/xStudents")
-	@ApiOperation(value = "Return all xStudents by xSchool refId", tags = {"xStudents"})
+	@GetMapping(value = "/requests/xSchools/{refId}/xStudents", produces = {"application/json", "application/xml"})
+	@ApiOperation(value = "Return all xStudents by xSchool refId", tags = {"xStudents"}, authorizations = {@Authorization(value="Bearer")})
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "Success", response = XStudentsResponse.class),
 			@ApiResponse(code = 400, message = "Bad Request", response = XErrorResponse.class),
@@ -95,7 +93,7 @@ public class XStudentController extends BaseController {
 			@ApiResponse(code = 404, message = "Not Found", response = XErrorResponse.class),
 			@ApiResponse(code = 500, message = "Internal Server Error", response = XErrorResponse.class)
 	})
-	public XStudentsResponse getXStudentsByXSchool(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "refId") String refId, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Optional<LocalDateTime> changesSinceMarker) throws Exception {
+	public XStudentsResponse getXStudentsByXSchool(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "refId") String refId, @SwaggerParam.SchoolYear Integer schoolYear, @SwaggerParam.NavigationPage Integer navigationPage, @SwaggerParam.NavigationPageSize Integer navigationPageSize, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Optional<LocalDateTime> changesSinceMarker) throws Exception {
 		if(changesSinceMarker.isPresent()) {
 			//Todo: Create service for getting AUPP
 		}
@@ -103,8 +101,8 @@ public class XStudentController extends BaseController {
 	}
 
 	@XStudentsACL.Get.ByXRoster
-	@ResponseBody @GetMapping(value = "/requests/xRosters/{refId}/xStudents")
-	@ApiOperation(value = "Return all xStudents by xRoster refId", tags = {"xStudents"})
+	@GetMapping(value = "/requests/xRosters/{refId}/xStudents", produces = {"application/json", "application/xml"})
+	@ApiOperation(value = "Return all xStudents by xRoster refId", tags = {"xStudents"}, authorizations = {@Authorization(value="Bearer")})
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "Success", response = XStudentsResponse.class),
 			@ApiResponse(code = 400, message = "Bad Request", response = XErrorResponse.class),
@@ -113,13 +111,13 @@ public class XStudentController extends BaseController {
 			@ApiResponse(code = 404, message = "Not Found", response = XErrorResponse.class),
 			@ApiResponse(code = 500, message = "Internal Server Error", response = XErrorResponse.class)
 	})
-	public XStudentsResponse getXStudentsByXRoster(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "refId") String refId) throws Exception {
+	public XStudentsResponse getXStudentsByXRoster(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "refId") String refId, @SwaggerParam.SchoolYear Integer schoolYear, @SwaggerParam.NavigationPage Integer navigationPage, @SwaggerParam.NavigationPageSize Integer navigationPageSize) throws Exception {
 		return service.findAllByRoster(getMetaData(request, response), refId);
 	}
 
 	@XStudentsACL.Get.ByXStaff
-	@ResponseBody @GetMapping(value = "/requests/xStaffs/{refId}/xStudents")
-	@ApiOperation(value = "Return all xStudents by xStaff refId", tags = {"xStudents"})
+	@GetMapping(value = "/requests/xStaffs/{refId}/xStudents", produces = {"application/json", "application/xml"})
+	@ApiOperation(value = "Return all xStudents by xStaff refId", tags = {"xStudents"}, authorizations = {@Authorization(value="Bearer")})
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "Success", response = XStudentsResponse.class),
 			@ApiResponse(code = 400, message = "Bad Request", response = XErrorResponse.class),
@@ -128,13 +126,13 @@ public class XStudentController extends BaseController {
 			@ApiResponse(code = 404, message = "Not Found", response = XErrorResponse.class),
 			@ApiResponse(code = 500, message = "Internal Server Error", response = XErrorResponse.class)
 	})
-	public XStudentsResponse getXStudentsByXStaff(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "refId") String refId) throws Exception {
+	public XStudentsResponse getXStudentsByXStaff(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "refId") String refId, @SwaggerParam.SchoolYear Integer schoolYear, @SwaggerParam.NavigationPage Integer navigationPage, @SwaggerParam.NavigationPageSize Integer navigationPageSize) throws Exception {
 		return service.findAllByStaff(getMetaData(request, response), refId);
 	}
 
 	@XStudentsACL.Get.ByXContact
-	@ResponseBody @GetMapping(value = "/requests/xContacts/{refId}/xStudents")
-	@ApiOperation(value = "Return all xStudents by xContact refId", tags = {"xStudents"})
+	@GetMapping(value = "/requests/xContacts/{refId}/xStudents", produces = {"application/json", "application/xml"})
+	@ApiOperation(value = "Return all xStudents by xContact refId", tags = {"xStudents"}, authorizations = {@Authorization(value="Bearer")})
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "Success", response = XStudentsResponse.class),
 			@ApiResponse(code = 400, message = "Bad Request", response = XErrorResponse.class),
@@ -143,7 +141,7 @@ public class XStudentController extends BaseController {
 			@ApiResponse(code = 404, message = "Not Found", response = XErrorResponse.class),
 			@ApiResponse(code = 500, message = "Internal Server Error", response = XErrorResponse.class)
 	})
-	public XStudentsResponse getXStudentsByXContact(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "refId") String refId) throws Exception {
+	public XStudentsResponse getXStudentsByXContact(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "refId") String refId, @SwaggerParam.SchoolYear Integer schoolYear, @SwaggerParam.NavigationPage Integer navigationPage, @SwaggerParam.NavigationPageSize Integer navigationPageSize) throws Exception {
 		return service.findAllByContact(getMetaData(request, response), refId);
 	}
 }

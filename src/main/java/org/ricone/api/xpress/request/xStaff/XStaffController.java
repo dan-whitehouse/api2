@@ -1,20 +1,23 @@
 package org.ricone.api.xpress.request.xStaff;
 
-import io.swagger.annotations.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ricone.api.xpress.component.BaseController;
 import org.ricone.api.xpress.component.ISO8601;
+import org.ricone.api.xpress.component.acl.ACL;
 import org.ricone.api.xpress.component.acl.XStaffsACL;
+import org.ricone.api.xpress.component.swagger.Swagger;
 import org.ricone.api.xpress.component.swagger.SwaggerParam;
 import org.ricone.api.xpress.error.exception.NotFoundException;
-import org.ricone.api.xpress.model.XErrorResponse;
 import org.ricone.api.xpress.model.XStaffResponse;
 import org.ricone.api.xpress.model.XStaffsResponse;
 import org.ricone.api.xpress.util.ControllerUtil;
 import org.ricone.api.xpress.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,22 +25,14 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 @RestController("XPress:XStaffs:XStaffController")
-@Api(value = "xStaffs", description = "REST API for xStaffs", tags = {"xStaffs"})
+@Swagger.Controller.XStaffController
 public class XStaffController extends BaseController {
 	@Autowired private XStaffService service;
 	private final Logger logger = LogManager.getLogger(XStaffController.class);
 
-	@XStaffsACL.Get.ById
+	@ACL.Get.XStaff.ById
 	@GetMapping(value = "/requests/xStaffs/{id}", produces = {"application/json", "application/xml"})
-	@ApiOperation(value = "Return xStaff by refId", tags = {"xStaffs"}, authorizations = {@Authorization(value="Bearer")})
-	@ApiResponses({
-			@ApiResponse(code = 200, message = "Success", response = XStaffResponse.class),
-			@ApiResponse(code = 400, message = "Bad Request", response = XErrorResponse.class),
-			@ApiResponse(code = 401, message = "Unauthorized", response = XErrorResponse.class),
-			@ApiResponse(code = 403, message = "Forbidden", response = XErrorResponse.class),
-			@ApiResponse(code = 404, message = "Not Found", response = XErrorResponse.class),
-			@ApiResponse(code = 500, message = "Internal Server Error", response = XErrorResponse.class)
-	})
+	@Swagger.Operation.GetXStaffById /**/ @Swagger.Response.XStaff
 	public XStaffResponse getXStaffById(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "id") String id, @SwaggerParam.SchoolYear Integer schoolYear, @SwaggerParam.IdType String idType) throws Exception {
 		if(Util.isRefId(id)) {
 			return service.findByRefId(getMetaData(request, response), id);
@@ -51,94 +46,46 @@ public class XStaffController extends BaseController {
 		throw new NotFoundException("Id: " + id + " is not a valid refId. You may be missing the 'IdType' header.");
 	}
 
-	@XStaffsACL.Get.All
+	@ACL.Get.XStaff.All
 	@GetMapping(value = "/requests/xStaffs", produces = {"application/json", "application/xml"})
-	@ApiOperation(value = "Return all xStaffs", tags = {"xStaffs"}, authorizations = {@Authorization(value="Bearer")})
-	@ApiResponses({
-			@ApiResponse(code = 200, message = "Success", response = XStaffsResponse.class),
-			@ApiResponse(code = 400, message = "Bad Request", response = XErrorResponse.class),
-			@ApiResponse(code = 401, message = "Unauthorized", response = XErrorResponse.class),
-			@ApiResponse(code = 403, message = "Forbidden", response = XErrorResponse.class),
-			@ApiResponse(code = 404, message = "Not Found", response = XErrorResponse.class),
-			@ApiResponse(code = 500, message = "Internal Server Error", response = XErrorResponse.class)
-	})
+	@Swagger.Operation.GetXStaffs /**/ @Swagger.Response.XStaffs
 	public XStaffsResponse getXStaffs(HttpServletRequest request, HttpServletResponse response, @SwaggerParam.SchoolYear Integer schoolYear, @SwaggerParam.NavigationPage Integer navigationPage, @SwaggerParam.NavigationPageSize Integer navigationPageSize) throws Exception {
 		return service.findAll(getMetaData(request, response));
 	}
 
-	@XStaffsACL.Get.ByXLea
+	@ACL.Get.XStaff.ByXLea
 	@GetMapping(value = "/requests/xLeas/{refId}/xStaffs", produces = {"application/json", "application/xml"})
-	@ApiOperation(value = "Return all xStaffs by xLea refId", tags = {"xStaffs"}, authorizations = {@Authorization(value="Bearer")})
-	@ApiResponses({
-			@ApiResponse(code = 200, message = "Success", response = XStaffsResponse.class),
-			@ApiResponse(code = 400, message = "Bad Request", response = XErrorResponse.class),
-			@ApiResponse(code = 401, message = "Unauthorized", response = XErrorResponse.class),
-			@ApiResponse(code = 403, message = "Forbidden", response = XErrorResponse.class),
-			@ApiResponse(code = 404, message = "Not Found", response = XErrorResponse.class),
-			@ApiResponse(code = 500, message = "Internal Server Error", response = XErrorResponse.class)
-	})
+	@Swagger.Operation.GetXStaffsByXLea /**/ @Swagger.Response.XStaffs
 	public XStaffsResponse getXStaffsByXLea(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "refId") String refId, @SwaggerParam.SchoolYear Integer schoolYear, @SwaggerParam.NavigationPage Integer navigationPage, @SwaggerParam.NavigationPageSize Integer navigationPageSize) throws Exception {
 		return service.findAllByLea(getMetaData(request, response), refId);
 	}
 
-	@XStaffsACL.Get.ByXSchool
+	@ACL.Get.XStaff.ByXSchool
 	@GetMapping(value = "/requests/xSchools/{refId}/xStaffs", produces = {"application/json", "application/xml"})
-	@ApiOperation(value = "Return all xStaffs by xSchool refId", tags = {"xStaffs"}, authorizations = {@Authorization(value="Bearer")})
-	@ApiResponses({
-			@ApiResponse(code = 200, message = "Success", response = XStaffsResponse.class),
-			@ApiResponse(code = 400, message = "Bad Request", response = XErrorResponse.class),
-			@ApiResponse(code = 401, message = "Unauthorized", response = XErrorResponse.class),
-			@ApiResponse(code = 403, message = "Forbidden", response = XErrorResponse.class),
-			@ApiResponse(code = 404, message = "Not Found", response = XErrorResponse.class),
-			@ApiResponse(code = 500, message = "Internal Server Error", response = XErrorResponse.class)
-	})
+	@Swagger.Operation.GetXStaffsByXSchool /**/ @Swagger.Response.XStaffs
 	public XStaffsResponse getXStaffsByXSchool(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "refId") String refId, @SwaggerParam.SchoolYear Integer schoolYear, @SwaggerParam.NavigationPage Integer navigationPage, @SwaggerParam.NavigationPageSize Integer navigationPageSize, @RequestParam @ISO8601 Optional<LocalDateTime> changesSinceMarker) throws Exception {
 		//Todo: Create service for getting AUPP
 		changesSinceMarker.ifPresent(localDateTime -> logger.debug("THIS LOOKS LIKE A DATE: " + localDateTime));
 		return service.findAllBySchool(getMetaData(request, response), refId);
 	}
 
-	@XStaffsACL.Get.ByXCourse
+	@ACL.Get.XStaff.ByXCourse
 	@GetMapping(value = "/requests/xCourses/{refId}/xStaffs", produces = {"application/json", "application/xml"})
-	@ApiOperation(value = "Return all xStaffs by xCourse refId", tags = {"xStaffs"}, authorizations = {@Authorization(value="Bearer")})
-	@ApiResponses({
-			@ApiResponse(code = 200, message = "Success", response = XStaffsResponse.class),
-			@ApiResponse(code = 400, message = "Bad Request", response = XErrorResponse.class),
-			@ApiResponse(code = 401, message = "Unauthorized", response = XErrorResponse.class),
-			@ApiResponse(code = 403, message = "Forbidden", response = XErrorResponse.class),
-			@ApiResponse(code = 404, message = "Not Found", response = XErrorResponse.class),
-			@ApiResponse(code = 500, message = "Internal Server Error", response = XErrorResponse.class)
-	})
+	@Swagger.Operation.GetXStaffsByXCourse /**/ @Swagger.Response.XStaffs
 	public XStaffsResponse getXStaffsByXCourse(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "refId") String refId, @SwaggerParam.SchoolYear Integer schoolYear, @SwaggerParam.NavigationPage Integer navigationPage, @SwaggerParam.NavigationPageSize Integer navigationPageSize) throws Exception {
 		return service.findAllByCourse(getMetaData(request, response), refId);
 	}
 
-	@XStaffsACL.Get.ByXRoster
+	@ACL.Get.XStaff.ByXRoster
 	@GetMapping(value = "/requests/xRosters/{refId}/xStaffs", produces = {"application/json", "application/xml"})
-	@ApiOperation(value = "Return all xStaffs by xRoster refId", tags = {"xStaffs"}, authorizations = {@Authorization(value="Bearer")})
-	@ApiResponses({
-			@ApiResponse(code = 200, message = "Success", response = XStaffsResponse.class),
-			@ApiResponse(code = 400, message = "Bad Request", response = XErrorResponse.class),
-			@ApiResponse(code = 401, message = "Unauthorized", response = XErrorResponse.class),
-			@ApiResponse(code = 403, message = "Forbidden", response = XErrorResponse.class),
-			@ApiResponse(code = 404, message = "Not Found", response = XErrorResponse.class),
-			@ApiResponse(code = 500, message = "Internal Server Error", response = XErrorResponse.class)
-	})
+	@Swagger.Operation.GetXStaffsByXRoster /**/ @Swagger.Response.XStaffs
 	public XStaffsResponse getXStaffsByXRoster(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "refId") String refId, @SwaggerParam.SchoolYear Integer schoolYear, @SwaggerParam.NavigationPage Integer navigationPage, @SwaggerParam.NavigationPageSize Integer navigationPageSize) throws Exception {
 		return service.findAllByRoster(getMetaData(request, response), refId);
 	}
 
-	@XStaffsACL.Get.ByXStudent
+	@ACL.Get.XStaff.ByXStudent
 	@GetMapping(value = "/requests/xStudents/{refId}/xStaffs", produces = {"application/json", "application/xml"})
-	@ApiOperation(value = "Return all xStaffs by xStudent refId", tags = {"xStaffs"}, authorizations = {@Authorization(value="Bearer")})
-	@ApiResponses({
-			@ApiResponse(code = 200, message = "Success", response = XStaffsResponse.class),
-			@ApiResponse(code = 400, message = "Bad Request", response = XErrorResponse.class),
-			@ApiResponse(code = 401, message = "Unauthorized", response = XErrorResponse.class),
-			@ApiResponse(code = 403, message = "Forbidden", response = XErrorResponse.class),
-			@ApiResponse(code = 404, message = "Not Found", response = XErrorResponse.class),
-			@ApiResponse(code = 500, message = "Internal Server Error", response = XErrorResponse.class)
-	})
+	@Swagger.Operation.GetXStaffsByXStudent /**/ @Swagger.Response.XStaffs
 	public XStaffsResponse getXStaffsByXStudent(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "refId") String refId, @SwaggerParam.SchoolYear Integer schoolYear, @SwaggerParam.NavigationPage Integer navigationPage, @SwaggerParam.NavigationPageSize Integer navigationPageSize) throws Exception {
 		return service.findAllByStudent(getMetaData(request, response), refId);
 	}

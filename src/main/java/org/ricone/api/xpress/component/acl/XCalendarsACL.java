@@ -73,8 +73,6 @@ public @interface XCalendarsACL {
 		@Retention(RetentionPolicy.RUNTIME)
 		@PreAuthorize("hasAuthority('put:/requests/xSchools/{}/xCalendars')")
 		@interface ByXSchool { }
-
-
 	}
 
 	@interface Delete {

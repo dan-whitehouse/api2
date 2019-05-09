@@ -14,7 +14,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 
 
-@EnableWebSecurity
+//@EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurity extends WebSecurityConfigurerAdapter {
 	@Autowired
@@ -35,6 +35,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 			.authorizeRequests()
 				.antMatchers(HttpMethod.GET,
 			env.getProperty("springfox.documentation.swagger.v2.path"),
+						"/docs/**",
 						"/swagger-resources/**",
 						"/swagger-ui.html**",
 						"/webjars/**",

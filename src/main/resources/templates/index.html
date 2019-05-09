@@ -1,0 +1,158 @@
+<!-- HTML for static distribution bundle build -->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8">
+		<title>RIC One - Swagger</title>
+		<link rel="stylesheet" type="text/css" href="/swagger-ui.css" >
+		<link rel="icon" type="image/x-icon" href="/favicon.ico" sizes="32x32" />
+		<link rel="icon" type="image/x-icon" href="/favicon.ico" sizes="16x16" />
+		<style>
+			html
+			{
+			box-sizing: border-box;
+			overflow: -moz-scrollbars-vertical;
+			overflow-y: scroll;
+			}
+			*,
+			*:before,
+			*:after
+			{
+			box-sizing: inherit;
+			}
+			body
+			{
+			margin:0;
+			background: #fafafa;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="swagger-ui"></div>
+		<script src="/swagger-ui-bundle.js"> </script>
+		<script src="/swagger-ui-standalone-preset.js"> </script>
+		<script src="https://code.jquery.com/jquery-1.8.3.min.js" integrity="sha256-YcbK69I5IXQftf/mYD8WY0/KmEDCv1asggHpJk1trM8=" crossorigin="anonymous"></script>
+		<script>
+			window.onload = function() {
+			  // Begin Swagger UI call region
+			  const ui = SwaggerUIBundle({
+			    urls: [
+					{url:"http://localhost:8080/docs/swagger.json?group=xPress", name: "xPress"},
+					{url:"http://localhost:8080/docs/swagger.json?group=OneRoster", name: "OneRoster"}
+				],
+			    dom_id: '#swagger-ui',
+			    deepLinking: true,
+			    presets: [
+			      SwaggerUIBundle.presets.apis,
+			      SwaggerUIStandalonePreset
+			    ],
+			    plugins: [
+			      SwaggerUIBundle.plugins.DownloadUrl
+			    ],
+			    layout: "StandaloneLayout",
+				requestInterceptor: (req) => {
+					req.headers.Authorization = "Bearer xxxxxxx"
+					return req
+				}
+				/*responseInterceptor:function(response){
+					/*response.headers.Authorization = "Bearer " + token;
+					ui.preauthorizeApiKey("AccessToken", token);
+					
+					if(response.obj.access_token){
+						const token = response.obj.access_token;
+						ui.preauthorizeApiKey("AccessToken", token);
+					}
+					
+					return response;
+				}*/
+				/*onComplete: () => {
+					//ui.preauthorizeApiKey("Bearer", "Bearer 123456")
+					addAuthDropdown()
+				}*/
+			  })
+			  // End Swagger UI call region
+			
+			  window.ui = ui
+			}
+		</script>
+		<footer>
+			<div class="scrollup">
+				<i class="arrow-up"></i>
+			</div>
+		</footer>
+		
+		
+		<!-- Auth Dropdown -->
+		<script>
+			function addAuthDropdown() {
+
+				$('button.btn.authorize').ajaxSuccess(function() {
+				  alert('click');
+				  // Inject Dropdown into Authorize Modal
+				  $('.modal-ux-header').append('<select onChange="authDropdown(this, \'theinput\')" onMouseOut="authDropdownInit(this)"><option>Bearer</option><option value="ZTk3MDcxZmItYmFiOS00ODYwLThiOTctNjM2OWZhYjk1Y2IxOlBhc3N3b3JkMQ">Basic Auth - Single</option><option value="OTQzOGI4MDUtOTE1Ni00ZDU0LWJhMGQtM2Q4YTMzNWI2NGRiOlBhc3N3b3JkMQ">Basic Auth - Multi</option></select>');
+				});
+				
+
+				if($('select#select option:selected').attr('value').indexOf('xPress') > -1) {			
+					//Add Dropdown if xPress is the selected definition
+					$('.description').append('<select id="bearerTokenSelector" onChange="authDropdown(this, \'theinput\')" onMouseOut="authDropdownInit(this)"><option>Bearer</option><option value="ZTk3MDcxZmItYmFiOS00ODYwLThiOTctNjM2OWZhYjk1Y2IxOlBhc3N3b3JkMQ">Basic Auth - Single</option><option value="OTQzOGI4MDUtOTE1Ni00ZDU0LWJhMGQtM2Q4YTMzNWI2NGRiOlBhc3N3b3JkMQ">Basic Auth - Multi</option></select>');	
+				}
+				else {
+					$('#bearerTokenSelector').remove();
+				}
+			}
+			
+			
+			function authDropdownInit(e)
+			{
+				var theinput = document.getElementById('theinput');
+				var n = e.selectedIndex;
+				var t = e.options[n].value;
+				if(t != 'Bearer')
+				{
+					"" == theinput.value && (theinput.value = t) 
+				}
+				else
+				{
+				"" == theinput.value && (theinput.value = "Bearer ") 
+				}
+			}
+			
+			function authDropdown(e,n)
+			{
+				n=document.getElementById(n);
+				var t = e.selectedIndex; 
+				var	o = e.options[t].value;
+				
+				if(e.options[t].innerHTML != 'Bearer')
+				{
+					n.value = o;
+				}
+				else
+				{
+					n.value = "Bearer ";
+				}
+			}		
+		</script>
+		
+		<!-- Scroll Up -->
+		<script>
+			$(function() {		
+				$(window).scroll(function () {
+					if ($(this).scrollTop() > 300) {
+						$('.scrollup').fadeIn();
+					} else {
+						$('.scrollup').fadeOut();
+					}
+				});
+		
+				$('.scrollup').click(function () {
+					$('html, body').animate({
+						scrollTop: 0
+					}, 300);
+					return false;
+				});	
+			});
+		</script>
+	</body>
+</html>

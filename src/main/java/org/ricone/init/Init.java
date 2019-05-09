@@ -86,9 +86,9 @@ public class Init {
 				.build()
 				.apiInfo(xPressMetaData())
 				.groupName("xPress")
-				.securitySchemes(Collections.singletonList(apiKey()))
-			//.securitySchemes(getSecuritySchemes())
-			//.securityContexts(getSecurityContexts())
+				//.securitySchemes(Collections.singletonList(apiKey()))
+			.securitySchemes(getSecuritySchemes())
+			.securityContexts(getSecurityContexts())
 		;
 	}
 
@@ -101,9 +101,9 @@ public class Init {
 				.build()
 				.apiInfo(oneRosterMetaData())
 				.groupName("OneRoster")
-			//.securitySchemes(getSecuritySchemes())
-			//.securityContexts(getSecurityContexts())
-				.securitySchemes(Collections.singletonList(apiKey()))
+			.securitySchemes(getSecuritySchemes())
+			.securityContexts(getSecurityContexts())
+				// .securitySchemes(Collections.singletonList(apiKey()))
 			/*.globalOperationParameters(
 				newArrayList(new ParameterBuilder()
 						.name("sort")
@@ -139,14 +139,16 @@ public class Init {
 			.build();
 	}
 
-	private ApiKey apiKey() {
+	/*private ApiKey apiKey() {
 		//`apiKey` is the name of the APIKey, `Authorization` is the key in the request header
 		return new ApiKey("Bearer", "Authorization", "header");
-	}
+	}*/
 
-	/*private List<ApiKey> getSecuritySchemes() {
+
+	private List<ApiKey> getSecuritySchemes() {
 		List<ApiKey> list = new ArrayList<>();
 		list.add(new ApiKey("Bearer", "Authorization", "header"));
+		//list.add(new ApiKey("Test", "Authorization", "header"));
 		return list;
 	}
 
@@ -180,5 +182,5 @@ public class Init {
 				.additionalQueryStringParams(null)
 				.useBasicAuthenticationWithAccessCodeGrant(false)
 				.build();
-	}*/
+	}
 }

@@ -155,7 +155,9 @@ public @interface Swagger {
 
 		@Target({ElementType.METHOD, ElementType.TYPE})
 		@Retention(RetentionPolicy.RUNTIME)
-		@ApiOperation(value = "Return all xCalendars", tags = {"xCalendars"}, authorizations = {@Authorization(value="Bearer")})
+		@ApiOperation(value = "Return all xCalendars", tags = {"xCalendars"}, authorizations = {@Authorization(value="Bearer")},
+				nickname = "Nickname", notes = "This is a test note.", responseHeaders = @ResponseHeader(name = "SchoolYear")
+		)
 		@interface GetXCalendars {}
 
 		@Target({ElementType.METHOD, ElementType.TYPE})

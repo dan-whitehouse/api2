@@ -30,8 +30,8 @@ public class XLeaServiceImp implements XLeaService {
     }
 
     @Override
-    public XLeaResponse findByLocalId(ControllerData metadata, String localId) throws Exception {
-        LeaWrapper instance = dao.findByLocalId(metadata, localId);
+    public XLeaResponse findById(ControllerData metadata, String id, String idType) throws Exception {
+        LeaWrapper instance = dao.findById(metadata, id, idType);
         if(instance == null) {
             throw new NotFoundException();
         }

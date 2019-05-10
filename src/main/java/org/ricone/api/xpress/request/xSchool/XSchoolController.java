@@ -3,7 +3,6 @@ package org.ricone.api.xpress.request.xSchool;
 import org.apache.commons.lang3.StringUtils;
 import org.ricone.api.xpress.component.BaseController;
 import org.ricone.api.xpress.component.acl.ACL;
-import org.ricone.api.xpress.component.acl.XSchoolsACL;
 import org.ricone.api.xpress.component.swagger.Swagger;
 import org.ricone.api.xpress.component.swagger.SwaggerParam;
 import org.ricone.api.xpress.error.exception.NotFoundException;
@@ -25,16 +24,18 @@ public class XSchoolController extends BaseController {
 	private XSchoolService service;
 
 	@ACL.Get.XSchool.ById
-	@GetMapping(value = "/requests/xSchools/{id}", produces = {"application/json", "application/xml"})
+	@GetMapping(value = "/requests/xSchools/{refId}", produces = {"application/json", "application/xml"})
 	@Swagger.Operation.GetXSchoolById /**/ @Swagger.Response.XSchool
-	public XSchoolResponse getXSchoolById(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "id") String id, @SwaggerParam.SchoolYear Integer schoolYear, @SwaggerParam.IdType String idType) throws Exception {
+	public XSchoolResponse getXSchoolById(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "refId") String id, @SwaggerParam.SchoolYear Integer schoolYear, @SwaggerParam.IdType(values = {"local", "state"}) String idType) throws Exception {
 		if(Util.isRefId(id)) {
 			return service.findByRefId(getMetaData(request, response), id);
 		}
-		else if(StringUtils.equalsIgnoreCase(request.getHeader("idType"), "local")) {
-			return service.findByLocalId(getMetaData(request, response), id);
+		else {
+			if(StringUtils.isNotBlank(request.getHeader("IdType"))) {
+				return service.findById(getMetaData(request, response), id, request.getHeader("IdType"));
+			}
+			throw new NotFoundException("Id: " + id + " is not a valid refId. You may be missing the 'IdType' header.");
 		}
-		throw new NotFoundException("Id: " + id + " is not a valid refId. You may be missing the 'IdType' header.");
 	}
 
 	@ACL.Get.XSchool.All

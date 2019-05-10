@@ -10,7 +10,7 @@ public interface XLeaDAO {
 	/* Find */
 	LeaWrapper findByRefId(ControllerData metadata, String refId) throws NotFoundException;
 
-	LeaWrapper findByLocalId(ControllerData metadata, String localId);
+	LeaWrapper findById(ControllerData metadata, String id, String idType);
 
 	List<LeaWrapper> findAll(ControllerData metadata);
 
@@ -31,7 +31,7 @@ public interface XLeaDAO {
 	/* Greatest School Year */
 	Integer greatestSchoolYearByRefId(ControllerData metadata, String refId);
 
-	Integer greatestSchoolYearByLocalId(ControllerData metadata, String localId);
+	Integer greatestSchoolYearById(ControllerData metadata, String id, String idType);
 
 	Integer greatestSchoolYearAll(ControllerData metadata);
 

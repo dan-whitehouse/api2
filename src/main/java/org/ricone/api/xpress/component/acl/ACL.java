@@ -196,7 +196,7 @@ public @interface ACL {
 			@Target(ElementType.METHOD)
 			@Retention(RetentionPolicy.RUNTIME)
 			@PreAuthorize("hasAuthority('get:/requests/xStaffs')")
-			@interface ById { }
+			@interface ByRefId { }
 
 			@Target(ElementType.METHOD)
 			@Retention(RetentionPolicy.RUNTIME)
@@ -233,7 +233,7 @@ public @interface ACL {
 			@Target(ElementType.METHOD)
 			@Retention(RetentionPolicy.RUNTIME)
 			@PreAuthorize("hasAuthority('get:/requests/xStudents')")
-			@interface ById { }
+			@interface ByRefId { }
 
 			@Target(ElementType.METHOD)
 			@Retention(RetentionPolicy.RUNTIME)
@@ -270,7 +270,7 @@ public @interface ACL {
 			@Target(ElementType.METHOD)
 			@Retention(RetentionPolicy.RUNTIME)
 			@PreAuthorize("hasAuthority('get:/requests/xContacts')")
-			@interface ById { }
+			@interface ByRefId { }
 
 			@Target(ElementType.METHOD)
 			@Retention(RetentionPolicy.RUNTIME)

@@ -4,15 +4,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ricone.api.xpress.component.BaseController;
 import org.ricone.api.xpress.component.acl.ACL;
-import org.ricone.api.xpress.component.acl.XStudentsACL;
 import org.ricone.api.xpress.component.swagger.Swagger;
 import org.ricone.api.xpress.component.swagger.SwaggerParam;
-import org.ricone.api.xpress.error.exception.NotFoundException;
 import org.ricone.api.xpress.model.XStudentResponse;
 import org.ricone.api.xpress.model.XStudentsResponse;
 import org.ricone.api.xpress.request.xStaff.XStaffController;
-import org.ricone.api.xpress.util.ControllerUtil;
-import org.ricone.api.xpress.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,20 +27,11 @@ public class XStudentController extends BaseController {
 	@Autowired private XStudentService service;
 	private final Logger logger = LogManager.getLogger(XStaffController.class);
 
-	@ACL.Get.XStudent.ById
-	@GetMapping(value = "/requests/xStudents/{id}", produces = {"application/json", "application/xml"})
-	@Swagger.Operation.GetXStudentById /**/ @Swagger.Response.XStudent
-	public XStudentResponse getXStudentById(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "id") String id, @SwaggerParam.SchoolYear Integer schoolYear, @SwaggerParam.IdType String idType) throws Exception {
-		if(Util.isRefId(id)) {
-			return service.findByRefId(getMetaData(request, response), id);
-		}
-		else if(ControllerUtil.isRequestHeaderIdTypeLocal(request)) {
-			return service.findByLocalId(getMetaData(request, response), id);
-		}
-		else if(ControllerUtil.isIdTypeState(request)) {
-			return service.findByStateId(getMetaData(request, response), id);
-		}
-		throw new NotFoundException("Id: " + id + " is not a valid refId. You may be missing the 'IdType' header.");
+	@ACL.Get.XStudent.ByRefId
+	@GetMapping(value = "/requests/xStudents/{refId}", produces = {"application/json", "application/xml"})
+	@Swagger.Operation.GetXStudentByRefId /**/ @Swagger.Response.XStudent
+	public XStudentResponse getXStudentByRefId(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "refId") String refId, @SwaggerParam.SchoolYear Integer schoolYear) throws Exception {
+		return service.findByRefId(getMetaData(request, response), refId);
 	}
 
 	@ACL.Get.XStudent.All
@@ -66,7 +53,7 @@ public class XStudentController extends BaseController {
 	@Swagger.Operation.GetXStudentsByXSchool /**/ @Swagger.Response.XStudents
 	public XStudentsResponse getXStudentsByXSchool(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "refId") String refId, @SwaggerParam.SchoolYear Integer schoolYear, @SwaggerParam.NavigationPage Integer navigationPage, @SwaggerParam.NavigationPageSize Integer navigationPageSize, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Optional<LocalDateTime> changesSinceMarker) throws Exception {
 		if(changesSinceMarker.isPresent()) {
-			//Todo: Create service for getting AUPP
+			//Todo: Create service for changesSince
 		}
 		return service.findAllBySchool(getMetaData(request, response), refId);
 	}

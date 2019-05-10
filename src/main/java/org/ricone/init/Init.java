@@ -9,10 +9,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 import springfox.documentation.builders.ApiInfoBuilder;
-import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.schema.ModelRef;
 import springfox.documentation.service.*;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.contexts.SecurityContext;
@@ -24,8 +22,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
-import static com.google.common.collect.Lists.newArrayList;
 
 @SpringBootApplication
 @EnableSwagger2
@@ -44,20 +40,7 @@ public class Init {
 		http://localhost:8080/docs/swagger.json?group=XPress
 	 */
 
-	@Bean
-	public CorsFilter corsFilter() {
-		//https://stackoverflow.com/questions/51720552/enabling-cors-globally-in-spring-boot
-		final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-		final CorsConfiguration config = new CorsConfiguration();
-		config.setAllowCredentials(true);
-		config.setAllowedOrigins(Collections.singletonList("*"));
-		config.setAllowedHeaders(Arrays.asList("Origin", "Content-Type", "Accept", "Authorization", "SchoolYear", "IdType", "NavigationPage", "NavigationPageSize"));
-		config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "HEAD", "OPTIONS", "DELETE", "PATCH"));
-		source.registerCorsConfiguration("/**", config);
-		return new CorsFilter(source);
-	}
-
-	@Bean
+	@Bean //Swagger Related
 	UiConfiguration uiConfig() {
 		return UiConfigurationBuilder.builder()
 				/*.deepLinking(true)
@@ -77,7 +60,7 @@ public class Init {
 				.build();
 	}
 
-	@Bean
+	@Bean //Swagger Related
 	public Docket xPressAPI() {
 		return new Docket(DocumentationType.SWAGGER_2)
 			.select()
@@ -92,7 +75,7 @@ public class Init {
 		;
 	}
 
-	@Bean
+	@Bean //Swagger Related
 	public Docket oneRosterAPI() {
 		return new Docket(DocumentationType.SWAGGER_2)
 			.select()
@@ -104,18 +87,10 @@ public class Init {
 			.securitySchemes(getSecuritySchemes())
 			.securityContexts(getSecurityContexts())
 				// .securitySchemes(Collections.singletonList(apiKey()))
-			/*.globalOperationParameters(
-				newArrayList(new ParameterBuilder()
-						.name("sort")
-						.description("Description of someGlobalParameter")
-						.modelRef(new ModelRef("string"))
-						.parameterType("query")
-						.required(false)
-						.build()))
-			*/
 			;
 	}
 
+	//Swagger Related
 	private ApiInfo xPressMetaData() {
 		return new ApiInfoBuilder()
 			.title("xPress")
@@ -127,6 +102,7 @@ public class Init {
 			.build();
 	}
 
+	//Swagger Related
 	private ApiInfo oneRosterMetaData() {
 		return new ApiInfoBuilder()
 			.title("One Roster")
@@ -139,12 +115,7 @@ public class Init {
 			.build();
 	}
 
-	/*private ApiKey apiKey() {
-		//`apiKey` is the name of the APIKey, `Authorization` is the key in the request header
-		return new ApiKey("Bearer", "Authorization", "header");
-	}*/
-
-
+	//Swagger Related
 	private List<ApiKey> getSecuritySchemes() {
 		List<ApiKey> list = new ArrayList<>();
 		list.add(new ApiKey("Bearer", "Authorization", "header"));
@@ -152,6 +123,7 @@ public class Init {
 		return list;
 	}
 
+	//Swagger Related
 	private List<SecurityContext> getSecurityContexts() {
 		List<SecurityContext> list = new ArrayList<>();
 		list.add(SecurityContext.builder()
@@ -161,6 +133,7 @@ public class Init {
 		return list;
 	}
 
+	//Swagger Related
 	private List<SecurityReference> defaultAuth() {
 		AuthorizationScope authorizationScope = new AuthorizationScope("global", "accessEverything");
 		AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
@@ -171,7 +144,7 @@ public class Init {
 		return list;
 	}
 
-	@Bean
+	@Bean //Swagger Related
 	public SecurityConfiguration security() {
 		return SecurityConfigurationBuilder.builder()
 				.clientId("test-app-client-id")
@@ -183,4 +156,17 @@ public class Init {
 				.useBasicAuthenticationWithAccessCodeGrant(false)
 				.build();
 	}
+
+	/*	@Bean
+	public CorsFilter corsFilter() {
+		//https://stackoverflow.com/questions/51720552/enabling-cors-globally-in-spring-boot
+		final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		final CorsConfiguration config = new CorsConfiguration();
+		config.setAllowCredentials(true);
+		config.setAllowedOrigins(Collections.singletonList("*"));
+		config.setAllowedHeaders(Arrays.asList("Origin", "Content-Type", "Accept", "Authorization", "SchoolYear", "IdType", "NavigationPage", "NavigationPageSize"));
+		config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "HEAD", "OPTIONS", "DELETE", "PATCH"));
+		source.registerCorsConfiguration("/**", config);
+		return new CorsFilter(source);
+	}*/
 }

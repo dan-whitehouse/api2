@@ -1,5 +1,6 @@
 package org.ricone.api.xpress.request.xSchool;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Hibernate;
@@ -24,10 +25,10 @@ public class XSchoolDAOImp extends BaseDAO implements XSchoolDAO {
 	private Logger logger = LogManager.getLogger(XSchoolDAOImp.class);
 	private final String PRIMARY_KEY = "schoolRefId";
 	private final String SCHOOL_YEAR_KEY = "schoolSchoolYear";
-	private final String LOCAL_ID_KEY = "schoolId";
+	private final String ID_KEY = "schoolId";
 	private final String IDENTIFICATION_SYSTEM_CODE = "identificationSystemCode";
-	private final String SYSTEM_CODE_BEDS = "SEA";
-	private final String SYSTEM_CODE_LEA = "LEA";
+	private final String SYSTEM_CODE_STATE = "SEA";
+	private final String SYSTEM_CODE_LOCAL = "LEA";
 
 	@Override
 	public SchoolWrapper findByRefId(ControllerData metadata, String refId) throws NotFoundException {
@@ -71,7 +72,7 @@ public class XSchoolDAOImp extends BaseDAO implements XSchoolDAO {
 	}
 
 	@Override
-	public SchoolWrapper findByLocalId(ControllerData metadata, String localId) {
+	public SchoolWrapper findById(ControllerData metadata, String id, String idType) {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<SchoolWrapper> select = cb.createQuery(SchoolWrapper.class);
 		final Root<School> from = select.from(School.class);
@@ -86,7 +87,7 @@ public class XSchoolDAOImp extends BaseDAO implements XSchoolDAO {
 			metadata.getResponse().addHeader(ControllerData.SCHOOL_YEAR_KEY, metadata.getSchoolYear());
 		}
 		else {
-			Integer schoolYear = greatestSchoolYearByLocalId(metadata, localId);
+			Integer schoolYear = greatestSchoolYearById(metadata, id, idType);
 			schoolYearEquals = cb.equal(from.get(SCHOOL_YEAR_KEY), schoolYear);
 			metadata.getResponse().addHeader(ControllerData.SCHOOL_YEAR_KEY, String.valueOf(schoolYear));
 		}
@@ -96,8 +97,8 @@ public class XSchoolDAOImp extends BaseDAO implements XSchoolDAO {
 		select.where(
 			cb.and(
 				schoolYearEquals,
-				cb.equal(schoolIdentifiers.get(LOCAL_ID_KEY), localId),
-				cb.equal(schoolIdentifiers.get(IDENTIFICATION_SYSTEM_CODE), SYSTEM_CODE_LEA),
+				cb.equal(schoolIdentifiers.get(ID_KEY), id),
+				cb.equal(schoolIdentifiers.get(IDENTIFICATION_SYSTEM_CODE), getIdTypeValue(idType)),
 				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 			)
 		);
@@ -514,7 +515,7 @@ public class XSchoolDAOImp extends BaseDAO implements XSchoolDAO {
 	}
 
 	@Override
-	public Integer greatestSchoolYearByLocalId(ControllerData metadata, String localId) {
+	public Integer greatestSchoolYearById(ControllerData metadata, String id, String idType) {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<Integer> select = cb.createQuery(Integer.class);
 		final Root<School> from = select.from(School.class);
@@ -527,8 +528,8 @@ public class XSchoolDAOImp extends BaseDAO implements XSchoolDAO {
 		select.select(cb.greatest(from.<Integer>get(SCHOOL_YEAR_KEY)));
 		select.where(
 			cb.and(
-				cb.equal(schoolIdentifiers.get(LOCAL_ID_KEY), localId),
-				cb.equal(schoolIdentifiers.get(IDENTIFICATION_SYSTEM_CODE), SYSTEM_CODE_LEA),
+				cb.equal(schoolIdentifiers.get(ID_KEY), id),
+				cb.equal(schoolIdentifiers.get(IDENTIFICATION_SYSTEM_CODE), getIdTypeValue(idType)),
 				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 			)
 		);
@@ -950,5 +951,17 @@ public class XSchoolDAOImp extends BaseDAO implements XSchoolDAO {
 			Hibernate.initialize(wrapper.getSchool().getSchoolIdentifiers());
 			Hibernate.initialize(wrapper.getSchool().getLea());
 		});
+	}
+
+	private String getIdTypeValue(String idType) {
+		if(StringUtils.equalsIgnoreCase(idType, "local")) {
+			return SYSTEM_CODE_LOCAL;
+		}
+		else if(StringUtils.equalsIgnoreCase(idType, "state")) {
+			return SYSTEM_CODE_STATE;
+		}
+		else {
+			return idType;
+		}
 	}
 }

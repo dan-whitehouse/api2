@@ -23,5 +23,12 @@ public @interface SwaggerParam {
 
 	@Target({ ElementType.PARAMETER, ElementType.METHOD, ElementType.FIELD})
 	@Retention(RetentionPolicy.RUNTIME)
-	@interface IdType { }
+	@interface IdType {
+		boolean required() default false;
+		String[] values() default {"local", "state", "beds"};
+	}
+
+	@Target({ ElementType.PARAMETER, ElementType.METHOD, ElementType.FIELD})
+	@Retention(RetentionPolicy.RUNTIME)
+	@interface Id { }
 }

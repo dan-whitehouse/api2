@@ -27,16 +27,18 @@ public class XLeaController extends BaseController {
 	private XLeaService service;
 
 	@ACL.Get.XLea.ById
-	@GetMapping(value = "/requests/xLeas/{id}", produces = {"application/json", "application/xml"})
+	@GetMapping(value = "/requests/xLeas/{refId}", produces = {"application/json", "application/xml"})
 	@Swagger.Operation.GetXLeaById /**/ @Swagger.Response.XLea
-	public XLeaResponse getXLeaById(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "id") String id, @SwaggerParam.SchoolYear Integer schoolYear, @SwaggerParam.IdType String idType) throws Exception {
+	public XLeaResponse getXLeaById(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "refId") String id, @SwaggerParam.SchoolYear Integer schoolYear, @SwaggerParam.IdType(values = {"local", "state"}) String idType) throws Exception {
 		if(Util.isRefId(id)) {
 			return service.findByRefId(getMetaData(request, response), id);
 		}
-		else if(StringUtils.equalsIgnoreCase(request.getHeader("IdType"), "local")) {
-			return service.findByLocalId(getMetaData(request, response), id);
+		else {
+			if(StringUtils.isNotBlank(request.getHeader("IdType"))) {
+				return service.findById(getMetaData(request, response), id, request.getHeader("IdType"));
+			}
+			throw new NotFoundException("Id: " + id + " is not a valid refId. You may be missing the 'IdType' header.");
 		}
-		throw new NotFoundException("Id: " + id + " is not a valid refId. You may be missing the 'IdType' header.");
 	}
 
 	@ACL.Get.XLea.All

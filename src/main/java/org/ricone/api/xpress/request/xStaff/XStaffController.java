@@ -5,14 +5,10 @@ import org.apache.logging.log4j.Logger;
 import org.ricone.api.xpress.component.BaseController;
 import org.ricone.api.xpress.component.ISO8601;
 import org.ricone.api.xpress.component.acl.ACL;
-import org.ricone.api.xpress.component.acl.XStaffsACL;
 import org.ricone.api.xpress.component.swagger.Swagger;
 import org.ricone.api.xpress.component.swagger.SwaggerParam;
-import org.ricone.api.xpress.error.exception.NotFoundException;
 import org.ricone.api.xpress.model.XStaffResponse;
 import org.ricone.api.xpress.model.XStaffsResponse;
-import org.ricone.api.xpress.util.ControllerUtil;
-import org.ricone.api.xpress.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,20 +26,11 @@ public class XStaffController extends BaseController {
 	@Autowired private XStaffService service;
 	private final Logger logger = LogManager.getLogger(XStaffController.class);
 
-	@ACL.Get.XStaff.ById
-	@GetMapping(value = "/requests/xStaffs/{id}", produces = {"application/json", "application/xml"})
-	@Swagger.Operation.GetXStaffById /**/ @Swagger.Response.XStaff
-	public XStaffResponse getXStaffById(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "id") String id, @SwaggerParam.SchoolYear Integer schoolYear, @SwaggerParam.IdType String idType) throws Exception {
-		if(Util.isRefId(id)) {
-			return service.findByRefId(getMetaData(request, response), id);
-		}
-		else if(ControllerUtil.isRequestHeaderIdTypeLocal(request)) {
-			return service.findByLocalId(getMetaData(request, response), id);
-		}
-		else if(ControllerUtil.isIdTypeState(request)) {
-			return service.findByStateId(getMetaData(request, response), id);
-		}
-		throw new NotFoundException("Id: " + id + " is not a valid refId. You may be missing the 'IdType' header.");
+	@ACL.Get.XStaff.ByRefId
+	@GetMapping(value = "/requests/xStaffs/{refId}", produces = {"application/json", "application/xml"})
+	@Swagger.Operation.GetXStaffByRefId /**/ @Swagger.Response.XStaff
+	public XStaffResponse getXStaffByRefId(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "refId") String refId, @SwaggerParam.SchoolYear Integer schoolYear) throws Exception {
+		return service.findByRefId(getMetaData(request, response), refId);
 	}
 
 	@ACL.Get.XStaff.All

@@ -30,8 +30,8 @@ public class XSchoolServiceImp implements XSchoolService {
     }
 
     @Override
-    public XSchoolResponse findByLocalId(ControllerData metadata, String localId) throws Exception {
-        SchoolWrapper instance = dao.findByLocalId(metadata, localId);
+    public XSchoolResponse findById(ControllerData metadata, String id, String idType) throws Exception {
+        SchoolWrapper instance = dao.findById(metadata, id, idType);
         if(instance == null) {
             throw new NotFoundException();
         }

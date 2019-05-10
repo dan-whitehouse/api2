@@ -1,5 +1,6 @@
 package org.ricone.api.xpress.request.xLea;
 
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Hibernate;
 import org.ricone.api.core.model.*;
 import org.ricone.api.core.model.wrapper.LeaWrapper;
@@ -22,7 +23,7 @@ public class XLeaDAOImp extends BaseDAO implements XLeaDAO {
 	private final String PRIMARY_KEY = "leaRefId";
 	private final String SCHOOL_YEAR_KEY = "leaSchoolYear";
 	private final String LOCAL_ID_KEY = "leaId";
-	private final String BEDS_ID_KEY = "leaSeaId";
+	private final String STATE_ID_KEY = "leaSeaId";
 
 	@Override
 	public LeaWrapper findByRefId(ControllerData metadata, String refId) throws NotFoundException {
@@ -63,7 +64,7 @@ public class XLeaDAOImp extends BaseDAO implements XLeaDAO {
 	}
 
 	@Override
-	public LeaWrapper findByLocalId(ControllerData metadata, String localId) {
+	public LeaWrapper findById(ControllerData metadata, String id, String idType) {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<LeaWrapper> select = cb.createQuery(LeaWrapper.class);
 		final Root<Lea> from = select.from(Lea.class);
@@ -75,7 +76,7 @@ public class XLeaDAOImp extends BaseDAO implements XLeaDAO {
 			metadata.getResponse().addHeader(ControllerData.SCHOOL_YEAR_KEY, metadata.getSchoolYear());
 		}
 		else {
-			Integer schoolYear = greatestSchoolYearByLocalId(metadata, localId);
+			Integer schoolYear = greatestSchoolYearById(metadata, id, idType);
 			schoolYearEquals = cb.equal(from.get(SCHOOL_YEAR_KEY), schoolYear);
 			metadata.getResponse().addHeader(ControllerData.SCHOOL_YEAR_KEY, String.valueOf(schoolYear));
 		}
@@ -85,7 +86,7 @@ public class XLeaDAOImp extends BaseDAO implements XLeaDAO {
 		select.where(
 			cb.and(
 				schoolYearEquals,
-				cb.equal(from.get(LOCAL_ID_KEY), localId),
+				cb.equal(from.get(getIdTypeValue(idType)), id),
 				from.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 			)
 		);
@@ -480,7 +481,7 @@ public class XLeaDAOImp extends BaseDAO implements XLeaDAO {
 	}
 
 	@Override
-	public Integer greatestSchoolYearByLocalId(ControllerData metaData, String localId) {
+	public Integer greatestSchoolYearById(ControllerData metaData, String id, String idType) {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<Integer> select = cb.createQuery(Integer.class);
 		final Root<Lea> from = select.from(Lea.class);
@@ -490,7 +491,7 @@ public class XLeaDAOImp extends BaseDAO implements XLeaDAO {
 		select.select(cb.greatest(from.<Integer>get(SCHOOL_YEAR_KEY)));
 		select.where(
 			cb.and(
-				cb.equal(from.get(LOCAL_ID_KEY), localId),
+				cb.equal(from.get(getIdTypeValue(idType)), id),
 				from.get(ControllerData.LEA_LOCAL_ID).in(metaData.getApplication().getApp().getDistrictLocalIds())
 			)
 		);
@@ -902,5 +903,17 @@ public class XLeaDAOImp extends BaseDAO implements XLeaDAO {
 			leaWrapper.getLea().getLeaTelephones().forEach(Hibernate::initialize);
 			leaWrapper.getLea().getSchools().forEach(Hibernate::initialize);
 		});
+	}
+
+	private String getIdTypeValue(String idType) {
+		if(StringUtils.equalsIgnoreCase(idType, "local")) {
+			return LOCAL_ID_KEY;
+		}
+		else if(StringUtils.equalsIgnoreCase(idType, "state")) {
+			return STATE_ID_KEY;
+		}
+		else {
+			return idType;
+		}
 	}
 }

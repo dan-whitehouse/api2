@@ -11,7 +11,7 @@ public interface XSchoolDAO {
 	/* Find */
 	SchoolWrapper findByRefId(ControllerData metadata, String refId) throws NotFoundException;
 
-	SchoolWrapper findByLocalId(ControllerData metadata, String localId);
+	SchoolWrapper findById(ControllerData metadata, String id, String idType);
 
 	List<SchoolWrapper> findAll(ControllerData metadata);
 
@@ -32,7 +32,7 @@ public interface XSchoolDAO {
 	/* Greatest School Year */
 	Integer greatestSchoolYearByRefId(ControllerData metadata, String refId);
 
-	Integer greatestSchoolYearByLocalId(ControllerData metadata, String localId);
+	Integer greatestSchoolYearById(ControllerData metadata, String id, String idType);
 
 	Integer greatestSchoolYearAll(ControllerData metadata);
 

@@ -9,7 +9,7 @@ import org.ricone.api.xpress.model.XSchoolsResponse;
 public interface XSchoolService {
 	XSchoolResponse findByRefId(ControllerData metadata, String refId) throws Exception;
 
-	XSchoolResponse findByLocalId(ControllerData metadata, String refId) throws Exception;
+	XSchoolResponse findById(ControllerData metadata, String id, String idType) throws Exception;
 
 	XSchoolsResponse findAll(ControllerData metadata) throws Exception;
 

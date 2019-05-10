@@ -30,9 +30,9 @@ public class IdTypeReader implements ParameterBuilderPlugin {
 			parameterContext.parameterBuilder()
 					.parameterType("header")
 					.name("IdType")
-					.description("The type of Id being requested")
-					.allowableValues(new AllowableListValues(List.of("local", "state", "beds"), "string"))
-					.required(false)
+					.description("Can be used to override the default refId value")
+					.allowableValues(new AllowableListValues(List.of(requestParam.get().values()), "string"))
+					.required(requestParam.get().required())
 					.order(1004)
 					.type(resolver.resolve(String.class));
 		}
@@ -43,3 +43,4 @@ public class IdTypeReader implements ParameterBuilderPlugin {
 		return true;
 	}
 }
+

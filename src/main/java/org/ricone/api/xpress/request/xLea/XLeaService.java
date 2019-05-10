@@ -7,7 +7,7 @@ import org.ricone.api.xpress.model.XLeasResponse;
 public interface XLeaService {
 	XLeaResponse findByRefId(ControllerData metadata, String refId) throws Exception;
 
-	XLeaResponse findByLocalId(ControllerData metadata, String refId) throws Exception;
+	XLeaResponse findById(ControllerData metadata, String id, String idType) throws Exception;
 
 	XLeasResponse findAll(ControllerData metadata) throws Exception;
 

@@ -2,7 +2,6 @@ package org.ricone.api.xpress.request.xContact;
 
 import org.ricone.api.xpress.component.BaseController;
 import org.ricone.api.xpress.component.acl.ACL;
-import org.ricone.api.xpress.component.acl.XContactsACL;
 import org.ricone.api.xpress.component.swagger.Swagger;
 import org.ricone.api.xpress.component.swagger.SwaggerParam;
 import org.ricone.api.xpress.model.XContactResponse;
@@ -21,11 +20,11 @@ public class XContactController extends BaseController {
 	@Autowired
 	private XContactService service;
 
-	@ACL.Get.XContact.ById
-	@GetMapping(value = "/requests/xContacts/{id}", produces = {"application/json", "application/xml"})
-	@Swagger.Operation.GetXContactById /**/ @Swagger.Response.XContact
-	public XContactResponse getXContactById(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "id") String id, @SwaggerParam.SchoolYear Integer schoolYear, @SwaggerParam.IdType String idType) throws Exception {
-		return service.findByRefId(getMetaData(request, response), id);
+	@ACL.Get.XContact.ByRefId
+	@GetMapping(value = "/requests/xContacts/{refId}", produces = {"application/json", "application/xml"})
+	@Swagger.Operation.GetXContactByRefId /**/ @Swagger.Response.XContact
+	public XContactResponse getXContactByRefId(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "refId") String refId, @SwaggerParam.SchoolYear Integer schoolYear) throws Exception {
+		return service.findByRefId(getMetaData(request, response), refId);
 	}
 
 	@ACL.Get.XContact.All

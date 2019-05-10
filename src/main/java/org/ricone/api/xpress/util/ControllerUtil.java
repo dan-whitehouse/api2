@@ -19,7 +19,7 @@ public class ControllerUtil {
 	private static final String GET_USERS = "getUsers";
 	public static final String CHANGES_SINCE_MARKER = "changesSinceMarker";
 
-	public static boolean isRequestHeaderIdTypeLocal(HttpServletRequest request) {
+	public static boolean isIdTypeLocal(HttpServletRequest request) {
 		return StringUtils.equalsIgnoreCase(request.getHeader(ID_TYPE), "local");
 	}
 

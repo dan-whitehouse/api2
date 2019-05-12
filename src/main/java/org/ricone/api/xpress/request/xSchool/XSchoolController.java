@@ -5,7 +5,7 @@ import org.ricone.api.xpress.component.BaseController;
 import org.ricone.api.xpress.component.acl.ACL;
 import org.ricone.api.xpress.component.swagger.Swagger;
 import org.ricone.api.xpress.component.swagger.SwaggerParam;
-import org.ricone.api.xpress.error.exception.NotFoundException;
+import org.ricone.api.xpress.component.error.exception.NotFoundException;
 import org.ricone.api.xpress.model.XSchoolResponse;
 import org.ricone.api.xpress.model.XSchoolsResponse;
 import org.ricone.api.xpress.util.Util;

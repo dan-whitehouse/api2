@@ -12,7 +12,6 @@ import java.util.List;
 @JsonRootName(value = "xLeas")
 public class XLeas {
 	@JsonProperty("xLea")
-	@JacksonXmlElementWrapper(useWrapping = false)
 	private List<XLea> xLeas;
 
 	public XLeas() {

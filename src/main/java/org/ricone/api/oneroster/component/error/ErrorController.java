@@ -1,8 +1,8 @@
-package org.ricone.api.oneroster.error;
+package org.ricone.api.oneroster.component.error;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ricone.api.oneroster.error.exception.*;
+import org.ricone.api.oneroster.component.error.exception.*;
 import org.ricone.api.oneroster.model.Error;
 import org.ricone.api.oneroster.model.*;
 import org.ricone.error.NoContentException;

@@ -1,9 +1,8 @@
 package org.ricone.api.xpress.request.xCalendar;
 
 import org.ricone.api.core.model.wrapper.SchoolCalendarWrapper;
-import org.ricone.api.core.model.wrapper.SchoolWrapper;
 import org.ricone.api.xpress.component.ControllerData;
-import org.ricone.api.xpress.error.exception.NotFoundException;
+import org.ricone.api.xpress.component.error.exception.NotFoundException;
 
 import java.util.List;
 

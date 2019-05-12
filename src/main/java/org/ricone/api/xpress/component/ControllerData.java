@@ -3,7 +3,7 @@ package org.ricone.api.xpress.component;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ricone.api.xpress.error.exception.BadRequestException;
+import org.ricone.api.xpress.component.error.exception.BadRequestException;
 import org.ricone.security.jwt.Application;
 import org.ricone.api.xpress.util.Util;
 import org.springframework.security.core.context.SecurityContextHolder;

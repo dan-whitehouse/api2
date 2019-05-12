@@ -2,7 +2,7 @@ package org.ricone.api.xpress.request.xLea;
 
 import org.ricone.api.core.model.wrapper.LeaWrapper;
 import org.ricone.api.xpress.component.ControllerData;
-import org.ricone.api.xpress.error.exception.NotFoundException;
+import org.ricone.api.xpress.component.error.exception.NotFoundException;
 
 import java.util.List;
 

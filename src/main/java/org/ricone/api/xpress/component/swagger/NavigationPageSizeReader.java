@@ -30,6 +30,7 @@ public class NavigationPageSizeReader implements ParameterBuilderPlugin {
 					.description("The navigationPageSize header allows you determine the number of results requested per page")
 					.required(false)
 					.order(1003)
+					.defaultValue("25")
 					.type(resolver.resolve(String.class));
 		}
 	}

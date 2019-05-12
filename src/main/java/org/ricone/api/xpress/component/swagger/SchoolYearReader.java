@@ -2,6 +2,7 @@ package org.ricone.api.xpress.component.swagger;
 
 import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Optional;
+import org.ricone.api.xpress.util.Util;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import springfox.documentation.service.ResolvedMethodParameter;
@@ -30,6 +31,7 @@ public class SchoolYearReader implements ParameterBuilderPlugin {
 					.description("The current school year of the response data")
 					.required(false)
 					.order(1001)
+					.defaultValue(Integer.toString(Util.getCurrentSchoolYear()))
 					.type(resolver.resolve(String.class));
 		}
 	}

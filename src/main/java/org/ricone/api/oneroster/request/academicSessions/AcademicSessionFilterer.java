@@ -1,8 +1,8 @@
 package org.ricone.api.oneroster.request.academicSessions;
 
 import org.ricone.api.oneroster.component.BaseFilterer;
-import org.ricone.api.oneroster.error.exception.InvalidDataException;
-import org.ricone.api.oneroster.error.exception.InvalidFilterFieldException;
+import org.ricone.api.oneroster.component.error.exception.InvalidDataException;
+import org.ricone.api.oneroster.component.error.exception.InvalidFilterFieldException;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.criteria.Path;

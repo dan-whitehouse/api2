@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import io.swagger.annotations.ApiModelProperty;
 
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
 import java.util.Objects;
 import java.util.stream.Stream;
 
@@ -13,7 +15,7 @@ import java.util.stream.Stream;
 @JsonRootName(value = "xLea")
 public class XLea extends XWrapper {
 	@JsonProperty("@refId")
-	@JacksonXmlProperty(localName = "refId", isAttribute = true)
+	@XmlAttribute(name = "refId")
 	@ApiModelProperty(position = 1, value = "The refId for the LEA")
 	private String refId;
 
@@ -65,7 +67,7 @@ public class XLea extends XWrapper {
 	}
 
 	@JsonProperty("@refId")
-	@JacksonXmlProperty(localName = "refId", isAttribute = true)
+	@XmlAttribute(name = "refId")
 	public String getRefId() {
 		return refId;
 	}

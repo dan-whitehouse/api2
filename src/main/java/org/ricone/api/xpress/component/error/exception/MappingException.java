@@ -1,4 +1,4 @@
-package org.ricone.api.xpress.error.exception;
+package org.ricone.api.xpress.component.error.exception;
 
 public class MappingException extends Exception {
     private static final long serialVersionUID = 1417351363726882509L;

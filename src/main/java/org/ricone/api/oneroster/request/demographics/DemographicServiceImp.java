@@ -3,7 +3,7 @@ package org.ricone.api.oneroster.request.demographics;
 import org.apache.commons.collections4.CollectionUtils;
 import org.ricone.api.core.model.oneroster.QDemographic;
 import org.ricone.api.oneroster.component.RequestData;
-import org.ricone.api.oneroster.error.exception.UnknownObjectException;
+import org.ricone.api.oneroster.component.error.exception.UnknownObjectException;
 import org.ricone.api.oneroster.model.DemographicResponse;
 import org.ricone.api.oneroster.model.DemographicsResponse;
 import org.ricone.error.NoContentException;

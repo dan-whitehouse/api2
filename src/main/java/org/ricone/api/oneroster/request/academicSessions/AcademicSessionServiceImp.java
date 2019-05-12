@@ -3,7 +3,7 @@ package org.ricone.api.oneroster.request.academicSessions;
 import org.apache.commons.collections4.CollectionUtils;
 import org.ricone.api.core.model.oneroster.QAcademicSession;
 import org.ricone.api.oneroster.component.RequestData;
-import org.ricone.api.oneroster.error.exception.UnknownObjectException;
+import org.ricone.api.oneroster.component.error.exception.UnknownObjectException;
 import org.ricone.api.oneroster.model.AcademicSessionResponse;
 import org.ricone.api.oneroster.model.AcademicSessionsResponse;
 import org.ricone.error.NoContentException;

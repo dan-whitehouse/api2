@@ -22,6 +22,7 @@ public class NavigationPageReader implements ParameterBuilderPlugin {
 	@Override
 	public void apply(ParameterContext parameterContext) {
 		ResolvedMethodParameter methodParameter = parameterContext.resolvedMethodParameter();
+
 		Optional<SwaggerParam.NavigationPage> requestParam = methodParameter.findAnnotation(SwaggerParam.NavigationPage.class);
 		if(requestParam.isPresent()) {
 			parameterContext.parameterBuilder()
@@ -30,6 +31,7 @@ public class NavigationPageReader implements ParameterBuilderPlugin {
 					.description("The navigationPage header describes the current page position in paging")
 					.required(false)
 					.order(1002)
+					.defaultValue("1")
 					.type(resolver.resolve(String.class));
 		}
 	}

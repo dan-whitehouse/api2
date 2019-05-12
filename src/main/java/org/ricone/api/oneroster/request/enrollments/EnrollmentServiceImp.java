@@ -3,7 +3,7 @@ package org.ricone.api.oneroster.request.enrollments;
 import org.apache.commons.collections4.CollectionUtils;
 import org.ricone.api.core.model.oneroster.QEnrollment;
 import org.ricone.api.oneroster.component.RequestData;
-import org.ricone.api.oneroster.error.exception.UnknownObjectException;
+import org.ricone.api.oneroster.component.error.exception.UnknownObjectException;
 import org.ricone.api.oneroster.model.EnrollmentResponse;
 import org.ricone.api.oneroster.model.EnrollmentsResponse;
 import org.ricone.error.NoContentException;

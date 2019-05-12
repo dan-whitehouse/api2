@@ -1,6 +1,6 @@
 package org.ricone.config;
 
-import org.ricone.api.xpress.error.exception.ConfigException;
+import org.ricone.api.xpress.component.error.exception.ConfigException;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.client.RestTemplate;

@@ -1,13 +1,11 @@
 package org.ricone.api.xpress.request.xLea;
 
-import io.swagger.annotations.Api;
 import org.apache.commons.lang3.StringUtils;
 import org.ricone.api.xpress.component.BaseController;
 import org.ricone.api.xpress.component.acl.ACL;
-import org.ricone.api.xpress.component.acl.XLeasACL;
 import org.ricone.api.xpress.component.swagger.Swagger;
 import org.ricone.api.xpress.component.swagger.SwaggerParam;
-import org.ricone.api.xpress.error.exception.NotFoundException;
+import org.ricone.api.xpress.component.error.exception.NotFoundException;
 import org.ricone.api.xpress.model.XLeaResponse;
 import org.ricone.api.xpress.model.XLeasResponse;
 import org.ricone.api.xpress.util.Util;

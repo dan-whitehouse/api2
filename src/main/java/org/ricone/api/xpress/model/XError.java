@@ -12,7 +12,7 @@ public class XError implements Serializable {
 	@JsonProperty("@id")
 	private String id;
 	@JsonProperty("code")
-	private String code;
+	private int code;
 	@JsonProperty("message")
 	private String message;
 	@JsonProperty("description")
@@ -33,7 +33,7 @@ public class XError implements Serializable {
 	 * @param description
 	 * @param code
 	 */
-	public XError(String id, String code, String message, String description) {
+	public XError(String id, int code, String message, String description) {
 		super();
 		this.id = id;
 		this.code = code;
@@ -52,12 +52,12 @@ public class XError implements Serializable {
 	}
 
 	@JsonProperty("code")
-	public String getCode() {
+	public int getCode() {
 		return code;
 	}
 
 	@JsonProperty("code")
-	public void setCode(String code) {
+	public void setCode(int code) {
 		this.code = code;
 	}
 

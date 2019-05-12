@@ -6,7 +6,7 @@ import org.ricone.api.core.model.*;
 import org.ricone.api.core.model.wrapper.LeaWrapper;
 import org.ricone.api.xpress.component.ControllerData;
 import org.ricone.api.xpress.component.BaseDAO;
-import org.ricone.api.xpress.error.exception.NotFoundException;
+import org.ricone.api.xpress.component.error.exception.NotFoundException;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;

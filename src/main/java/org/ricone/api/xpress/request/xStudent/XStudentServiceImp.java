@@ -4,7 +4,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.ricone.api.core.model.wrapper.StudentWrapper;
 import org.ricone.api.xpress.component.ControllerData;
 import org.ricone.error.NoContentException;
-import org.ricone.api.xpress.error.exception.NotFoundException;
+import org.ricone.api.xpress.component.error.exception.NotFoundException;
 import org.ricone.api.xpress.model.XStudentResponse;
 import org.ricone.api.xpress.model.XStudentsResponse;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package org.ricone.api.xpress.error.exception;
+package org.ricone.api.xpress.component.error.exception;
 
 public class ForbiddenException extends Exception {
     private static final long serialVersionUID = 1997753363232807009L;

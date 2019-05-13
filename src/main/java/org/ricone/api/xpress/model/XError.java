@@ -1,15 +1,24 @@
 package org.ricone.api.xpress.model;
 
 import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"@id", "code", "message", "description"})
+@JsonRootName("error")
+@JacksonXmlRootElement(localName = "error")
+@XmlRootElement(name = "error")
 public class XError implements Serializable {
 	@JsonProperty("@id")
+	@JacksonXmlProperty(localName = "id", isAttribute = true)
+	@XmlAttribute(name = "id")
 	private String id;
 	@JsonProperty("code")
 	private int code;
@@ -42,6 +51,8 @@ public class XError implements Serializable {
 	}
 
 	@JsonProperty("@id")
+	@JacksonXmlProperty(localName = "id", isAttribute = true)
+	@XmlAttribute(name = "id")
 	public String getId() {
 		return id;
 	}

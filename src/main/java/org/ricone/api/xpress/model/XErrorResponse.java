@@ -1,25 +1,19 @@
 package org.ricone.api.xpress.model;
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
-import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"error"})
-@XmlRootElement
+@XmlRootElement(name = "error")
 public class XErrorResponse implements Serializable {
 
 	@JsonProperty("error")
-	@XmlElementWrapper(nillable = true)
 	private XError error;
-
-	@JsonIgnore
-	private Map<String, Object> additionalProperties = new HashMap<String, Object>();
-	private final static long serialVersionUID = -1284641496243738693L;
 
 	/**
 	 * No args constructor for use in serialization
@@ -44,15 +38,4 @@ public class XErrorResponse implements Serializable {
 	public void setError(XError error) {
 		this.error = error;
 	}
-
-	@JsonAnyGetter
-	public Map<String, Object> getAdditionalProperties() {
-		return this.additionalProperties;
-	}
-
-	@JsonAnySetter
-	public void setAdditionalProperty(String name, Object value) {
-		this.additionalProperties.put(name, value);
-	}
-
 }

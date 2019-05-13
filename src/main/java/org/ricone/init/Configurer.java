@@ -10,6 +10,7 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.ZonedDateTimeSerializer;
 import org.ricone.api.oneroster.model.serializer.BooleanStringSerializer;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,6 +32,9 @@ public class Configurer implements WebMvcConfigurer {
     private static final String dateFormat = "yyyy-MM-dd";
     private static final String dateTimeFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
 
+    @Autowired
+    private ObjectMapper jacksonObjectMapper;
+
     @Bean
     public Jackson2ObjectMapperBuilderCustomizer jsonCustomizer() {
         return builder -> {
@@ -40,8 +44,8 @@ public class Configurer implements WebMvcConfigurer {
             builder.serializers(new ZonedDateTimeSerializer(DateTimeFormatter.ofPattern(dateTimeFormat).withZone(ZoneId.of("America/New_York"))));
             builder.serializers(new BooleanStringSerializer(Boolean.class));
             //builder.featuresToDisable(DeserializationFeature.UNWRAP_ROOT_VALUE);
-            //builder.featuresToDisable(SerializationFeature.WRAP_ROOT_VALUE);
-            //builder.defaultUseWrapper(true);
+            //builder.featuresToEnable(SerializationFeature.WRAP_ROOT_VALUE);
+            //builder.defaultUseWrapper(false);
             //builder.createXmlMapper(true);
             builder.featuresToEnable(JsonGenerator.Feature.WRITE_NUMBERS_AS_STRINGS);
         };

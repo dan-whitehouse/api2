@@ -31,4 +31,14 @@ public @interface SwaggerParam {
 	@Target({ ElementType.PARAMETER, ElementType.METHOD, ElementType.FIELD})
 	@Retention(RetentionPolicy.RUNTIME)
 	@interface Id { }
+
+	@Target({ ElementType.PARAMETER, ElementType.METHOD, ElementType.FIELD})
+	@Retention(RetentionPolicy.RUNTIME)
+	@interface ChangesSince { }
+
+	@Target({ ElementType.PARAMETER, ElementType.METHOD, ElementType.FIELD})
+	@Retention(RetentionPolicy.RUNTIME)
+	@interface AUPP {
+		String[] values() default {"createUsers", "getUsers", "deleteUsers"};
+	}
 }

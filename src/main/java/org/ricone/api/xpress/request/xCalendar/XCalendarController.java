@@ -1,6 +1,7 @@
 package org.ricone.api.xpress.request.xCalendar;
 
 import org.ricone.api.xpress.component.BaseController;
+import org.ricone.api.xpress.component.ISO8601;
 import org.ricone.api.xpress.component.acl.ACL;
 import org.ricone.api.xpress.component.acl.XCalendarsACL;
 import org.ricone.api.xpress.component.swagger.Swagger;
@@ -10,10 +11,13 @@ import org.ricone.api.xpress.model.XCalendarsResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.time.LocalDateTime;
+import java.util.Optional;
 
 @RestController("XPress:XCalendars:XCalendarController")
 @Swagger.Controller.XCalendarController
@@ -31,21 +35,21 @@ public class XCalendarController extends BaseController {
 	@ACL.Get.XCalendar.All
 	@GetMapping(value = "/requests/xCalendars", produces = {"application/json", "application/xml"})
 	@Swagger.Operation.GetXCalendars /**/ @Swagger.Response.XCalendars
-	public XCalendarsResponse getXCalendars(HttpServletRequest request, HttpServletResponse response, @SwaggerParam.SchoolYear Integer schoolYear, @SwaggerParam.NavigationPage Integer navigationPage, @SwaggerParam.NavigationPageSize Integer navigationPageSize) throws Exception {
+	public XCalendarsResponse getXCalendars(HttpServletRequest request, HttpServletResponse response, @SwaggerParam.SchoolYear Integer schoolYear, @SwaggerParam.NavigationPage Integer navigationPage, @SwaggerParam.NavigationPageSize Integer navigationPageSize, @SwaggerParam.ChangesSince @ISO8601 LocalDateTime changesSinceMarker) throws Exception {
 		return service.findAll(getMetaData(request, response));
 	}
 
 	@ACL.Get.XCalendar.ByXLea
 	@GetMapping(value = "/requests/xLeas/{refId}/xCalendars", produces = {"application/json", "application/xml"})
 	@Swagger.Operation.GetXCalendarsByXLea /**/ @Swagger.Response.XCalendars
-	public XCalendarsResponse getXCalendarsByXLea(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "refId") String refId, @SwaggerParam.SchoolYear Integer schoolYear, @SwaggerParam.NavigationPage Integer navigationPage, @SwaggerParam.NavigationPageSize Integer navigationPageSize) throws Exception {
+	public XCalendarsResponse getXCalendarsByXLea(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "refId") String refId, @SwaggerParam.SchoolYear Integer schoolYear, @SwaggerParam.NavigationPage Integer navigationPage, @SwaggerParam.NavigationPageSize Integer navigationPageSize, @SwaggerParam.ChangesSince @ISO8601 LocalDateTime changesSinceMarker) throws Exception {
 		return service.findAllByLea(getMetaData(request, response), refId);
 	}
 
 	@ACL.Get.XCalendar.ByXSchool
 	@GetMapping(value = "/requests/xSchools/{refId}/xCalendars", produces = {"application/json", "application/xml"})
 	@Swagger.Operation.GetXCalendarsByXSchool /**/ @Swagger.Response.XCalendars
-	public XCalendarsResponse getXCalendarsByXSchool(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "refId") String refId, @SwaggerParam.SchoolYear Integer schoolYear, @SwaggerParam.NavigationPage Integer navigationPage, @SwaggerParam.NavigationPageSize Integer navigationPageSize) throws Exception {
+	public XCalendarsResponse getXCalendarsByXSchool(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "refId") String refId, @SwaggerParam.SchoolYear Integer schoolYear, @SwaggerParam.NavigationPage Integer navigationPage, @SwaggerParam.NavigationPageSize Integer navigationPageSize, @SwaggerParam.ChangesSince @ISO8601 LocalDateTime changesSinceMarker) throws Exception {
 		return service.findAllBySchool(getMetaData(request, response), refId);
 	}
 }

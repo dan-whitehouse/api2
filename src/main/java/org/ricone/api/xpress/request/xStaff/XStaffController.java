@@ -43,14 +43,14 @@ public class XStaffController extends BaseController {
 	@ACL.Get.XStaff.ByXLea
 	@GetMapping(value = "/requests/xLeas/{refId}/xStaffs", produces = {"application/json", "application/xml"})
 	@Swagger.Operation.GetXStaffsByXLea /**/ @Swagger.Response.XStaffs
-	public XStaffsResponse getXStaffsByXLea(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "refId") String refId, @SwaggerParam.SchoolYear Integer schoolYear, @SwaggerParam.NavigationPage Integer navigationPage, @SwaggerParam.NavigationPageSize Integer navigationPageSize) throws Exception {
+	public XStaffsResponse getXStaffsByXLea(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "refId") String refId, @SwaggerParam.SchoolYear Integer schoolYear, @SwaggerParam.NavigationPage Integer navigationPage, @SwaggerParam.NavigationPageSize Integer navigationPageSize, @SwaggerParam.ChangesSince @RequestParam @ISO8601 Optional<LocalDateTime> changesSinceMarker) throws Exception {
 		return service.findAllByLea(getMetaData(request, response), refId);
 	}
 
 	@ACL.Get.XStaff.ByXSchool
 	@GetMapping(value = "/requests/xSchools/{refId}/xStaffs", produces = {"application/json", "application/xml"})
 	@Swagger.Operation.GetXStaffsByXSchool /**/ @Swagger.Response.XStaffs
-	public XStaffsResponse getXStaffsByXSchool(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "refId") String refId, @SwaggerParam.SchoolYear Integer schoolYear, @SwaggerParam.NavigationPage Integer navigationPage, @SwaggerParam.NavigationPageSize Integer navigationPageSize, @RequestParam @ISO8601 Optional<LocalDateTime> changesSinceMarker) throws Exception {
+	public XStaffsResponse getXStaffsByXSchool(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "refId") String refId, @SwaggerParam.SchoolYear Integer schoolYear, @SwaggerParam.NavigationPage Integer navigationPage, @SwaggerParam.NavigationPageSize Integer navigationPageSize, @SwaggerParam.ChangesSince @RequestParam @ISO8601 Optional<LocalDateTime> changesSinceMarker) throws Exception {
 		//Todo: Create service for getting AUPP
 		changesSinceMarker.ifPresent(localDateTime -> logger.debug("THIS LOOKS LIKE A DATE: " + localDateTime));
 		return service.findAllBySchool(getMetaData(request, response), refId);
@@ -59,21 +59,21 @@ public class XStaffController extends BaseController {
 	@ACL.Get.XStaff.ByXCourse
 	@GetMapping(value = "/requests/xCourses/{refId}/xStaffs", produces = {"application/json", "application/xml"})
 	@Swagger.Operation.GetXStaffsByXCourse /**/ @Swagger.Response.XStaffs
-	public XStaffsResponse getXStaffsByXCourse(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "refId") String refId, @SwaggerParam.SchoolYear Integer schoolYear, @SwaggerParam.NavigationPage Integer navigationPage, @SwaggerParam.NavigationPageSize Integer navigationPageSize) throws Exception {
+	public XStaffsResponse getXStaffsByXCourse(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "refId") String refId, @SwaggerParam.SchoolYear Integer schoolYear, @SwaggerParam.NavigationPage Integer navigationPage, @SwaggerParam.NavigationPageSize Integer navigationPageSize, @SwaggerParam.ChangesSince @RequestParam @ISO8601 Optional<LocalDateTime> changesSinceMarker) throws Exception {
 		return service.findAllByCourse(getMetaData(request, response), refId);
 	}
 
 	@ACL.Get.XStaff.ByXRoster
 	@GetMapping(value = "/requests/xRosters/{refId}/xStaffs", produces = {"application/json", "application/xml"})
 	@Swagger.Operation.GetXStaffsByXRoster /**/ @Swagger.Response.XStaffs
-	public XStaffsResponse getXStaffsByXRoster(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "refId") String refId, @SwaggerParam.SchoolYear Integer schoolYear, @SwaggerParam.NavigationPage Integer navigationPage, @SwaggerParam.NavigationPageSize Integer navigationPageSize) throws Exception {
+	public XStaffsResponse getXStaffsByXRoster(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "refId") String refId, @SwaggerParam.SchoolYear Integer schoolYear, @SwaggerParam.NavigationPage Integer navigationPage, @SwaggerParam.NavigationPageSize Integer navigationPageSize, @SwaggerParam.ChangesSince @RequestParam @ISO8601 Optional<LocalDateTime> changesSinceMarker) throws Exception {
 		return service.findAllByRoster(getMetaData(request, response), refId);
 	}
 
 	@ACL.Get.XStaff.ByXStudent
 	@GetMapping(value = "/requests/xStudents/{refId}/xStaffs", produces = {"application/json", "application/xml"})
 	@Swagger.Operation.GetXStaffsByXStudent /**/ @Swagger.Response.XStaffs
-	public XStaffsResponse getXStaffsByXStudent(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "refId") String refId, @SwaggerParam.SchoolYear Integer schoolYear, @SwaggerParam.NavigationPage Integer navigationPage, @SwaggerParam.NavigationPageSize Integer navigationPageSize) throws Exception {
+	public XStaffsResponse getXStaffsByXStudent(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "refId") String refId, @SwaggerParam.SchoolYear Integer schoolYear, @SwaggerParam.NavigationPage Integer navigationPage, @SwaggerParam.NavigationPageSize Integer navigationPageSize, @SwaggerParam.ChangesSince @RequestParam @ISO8601 Optional<LocalDateTime> changesSinceMarker) throws Exception {
 		return service.findAllByStudent(getMetaData(request, response), refId);
 	}
 }

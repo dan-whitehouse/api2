@@ -3,6 +3,7 @@ package org.ricone.api.xpress.model;
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 
+import javax.xml.bind.annotation.XmlElementWrapper;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +13,7 @@ import java.util.List;
 @JsonRootName(value = "xLeas")
 public class XLeas {
 	@JsonProperty("xLea")
+	@JacksonXmlElementWrapper(useWrapping = false)
 	private List<XLea> xLeas;
 
 	public XLeas() {
@@ -24,6 +26,7 @@ public class XLeas {
 	}
 
 	@JsonProperty("xLea")
+	@JacksonXmlElementWrapper(useWrapping = false)
 	public List<XLea> getXLeas() {
 		return xLeas;
 	}

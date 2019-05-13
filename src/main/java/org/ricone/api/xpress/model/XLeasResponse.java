@@ -15,7 +15,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class XLeasResponse {
 
     @JsonProperty("xLeas")
-    @XmlElementWrapper(nillable = true)
     private XLeas xLeas;
 
     public XLeasResponse() {

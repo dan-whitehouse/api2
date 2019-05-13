@@ -2,10 +2,12 @@ package org.ricone.api.xpress.model;
 
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Objects;
 import java.util.stream.Stream;
 
@@ -13,8 +15,11 @@ import java.util.stream.Stream;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"@refId", "localId", "stateProvinceId", "ncesId", "leaName", "address", "phoneNumber", "otherPhoneNumbers", "metadata"})
 @JsonRootName(value = "xLea")
+@JacksonXmlRootElement(localName = "xLea")
+@XmlRootElement(name = "xLea")
 public class XLea extends XWrapper {
 	@JsonProperty("@refId")
+	@JacksonXmlProperty(localName = "refId", isAttribute = true)
 	@XmlAttribute(name = "refId")
 	@ApiModelProperty(position = 1, value = "The refId for the LEA")
 	private String refId;
@@ -67,6 +72,7 @@ public class XLea extends XWrapper {
 	}
 
 	@JsonProperty("@refId")
+	@JacksonXmlProperty(localName = "refId", isAttribute = true)
 	@XmlAttribute(name = "refId")
 	public String getRefId() {
 		return refId;

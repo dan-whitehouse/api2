@@ -393,7 +393,7 @@ public @interface Swagger {
 		@Target({ElementType.METHOD, ElementType.TYPE})
 		@Retention(RetentionPolicy.RUNTIME)
 		@ApiResponses({
-				@ApiResponse(code = 200, message = "Success", response = XLeaResponse.class),
+				@ApiResponse(code = 200, message = "Success", response = XErrorResponse.class),
 				@ApiResponse(code = 400, message = "Bad Request", response = XErrorResponse.class),
 				@ApiResponse(code = 401, message = "Unauthorized", response = XErrorResponse.class),
 				@ApiResponse(code = 403, message = "Forbidden", response = XErrorResponse.class),

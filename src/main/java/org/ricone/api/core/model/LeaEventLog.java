@@ -12,7 +12,7 @@ import java.io.Serializable;
 
 
 @Entity
-@Table(name = "leaeventlog")
+@Table(name = "eventloglea")
 public class LeaEventLog extends EventLog implements Serializable {
     private static final long serialVersionUID = 2954727154531497019L;
 

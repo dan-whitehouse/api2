@@ -4,8 +4,10 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.hibernate.MappingException;
+import org.ricone.api.core.model.CalendarEventLog;
 import org.ricone.api.core.model.SchoolCalendar;
 import org.ricone.api.core.model.SchoolCalendarSession;
+import org.ricone.api.core.model.wrapper.EventLogWrapper;
 import org.ricone.api.core.model.wrapper.SchoolCalendarWrapper;
 import org.ricone.api.xpress.model.*;
 import org.springframework.stereotype.Component;
@@ -104,5 +106,39 @@ public class XCalendarMapper {
 
     private Metadata mapMetadata(SchoolCalendar schoolCalendar) {
         return new Metadata(schoolCalendar.getSchoolCalendarSchoolYear());
+    }
+
+    /** Event Mapping Methods **/
+    public XCalendarsResponse convertEventLogs(List<EventLogWrapper<CalendarEventLog>> instance) {
+        List<XCalendar> list = new ArrayList<>();
+        for (EventLogWrapper<CalendarEventLog> wrapper : instance) {
+            XCalendar xCalendar = mapEventLog(wrapper.getEventLog(), wrapper.getDistrictId());
+            if (xCalendar != null) {
+                list.add(xCalendar);
+            }
+        }
+
+        XCalendarsResponse response = new XCalendarsResponse();
+        XCalendars xCalendars = new XCalendars();
+        xCalendars.setXCalendar(list);
+
+        response.setXCalendars(xCalendars);
+        return response;
+    }
+
+    private XCalendar mapEventLog(CalendarEventLog eventLog, String districtId) {
+        XCalendar instance;
+        if ("D".equalsIgnoreCase(eventLog.getEventType())) {
+            instance = new XCalendar();
+            instance.setRefId(eventLog.getObjectRefId());
+        }
+        else {
+            instance = map(eventLog.getSchoolCalendar(), districtId);
+            if(instance == null) {
+                instance = new XCalendar();
+                instance.setRefId(eventLog.getObjectRefId());
+            }
+        }
+        return instance;
     }
 }

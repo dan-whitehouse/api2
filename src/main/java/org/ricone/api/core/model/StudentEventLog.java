@@ -14,7 +14,7 @@ import java.util.Date;
  */
 
 @Entity
-@Table(name = "studenteventlog")
+@Table(name = "eventlogstudent")
 public class StudentEventLog  extends EventLog implements Serializable {
     private static final long serialVersionUID = 5974939838069996873L;
 

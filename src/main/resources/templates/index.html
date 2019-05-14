@@ -50,6 +50,7 @@
 			      SwaggerUIBundle.plugins.DownloadUrl
 			    ],
 			    layout: "StandaloneLayout",
+			    //onComplete: customScripts,
 				requestInterceptor: (req) => {
 					req.headers.Authorization = "Bearer xxxxxxx"
 					return req
@@ -69,6 +70,7 @@
 					//ui.preauthorizeApiKey("Bearer", "Bearer 123456")
 					addAuthDropdown()
 				}*/
+
 			  })
 			  // End Swagger UI call region
 			
@@ -81,7 +83,14 @@
 			</div>
 		</footer>
 		
-		
+		<!-- Custom Scripts -->
+		<script>
+			function customScripts() {
+				//addAuthDropdown();
+				updateContentTypeOrder();
+			}
+		</script>
+
 		<!-- Auth Dropdown -->
 		<script>
 			function addAuthDropdown() {
@@ -154,5 +163,13 @@
 				});	
 			});
 		</script>
+
+		<!-- Fix Response Content Order -->
+		<script>
+			function updateContentTypeOrder() {
+				$('select[class="content-type"] option[value="application/json"]').insertBefore($('select[name="content-type"] option[value="application/xml"]'));
+			}
+		</script>
+
 	</body>
 </html>

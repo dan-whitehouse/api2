@@ -1,6 +1,8 @@
 package org.ricone.api.xpress.request.xContact;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.ricone.api.core.model.ContactEventLog;
+import org.ricone.api.core.model.wrapper.EventLogWrapper;
 import org.ricone.api.core.model.wrapper.StudentContactWrapper;
 import org.ricone.api.xpress.component.ControllerData;
 import org.ricone.error.NoContentException;
@@ -19,6 +21,8 @@ public class XContactServiceImp implements XContactService {
     @Autowired private XContactDAO dao;
     @Autowired private XContactMapper mapper;
     @Autowired private XContactFilterer filterer;
+    @Autowired private XContactEventLogDAO eventLogDAO;
+    @Autowired private XContactEventLogMapper eventLogMapper;
 
     @Override
     public XContactResponse findByRefId(ControllerData metadata, String refId) throws Exception {
@@ -31,6 +35,14 @@ public class XContactServiceImp implements XContactService {
 
     @Override
     public XContactsResponse findAll(ControllerData metadata) throws Exception {
+        if(metadata.hasChangesSinceMarker()) {
+            List<EventLogWrapper<ContactEventLog>> instance = eventLogDAO.findAll(metadata, metadata.getChangesSinceLocalDateTime());
+            if(CollectionUtils.isEmpty(instance)) {
+                throw new NoContentException();
+            }
+            return filterer.apply(eventLogMapper.convert(instance), metadata);
+        }
+
         List<StudentContactWrapper> instance = dao.findAll(metadata);
         if(CollectionUtils.isEmpty(instance)) {
             throw new NoContentException();
@@ -40,6 +52,14 @@ public class XContactServiceImp implements XContactService {
 
     @Override
     public XContactsResponse findAllByLea(ControllerData metadata, String refId) throws Exception {
+        if(metadata.hasChangesSinceMarker()) {
+            List<EventLogWrapper<ContactEventLog>> instance = eventLogDAO.findAllByLeaRefId(metadata, metadata.getChangesSinceLocalDateTime(), refId);
+            if(CollectionUtils.isEmpty(instance)) {
+                throw new NoContentException();
+            }
+            return filterer.apply(eventLogMapper.convert(instance), metadata);
+        }
+
         List<StudentContactWrapper> instance = dao.findAllByLeaRefId(metadata, refId);
         if(CollectionUtils.isEmpty(instance)) {
             throw new NoContentException();
@@ -49,6 +69,14 @@ public class XContactServiceImp implements XContactService {
 
     @Override
     public XContactsResponse findAllBySchool(ControllerData metadata, String refId) throws Exception {
+        if(metadata.hasChangesSinceMarker()) {
+            List<EventLogWrapper<ContactEventLog>> instance = eventLogDAO.findAllBySchoolRefId(metadata, metadata.getChangesSinceLocalDateTime(), refId);
+            if(CollectionUtils.isEmpty(instance)) {
+                throw new NoContentException();
+            }
+            return filterer.apply(eventLogMapper.convert(instance), metadata);
+        }
+
         List<StudentContactWrapper> instance = dao.findAllBySchoolRefId(metadata, refId);
         if(CollectionUtils.isEmpty(instance)) {
             throw new NoContentException();
@@ -58,6 +86,14 @@ public class XContactServiceImp implements XContactService {
 
     @Override
     public XContactsResponse findAllByStudent(ControllerData metadata, String refId) throws Exception {
+        if(metadata.hasChangesSinceMarker()) {
+            List<EventLogWrapper<ContactEventLog>> instance = eventLogDAO.findAllByStudentRefId(metadata, metadata.getChangesSinceLocalDateTime(), refId);
+            if(CollectionUtils.isEmpty(instance)) {
+                throw new NoContentException();
+            }
+            return filterer.apply(eventLogMapper.convert(instance), metadata);
+        }
+
         List<StudentContactWrapper> instance = dao.findAllByStudentRefId(metadata, refId);
         if(CollectionUtils.isEmpty(instance)) {
             throw new NoContentException();

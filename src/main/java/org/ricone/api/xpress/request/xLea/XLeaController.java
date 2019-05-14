@@ -27,7 +27,7 @@ public class XLeaController extends BaseController {
 	@ACL.Get.XLea.ById
 	@GetMapping(value = "/requests/xLeas/{refId}", produces = {"application/json", "application/xml"})
 	@Swagger.Operation.GetXLeaById /**/ @Swagger.Response.XLea
-	public XLeaResponse getXLeaById(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "refId") String id) throws Exception {
+	public XLeaResponse getXLeaById(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "refId") String id, @SwaggerParam.SchoolYear Integer schoolYear, @SwaggerParam.IdType(values = {"local", "state"}) String idType) throws Exception {
 		if(Util.isRefId(id)) {
 			return service.findByRefId(getMetaData(request, response), id);
 		}

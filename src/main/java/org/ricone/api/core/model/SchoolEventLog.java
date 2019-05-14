@@ -13,7 +13,7 @@ import java.io.Serializable;
  */
 
 @Entity
-@Table(name = "schooleventlog")
+@Table(name = "eventlogschool")
 public class SchoolEventLog extends EventLog implements Serializable {
     private static final long serialVersionUID = 8596207385746991408L;
 

@@ -75,6 +75,7 @@ public class ErrorController {
     @ExceptionHandler({Exception.class, MappingException.class})
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
     private XErrorResponse serverError(HttpServletRequest request, HttpServletResponse response, Exception ex) {
+        ex.printStackTrace();
         return new XErrorResponse(new XError(UUID.randomUUID().toString(), 500, "Internal Server Error", ex.getMessage()));
     }
 

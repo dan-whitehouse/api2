@@ -1,7 +1,9 @@
 package org.ricone.api.xpress.request.xCourse;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.ricone.api.core.model.CourseEventLog;
 import org.ricone.api.core.model.wrapper.CourseWrapper;
+import org.ricone.api.core.model.wrapper.EventLogWrapper;
 import org.ricone.api.xpress.component.ControllerData;
 import org.ricone.error.NoContentException;
 import org.ricone.api.xpress.component.error.exception.NotFoundException;
@@ -19,6 +21,8 @@ public class XCourseServiceImp implements XCourseService {
     @Autowired private XCourseDAO dao;
     @Autowired private XCourseMapper mapper;
     @Autowired private XCourseFilterer filterer;
+    @Autowired private XCourseEventLogDAO eventLogDAO;
+    @Autowired private XCourseEventLogMapper eventLogMapper;
 
     @Override
     public XCourseResponse findByRefId(ControllerData metadata, String refId) throws Exception {
@@ -31,6 +35,14 @@ public class XCourseServiceImp implements XCourseService {
 
     @Override
     public XCoursesResponse findAll(ControllerData metadata) throws Exception {
+        if(metadata.hasChangesSinceMarker()) {
+            List<EventLogWrapper<CourseEventLog>> instance = eventLogDAO.findAll(metadata, metadata.getChangesSinceLocalDateTime());
+            if(CollectionUtils.isEmpty(instance)) {
+                throw new NoContentException();
+            }
+            return filterer.apply(eventLogMapper.convert(instance), metadata);
+        }
+
         List<CourseWrapper> instance = dao.findAll(metadata);
         if(CollectionUtils.isEmpty(instance)) {
             throw new NoContentException();
@@ -40,6 +52,14 @@ public class XCourseServiceImp implements XCourseService {
 
     @Override
     public XCoursesResponse findAllByLea(ControllerData metadata, String refId) throws Exception {
+        if(metadata.hasChangesSinceMarker()) {
+            List<EventLogWrapper<CourseEventLog>> instance = eventLogDAO.findAllByLeaRefId(metadata, metadata.getChangesSinceLocalDateTime(), refId);
+            if(CollectionUtils.isEmpty(instance)) {
+                throw new NoContentException();
+            }
+            return filterer.apply(eventLogMapper.convert(instance), metadata);
+        }
+
         List<CourseWrapper> instance = dao.findAllBySchoolRefId(metadata, refId);
         if(CollectionUtils.isEmpty(instance)) {
             throw new NoContentException();
@@ -49,6 +69,14 @@ public class XCourseServiceImp implements XCourseService {
 
     @Override
     public XCoursesResponse findAllBySchool(ControllerData metadata, String refId) throws Exception {
+        if(metadata.hasChangesSinceMarker()) {
+            List<EventLogWrapper<CourseEventLog>> instance = eventLogDAO.findAllBySchoolRefId(metadata, metadata.getChangesSinceLocalDateTime(), refId);
+            if(CollectionUtils.isEmpty(instance)) {
+                throw new NoContentException();
+            }
+            return filterer.apply(eventLogMapper.convert(instance), metadata);
+        }
+
         List<CourseWrapper> instance = dao.findAllBySchoolRefId(metadata, refId);
         if(CollectionUtils.isEmpty(instance)) {
             throw new NoContentException();
@@ -58,6 +86,14 @@ public class XCourseServiceImp implements XCourseService {
 
     @Override
     public XCoursesResponse findAllByRoster(ControllerData metadata, String refId) throws Exception {
+        if(metadata.hasChangesSinceMarker()) {
+            List<EventLogWrapper<CourseEventLog>> instance = eventLogDAO.findAllByRosterRefId(metadata, metadata.getChangesSinceLocalDateTime(), refId);
+            if(CollectionUtils.isEmpty(instance)) {
+                throw new NoContentException();
+            }
+            return filterer.apply(eventLogMapper.convert(instance), metadata);
+        }
+
         List<CourseWrapper> instance = dao.findAllBySchoolRefId(metadata, refId);
         if(CollectionUtils.isEmpty(instance)) {
             throw new NoContentException();

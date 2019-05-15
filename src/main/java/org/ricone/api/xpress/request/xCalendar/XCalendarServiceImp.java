@@ -15,6 +15,12 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.List;
 
+/**
+ * @author Dan Whitehouse <daniel.whitehouse@neric.org>
+ * @version 2.0.0
+ * @since 2019-05-15
+ */
+
 @Transactional
 @Service("XPress:XCalendars:XCalendarService")
 public class XCalendarServiceImp implements XCalendarService {
@@ -36,7 +42,7 @@ public class XCalendarServiceImp implements XCalendarService {
     @Override
     public XCalendarsResponse findAll(ControllerData metadata) throws Exception {
         if(metadata.hasChangesSinceMarker()) {
-            List<EventLogWrapper<CalendarEventLog>> instance = eventLogDAO.findAll(metadata, metadata.getChangesSinceLocalDateTime());
+            List<EventLogWrapper<CalendarEventLog>> instance = eventLogDAO.findAll(metadata);
             if(CollectionUtils.isEmpty(instance)) {
                 throw new NoContentException();
             }
@@ -53,7 +59,7 @@ public class XCalendarServiceImp implements XCalendarService {
     @Override
     public XCalendarsResponse findAllByLea(ControllerData metadata, String refId) throws Exception {
         if(metadata.hasChangesSinceMarker()) {
-            List<EventLogWrapper<CalendarEventLog>> instance = eventLogDAO.findAllByLeaRefId(metadata, metadata.getChangesSinceLocalDateTime(), refId);
+            List<EventLogWrapper<CalendarEventLog>> instance = eventLogDAO.findAllByLeaRefId(metadata, refId);
             if(CollectionUtils.isEmpty(instance)) {
                 throw new NoContentException();
             }
@@ -71,7 +77,7 @@ public class XCalendarServiceImp implements XCalendarService {
     public XCalendarsResponse findAllBySchool(ControllerData metadata, String refId) throws Exception {
 
         if(metadata.hasChangesSinceMarker()) {
-            List<EventLogWrapper<CalendarEventLog>> instance = eventLogDAO.findAllByLeaRefId(metadata, metadata.getChangesSinceLocalDateTime(), refId);
+            List<EventLogWrapper<CalendarEventLog>> instance = eventLogDAO.findAllByLeaRefId(metadata, refId);
             if(CollectionUtils.isEmpty(instance)) {
                 throw new NoContentException();
             }

@@ -31,12 +31,12 @@ public class Util {
 		return year.matches("[0-9]+") && year.length() == 4;
 	}
 
-	static String get2DigitYear(Date d) {
+	public static String get2DigitYear(Date d) {
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 		return df.format(d).substring(2, 4);
 	}
 
-	static boolean isGradeGreater(String grade, String grade2) {
+	public static boolean isGradeGreater(String grade, String grade2) {
 		return getGradeAsInt(grade) > getGradeAsInt(grade2);
 	}
 

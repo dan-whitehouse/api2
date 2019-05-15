@@ -1,8 +1,10 @@
 package org.ricone.config.model;
 
 import com.fasterxml.jackson.annotation.*;
+import org.ricone.api.core.model.Lea;
 
 import java.util.HashMap;
+import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -16,6 +18,12 @@ public class District {
     private String name;
     @JsonProperty("provider_id")
     private String providerId;
+
+    @JsonIgnore
+    private Lea lea;
+
+    @JsonIgnore
+    private List<School> schools;
 
     @JsonIgnore
     private HashMap<String, String> kv;
@@ -72,6 +80,25 @@ public class District {
         this.providerId = providerId;
     }
 
+    @JsonIgnore
+    public Lea getLea() {
+        return lea;
+    }
+
+    @JsonIgnore
+    public void setLea(Lea lea) {
+        this.lea = lea;
+    }
+
+    @JsonIgnore
+    public List<School> getSchools() {
+        return schools;
+    }
+
+    @JsonIgnore
+    public void setSchools(List<School> schools) {
+        this.schools = schools;
+    }
 
     @JsonIgnore
     public HashMap<String, String> getKv() {

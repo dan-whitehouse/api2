@@ -15,17 +15,17 @@ import java.util.List;
 
 /**
  * @author Dan Whitehouse <daniel.whitehouse@neric.org>
- * @version 1.2.1
- * @since 2018-11-09
+ * @version 2.0.0
+ * @since 2019-05-15
  */
 
-@SuppressWarnings({"unchecked", "RedundantTypeArguments"})
 @Repository("XPress:XContacts:XCalendarEventLogDAO")
 public class XContactEventLogDAOImp extends BaseDAO implements XContactEventLogDAO {
 	@PersistenceContext
 	private EntityManager em;
 
-	public List<EventLogWrapper<ContactEventLog>> findAll(ControllerData metadata, Date iso8601) {
+	@Override
+	public List<EventLogWrapper<ContactEventLog>> findAll(ControllerData metadata) {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<EventLogWrapper> select = cb.createQuery(EventLogWrapper.class);
 		final Root<ContactEventLog> from = select.from(ContactEventLog.class);
@@ -35,7 +35,7 @@ public class XContactEventLogDAOImp extends BaseDAO implements XContactEventLogD
 		select.select(cb.construct(EventLogWrapper.class, lea.get(ControllerData.LEA_LOCAL_ID), from));
 		select.where(
 			cb.and(
-				cb.greaterThanOrEqualTo(from.get(EVENT_TIMESTAMP), iso8601),
+				cb.greaterThanOrEqualTo(from.get(EVENT_TIMESTAMP), metadata.getChangesSinceLocalDateTime()),
 				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 			)
 		);
@@ -47,13 +47,14 @@ public class XContactEventLogDAOImp extends BaseDAO implements XContactEventLogD
 			q.setMaxResults(metadata.getPaging().getPageSize());
 			
 			//If Paging - Set ControllerData PagingInfo Total Objects
-			metadata.getPaging().setTotalObjects(countAll(metadata, iso8601));
+			metadata.getPaging().setTotalObjects(countAll(metadata));
 		}
 
 		return (List<EventLogWrapper<ContactEventLog>>) q.getResultList();
 	}
 
-	public List<EventLogWrapper<ContactEventLog>> findAllByLeaRefId(ControllerData metadata, Date iso8601, String refId) {
+	@Override
+	public List<EventLogWrapper<ContactEventLog>> findAllByLeaRefId(ControllerData metadata, String refId) {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<EventLogWrapper> select = cb.createQuery(EventLogWrapper.class);
 		final Root<ContactEventLog> from = select.from(ContactEventLog.class);
@@ -63,7 +64,7 @@ public class XContactEventLogDAOImp extends BaseDAO implements XContactEventLogD
 		select.select(cb.construct(EventLogWrapper.class, lea.get(ControllerData.LEA_LOCAL_ID), from));
 		select.where(
 			cb.and(
-				cb.greaterThanOrEqualTo(from.get(EVENT_TIMESTAMP), iso8601),
+				cb.greaterThanOrEqualTo(from.get(EVENT_TIMESTAMP), metadata.getChangesSinceLocalDateTime()),
 				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()),
 				cb.equal(lea.get(LEA_REF_ID), refId)
 			)
@@ -76,13 +77,14 @@ public class XContactEventLogDAOImp extends BaseDAO implements XContactEventLogD
 			q.setMaxResults(metadata.getPaging().getPageSize());
 
 			//If Paging - Set ControllerData PagingInfo Total Objects
-			metadata.getPaging().setTotalObjects(countAllByLeaRefId(metadata, iso8601, refId));
+			metadata.getPaging().setTotalObjects(countAllByLeaRefId(metadata, refId));
 		}
 
 		return (List<EventLogWrapper<ContactEventLog>>) q.getResultList();
 	}
 
-	public List<EventLogWrapper<ContactEventLog>> findAllBySchoolRefId(ControllerData metadata, Date iso8601, String refId) {
+	@Override
+	public List<EventLogWrapper<ContactEventLog>> findAllBySchoolRefId(ControllerData metadata, String refId) {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<EventLogWrapper> select = cb.createQuery(EventLogWrapper.class);
 		final Root<ContactEventLog> from = select.from(ContactEventLog.class);
@@ -97,7 +99,7 @@ public class XContactEventLogDAOImp extends BaseDAO implements XContactEventLogD
 		select.select(cb.construct(EventLogWrapper.class, lea.get(ControllerData.LEA_LOCAL_ID), from));
 		select.where(
 			cb.and(
-				cb.greaterThanOrEqualTo(from.get(EVENT_TIMESTAMP), iso8601),
+				cb.greaterThanOrEqualTo(from.get(EVENT_TIMESTAMP), metadata.getChangesSinceLocalDateTime()),
 				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()),
 				cb.equal(school.get(SCHOOL_REF_ID), refId)
 			)
@@ -110,13 +112,14 @@ public class XContactEventLogDAOImp extends BaseDAO implements XContactEventLogD
 			q.setMaxResults(metadata.getPaging().getPageSize());
 
 			//If Paging - Set ControllerData PagingInfo Total Objects
-			metadata.getPaging().setTotalObjects(countAllBySchoolRefId(metadata, iso8601, refId));
+			metadata.getPaging().setTotalObjects(countAllBySchoolRefId(metadata, refId));
 		}
 
 		return (List<EventLogWrapper<ContactEventLog>>) q.getResultList();
 	}
 
-	public List<EventLogWrapper<ContactEventLog>> findAllByStudentRefId(ControllerData metadata, Date iso8601, String refId) {
+	@Override
+	public List<EventLogWrapper<ContactEventLog>> findAllByStudentRefId(ControllerData metadata, String refId) {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<EventLogWrapper> select = cb.createQuery(EventLogWrapper.class);
 		final Root<ContactEventLog> from = select.from(ContactEventLog.class);
@@ -129,7 +132,7 @@ public class XContactEventLogDAOImp extends BaseDAO implements XContactEventLogD
 		select.select(cb.construct(EventLogWrapper.class, lea.get(ControllerData.LEA_LOCAL_ID), from));
 		select.where(
 			cb.and(
-				cb.greaterThanOrEqualTo(from.get(EVENT_TIMESTAMP), iso8601),
+				cb.greaterThanOrEqualTo(from.get(EVENT_TIMESTAMP), metadata.getChangesSinceLocalDateTime()),
 				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()),
 				cb.equal(student.get(STUDENT_REF_ID), refId)
 			)
@@ -142,14 +145,16 @@ public class XContactEventLogDAOImp extends BaseDAO implements XContactEventLogD
 			q.setMaxResults(metadata.getPaging().getPageSize());
 
 			//If Paging - Set ControllerData PagingInfo Total Objects
-			metadata.getPaging().setTotalObjects(countAllByStudentRefId(metadata, iso8601, refId));
+			metadata.getPaging().setTotalObjects(countAllByStudentRefId(metadata, refId));
 		}
 
 		return (List<EventLogWrapper<ContactEventLog>>) q.getResultList();
 	}
 
 	/** Counts **/
-	public int countAll(ControllerData metadata, Date iso8601) {
+
+	@Override
+	public int countAll(ControllerData metadata) {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<Long> select = cb.createQuery(Long.class);
 		final Root<ContactEventLog> from = select.from(ContactEventLog.class);
@@ -159,7 +164,7 @@ public class XContactEventLogDAOImp extends BaseDAO implements XContactEventLogD
 		select.select(cb.countDistinct(from));
 		select.where(
 			cb.and(
-				cb.greaterThanOrEqualTo(from.get(EVENT_TIMESTAMP), iso8601),
+				cb.greaterThanOrEqualTo(from.get(EVENT_TIMESTAMP), metadata.getChangesSinceLocalDateTime()),
 				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 			)
 		);
@@ -168,7 +173,8 @@ public class XContactEventLogDAOImp extends BaseDAO implements XContactEventLogD
 		return em.createQuery(select).getSingleResult().intValue();
 	}
 
-	public int countAllByLeaRefId(ControllerData metadata, Date iso8601, String refId) {
+	@Override
+	public int countAllByLeaRefId(ControllerData metadata, String refId) {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<Long> select = cb.createQuery(Long.class);
 		final Root<ContactEventLog> from = select.from(ContactEventLog.class);
@@ -178,7 +184,7 @@ public class XContactEventLogDAOImp extends BaseDAO implements XContactEventLogD
 		select.select(cb.countDistinct(from));
 		select.where(
 			cb.and(
-				cb.greaterThanOrEqualTo(from.get(EVENT_TIMESTAMP), iso8601),
+				cb.greaterThanOrEqualTo(from.get(EVENT_TIMESTAMP), metadata.getChangesSinceLocalDateTime()),
 				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()),
 				cb.equal(lea.get(LEA_REF_ID), refId)
 			)
@@ -188,7 +194,8 @@ public class XContactEventLogDAOImp extends BaseDAO implements XContactEventLogD
 		return em.createQuery(select).getSingleResult().intValue();
 	}
 
-	public int countAllBySchoolRefId(ControllerData metadata, Date iso8601, String refId) {
+	@Override
+	public int countAllBySchoolRefId(ControllerData metadata, String refId) {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<Long> select = cb.createQuery(Long.class);
 		final Root<ContactEventLog> from = select.from(ContactEventLog.class);
@@ -203,7 +210,7 @@ public class XContactEventLogDAOImp extends BaseDAO implements XContactEventLogD
 		select.select(cb.countDistinct(from));
 		select.where(
 			cb.and(
-				cb.greaterThanOrEqualTo(from.get(EVENT_TIMESTAMP), iso8601),
+				cb.greaterThanOrEqualTo(from.get(EVENT_TIMESTAMP), metadata.getChangesSinceLocalDateTime()),
 				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()),
 				cb.equal(school.get(SCHOOL_REF_ID), refId)
 			)
@@ -213,7 +220,8 @@ public class XContactEventLogDAOImp extends BaseDAO implements XContactEventLogD
 		return em.createQuery(select).getSingleResult().intValue();
 	}
 
-	public int countAllByStudentRefId(ControllerData metadata, Date iso8601, String refId) {
+	@Override
+	public int countAllByStudentRefId(ControllerData metadata, String refId) {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<Long> select = cb.createQuery(Long.class);
 		final Root<ContactEventLog> from = select.from(ContactEventLog.class);
@@ -226,7 +234,7 @@ public class XContactEventLogDAOImp extends BaseDAO implements XContactEventLogD
 		select.select(cb.countDistinct(from));
 		select.where(
 			cb.and(
-				cb.greaterThanOrEqualTo(from.get(EVENT_TIMESTAMP), iso8601),
+				cb.greaterThanOrEqualTo(from.get(EVENT_TIMESTAMP), metadata.getChangesSinceLocalDateTime()),
 				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()),
 				cb.equal(student.get(STUDENT_REF_ID), refId)
 			)
@@ -237,6 +245,8 @@ public class XContactEventLogDAOImp extends BaseDAO implements XContactEventLogD
 	}
 
 	/** Latest Opaque Markers **/
+
+	@Override
 	public Date getLatestOpaqueMarker(ControllerData metadata) {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<Date> select = cb.createQuery(Date.class);

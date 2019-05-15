@@ -11,6 +11,12 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Dan Whitehouse <daniel.whitehouse@neric.org>
+ * @version 2.0.0
+ * @since 2019-05-15
+ */
+
 @Component("XPress:XLeas:XLeaEventLogMapper")
 public class XLeaEventLogMapper {
     @Autowired private XLeaMapper mapper;

@@ -1,16 +1,21 @@
 package org.ricone.api.xpress.request.xStudent;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.ricone.api.core.model.StudentEventLog;
+import org.ricone.api.core.model.wrapper.EventLogWrapper;
 import org.ricone.api.core.model.wrapper.StudentWrapper;
 import org.ricone.api.xpress.component.ControllerData;
-import org.ricone.error.NoContentException;
+import org.ricone.api.xpress.component.aupp.User;
+import org.ricone.api.xpress.component.aupp.UserPasswordGenerator;
 import org.ricone.api.xpress.component.error.exception.NotFoundException;
 import org.ricone.api.xpress.model.XStudentResponse;
 import org.ricone.api.xpress.model.XStudentsResponse;
+import org.ricone.error.NoContentException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 
 @Transactional
@@ -19,6 +24,9 @@ public class XStudentServiceImp implements XStudentService {
     @Autowired private XStudentDAO dao;
     @Autowired private XStudentMapper mapper;
     @Autowired private XStudentFilterer filterer;
+    @Autowired private XStudentEventLogDAOImp eventLogDAO;
+    @Autowired private XStudentEventLogMapper eventLogMapper;
+    @Autowired private XStudentUsernamePasswordMapper usernamePasswordMapper;
 
     @Override
     public XStudentResponse findByRefId(ControllerData metadata, String refId) throws Exception {
@@ -49,6 +57,14 @@ public class XStudentServiceImp implements XStudentService {
 
     @Override
     public XStudentsResponse findAll(ControllerData metadata) throws Exception {
+        if(metadata.hasChangesSinceMarker()) {
+            List<EventLogWrapper<StudentEventLog>> instance = eventLogDAO.findAll(metadata);
+            if(CollectionUtils.isEmpty(instance)) {
+                throw new NoContentException();
+            }
+            return filterer.apply(eventLogMapper.convert(instance), metadata);
+        }
+
         List<StudentWrapper> instance = dao.findAll(metadata);
         if(CollectionUtils.isEmpty(instance)) {
             throw new NoContentException();
@@ -58,6 +74,14 @@ public class XStudentServiceImp implements XStudentService {
 
     @Override
     public XStudentsResponse findAllByLea(ControllerData metadata, String refId) throws Exception {
+        if(metadata.hasChangesSinceMarker()) {
+            List<EventLogWrapper<StudentEventLog>> instance = eventLogDAO.findAllByLeaRefId(metadata, refId);
+            if(CollectionUtils.isEmpty(instance)) {
+                throw new NoContentException();
+            }
+            return filterer.apply(eventLogMapper.convert(instance), metadata);
+        }
+
         List<StudentWrapper> instance = dao.findAllByLeaRefId(metadata, refId);
         if(CollectionUtils.isEmpty(instance)) {
             throw new NoContentException();
@@ -67,7 +91,26 @@ public class XStudentServiceImp implements XStudentService {
 
     @Override
     public XStudentsResponse findAllBySchool(ControllerData metadata, String refId) throws Exception {
+        //ChangesSince
+        if(metadata.hasChangesSinceMarker()) {
+            List<EventLogWrapper<StudentEventLog>> instance = eventLogDAO.findAllBySchoolRefId(metadata, refId);
+            if(CollectionUtils.isEmpty(instance)) {
+                throw new NoContentException();
+            }
+            return filterer.apply(eventLogMapper.convert(instance), metadata);
+        }
+
         List<StudentWrapper> instance = dao.findAllBySchoolRefId(metadata, refId);
+
+        //AUPP
+        if(metadata.hasAUPP()) {
+            if(metadata.isGetAUPP()) {
+                return usernamePasswordMapper.convert(instance, metadata, refId);
+            }
+            throw new NoContentException();
+        }
+
+        //Regular Request
         if(CollectionUtils.isEmpty(instance)) {
             throw new NoContentException();
         }
@@ -76,6 +119,14 @@ public class XStudentServiceImp implements XStudentService {
 
     @Override
     public XStudentsResponse findAllByRoster(ControllerData metadata, String refId) throws Exception {
+        if(metadata.hasChangesSinceMarker()) {
+            List<EventLogWrapper<StudentEventLog>> instance = eventLogDAO.findAllByRosterRefId(metadata, refId);
+            if(CollectionUtils.isEmpty(instance)) {
+                throw new NoContentException();
+            }
+            return filterer.apply(eventLogMapper.convert(instance), metadata);
+        }
+
         List<StudentWrapper> instance = dao.findAllByRosterRefId(metadata, refId);
         if(CollectionUtils.isEmpty(instance)) {
             throw new NoContentException();
@@ -85,6 +136,14 @@ public class XStudentServiceImp implements XStudentService {
 
     @Override
     public XStudentsResponse findAllByStaff(ControllerData metadata, String refId) throws Exception {
+        if(metadata.hasChangesSinceMarker()) {
+            List<EventLogWrapper<StudentEventLog>> instance = eventLogDAO.findAllByStaffRefId(metadata, refId);
+            if(CollectionUtils.isEmpty(instance)) {
+                throw new NoContentException();
+            }
+            return filterer.apply(eventLogMapper.convert(instance), metadata);
+        }
+
         List<StudentWrapper> instance = dao.findAllByStaffRefId(metadata, refId);
         if(CollectionUtils.isEmpty(instance)) {
             throw new NoContentException();
@@ -94,6 +153,14 @@ public class XStudentServiceImp implements XStudentService {
 
     @Override
     public XStudentsResponse findAllByContact(ControllerData metadata, String refId) throws Exception {
+        if(metadata.hasChangesSinceMarker()) {
+            List<EventLogWrapper<StudentEventLog>> instance = eventLogDAO.findAllByContactRefId(metadata, refId);
+            if(CollectionUtils.isEmpty(instance)) {
+                throw new NoContentException();
+            }
+            return filterer.apply(eventLogMapper.convert(instance), metadata);
+        }
+
         List<StudentWrapper> instance = dao.findAllByContactRefId(metadata, refId);
         if(CollectionUtils.isEmpty(instance)) {
             throw new NoContentException();

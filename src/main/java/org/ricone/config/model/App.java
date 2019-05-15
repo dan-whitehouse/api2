@@ -8,7 +8,10 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
 import org.ricone.api.core.model.Lea;
 import org.ricone.api.core.model.School;
+import org.ricone.api.core.model.SchoolIdentifier;
 import org.ricone.security.jwt.PathPermission;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -20,6 +23,8 @@ import java.util.stream.Collectors;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"longDescription", "type", "name", "permTemplate", "status", "profile_id", "tags", "licenseName", "includeExitedStudents", "providerSecret", "siteUrl", "vendor_id", "iconUrl", "sis_id", "public", "severityLevelDataAPI", "shortDescription", "title", "id", "password"})
 public class App implements Serializable {
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
+
     private final static long serialVersionUID = 391070065402879606L;
     @JsonProperty("longDescription")
     private String longDescription;
@@ -424,6 +429,8 @@ public class App implements Serializable {
     @JsonIgnore
     public HashMap<String, String> getDistrictKVsBySchool(String refId) {
         for (District district : districts) {
+            logger.debug("district: " + district.getId());
+            logger.debug("leas: " + leas.size());
             if(CollectionUtils.isNotEmpty(leas)) {
                 Optional<Lea> oLea = leas.stream().filter(lea -> lea.getLeaId().equalsIgnoreCase(district.getId())).findFirst();
                 if(oLea.isPresent()) {
@@ -431,6 +438,26 @@ public class App implements Serializable {
                         Optional<School> oSchool = oLea.get().getSchools().stream().filter(school -> school.getSchoolRefId().equalsIgnoreCase(refId)).findFirst();
                         if(oSchool.isPresent()) {
                             return district.getKv();
+                        }
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    public HashMap<String, String> getSchoolKVsBySchool(String schoolRefId) {
+        for (District district : districts) {
+            if(district.getLea() != null) {
+                if (CollectionUtils.isNotEmpty(district.getLea().getSchools())) {
+                    Optional<School> school = district.getLea().getSchools().stream().filter(sch -> sch.getSchoolRefId().equalsIgnoreCase(schoolRefId)).findFirst();
+                    if (school.isPresent()) {
+                        Optional<SchoolIdentifier> schoolId = school.get().getSchoolIdentifiers().stream().filter(id -> id.getIdentificationSystemCode().equalsIgnoreCase("SEA")).findFirst();
+                        if(schoolId.isPresent()) {
+                            Optional<org.ricone.config.model.School> schoolFromConfig = district.getSchools().stream().filter(sch -> sch.getStateLocId().equalsIgnoreCase(schoolId.get().getSchoolId())).findFirst();
+                            if(schoolFromConfig.isPresent()) {
+                                return schoolFromConfig.get().getKv();
+                            }
                         }
                     }
                 }

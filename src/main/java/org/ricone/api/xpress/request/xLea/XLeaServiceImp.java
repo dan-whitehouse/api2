@@ -45,7 +45,7 @@ public class XLeaServiceImp implements XLeaService {
     @Override
     public XLeasResponse findAll(ControllerData metadata) throws Exception {
         if(metadata.hasChangesSinceMarker()) {
-            List<EventLogWrapper<LeaEventLog>> instance = eventLogDAO.findAll(metadata, metadata.getChangesSinceLocalDateTime());
+            List<EventLogWrapper<LeaEventLog>> instance = eventLogDAO.findAll(metadata);
             if(CollectionUtils.isEmpty(instance)) {
                 throw new NoContentException();
             }
@@ -62,7 +62,7 @@ public class XLeaServiceImp implements XLeaService {
     @Override
     public XLeasResponse findAllBySchool(ControllerData metadata, String refId) throws Exception {
         if(metadata.hasChangesSinceMarker()) {
-            List<EventLogWrapper<LeaEventLog>> instance = eventLogDAO.findAllBySchoolRefId(metadata, metadata.getChangesSinceLocalDateTime(), refId);
+            List<EventLogWrapper<LeaEventLog>> instance = eventLogDAO.findAllBySchoolRefId(metadata, refId);
             if(CollectionUtils.isEmpty(instance)) {
                 throw new NoContentException();
             }
@@ -79,7 +79,7 @@ public class XLeaServiceImp implements XLeaService {
     @Override
     public XLeasResponse findAllByCalendar(ControllerData metadata, String refId) throws Exception {
         if(metadata.hasChangesSinceMarker()) {
-            List<EventLogWrapper<LeaEventLog>> instance = eventLogDAO.findAllByCalendarRefId(metadata, metadata.getChangesSinceLocalDateTime(), refId);
+            List<EventLogWrapper<LeaEventLog>> instance = eventLogDAO.findAllByCalendarRefId(metadata, refId);
             if(CollectionUtils.isEmpty(instance)) {
                 throw new NoContentException();
             }
@@ -96,7 +96,7 @@ public class XLeaServiceImp implements XLeaService {
     @Override
     public XLeasResponse findAllByCourse(ControllerData metadata, String refId) throws Exception {
         if(metadata.hasChangesSinceMarker()) {
-            List<EventLogWrapper<LeaEventLog>> instance = eventLogDAO.findAllByCourseRefId(metadata, metadata.getChangesSinceLocalDateTime(), refId);
+            List<EventLogWrapper<LeaEventLog>> instance = eventLogDAO.findAllByCourseRefId(metadata, refId);
             if(CollectionUtils.isEmpty(instance)) {
                 throw new NoContentException();
             }
@@ -113,7 +113,7 @@ public class XLeaServiceImp implements XLeaService {
     @Override
     public XLeasResponse findAllByRoster(ControllerData metadata, String refId) throws Exception {
         if(metadata.hasChangesSinceMarker()) {
-            List<EventLogWrapper<LeaEventLog>> instance = eventLogDAO.findAllByRosterRefId(metadata, metadata.getChangesSinceLocalDateTime(), refId);
+            List<EventLogWrapper<LeaEventLog>> instance = eventLogDAO.findAllByRosterRefId(metadata, refId);
             if(CollectionUtils.isEmpty(instance)) {
                 throw new NoContentException();
             }
@@ -130,7 +130,7 @@ public class XLeaServiceImp implements XLeaService {
     @Override
     public XLeasResponse findAllByStaff(ControllerData metadata, String refId) throws Exception {
         if(metadata.hasChangesSinceMarker()) {
-            List<EventLogWrapper<LeaEventLog>> instance = eventLogDAO.findAllByStaffRefId(metadata, metadata.getChangesSinceLocalDateTime(), refId);
+            List<EventLogWrapper<LeaEventLog>> instance = eventLogDAO.findAllByStaffRefId(metadata, refId);
             if(CollectionUtils.isEmpty(instance)) {
                 throw new NoContentException();
             }
@@ -147,7 +147,7 @@ public class XLeaServiceImp implements XLeaService {
     @Override
     public XLeasResponse findAllByStudent(ControllerData metadata, String refId) throws Exception {
         if(metadata.hasChangesSinceMarker()) {
-            List<EventLogWrapper<LeaEventLog>> instance = eventLogDAO.findAllByStudentRefId(metadata, metadata.getChangesSinceLocalDateTime(), refId);
+            List<EventLogWrapper<LeaEventLog>> instance = eventLogDAO.findAllByStudentRefId(metadata, refId);
             if(CollectionUtils.isEmpty(instance)) {
                 throw new NoContentException();
             }
@@ -164,7 +164,7 @@ public class XLeaServiceImp implements XLeaService {
     @Override
     public XLeasResponse findAllByContact(ControllerData metadata, String refId) throws Exception {
         if(metadata.hasChangesSinceMarker()) {
-            List<EventLogWrapper<LeaEventLog>> instance = eventLogDAO.findAllByContactRefId(metadata, metadata.getChangesSinceLocalDateTime(), refId);
+            List<EventLogWrapper<LeaEventLog>> instance = eventLogDAO.findAllByContactRefId(metadata, refId);
             if(CollectionUtils.isEmpty(instance)) {
                 throw new NoContentException();
             }

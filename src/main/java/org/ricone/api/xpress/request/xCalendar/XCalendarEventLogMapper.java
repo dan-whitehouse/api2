@@ -1,20 +1,21 @@
 package org.ricone.api.xpress.request.xCalendar;
 
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.BooleanUtils;
-import org.apache.commons.lang3.time.DateFormatUtils;
-import org.hibernate.MappingException;
 import org.ricone.api.core.model.CalendarEventLog;
-import org.ricone.api.core.model.SchoolCalendar;
-import org.ricone.api.core.model.SchoolCalendarSession;
 import org.ricone.api.core.model.wrapper.EventLogWrapper;
-import org.ricone.api.core.model.wrapper.SchoolCalendarWrapper;
-import org.ricone.api.xpress.model.*;
+import org.ricone.api.xpress.model.XCalendar;
+import org.ricone.api.xpress.model.XCalendars;
+import org.ricone.api.xpress.model.XCalendarsResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+
+/**
+ * @author Dan Whitehouse <daniel.whitehouse@neric.org>
+ * @version 2.0.0
+ * @since 2019-05-15
+ */
 
 @Component("XPress:XCalendars:XCalendarEventLogMapper")
 public class XCalendarEventLogMapper {

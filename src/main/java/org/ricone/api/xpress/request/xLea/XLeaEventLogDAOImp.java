@@ -13,12 +13,19 @@ import javax.persistence.criteria.*;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * @author Dan Whitehouse <daniel.whitehouse@neric.org>
+ * @version 2.0.0
+ * @since 2019-05-15
+ */
+
 @Repository("XPress:XLeas:XLeaEventLogDAO")
 public class XLeaEventLogDAOImp extends BaseDAO implements XLeaEventLogDAO {
 	@PersistenceContext
 	private EntityManager em;
 
-	public List<EventLogWrapper<LeaEventLog>> findAll(ControllerData metadata, Date iso8601) {
+	@Override
+	public List<EventLogWrapper<LeaEventLog>> findAll(ControllerData metadata) {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<EventLogWrapper> select = cb.createQuery(EventLogWrapper.class);
 		final Root<LeaEventLog> from = select.from(LeaEventLog.class);
@@ -28,7 +35,7 @@ public class XLeaEventLogDAOImp extends BaseDAO implements XLeaEventLogDAO {
 		select.select(cb.construct(EventLogWrapper.class, lea.get(ControllerData.LEA_LOCAL_ID), from));
 		select.where(
 				cb.and(
-						cb.greaterThanOrEqualTo(from.get(EVENT_TIMESTAMP), iso8601),
+						cb.greaterThanOrEqualTo(from.get(EVENT_TIMESTAMP), metadata.getChangesSinceLocalDateTime()),
 						lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 				)
 		);
@@ -40,13 +47,14 @@ public class XLeaEventLogDAOImp extends BaseDAO implements XLeaEventLogDAO {
 			q.setMaxResults(metadata.getPaging().getPageSize());
 
 			//If Paging - Set ControllerData PagingInfo Total Objects
-			metadata.getPaging().setTotalObjects(countAll(metadata, iso8601));
+			metadata.getPaging().setTotalObjects(countAll(metadata));
 		}
 
 		return (List<EventLogWrapper<LeaEventLog>>) q.getResultList();
 	}
 
-	public List<EventLogWrapper<LeaEventLog>> findAllBySchoolRefId(ControllerData metadata, Date iso8601, String refId) {
+	@Override
+	public List<EventLogWrapper<LeaEventLog>> findAllBySchoolRefId(ControllerData metadata, String refId) {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<EventLogWrapper> select = cb.createQuery(EventLogWrapper.class);
 		final Root<LeaEventLog> from = select.from(LeaEventLog.class);
@@ -57,7 +65,7 @@ public class XLeaEventLogDAOImp extends BaseDAO implements XLeaEventLogDAO {
 		select.select(cb.construct(EventLogWrapper.class, lea.get(ControllerData.LEA_LOCAL_ID), from));
 		select.where(
 				cb.and(
-						cb.greaterThanOrEqualTo(from.get(EVENT_TIMESTAMP), iso8601),
+						cb.greaterThanOrEqualTo(from.get(EVENT_TIMESTAMP), metadata.getChangesSinceLocalDateTime()),
 						lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()),
 						cb.equal(schools.get(SCHOOL_REF_ID), refId)
 				)
@@ -70,13 +78,14 @@ public class XLeaEventLogDAOImp extends BaseDAO implements XLeaEventLogDAO {
 			q.setMaxResults(metadata.getPaging().getPageSize());
 
 			//If Paging - Set ControllerData PagingInfo Total Objects
-			metadata.getPaging().setTotalObjects(countAllBySchoolRefId(metadata, iso8601, refId));
+			metadata.getPaging().setTotalObjects(countAllBySchoolRefId(metadata, refId));
 		}
 
 		return (List<EventLogWrapper<LeaEventLog>>) q.getResultList();
 	}
 
-	public List<EventLogWrapper<LeaEventLog>> findAllByCalendarRefId(ControllerData metadata, Date iso8601, String refId) {
+	@Override
+	public List<EventLogWrapper<LeaEventLog>> findAllByCalendarRefId(ControllerData metadata, String refId) {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<EventLogWrapper> select = cb.createQuery(EventLogWrapper.class);
 		final Root<LeaEventLog> from = select.from(LeaEventLog.class);
@@ -88,7 +97,7 @@ public class XLeaEventLogDAOImp extends BaseDAO implements XLeaEventLogDAO {
 		select.select(cb.construct(EventLogWrapper.class, lea.get(ControllerData.LEA_LOCAL_ID), from));
 		select.where(
 				cb.and(
-						cb.greaterThanOrEqualTo(from.get(EVENT_TIMESTAMP), iso8601),
+						cb.greaterThanOrEqualTo(from.get(EVENT_TIMESTAMP), metadata.getChangesSinceLocalDateTime()),
 						lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()),
 						cb.equal(schoolCalendars.get(SCHOOL_CALENDAR_REF_ID), refId)
 				)
@@ -101,13 +110,14 @@ public class XLeaEventLogDAOImp extends BaseDAO implements XLeaEventLogDAO {
 			q.setMaxResults(metadata.getPaging().getPageSize());
 
 			//If Paging - Set ControllerData PagingInfo Total Objects
-			metadata.getPaging().setTotalObjects(countAllByCalendarRefId(metadata, iso8601, refId));
+			metadata.getPaging().setTotalObjects(countAllByCalendarRefId(metadata, refId));
 		}
 
 		return (List<EventLogWrapper<LeaEventLog>>) q.getResultList();
 	}
 
-	public List<EventLogWrapper<LeaEventLog>> findAllByCourseRefId(ControllerData metadata, Date iso8601, String refId) {
+	@Override
+	public List<EventLogWrapper<LeaEventLog>> findAllByCourseRefId(ControllerData metadata, String refId) {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<EventLogWrapper> select = cb.createQuery(EventLogWrapper.class);
 		final Root<LeaEventLog> from = select.from(LeaEventLog.class);
@@ -119,7 +129,7 @@ public class XLeaEventLogDAOImp extends BaseDAO implements XLeaEventLogDAO {
 		select.select(cb.construct(EventLogWrapper.class, lea.get(ControllerData.LEA_LOCAL_ID), from));
 		select.where(
 				cb.and(
-						cb.greaterThanOrEqualTo(from.get(EVENT_TIMESTAMP), iso8601),
+						cb.greaterThanOrEqualTo(from.get(EVENT_TIMESTAMP), metadata.getChangesSinceLocalDateTime()),
 						lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()),
 						cb.equal(courses.get(COURSE_REF_ID), refId)
 				)
@@ -132,13 +142,14 @@ public class XLeaEventLogDAOImp extends BaseDAO implements XLeaEventLogDAO {
 			q.setMaxResults(metadata.getPaging().getPageSize());
 
 			//If Paging - Set ControllerData PagingInfo Total Objects
-			metadata.getPaging().setTotalObjects(countAllByCourseRefId(metadata, iso8601, refId));
+			metadata.getPaging().setTotalObjects(countAllByCourseRefId(metadata, refId));
 		}
 
 		return (List<EventLogWrapper<LeaEventLog>>) q.getResultList();
 	}
 
-	public List<EventLogWrapper<LeaEventLog>> findAllByRosterRefId(ControllerData metadata, Date iso8601, String refId) {
+	@Override
+	public List<EventLogWrapper<LeaEventLog>> findAllByRosterRefId(ControllerData metadata, String refId) {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<EventLogWrapper> select = cb.createQuery(EventLogWrapper.class);
 		final Root<LeaEventLog> from = select.from(LeaEventLog.class);
@@ -151,7 +162,7 @@ public class XLeaEventLogDAOImp extends BaseDAO implements XLeaEventLogDAO {
 		select.select(cb.construct(EventLogWrapper.class, lea.get(ControllerData.LEA_LOCAL_ID), from));
 		select.where(
 				cb.and(
-						cb.greaterThanOrEqualTo(from.get(EVENT_TIMESTAMP), iso8601),
+						cb.greaterThanOrEqualTo(from.get(EVENT_TIMESTAMP), metadata.getChangesSinceLocalDateTime()),
 						lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()),
 						cb.equal(courseSections.get(COURSE_SECTION_REF_ID), refId)
 				)
@@ -164,13 +175,14 @@ public class XLeaEventLogDAOImp extends BaseDAO implements XLeaEventLogDAO {
 			q.setMaxResults(metadata.getPaging().getPageSize());
 
 			//If Paging - Set ControllerData PagingInfo Total Objects
-			metadata.getPaging().setTotalObjects(countAllByRosterRefId(metadata, iso8601, refId));
+			metadata.getPaging().setTotalObjects(countAllByRosterRefId(metadata, refId));
 		}
 
 		return (List<EventLogWrapper<LeaEventLog>>) q.getResultList();
 	}
 
-	public List<EventLogWrapper<LeaEventLog>> findAllByStaffRefId(ControllerData metadata, Date iso8601, String refId) {
+	@Override
+	public List<EventLogWrapper<LeaEventLog>> findAllByStaffRefId(ControllerData metadata, String refId) {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<EventLogWrapper> select = cb.createQuery(EventLogWrapper.class);
 		final Root<LeaEventLog> from = select.from(LeaEventLog.class);
@@ -183,7 +195,7 @@ public class XLeaEventLogDAOImp extends BaseDAO implements XLeaEventLogDAO {
 		select.select(cb.construct(EventLogWrapper.class, lea.get(ControllerData.LEA_LOCAL_ID), from));
 		select.where(
 				cb.and(
-						cb.greaterThanOrEqualTo(from.get(EVENT_TIMESTAMP), iso8601),
+						cb.greaterThanOrEqualTo(from.get(EVENT_TIMESTAMP), metadata.getChangesSinceLocalDateTime()),
 						lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()),
 						cb.equal(staff.get(STAFF_REF_ID), refId)
 				)
@@ -196,13 +208,14 @@ public class XLeaEventLogDAOImp extends BaseDAO implements XLeaEventLogDAO {
 			q.setMaxResults(metadata.getPaging().getPageSize());
 
 			//If Paging - Set ControllerData PagingInfo Total Objects
-			metadata.getPaging().setTotalObjects(countAllByStaffRefId(metadata, iso8601, refId));
+			metadata.getPaging().setTotalObjects(countAllByStaffRefId(metadata, refId));
 		}
 
 		return (List<EventLogWrapper<LeaEventLog>>) q.getResultList();
 	}
 
-	public List<EventLogWrapper<LeaEventLog>> findAllByStudentRefId(ControllerData metadata, Date iso8601, String refId) {
+	@Override
+	public List<EventLogWrapper<LeaEventLog>> findAllByStudentRefId(ControllerData metadata, String refId) {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<EventLogWrapper> select = cb.createQuery(EventLogWrapper.class);
 		final Root<LeaEventLog> from = select.from(LeaEventLog.class);
@@ -215,7 +228,7 @@ public class XLeaEventLogDAOImp extends BaseDAO implements XLeaEventLogDAO {
 		select.select(cb.construct(EventLogWrapper.class, lea.get(ControllerData.LEA_LOCAL_ID), from));
 		select.where(
 				cb.and(
-						cb.greaterThanOrEqualTo(from.get(EVENT_TIMESTAMP), iso8601),
+						cb.greaterThanOrEqualTo(from.get(EVENT_TIMESTAMP), metadata.getChangesSinceLocalDateTime()),
 						lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()),
 						cb.equal(student.get(STUDENT_REF_ID), refId)
 				)
@@ -228,13 +241,14 @@ public class XLeaEventLogDAOImp extends BaseDAO implements XLeaEventLogDAO {
 			q.setMaxResults(metadata.getPaging().getPageSize());
 
 			//If Paging - Set ControllerData PagingInfo Total Objects
-			metadata.getPaging().setTotalObjects(countAllByStudentRefId(metadata, iso8601, refId));
+			metadata.getPaging().setTotalObjects(countAllByStudentRefId(metadata, refId));
 		}
 
 		return (List<EventLogWrapper<LeaEventLog>>) q.getResultList();
 	}
 
-	public List<EventLogWrapper<LeaEventLog>> findAllByContactRefId(ControllerData metadata, Date iso8601, String refId) {
+	@Override
+	public List<EventLogWrapper<LeaEventLog>> findAllByContactRefId(ControllerData metadata, String refId) {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<EventLogWrapper> select = cb.createQuery(EventLogWrapper.class);
 		final Root<LeaEventLog> from = select.from(LeaEventLog.class);
@@ -249,7 +263,7 @@ public class XLeaEventLogDAOImp extends BaseDAO implements XLeaEventLogDAO {
 		select.select(cb.construct(EventLogWrapper.class, lea.get(ControllerData.LEA_LOCAL_ID), from));
 		select.where(
 				cb.and(
-						cb.greaterThanOrEqualTo(from.get(EVENT_TIMESTAMP), iso8601),
+						cb.greaterThanOrEqualTo(from.get(EVENT_TIMESTAMP), metadata.getChangesSinceLocalDateTime()),
 						lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()),
 						cb.equal(contact.get(STUDENT_CONTACT_REF_ID), refId)
 				)
@@ -262,14 +276,15 @@ public class XLeaEventLogDAOImp extends BaseDAO implements XLeaEventLogDAO {
 			q.setMaxResults(metadata.getPaging().getPageSize());
 
 			//If Paging - Set ControllerData PagingInfo Total Objects
-			metadata.getPaging().setTotalObjects(countAllByContactRefId(metadata, iso8601, refId));
+			metadata.getPaging().setTotalObjects(countAllByContactRefId(metadata, refId));
 		}
 
 		return (List<EventLogWrapper<LeaEventLog>>) q.getResultList();
 	}
 
 	/** Counts **/
-	public int countAll(ControllerData metadata, Date iso8601) {
+	@Override
+	public int countAll(ControllerData metadata) {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<Long> select = cb.createQuery(Long.class);
 		final Root<LeaEventLog> from = select.from(LeaEventLog.class);
@@ -279,7 +294,7 @@ public class XLeaEventLogDAOImp extends BaseDAO implements XLeaEventLogDAO {
 		select.select(cb.countDistinct(from));
 		select.where(
 				cb.and(
-						cb.greaterThanOrEqualTo(from.get(EVENT_TIMESTAMP), iso8601),
+						cb.greaterThanOrEqualTo(from.get(EVENT_TIMESTAMP), metadata.getChangesSinceLocalDateTime()),
 						lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
 				)
 		);
@@ -288,7 +303,8 @@ public class XLeaEventLogDAOImp extends BaseDAO implements XLeaEventLogDAO {
 		return em.createQuery(select).getSingleResult().intValue();
 	}
 
-	public int countAllBySchoolRefId(ControllerData metadata, Date iso8601, String refId) {
+	@Override
+	public int countAllBySchoolRefId(ControllerData metadata, String refId) {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<Long> select = cb.createQuery(Long.class);
 		final Root<LeaEventLog> from = select.from(LeaEventLog.class);
@@ -299,7 +315,7 @@ public class XLeaEventLogDAOImp extends BaseDAO implements XLeaEventLogDAO {
 		select.select(cb.countDistinct(from));
 		select.where(
 				cb.and(
-						cb.greaterThanOrEqualTo(from.get(EVENT_TIMESTAMP), iso8601),
+						cb.greaterThanOrEqualTo(from.get(EVENT_TIMESTAMP), metadata.getChangesSinceLocalDateTime()),
 						lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()),
 						cb.equal(schools.get(SCHOOL_REF_ID), refId)
 				)
@@ -309,7 +325,8 @@ public class XLeaEventLogDAOImp extends BaseDAO implements XLeaEventLogDAO {
 		return em.createQuery(select).getSingleResult().intValue();
 	}
 
-	public int countAllByCalendarRefId(ControllerData metadata, Date iso8601, String refId) {
+	@Override
+	public int countAllByCalendarRefId(ControllerData metadata, String refId) {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<Long> select = cb.createQuery(Long.class);
 		final Root<LeaEventLog> from = select.from(LeaEventLog.class);
@@ -321,7 +338,7 @@ public class XLeaEventLogDAOImp extends BaseDAO implements XLeaEventLogDAO {
 		select.select(cb.countDistinct(from));
 		select.where(
 				cb.and(
-						cb.greaterThanOrEqualTo(from.get(EVENT_TIMESTAMP), iso8601),
+						cb.greaterThanOrEqualTo(from.get(EVENT_TIMESTAMP), metadata.getChangesSinceLocalDateTime()),
 						lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()),
 						cb.equal(schoolCalendars.get(SCHOOL_CALENDAR_REF_ID), refId)
 				)
@@ -331,7 +348,8 @@ public class XLeaEventLogDAOImp extends BaseDAO implements XLeaEventLogDAO {
 		return em.createQuery(select).getSingleResult().intValue();
 	}
 
-	public int countAllByCourseRefId(ControllerData metadata, Date iso8601, String refId) {
+	@Override
+	public int countAllByCourseRefId(ControllerData metadata, String refId) {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<Long> select = cb.createQuery(Long.class);
 		final Root<LeaEventLog> from = select.from(LeaEventLog.class);
@@ -343,7 +361,7 @@ public class XLeaEventLogDAOImp extends BaseDAO implements XLeaEventLogDAO {
 		select.select(cb.countDistinct(from));
 		select.where(
 				cb.and(
-						cb.greaterThanOrEqualTo(from.get(EVENT_TIMESTAMP), iso8601),
+						cb.greaterThanOrEqualTo(from.get(EVENT_TIMESTAMP), metadata.getChangesSinceLocalDateTime()),
 						lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()),
 						cb.equal(courses.get(COURSE_REF_ID), refId)
 				)
@@ -353,7 +371,8 @@ public class XLeaEventLogDAOImp extends BaseDAO implements XLeaEventLogDAO {
 		return em.createQuery(select).getSingleResult().intValue();
 	}
 
-	public int countAllByRosterRefId(ControllerData metadata, Date iso8601, String refId) {
+	@Override
+	public int countAllByRosterRefId(ControllerData metadata, String refId) {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<Long> select = cb.createQuery(Long.class);
 		final Root<LeaEventLog> from = select.from(LeaEventLog.class);
@@ -366,7 +385,7 @@ public class XLeaEventLogDAOImp extends BaseDAO implements XLeaEventLogDAO {
 		select.select(cb.countDistinct(from));
 		select.where(
 				cb.and(
-						cb.greaterThanOrEqualTo(from.get(EVENT_TIMESTAMP), iso8601),
+						cb.greaterThanOrEqualTo(from.get(EVENT_TIMESTAMP), metadata.getChangesSinceLocalDateTime()),
 						lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()),
 						cb.equal(courseSections.get(COURSE_SECTION_REF_ID), refId)
 				)
@@ -376,7 +395,8 @@ public class XLeaEventLogDAOImp extends BaseDAO implements XLeaEventLogDAO {
 		return em.createQuery(select).getSingleResult().intValue();
 	}
 
-	public int countAllByStaffRefId(ControllerData metadata, Date iso8601, String refId) {
+	@Override
+	public int countAllByStaffRefId(ControllerData metadata, String refId) {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<Long> select = cb.createQuery(Long.class);
 		final Root<LeaEventLog> from = select.from(LeaEventLog.class);
@@ -389,7 +409,7 @@ public class XLeaEventLogDAOImp extends BaseDAO implements XLeaEventLogDAO {
 		select.select(cb.countDistinct(from));
 		select.where(
 				cb.and(
-						cb.greaterThanOrEqualTo(from.get(EVENT_TIMESTAMP), iso8601),
+						cb.greaterThanOrEqualTo(from.get(EVENT_TIMESTAMP), metadata.getChangesSinceLocalDateTime()),
 						lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()),
 						cb.equal(staff.get(STAFF_REF_ID), refId)
 				)
@@ -399,7 +419,8 @@ public class XLeaEventLogDAOImp extends BaseDAO implements XLeaEventLogDAO {
 		return em.createQuery(select).getSingleResult().intValue();
 	}
 
-	public int countAllByStudentRefId(ControllerData metadata, Date iso8601, String refId) {
+	@Override
+	public int countAllByStudentRefId(ControllerData metadata, String refId) {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<Long> select = cb.createQuery(Long.class);
 		final Root<LeaEventLog> from = select.from(LeaEventLog.class);
@@ -412,7 +433,7 @@ public class XLeaEventLogDAOImp extends BaseDAO implements XLeaEventLogDAO {
 		select.select(cb.countDistinct(from));
 		select.where(
 				cb.and(
-						cb.greaterThanOrEqualTo(from.get(EVENT_TIMESTAMP), iso8601),
+						cb.greaterThanOrEqualTo(from.get(EVENT_TIMESTAMP), metadata.getChangesSinceLocalDateTime()),
 						lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()),
 						cb.equal(student.get(STUDENT_REF_ID), refId)
 				)
@@ -422,7 +443,8 @@ public class XLeaEventLogDAOImp extends BaseDAO implements XLeaEventLogDAO {
 		return em.createQuery(select).getSingleResult().intValue();
 	}
 
-	public int countAllByContactRefId(ControllerData metadata, Date iso8601, String refId) {
+	@Override
+	public int countAllByContactRefId(ControllerData metadata, String refId) {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<Long> select = cb.createQuery(Long.class);
 		final Root<LeaEventLog> from = select.from(LeaEventLog.class);
@@ -437,7 +459,7 @@ public class XLeaEventLogDAOImp extends BaseDAO implements XLeaEventLogDAO {
 		select.select(cb.countDistinct(from));
 		select.where(
 				cb.and(
-						cb.greaterThanOrEqualTo(from.get(EVENT_TIMESTAMP), iso8601),
+						cb.greaterThanOrEqualTo(from.get(EVENT_TIMESTAMP), metadata.getChangesSinceLocalDateTime()),
 						lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()),
 						cb.equal(contact.get(STUDENT_CONTACT_REF_ID), refId)
 				)
@@ -448,6 +470,8 @@ public class XLeaEventLogDAOImp extends BaseDAO implements XLeaEventLogDAO {
 	}
 
 	/** Latest Opaque Markers **/
+
+	@Override
 	public Date getLatestOpaqueMarker(ControllerData metadata) {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<Date> select = cb.createQuery(Date.class);

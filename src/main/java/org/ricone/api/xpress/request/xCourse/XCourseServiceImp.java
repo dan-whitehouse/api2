@@ -36,7 +36,7 @@ public class XCourseServiceImp implements XCourseService {
     @Override
     public XCoursesResponse findAll(ControllerData metadata) throws Exception {
         if(metadata.hasChangesSinceMarker()) {
-            List<EventLogWrapper<CourseEventLog>> instance = eventLogDAO.findAll(metadata, metadata.getChangesSinceLocalDateTime());
+            List<EventLogWrapper<CourseEventLog>> instance = eventLogDAO.findAll(metadata);
             if(CollectionUtils.isEmpty(instance)) {
                 throw new NoContentException();
             }
@@ -53,7 +53,7 @@ public class XCourseServiceImp implements XCourseService {
     @Override
     public XCoursesResponse findAllByLea(ControllerData metadata, String refId) throws Exception {
         if(metadata.hasChangesSinceMarker()) {
-            List<EventLogWrapper<CourseEventLog>> instance = eventLogDAO.findAllByLeaRefId(metadata, metadata.getChangesSinceLocalDateTime(), refId);
+            List<EventLogWrapper<CourseEventLog>> instance = eventLogDAO.findAllByLeaRefId(metadata, refId);
             if(CollectionUtils.isEmpty(instance)) {
                 throw new NoContentException();
             }
@@ -70,7 +70,7 @@ public class XCourseServiceImp implements XCourseService {
     @Override
     public XCoursesResponse findAllBySchool(ControllerData metadata, String refId) throws Exception {
         if(metadata.hasChangesSinceMarker()) {
-            List<EventLogWrapper<CourseEventLog>> instance = eventLogDAO.findAllBySchoolRefId(metadata, metadata.getChangesSinceLocalDateTime(), refId);
+            List<EventLogWrapper<CourseEventLog>> instance = eventLogDAO.findAllBySchoolRefId(metadata, refId);
             if(CollectionUtils.isEmpty(instance)) {
                 throw new NoContentException();
             }
@@ -87,7 +87,7 @@ public class XCourseServiceImp implements XCourseService {
     @Override
     public XCoursesResponse findAllByRoster(ControllerData metadata, String refId) throws Exception {
         if(metadata.hasChangesSinceMarker()) {
-            List<EventLogWrapper<CourseEventLog>> instance = eventLogDAO.findAllByRosterRefId(metadata, metadata.getChangesSinceLocalDateTime(), refId);
+            List<EventLogWrapper<CourseEventLog>> instance = eventLogDAO.findAllByRosterRefId(metadata, refId);
             if(CollectionUtils.isEmpty(instance)) {
                 throw new NoContentException();
             }

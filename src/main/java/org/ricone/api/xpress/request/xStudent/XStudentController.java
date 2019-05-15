@@ -53,9 +53,6 @@ public class XStudentController extends BaseController {
 	@GetMapping(value = "/requests/xSchools/{refId}/xStudents", produces = {"application/json", "application/xml"})
 	@Swagger.Operation.GetXStudentsByXSchool /**/ @Swagger.Response.XStudents
 	public XStudentsResponse getXStudentsByXSchool(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "refId") String refId, @SwaggerParam.SchoolYear Integer schoolYear, @SwaggerParam.NavigationPage Integer navigationPage, @SwaggerParam.NavigationPageSize Integer navigationPageSize, @SwaggerParam.ChangesSince @RequestParam @ISO8601 Optional<LocalDateTime> changesSinceMarker) throws Exception {
-		if(changesSinceMarker.isPresent()) {
-			//Todo: Create service for changesSince
-		}
 		return service.findAllBySchool(getMetaData(request, response), refId);
 	}
 

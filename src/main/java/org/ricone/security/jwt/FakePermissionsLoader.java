@@ -13,7 +13,6 @@ class FakePermissionsLoader {
 				//Leas
 				new PathPermission("/requests/xLeas", true, true, false, true),
 				new PathPermission("/requests/xSchools/{}/xLeas", true, false, false, false),
-				new PathPermission("/requests/xSchools/{}/xLeas", true, false, false, false),
 				new PathPermission("/requests/xCalendars/{}/xLeas", true, false, false, false),
 				new PathPermission("/requests/xCourses/{}/xLeas", true, false, false, false),
 				new PathPermission("/requests/xRosters/{}/xLeas", true, false, false, false),
@@ -23,6 +22,7 @@ class FakePermissionsLoader {
 
 				//Schools
 				new PathPermission("/requests/xSchools", true, true, false, true),
+				new PathPermission("/requests/xLeas/{}/xSchools", true, false, false, false),
 
 				//Calendars
 				new PathPermission("/requests/xCalendars", true, true, false, true),
@@ -35,10 +35,13 @@ class FakePermissionsLoader {
 
 				//Staffs
 				new PathPermission("/requests/xStaffs", true, true, false, true),
+				new PathPermission("/requests/xLeas/{}/xStaffs", true, true, false, true),
 				new PathPermission("/requests/xSchools/{}/xStaffs", true, true, false, true),
 
 				//Students
 				new PathPermission("/requests/xStudents", true, true, false, true),
+				new PathPermission("/requests/xLeas/{}/xStudents", true, true, false, true),
+				new PathPermission("/requests/xSchools/{}/xStudents", true, true, false, true),
 
 				//Contacts
 				new PathPermission("/requests/xContacts", true, true, false, true)

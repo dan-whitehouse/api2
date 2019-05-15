@@ -36,7 +36,7 @@ public class XContactServiceImp implements XContactService {
     @Override
     public XContactsResponse findAll(ControllerData metadata) throws Exception {
         if(metadata.hasChangesSinceMarker()) {
-            List<EventLogWrapper<ContactEventLog>> instance = eventLogDAO.findAll(metadata, metadata.getChangesSinceLocalDateTime());
+            List<EventLogWrapper<ContactEventLog>> instance = eventLogDAO.findAll(metadata);
             if(CollectionUtils.isEmpty(instance)) {
                 throw new NoContentException();
             }
@@ -53,7 +53,7 @@ public class XContactServiceImp implements XContactService {
     @Override
     public XContactsResponse findAllByLea(ControllerData metadata, String refId) throws Exception {
         if(metadata.hasChangesSinceMarker()) {
-            List<EventLogWrapper<ContactEventLog>> instance = eventLogDAO.findAllByLeaRefId(metadata, metadata.getChangesSinceLocalDateTime(), refId);
+            List<EventLogWrapper<ContactEventLog>> instance = eventLogDAO.findAllByLeaRefId(metadata, refId);
             if(CollectionUtils.isEmpty(instance)) {
                 throw new NoContentException();
             }
@@ -70,7 +70,7 @@ public class XContactServiceImp implements XContactService {
     @Override
     public XContactsResponse findAllBySchool(ControllerData metadata, String refId) throws Exception {
         if(metadata.hasChangesSinceMarker()) {
-            List<EventLogWrapper<ContactEventLog>> instance = eventLogDAO.findAllBySchoolRefId(metadata, metadata.getChangesSinceLocalDateTime(), refId);
+            List<EventLogWrapper<ContactEventLog>> instance = eventLogDAO.findAllBySchoolRefId(metadata, refId);
             if(CollectionUtils.isEmpty(instance)) {
                 throw new NoContentException();
             }
@@ -87,7 +87,7 @@ public class XContactServiceImp implements XContactService {
     @Override
     public XContactsResponse findAllByStudent(ControllerData metadata, String refId) throws Exception {
         if(metadata.hasChangesSinceMarker()) {
-            List<EventLogWrapper<ContactEventLog>> instance = eventLogDAO.findAllByStudentRefId(metadata, metadata.getChangesSinceLocalDateTime(), refId);
+            List<EventLogWrapper<ContactEventLog>> instance = eventLogDAO.findAllByStudentRefId(metadata, refId);
             if(CollectionUtils.isEmpty(instance)) {
                 throw new NoContentException();
             }

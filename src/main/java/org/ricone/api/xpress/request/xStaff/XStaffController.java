@@ -51,8 +51,6 @@ public class XStaffController extends BaseController {
 	@GetMapping(value = "/requests/xSchools/{refId}/xStaffs", produces = {"application/json", "application/xml"})
 	@Swagger.Operation.GetXStaffsByXSchool /**/ @Swagger.Response.XStaffs
 	public XStaffsResponse getXStaffsByXSchool(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "refId") String refId, @SwaggerParam.SchoolYear Integer schoolYear, @SwaggerParam.NavigationPage Integer navigationPage, @SwaggerParam.NavigationPageSize Integer navigationPageSize, @SwaggerParam.ChangesSince @RequestParam @ISO8601 Optional<LocalDateTime> changesSinceMarker) throws Exception {
-		//Todo: Create service for getting AUPP
-		changesSinceMarker.ifPresent(localDateTime -> logger.debug("THIS LOOKS LIKE A DATE: " + localDateTime));
 		return service.findAllBySchool(getMetaData(request, response), refId);
 	}
 

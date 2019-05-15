@@ -67,6 +67,10 @@ public class ControllerData {
 
 
 	// Custom Methods - Query Parameters - AUPP
+	public boolean hasAUPP() {
+		return isCreateAUPP() || isGetAUPP() || isDeleteAUPP();
+	}
+
 	public boolean isCreateAUPP() {
 		return "true".equalsIgnoreCase(request.getParameter(AUPP_CREATE));
 	}

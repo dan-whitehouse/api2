@@ -12,28 +12,26 @@ import javax.persistence.criteria.*;
 import java.util.Date;
 import java.util.List;
 
-//import api.model.core.wrapper.EventLogWrapper;
-
 /**
  * @author Dan Whitehouse <daniel.whitehouse@neric.org>
- * @version 1.2.1
- * @since 2018-11-09
+ * @version 2.0.0
+ * @since 2019-05-15
  */
 
 public interface XCalendarEventLogDAO{
 
-	List<EventLogWrapper<CalendarEventLog>> findAll(ControllerData metadata, Date iso8601);
+	List<EventLogWrapper<CalendarEventLog>> findAll(ControllerData metadata);
 
-	List<EventLogWrapper<CalendarEventLog>> findAllByLeaRefId(ControllerData metadata, Date iso8601, String refId);
+	List<EventLogWrapper<CalendarEventLog>> findAllByLeaRefId(ControllerData metadata, String refId);
 
-	List<EventLogWrapper<CalendarEventLog>> findAllBySchoolRefId(ControllerData metadata, Date iso8601, String refId);
+	List<EventLogWrapper<CalendarEventLog>> findAllBySchoolRefId(ControllerData metadata, String refId);
 
 	/** Counts **/
-	int countAll(ControllerData metadata, Date iso8601);
+	int countAll(ControllerData metadata);
 
-	int countAllByLeaRefId(ControllerData metadata, Date iso8601, String refId);
+	int countAllByLeaRefId(ControllerData metadata, String refId);
 
-	int countAllBySchoolRefId(ControllerData metadata, Date iso8601, String refId);
+	int countAllBySchoolRefId(ControllerData metadata, String refId);
 
 	Date getLatestOpaqueMarker(ControllerData metadata);
 }

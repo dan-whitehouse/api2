@@ -40,6 +40,7 @@ public class BaseDAO {
     protected final String STAFF_REF_ID = "staffRefId";
     protected final String STUDENT_REF_ID = "studentRefId";
     protected final String STUDENT_CONTACT_REF_ID = "studentContactRefId";
+    protected final String STUDENT_ENROLLMENT_REF_ID = "studentEnrollmentRefId";
 
     /* Event Log */
     protected final String EVENT_TIMESTAMP = "eventTimestamp";

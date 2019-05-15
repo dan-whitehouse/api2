@@ -1,4 +1,4 @@
-package org.ricone.api.xpress.request.xCourse;
+package org.ricone.api.xpress.request.xStudent;
 
 import org.ricone.api.core.model.*;
 import org.ricone.api.core.model.wrapper.EventLogWrapper;
@@ -19,16 +19,20 @@ import java.util.List;
  * @since 2019-05-15
  */
 
-interface XCourseEventLogDAO {
+interface XStudentEventLogDAO {
 
-	List<EventLogWrapper<CourseEventLog>> findAll(ControllerData metadata);
+	List<EventLogWrapper<StudentEventLog>> findAll(ControllerData metadata);
 
-	List<EventLogWrapper<CourseEventLog>> findAllByLeaRefId(ControllerData metadata, String refId);
+	List<EventLogWrapper<StudentEventLog>> findAllByLeaRefId(ControllerData metadata, String refId);
 
-	List<EventLogWrapper<CourseEventLog>> findAllBySchoolRefId(ControllerData metadata, String refId);
+	List<EventLogWrapper<StudentEventLog>> findAllBySchoolRefId(ControllerData metadata, String refId);
 
-	List<EventLogWrapper<CourseEventLog>> findAllByRosterRefId(ControllerData metadata, String refId);
+	List<EventLogWrapper<StudentEventLog>> findAllByRosterRefId(ControllerData metadata, String refId);
 
+	List<EventLogWrapper<StudentEventLog>> findAllByStaffRefId(ControllerData metadata, String refId);
+
+	List<EventLogWrapper<StudentEventLog>> findAllByContactRefId(ControllerData metadata, String refId);
+	
 	/** Counts **/
 	int countAll(ControllerData metadata);
 
@@ -37,6 +41,10 @@ interface XCourseEventLogDAO {
 	int countAllBySchoolRefId(ControllerData metadata, String refId);
 
 	int countAllByRosterRefId(ControllerData metadata, String refId);
+
+	int countAllByStaffRefId(ControllerData metadata, String refId);
+
+	int countAllByContactRefId(ControllerData metadata, String refId);
 
 	/** Latest Opaque Markers **/
 	Date getLatestOpaqueMarker(ControllerData metadata);

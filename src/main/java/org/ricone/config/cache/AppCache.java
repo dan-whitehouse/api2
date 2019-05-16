@@ -8,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.ricone.config.ConfigService;
 import org.ricone.config.model.App;
 import org.ricone.config.model.District;
+import org.ricone.config.model.School;
 
 import java.util.HashMap;
 import java.util.List;
@@ -48,18 +49,26 @@ public class AppCache {
     }
 
     private App loadCache(String appId) {
+        //Get App
         App app = ConfigService.getInstance().getApp(appId);
         if (app != null) {
+            //Get Districts For App
             List<District> districts = ConfigService.getInstance().getDistrictsByApp(app.getId());
             if (CollectionUtils.isNotEmpty(districts)) {
                 List<District> filtered = districts.stream().filter(district -> (district.getEnabled() && StringUtils.equalsIgnoreCase(district.getProviderId(), System.getenv("provider_id")))).collect(Collectors.toList());
                 filtered.forEach(district -> {
-                    try {
-                        HashMap<String, String> kv = ConfigService.getInstance().getDistrictAPIKV(district.getId());
-                        district.setKv(kv);
-                    }
-                    catch (Exception ignored) {
+                    //Get District API KV's
+                    district.setKv(ConfigService.getInstance().getDistrictAPIKV(district.getId()));
 
+                    //Get Schools By District
+                    List<School> schools = ConfigService.getInstance().getSchoolsByDistrict(district.getId());
+                    if (CollectionUtils.isNotEmpty(schools)) {
+                        List<School> filteredSchools = schools.stream().filter(School::getEnabled).collect(Collectors.toList());
+                        filteredSchools.forEach(school -> {
+                            //Get School API KV's
+                            school.setKv(ConfigService.getInstance().getSchoolAPIKV(school.getId()));
+                        });
+                        district.getSchools().addAll(schools);
                     }
                 });
                 app.setDistricts(filtered);

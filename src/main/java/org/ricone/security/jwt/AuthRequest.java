@@ -12,7 +12,7 @@ public class AuthRequest {
     private boolean isHeader;
     private String token;
 
-    protected AuthRequest(HttpServletRequest request) {
+    AuthRequest(HttpServletRequest request) {
         allowTokenParameter = allowTokenParams();
         isHeader = StringUtils.isNotBlank(request.getHeader("Authorization"));
         isParameter = StringUtils.isNotBlank(request.getParameter("access_token"));

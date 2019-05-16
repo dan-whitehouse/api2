@@ -363,6 +363,42 @@ public class App implements Serializable {
     }
 
     @JsonIgnore
+    public HashMap<String, String> getDistrictKVsBySchool(String schoolRefId) {
+        for (District district : districts) {
+            if(district.getLea() != null) {
+                if(CollectionUtils.isNotEmpty(district.getLea().getSchools())) {
+                    Optional<School> oSchool = district.getLea().getSchools().stream().filter(school -> school.getSchoolRefId().equalsIgnoreCase(schoolRefId)).findFirst();
+                    if(oSchool.isPresent()) {
+                        return district.getKv();
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    @JsonIgnore
+    public HashMap<String, String> getSchoolKVsBySchool(String schoolRefId) {
+        for (District district : districts) {
+            if(district.getLea() != null) {
+                if (CollectionUtils.isNotEmpty(district.getLea().getSchools())) {
+                    Optional<School> school = district.getLea().getSchools().stream().filter(sch -> sch.getSchoolRefId().equalsIgnoreCase(schoolRefId)).findFirst();
+                    if (school.isPresent()) {
+                        Optional<SchoolIdentifier> schoolId = school.get().getSchoolIdentifiers().stream().filter(id -> id.getIdentificationSystemCode().equalsIgnoreCase("SEA")).findFirst();
+                        if(schoolId.isPresent()) {
+                            Optional<org.ricone.config.model.School> schoolFromConfig = district.getSchools().stream().filter(sch -> sch.getStateLocId().equalsIgnoreCase(schoolId.get().getSchoolId())).findFirst();
+                            if(schoolFromConfig.isPresent()) {
+                                return schoolFromConfig.get().getKv();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    /*@JsonIgnore
     public Lea getLea(String refId) {
         if(CollectionUtils.isNotEmpty(leas)) {
             Optional<Lea> instance = leas.stream().filter(lea -> lea.getLeaRefId().equalsIgnoreCase(refId)).findFirst();
@@ -424,46 +460,6 @@ public class App implements Serializable {
             }
         }
         return null;
-    }
-
-    @JsonIgnore
-    public HashMap<String, String> getDistrictKVsBySchool(String refId) {
-        for (District district : districts) {
-            logger.debug("district: " + district.getId());
-            logger.debug("leas: " + leas.size());
-            if(CollectionUtils.isNotEmpty(leas)) {
-                Optional<Lea> oLea = leas.stream().filter(lea -> lea.getLeaId().equalsIgnoreCase(district.getId())).findFirst();
-                if(oLea.isPresent()) {
-                    if(CollectionUtils.isNotEmpty(oLea.get().getSchools())) {
-                        Optional<School> oSchool = oLea.get().getSchools().stream().filter(school -> school.getSchoolRefId().equalsIgnoreCase(refId)).findFirst();
-                        if(oSchool.isPresent()) {
-                            return district.getKv();
-                        }
-                    }
-                }
-            }
-        }
-        return null;
-    }
-
-    public HashMap<String, String> getSchoolKVsBySchool(String schoolRefId) {
-        for (District district : districts) {
-            if(district.getLea() != null) {
-                if (CollectionUtils.isNotEmpty(district.getLea().getSchools())) {
-                    Optional<School> school = district.getLea().getSchools().stream().filter(sch -> sch.getSchoolRefId().equalsIgnoreCase(schoolRefId)).findFirst();
-                    if (school.isPresent()) {
-                        Optional<SchoolIdentifier> schoolId = school.get().getSchoolIdentifiers().stream().filter(id -> id.getIdentificationSystemCode().equalsIgnoreCase("SEA")).findFirst();
-                        if(schoolId.isPresent()) {
-                            Optional<org.ricone.config.model.School> schoolFromConfig = district.getSchools().stream().filter(sch -> sch.getStateLocId().equalsIgnoreCase(schoolId.get().getSchoolId())).findFirst();
-                            if(schoolFromConfig.isPresent()) {
-                                return schoolFromConfig.get().getKv();
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return null;
-    }
+    }*/
 }
 

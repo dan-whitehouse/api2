@@ -5,8 +5,6 @@ import org.ricone.api.core.model.StudentEventLog;
 import org.ricone.api.core.model.wrapper.EventLogWrapper;
 import org.ricone.api.core.model.wrapper.StudentWrapper;
 import org.ricone.api.xpress.component.ControllerData;
-import org.ricone.api.xpress.component.aupp.User;
-import org.ricone.api.xpress.component.aupp.UserPasswordGenerator;
 import org.ricone.api.xpress.component.error.exception.NotFoundException;
 import org.ricone.api.xpress.model.XStudentResponse;
 import org.ricone.api.xpress.model.XStudentsResponse;
@@ -15,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
 
 @Transactional
@@ -100,20 +97,21 @@ public class XStudentServiceImp implements XStudentService {
             return filterer.apply(eventLogMapper.convert(instance), metadata);
         }
 
+        //Regular Request
         List<StudentWrapper> instance = dao.findAllBySchoolRefId(metadata, refId);
+        if(CollectionUtils.isEmpty(instance)) {
+            throw new NoContentException();
+        }
 
         //AUPP
         if(metadata.hasAUPP()) {
             if(metadata.isGetAUPP()) {
                 return usernamePasswordMapper.convert(instance, metadata, refId);
             }
-            throw new NoContentException();
+            throw new NoContentException(); //Will catch things like createUsers *& deleteUsers
         }
 
         //Regular Request
-        if(CollectionUtils.isEmpty(instance)) {
-            throw new NoContentException();
-        }
         return filterer.apply(mapper.convert(instance), metadata);
     }
 

@@ -8,7 +8,6 @@ import org.ricone.config.cache.AppCache;
 import org.ricone.config.model.App;
 import org.ricone.config.model.District;
 import org.ricone.security.PropertiesLoader;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
@@ -23,7 +22,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
     public JWTAuthorizationFilter(AuthenticationManager authManager) {
@@ -35,7 +33,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
         AuthRequest authRequest = new AuthRequest(req);
         if(authRequest.isAuthEnabled()) {
             if(authRequest.isHeader() || (authRequest.isParameter() && authRequest.isAllowTokenParameter())) {
-                UsernamePasswordAuthenticationToken authentication = getAuthentication(authRequest);
+                UsernamePasswordAuthenticationToken authentication = getAuthentication(req, authRequest);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         }
@@ -47,7 +45,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
         chain.doFilter(req, res);
     }
 
-    private UsernamePasswordAuthenticationToken getAuthentication(AuthRequest authRequest) {
+    private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest req, AuthRequest authRequest) {
         if(StringUtils.isBlank(authRequest.getToken())) {
             return null;  //Token was blank... 403 Forbidden
         }
@@ -77,7 +75,8 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
             }
         }
         catch (JWTVerificationException exception) {
-            System.out.println(exception.getMessage()); //Failed to verify the token... 403 Forbidden
+            //https://medium.com/fullstackblog/spring-security-jwt-token-expired-custom-response-b85437914b81
+            req.setAttribute("JWTVerificationException", exception.getMessage());
             return null;
         }
         return null; //DecodedToken or Application was null... 403 Forbidden

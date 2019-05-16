@@ -98,6 +98,44 @@ public class ConfigService {
         return null;
     }
 
+    /* School */
+    public List<School> getSchoolsByDistrict(String districtId) {
+        RestTemplate rt = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        ResponseEntity<List<School>> response;
+        try {
+            headers.set("Authorization", getAccessToken());
+            HttpEntity<?> entity = new HttpEntity<>(headers);
+            response = rt.exchange((getUrl() + "/district/" + districtId + "/school"), HttpMethod.GET, entity, new ParameterizedTypeReference<List<School>>() {
+            });
+            return response.getBody();
+        }
+        catch (Exception ignored) {
+
+        }
+        return null;
+    }
+
+    /*********** School API KV ***********/
+    public HashMap<String, String> getSchoolAPIKV(String schoolId) throws RestClientException {
+        RestTemplate rt = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        try {
+            headers.set("Authorization", this.getAccessToken());
+            HttpEntity<?> entity = new HttpEntity<>(headers);
+            ResponseEntity<SchoolAPIKV[]> response = rt.exchange((getUrl() + "/school/" + schoolId + "/apikv"), HttpMethod.GET, entity, SchoolAPIKV[].class);
+
+            HashMap<String, String> infoMap = new HashMap<>();
+            for (SchoolAPIKV info : response.getBody()) {
+                infoMap.put(info.getField(), info.getValue());
+            }
+            return infoMap;
+        }
+        catch (Exception ignored) {
+        }
+        return null;
+    }
+
     private static long ISO8601toLong(String iso) {
         ZonedDateTime date = ZonedDateTime.parse(iso); // works
         return date.toInstant().toEpochMilli();

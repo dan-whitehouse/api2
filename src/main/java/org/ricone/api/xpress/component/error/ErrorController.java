@@ -8,6 +8,7 @@ import org.ricone.error.NoContentException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,7 +44,7 @@ public class ErrorController {
     }
 
     @ResponseBody
-    @ExceptionHandler(ForbiddenException.class)
+    @ExceptionHandler({ForbiddenException.class})
     @ResponseStatus(value = HttpStatus.FORBIDDEN)
     public XErrorResponse forbidden(HttpServletRequest request, HttpServletResponse response, Exception ex) {
         return new XErrorResponse(new XError(UUID.randomUUID().toString(), 403, "Forbidden", ex.getMessage()));

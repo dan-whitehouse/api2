@@ -3,6 +3,7 @@ package org.ricone.config.model;
 import com.fasterxml.jackson.annotation.*;
 import org.ricone.api.core.model.Lea;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -23,10 +24,10 @@ public class District {
     private Lea lea;
 
     @JsonIgnore
-    private List<School> schools;
+    private List<School> schools = new ArrayList<>();
 
     @JsonIgnore
-    private HashMap<String, String> kv;
+    private HashMap<String, String> kv = new HashMap<>();
 
 
     public District() {

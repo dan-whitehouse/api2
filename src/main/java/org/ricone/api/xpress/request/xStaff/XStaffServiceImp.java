@@ -97,7 +97,11 @@ public class XStaffServiceImp implements XStaffService {
             return filterer.apply(eventLogMapper.convert(instance), metadata);
         }
 
+        //Regular Request
         List<StaffWrapper> instance = dao.findAllBySchoolRefId(metadata, refId);
+        if(CollectionUtils.isEmpty(instance)) {
+            throw new NoContentException();
+        }
 
         //AUPP
         if(metadata.hasAUPP()) {
@@ -108,9 +112,6 @@ public class XStaffServiceImp implements XStaffService {
         }
 
         //Regular Request
-        if(CollectionUtils.isEmpty(instance)) {
-            throw new NoContentException();
-        }
         return filterer.apply(mapper.convert(instance), metadata);
     }
 

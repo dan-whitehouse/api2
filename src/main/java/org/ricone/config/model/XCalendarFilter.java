@@ -7,9 +7,10 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import java.io.Serializable;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"refId", "schoolRefId", "schoolYear", "sessionssessionListsessionType", "sessionssessionListsessionCode", "sessionssessionListdescription", "sessionssessionListmarkingTerm", "sessionssessionListschedulingTerm", "sessionssessionListlinkedSessionCode", "sessionssessionListstartDate", "sessionssessionListendDate", "id"})
+@JsonPropertyOrder({"ID", "refId", "schoolRefId", "schoolYear", "sessionssessionListsessionType", "sessionssessionListsessionCode", "sessionssessionListdescription", "sessionssessionListmarkingTerm", "sessionssessionListschedulingTerm", "sessionssessionListlinkedSessionCode", "sessionssessionListstartDate", "sessionssessionListendDate"})
 public class XCalendarFilter implements IFilter<XCalendarFilter>, Serializable {
-
+    @JsonProperty("ID")
+    private String iD;
     @JsonProperty("refId")
     private Boolean refId;
     @JsonProperty("schoolRefId")
@@ -32,8 +33,7 @@ public class XCalendarFilter implements IFilter<XCalendarFilter>, Serializable {
     private Boolean sessionssessionListstartDate;
     @JsonProperty("sessionssessionListendDate")
     private Boolean sessionssessionListendDate;
-    @JsonProperty("id")
-    private Integer id;
+
     private final static long serialVersionUID = -4524526063568415901L;
 
     /**
@@ -67,8 +67,9 @@ public class XCalendarFilter implements IFilter<XCalendarFilter>, Serializable {
      * @param sessionssessionListschedulingTerm
      * @param schoolRefId
      */
-    public XCalendarFilter(Boolean refId, Boolean schoolRefId, Boolean schoolYear, Boolean sessionssessionListsessionType, Boolean sessionssessionListsessionCode, Boolean sessionssessionListdescription, Boolean sessionssessionListmarkingTerm, Boolean sessionssessionListschedulingTerm, Boolean sessionssessionListlinkedSessionCode, Boolean sessionssessionListstartDate, Boolean sessionssessionListendDate, Integer id) {
+    public XCalendarFilter(String id, Boolean refId, Boolean schoolRefId, Boolean schoolYear, Boolean sessionssessionListsessionType, Boolean sessionssessionListsessionCode, Boolean sessionssessionListdescription, Boolean sessionssessionListmarkingTerm, Boolean sessionssessionListschedulingTerm, Boolean sessionssessionListlinkedSessionCode, Boolean sessionssessionListstartDate, Boolean sessionssessionListendDate) {
         super();
+        this.iD = id;
         this.refId = refId;
         this.schoolRefId = schoolRefId;
         this.schoolYear = schoolYear;
@@ -80,7 +81,16 @@ public class XCalendarFilter implements IFilter<XCalendarFilter>, Serializable {
         this.sessionssessionListlinkedSessionCode = sessionssessionListlinkedSessionCode;
         this.sessionssessionListstartDate = sessionssessionListstartDate;
         this.sessionssessionListendDate = sessionssessionListendDate;
-        this.id = id;
+    }
+
+    @JsonProperty("ID")
+    public String getID() {
+        return iD;
+    }
+
+    @JsonProperty("ID")
+    public void setID(String id) {
+        this.iD = id;
     }
 
     @JsonProperty("refId")
@@ -192,15 +202,4 @@ public class XCalendarFilter implements IFilter<XCalendarFilter>, Serializable {
     public void setSessionssessionListendDate(Boolean sessionssessionListendDate) {
         this.sessionssessionListendDate = sessionssessionListendDate;
     }
-
-    @JsonProperty("id")
-    public Integer getId() {
-        return id;
-    }
-
-    @JsonProperty("id")
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
 }

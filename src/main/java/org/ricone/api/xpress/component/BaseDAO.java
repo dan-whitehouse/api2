@@ -39,8 +39,23 @@ public class BaseDAO {
     protected final String COURSE_SECTION_REF_ID = "courseSectionRefId";
     protected final String STAFF_REF_ID = "staffRefId";
     protected final String STUDENT_REF_ID = "studentRefId";
-    protected final String STUDENT_CONTACT_REF_ID = "studentContactRefId";
     protected final String STUDENT_ENROLLMENT_REF_ID = "studentEnrollmentRefId";
+    protected final String STUDENT_EMAIL_REF_ID = "studentEmailRefId";
+    protected final String STUDENT_ID_REF_ID = "studentIdentifierRefId";
+    protected final String STUDENT_CONTACT_REF_ID = "studentContactRefId";
+
+
+    protected final String LEA_SCHOOL_YEAR = "leaSchoolYear";
+    protected final String COURSE_SCHOOL_YEAR = "courseSchoolYear";
+    protected final String COURSE_SECTION_SCHOOL_YEAR = "courseSectionSchoolYear";
+    protected final String STAFF_SCHOOL_YEAR = "staffSchoolYear";
+    protected final String STAFF_EMAIL_SCHOOL_YEAR = "staffEmailSchoolYear";
+    protected final String STAFF_ID_SCHOOL_YEAR = "staffIdentifierSchoolYear";
+    protected final String STAFF_ASSIGNMENT_SCHOOL_YEAR = "staffAssignmentSchoolYear";
+    protected final String STUDENT_SCHOOL_YEAR = "studentSchoolYear";
+    protected final String STUDENT_EMAIL_SCHOOL_YEAR = "studentEmailSchoolYear";
+    protected final String STUDENT_ID_SCHOOL_YEAR = "studentIdentifierSchoolYear";
+    protected final String STUDENT_ENROLLMENT_SCHOOL_YEAR = "studentEnrollmentSchoolYear";
 
     /* Event Log */
     protected final String EVENT_TIMESTAMP = "eventTimestamp";

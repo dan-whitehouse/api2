@@ -1,7 +1,9 @@
 package org.ricone.config;
 
 import org.ricone.config.model.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.core.env.Environment;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientException;
@@ -15,7 +17,7 @@ import java.util.List;
 @Component
 public class ConfigService {
     private static ConfigService instance = null;
-
+    
     public static ConfigService getInstance() {
         if(instance == null) {
             instance = new ConfigService();

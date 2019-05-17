@@ -24,7 +24,6 @@ import java.util.List;
 public class XCalendarEventLogDAOImp extends BaseDAO implements XCalendarEventLogDAO {
 	@PersistenceContext
 	private EntityManager em;
-	private final String EVENT_TIMESTAMP = "eventTimestamp";
 
 	@Override
 	public List<EventLogWrapper<CalendarEventLog>> findAll(ControllerData metadata) {

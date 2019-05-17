@@ -9,6 +9,8 @@ import org.ricone.config.ConfigService;
 import org.ricone.config.model.App;
 import org.ricone.config.model.District;
 import org.ricone.config.model.School;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 
 import java.util.HashMap;
 import java.util.List;

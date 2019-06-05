@@ -1,6 +1,8 @@
 package org.ricone.security.jwt;
 
 import org.ricone.config.model.App;
+import org.ricone.init.CacheService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 

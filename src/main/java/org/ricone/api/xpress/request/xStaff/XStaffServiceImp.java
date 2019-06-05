@@ -18,12 +18,21 @@ import java.util.List;
 @Transactional
 @Service("XPress:XStaffs:XStaffService")
 public class XStaffServiceImp implements XStaffService {
-    @Autowired private XStaffDAO dao;
-    @Autowired private XStaffMapper mapper;
-    @Autowired private XStaffFilterer filterer;
-    @Autowired private XStaffEventLogDAOImp eventLogDAO;
-    @Autowired private XStaffEventLogMapper eventLogMapper;
-    @Autowired private XStaffUsernamePasswordMapper usernamePasswordMapper;
+    private final XStaffDAO dao;
+    private final XStaffMapper mapper;
+    private final XStaffFilterer filterer;
+    private final XStaffEventLogDAOImp eventLogDAO;
+    private final XStaffEventLogMapper eventLogMapper;
+    private final XStaffUsernamePasswordMapper usernamePasswordMapper;
+
+    public XStaffServiceImp(XStaffDAO dao, XStaffMapper mapper, XStaffFilterer filterer, XStaffEventLogDAOImp eventLogDAO, XStaffEventLogMapper eventLogMapper, XStaffUsernamePasswordMapper usernamePasswordMapper) {
+        this.dao = dao;
+        this.mapper = mapper;
+        this.filterer = filterer;
+        this.eventLogDAO = eventLogDAO;
+        this.eventLogMapper = eventLogMapper;
+        this.usernamePasswordMapper = usernamePasswordMapper;
+    }
 
     @Override
     public XStaffResponse findByRefId(ControllerData metadata, String refId) throws Exception {

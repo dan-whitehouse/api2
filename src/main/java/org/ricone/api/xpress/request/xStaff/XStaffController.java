@@ -23,8 +23,10 @@ import java.util.Optional;
 @RestController("XPress:XStaffs:XStaffController")
 @Swagger.Controller.XStaffController
 public class XStaffController extends BaseController {
-	@Autowired private XStaffService service;
+	private final XStaffService service;
 	private final Logger logger = LogManager.getLogger(XStaffController.class);
+
+	public XStaffController(XStaffService service) {this.service = service;}
 
 	@ACL.Get.XStaff.ByRefId
 	@GetMapping(value = "/requests/xStaffs/{refId}", produces = {"application/json", "application/xml"})

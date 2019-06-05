@@ -4,7 +4,10 @@ import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 
 /**
@@ -30,4 +33,17 @@ public class ControllerUtil {
 	public static boolean isIdTypeBEDS(HttpServletRequest request) {
 		return StringUtils.equalsIgnoreCase(request.getHeader(ID_TYPE), "beds");
 	}
+
+	private void test(List<Object> objects) {
+		objects.removeIf(o -> {
+			boolean isRemoveable = Objects.nonNull(o);
+			if(isRemoveable) {
+				//do something here
+			}
+			return isRemoveable;
+		});
+
+
+	}
+
 }

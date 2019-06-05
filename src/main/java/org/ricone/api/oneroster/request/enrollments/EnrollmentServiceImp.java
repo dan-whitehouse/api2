@@ -16,9 +16,15 @@ import java.util.List;
 @Transactional
 @Service("OneRoster:Enrollments:EnrollmentService")
 class EnrollmentServiceImp implements EnrollmentService {
-	@Autowired private EnrollmentDAO dao;
-	@Autowired private EnrollmentMapper mapper;
-	@Autowired private EnrollmentFieldSelector selector;
+	private final EnrollmentDAO dao;
+	private final EnrollmentMapper mapper;
+	private final EnrollmentFieldSelector selector;
+
+	public EnrollmentServiceImp(EnrollmentDAO dao, EnrollmentMapper mapper, EnrollmentFieldSelector selector) {
+		this.dao = dao;
+		this.mapper = mapper;
+		this.selector = selector;
+	}
 
 	@Override
 	public EnrollmentResponse getEnrollment(RequestData metadata, String refId) throws Exception {

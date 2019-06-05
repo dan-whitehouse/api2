@@ -18,11 +18,19 @@ import java.util.List;
 @Transactional
 @Service("XPress:XCourses:XCourseService")
 public class XCourseServiceImp implements XCourseService {
-    @Autowired private XCourseDAO dao;
-    @Autowired private XCourseMapper mapper;
-    @Autowired private XCourseFilterer filterer;
-    @Autowired private XCourseEventLogDAO eventLogDAO;
-    @Autowired private XCourseEventLogMapper eventLogMapper;
+    private final XCourseDAO dao;
+    private final XCourseMapper mapper;
+    private final XCourseFilterer filterer;
+    private final XCourseEventLogDAO eventLogDAO;
+    private final XCourseEventLogMapper eventLogMapper;
+
+    public XCourseServiceImp(XCourseDAO dao, XCourseMapper mapper, XCourseFilterer filterer, XCourseEventLogDAO eventLogDAO, XCourseEventLogMapper eventLogMapper) {
+        this.dao = dao;
+        this.mapper = mapper;
+        this.filterer = filterer;
+        this.eventLogDAO = eventLogDAO;
+        this.eventLogMapper = eventLogMapper;
+    }
 
     @Override
     public XCourseResponse findByRefId(ControllerData metadata, String refId) throws Exception {

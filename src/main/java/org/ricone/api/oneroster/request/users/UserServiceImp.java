@@ -16,9 +16,15 @@ import java.util.List;
 @Transactional
 @Service("OneRoster:Users:UserService")
 class UserServiceImp implements UserService {
-	@Autowired private UserDAO dao;
-	@Autowired private UserMapper mapper;
-	@Autowired private UserFieldSelector selector;
+	private final UserDAO dao;
+	private final UserMapper mapper;
+	private final UserFieldSelector selector;
+
+	public UserServiceImp(UserDAO dao, UserMapper mapper, UserFieldSelector selector) {
+		this.dao = dao;
+		this.mapper = mapper;
+		this.selector = selector;
+	}
 
 	@Override
 	public UserResponse getUser(RequestData metadata, String refId) throws Exception {

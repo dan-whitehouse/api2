@@ -19,9 +19,10 @@ import java.util.List;
 
 @Component("XPress:XRosters:XRosterEventLogMapper")
 public class XRosterEventLogMapper {
-    @Autowired private XRosterMapper mapper;
+    private final XRosterMapper mapper;
 
-    public XRosterEventLogMapper() {
+    public XRosterEventLogMapper(XRosterMapper mapper) {
+        this.mapper = mapper;
     }
 
     public XRostersResponse convert(List<EventLogWrapper<RosterEventLog>> instance) {

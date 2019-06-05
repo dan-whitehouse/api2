@@ -16,9 +16,15 @@ import java.util.List;
 @Transactional
 @Service("OneRoster:Orgs:OrgService")
 class OrgServiceImp implements OrgService {
-	@Autowired private OrgDAO dao;
-	@Autowired private OrgMapper mapper;
-	@Autowired private OrgFieldSelector selector;
+	private final OrgDAO dao;
+	private final OrgMapper mapper;
+	private final OrgFieldSelector selector;
+
+	public OrgServiceImp(OrgDAO dao, OrgMapper mapper, OrgFieldSelector selector) {
+		this.dao = dao;
+		this.mapper = mapper;
+		this.selector = selector;
+	}
 
 	@Override
 	public OrgResponse getOrg(RequestData metadata, String refId) throws Exception {

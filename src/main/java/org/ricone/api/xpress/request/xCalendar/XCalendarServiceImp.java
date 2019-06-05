@@ -24,11 +24,19 @@ import java.util.List;
 @Transactional
 @Service("XPress:XCalendars:XCalendarService")
 public class XCalendarServiceImp implements XCalendarService {
-    @Autowired private XCalendarDAO dao;
-    @Autowired private XCalendarMapper mapper;
-    @Autowired private XCalendarFilterer filterer;
-    @Autowired private XCalendarEventLogDAO eventLogDAO;
-    @Autowired private XCalendarEventLogMapper eventLogMapper;
+    private final XCalendarDAO dao;
+    private final XCalendarMapper mapper;
+    private final XCalendarFilterer filterer;
+    private final XCalendarEventLogDAO eventLogDAO;
+    private final XCalendarEventLogMapper eventLogMapper;
+
+    public XCalendarServiceImp(XCalendarDAO dao, XCalendarMapper mapper, XCalendarFilterer filterer, XCalendarEventLogDAO eventLogDAO, XCalendarEventLogMapper eventLogMapper) {
+        this.dao = dao;
+        this.mapper = mapper;
+        this.filterer = filterer;
+        this.eventLogDAO = eventLogDAO;
+        this.eventLogMapper = eventLogMapper;
+    }
 
     @Override
     public XCalendarResponse findByRefId(ControllerData metadata, String refId) throws Exception {

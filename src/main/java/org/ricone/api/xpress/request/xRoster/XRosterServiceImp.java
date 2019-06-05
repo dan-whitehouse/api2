@@ -18,11 +18,19 @@ import java.util.List;
 @Transactional
 @Service("XPress:XRosters:XRosterService")
 public class XRosterServiceImp implements XRosterService {
-    @Autowired private XRosterDAO dao;
-    @Autowired private XRosterMapper mapper;
-    @Autowired private XRosterFilterer filterer;
-    @Autowired private XRosterEventLogDAO eventLogDAO;
-    @Autowired private XRosterEventLogMapper eventLogMapper;
+    private final XRosterDAO dao;
+    private final XRosterMapper mapper;
+    private final XRosterFilterer filterer;
+    private final XRosterEventLogDAO eventLogDAO;
+    private final XRosterEventLogMapper eventLogMapper;
+
+    public XRosterServiceImp(XRosterDAO dao, XRosterMapper mapper, XRosterFilterer filterer, XRosterEventLogDAO eventLogDAO, XRosterEventLogMapper eventLogMapper) {
+        this.dao = dao;
+        this.mapper = mapper;
+        this.filterer = filterer;
+        this.eventLogDAO = eventLogDAO;
+        this.eventLogMapper = eventLogMapper;
+    }
 
     @Override
     public XRosterResponse findByRefId(ControllerData metadata, String refId) throws Exception {

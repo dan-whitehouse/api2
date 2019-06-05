@@ -9,6 +9,17 @@ import java.lang.annotation.*;
 public @interface Swagger {
 
 	@interface Controller {
+
+		@Target({ElementType.TYPE})
+		@Retention(RetentionPolicy.RUNTIME)
+		@Inherited @Api(value = "App", description = "REST API for App", tags = {"App"})
+		@interface AppController {}
+
+		@Target({ElementType.TYPE})
+		@Retention(RetentionPolicy.RUNTIME)
+		@Inherited @Api(value = "Validation", description = "REST API for Validation", tags = {"Validation"})
+		@interface ValidationController {}
+
 		@Target({ElementType.TYPE})
 		@Retention(RetentionPolicy.RUNTIME)
 		@Inherited @Api(value = "xLeas", description = "REST API for xLeas", tags = {"xLeas"})
@@ -52,8 +63,23 @@ public @interface Swagger {
 
 	//The Operation Annotation is used to define the requests available in Swagger UI.
 	@interface Operation {
-		/* Lea */
+		/* App */
+		@Target({ElementType.METHOD, ElementType.TYPE})
+		@Retention(RetentionPolicy.RUNTIME)
+		@ApiOperation(value = "Return Current App", tags = {"App"}, authorizations = {@Authorization(value="Bearer")},
+				notes = "${swagger.docs.xPress.operation.app}"
+		)@interface GetApp {}
 
+		@Target({ElementType.METHOD, ElementType.TYPE})
+		@Retention(RetentionPolicy.RUNTIME)
+		@ApiOperation(value = "Return App by appId", tags = {"App"}, authorizations = {@Authorization(value="Bearer")},
+				notes = "${swagger.docs.xPress.operation.app}"
+		)@interface GetAppById {}
+
+		/* Validation */
+
+
+		/* Lea */
 		@Target({ElementType.METHOD, ElementType.TYPE})
 		@Retention(RetentionPolicy.RUNTIME)
 		@ApiOperation(value = "Return xLea by refId", tags = {"xLeas"}, authorizations = {@Authorization(value="Bearer")},
@@ -108,8 +134,8 @@ public @interface Swagger {
 				notes = "${swagger.docs.xPress.operation.xLeas}"
 		) @interface GetXLeasByXContact {}
 
-		/* School */
 
+		/* School */
 		@Target({ElementType.METHOD, ElementType.TYPE})
 		@Retention(RetentionPolicy.RUNTIME)
 		@ApiOperation(value = "Return xSchool by refId", tags = {"xSchools"}, authorizations = {@Authorization(value="Bearer")},

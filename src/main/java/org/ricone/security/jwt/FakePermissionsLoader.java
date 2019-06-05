@@ -1,6 +1,7 @@
 package org.ricone.security.jwt;
 
-import java.util.ArrayList;
+import org.ricone.security.acl.PathPermission;
+
 import java.util.List;
 
 /**
@@ -8,43 +9,45 @@ import java.util.List;
  * @author: Dan on 12/4/2018.
  */
 class FakePermissionsLoader {
+	private static final String appId = "NoSecurityAccount";
+
 	static List<PathPermission> getPathPermissions() {
 		return List.of(
 				//Leas
-				new PathPermission("/requests/xLeas", true, true, false, true),
-				new PathPermission("/requests/xSchools/{}/xLeas", true, false, false, false),
-				new PathPermission("/requests/xCalendars/{}/xLeas", true, false, false, false),
-				new PathPermission("/requests/xCourses/{}/xLeas", true, false, false, false),
-				new PathPermission("/requests/xRosters/{}/xLeas", true, false, false, false),
-				new PathPermission("/requests/xStaffs/{}/xLeas", true, false, false, false),
-				new PathPermission("/requests/xStudents/{}/xLeas", true, false, false, false),
-				new PathPermission("/requests/xContacts/{}/xLeas", true, false, false, false),
+				new PathPermission(appId,"/requests/xLeas", true, true, false, true),
+				new PathPermission(appId,"/requests/xSchools/{}/xLeas", true, false, false, false),
+				new PathPermission(appId,"/requests/xCalendars/{}/xLeas", true, false, false, false),
+				new PathPermission(appId,"/requests/xCourses/{}/xLeas", true, false, false, false),
+				new PathPermission(appId,"/requests/xRosters/{}/xLeas", true, false, false, false),
+				new PathPermission(appId,"/requests/xStaffs/{}/xLeas", true, false, false, false),
+				new PathPermission(appId,"/requests/xStudents/{}/xLeas", true, false, false, false),
+				new PathPermission(appId,"/requests/xContacts/{}/xLeas", true, false, false, false),
 
 				//Schools
-				new PathPermission("/requests/xSchools", true, true, false, true),
-				new PathPermission("/requests/xLeas/{}/xSchools", true, false, false, false),
+				new PathPermission(appId,"/requests/xSchools", true, true, false, true),
+				new PathPermission(appId,"/requests/xLeas/{}/xSchools", true, false, false, false),
 
 				//Calendars
-				new PathPermission("/requests/xCalendars", true, true, false, true),
+				new PathPermission(appId,"/requests/xCalendars", true, true, false, true),
 
 				//Courses
-				new PathPermission("/requests/xCourses", true, true, false, true),
+				new PathPermission(appId,"/requests/xCourses", true, true, false, true),
 
 				//Rosters
-				new PathPermission("/requests/xRosters", true, true, false, true),
+				new PathPermission(appId,"/requests/xRosters", true, true, false, true),
 
 				//Staffs
-				new PathPermission("/requests/xStaffs", true, true, false, true),
-				new PathPermission("/requests/xLeas/{}/xStaffs", true, true, false, true),
-				new PathPermission("/requests/xSchools/{}/xStaffs", true, true, false, true),
+				new PathPermission(appId,"/requests/xStaffs", true, true, false, true),
+				new PathPermission(appId,"/requests/xLeas/{}/xStaffs", true, true, false, true),
+				new PathPermission(appId,"/requests/xSchools/{}/xStaffs", true, true, false, true),
 
 				//Students
-				new PathPermission("/requests/xStudents", true, true, false, true),
-				new PathPermission("/requests/xLeas/{}/xStudents", true, true, false, true),
-				new PathPermission("/requests/xSchools/{}/xStudents", true, true, false, true),
+				new PathPermission(appId,"/requests/xStudents", true, true, false, true),
+				new PathPermission(appId,"/requests/xLeas/{}/xStudents", true, true, false, true),
+				new PathPermission(appId,"/requests/xSchools/{}/xStudents", true, true, false, true),
 
 				//Contacts
-				new PathPermission("/requests/xContacts", true, true, false, true)
+				new PathPermission(appId,"/requests/xContacts", true, true, false, true)
 		);
 	}
 }

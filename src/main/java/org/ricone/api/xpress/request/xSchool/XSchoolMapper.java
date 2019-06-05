@@ -8,6 +8,7 @@ import org.ricone.api.core.model.SchoolGrade;
 import org.ricone.api.core.model.SchoolIdentifier;
 import org.ricone.api.core.model.SchoolTelephone;
 import org.ricone.api.core.model.wrapper.SchoolWrapper;
+import org.ricone.api.xpress.component.BaseMapper;
 import org.ricone.api.xpress.model.*;
 import org.springframework.stereotype.Component;
 
@@ -16,10 +17,7 @@ import java.util.List;
 import java.util.Set;
 
 @Component("XPress:XSchools:XSchoolMapper")
-public class XSchoolMapper {
-
-    private final String LOCAL_ID = "LEA";
-    private final String STATE_ID = "SEA";
+public class XSchoolMapper extends BaseMapper {
 
     public XSchoolMapper() {
     }
@@ -95,10 +93,10 @@ public class XSchoolMapper {
             //Identifiers
             List<OtherId> otherIdList = new ArrayList<>();
             for (SchoolIdentifier id : instance.getSchoolIdentifiers()) {
-                if(LOCAL_ID.equals(id.getIdentificationSystemCode())) {
+                if(LEA_ID.equals(id.getIdentificationSystemCode())) {
                     xSchool.setLocalId(id.getSchoolId());
                 }
-                else if(STATE_ID.equals(id.getIdentificationSystemCode())) {
+                else if(SEA_ID.equals(id.getIdentificationSystemCode())) {
                     xSchool.setStateProvinceId(id.getSchoolId());
                 }
                 else {

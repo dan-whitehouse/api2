@@ -63,6 +63,21 @@ public class ConfigService {
         return null;
     }
 
+    public DataXML getDataXMLByApp(String appId) {
+        RestTemplate rt = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        try {
+            headers.set("Authorization", getAccessToken());
+            HttpEntity<?> entity = new HttpEntity<>(headers);
+            ResponseEntity<DataXML> response = rt.exchange((getUrl() + "app/" + appId + "/dataxml"), HttpMethod.GET, entity, DataXML.class);
+            return response.getBody();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public HashMap<String, String> getDistrictAPIKV(String districtId) throws RestClientException {
         RestTemplate rt = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();

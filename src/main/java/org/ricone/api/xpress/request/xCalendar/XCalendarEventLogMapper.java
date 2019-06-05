@@ -19,9 +19,10 @@ import java.util.List;
 
 @Component("XPress:XCalendars:XCalendarEventLogMapper")
 public class XCalendarEventLogMapper {
-    @Autowired private XCalendarMapper mapper;
+    private final XCalendarMapper mapper;
 
-    public XCalendarEventLogMapper() {
+    public XCalendarEventLogMapper(XCalendarMapper mapper) {
+        this.mapper = mapper;
     }
 
     public XCalendarsResponse convert(List<EventLogWrapper<CalendarEventLog>> instance) {

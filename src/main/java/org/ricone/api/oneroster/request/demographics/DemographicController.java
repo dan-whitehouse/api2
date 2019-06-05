@@ -20,8 +20,9 @@ import javax.servlet.http.HttpServletResponse;
 @RestController("OneRoster:Demographics:DemographicController")
 @Api(value = "Demographic", description = "One Roster - Demographics", tags = {"Demographic"})
 class DemographicController extends BaseController {
-	@Autowired
-	private DemographicService service;
+	private final DemographicService service;
+
+	public DemographicController(DemographicService service) {this.service = service;}
 
 	@ResponseBody @GetMapping(value = "/ims/oneroster/v1p1/demographics/{id}")
 	@ApiOperation(value = "getDemographic", tags = {"Demographic"})

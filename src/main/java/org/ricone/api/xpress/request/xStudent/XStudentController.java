@@ -25,8 +25,10 @@ import java.util.Optional;
 @RestController("XPress:XStudents:XStudentController")
 @Swagger.Controller.XStudentController
 public class XStudentController extends BaseController {
-	@Autowired private XStudentService service;
+	private final XStudentService service;
 	private final Logger logger = LogManager.getLogger(XStaffController.class);
+
+	public XStudentController(XStudentService service) {this.service = service;}
 
 	@ACL.Get.XStudent.ByRefId
 	@GetMapping(value = "/requests/xStudents/{refId}", produces = {"application/json", "application/xml"})

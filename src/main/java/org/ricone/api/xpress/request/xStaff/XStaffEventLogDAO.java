@@ -21,7 +21,6 @@ import java.util.List;
 
 interface XStaffEventLogDAO {
 
-
 	List<EventLogWrapper<StaffEventLog>> findAll(ControllerData metadata);
 
 	List<EventLogWrapper<StaffEventLog>> findAllByLeaRefId(ControllerData metadata, String refId);

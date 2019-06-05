@@ -18,12 +18,21 @@ import java.util.List;
 @Transactional
 @Service("XPress:XStudents:XStudentService")
 public class XStudentServiceImp implements XStudentService {
-    @Autowired private XStudentDAO dao;
-    @Autowired private XStudentMapper mapper;
-    @Autowired private XStudentFilterer filterer;
-    @Autowired private XStudentEventLogDAOImp eventLogDAO;
-    @Autowired private XStudentEventLogMapper eventLogMapper;
-    @Autowired private XStudentUsernamePasswordMapper usernamePasswordMapper;
+    private final XStudentDAO dao;
+    private final XStudentMapper mapper;
+    private final XStudentFilterer filterer;
+    private final XStudentEventLogDAOImp eventLogDAO;
+    private final XStudentEventLogMapper eventLogMapper;
+    private final XStudentUsernamePasswordMapper usernamePasswordMapper;
+
+    public XStudentServiceImp(XStudentDAO dao, XStudentMapper mapper, XStudentFilterer filterer, XStudentEventLogDAOImp eventLogDAO, XStudentEventLogMapper eventLogMapper, XStudentUsernamePasswordMapper usernamePasswordMapper) {
+        this.dao = dao;
+        this.mapper = mapper;
+        this.filterer = filterer;
+        this.eventLogDAO = eventLogDAO;
+        this.eventLogMapper = eventLogMapper;
+        this.usernamePasswordMapper = usernamePasswordMapper;
+    }
 
     @Override
     public XStudentResponse findByRefId(ControllerData metadata, String refId) throws Exception {

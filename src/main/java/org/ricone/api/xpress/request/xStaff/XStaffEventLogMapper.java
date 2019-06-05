@@ -19,9 +19,10 @@ import java.util.List;
 
 @Component("XPress:XStaffs:XStaffEventLogMapper")
 public class XStaffEventLogMapper {
-    @Autowired private XStaffMapper mapper;
+    private final XStaffMapper mapper;
 
-    public XStaffEventLogMapper() {
+    public XStaffEventLogMapper(XStaffMapper mapper) {
+        this.mapper = mapper;
     }
 
     public XStaffsResponse convert(List<EventLogWrapper<StaffEventLog>> instance) {

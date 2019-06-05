@@ -16,9 +16,15 @@ import java.util.List;
 @Transactional
 @Service("OneRoster:Classes:ClassService")
 class ClassServiceImp implements ClassService {
-	@Autowired private ClassDAO dao;
-	@Autowired private ClassMapper mapper;
-	@Autowired private ClassFieldSelector selector;
+	private final ClassDAO dao;
+	private final ClassMapper mapper;
+	private final ClassFieldSelector selector;
+
+	public ClassServiceImp(ClassDAO dao, ClassMapper mapper, ClassFieldSelector selector) {
+		this.dao = dao;
+		this.mapper = mapper;
+		this.selector = selector;
+	}
 
 	@Override
 	public ClassResponse getClass(RequestData metadata, String refId) throws Exception {

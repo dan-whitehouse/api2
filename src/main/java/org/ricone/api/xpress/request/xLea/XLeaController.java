@@ -21,8 +21,9 @@ import java.util.Optional;
 @RestController("XPress:XLeas:XLeaController")
 @Swagger.Controller.XLeaController
 public class XLeaController extends BaseController {
-	@Autowired
-	private XLeaService service;
+	private final XLeaService service;
+
+	public XLeaController(XLeaService service) {this.service = service;}
 
 	@ACL.Get.XLea.ById
 	@GetMapping(value = "/requests/xLeas/{refId}", produces = {"application/json", "application/xml"})

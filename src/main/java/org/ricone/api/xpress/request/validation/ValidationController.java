@@ -1,5 +1,6 @@
 package org.ricone.api.xpress.request.validation;
 
+import org.ricone.api.xpress.component.swagger.Swagger;
 import org.ricone.api.xpress.model.validation.Validation;
 import org.ricone.api.xpress.request.app.AppService;
 import org.ricone.api.xpress.request.app.Application;
@@ -19,9 +20,11 @@ import javax.servlet.http.HttpServletResponse;
  */
 
 @RestController("RICOne:Validation:ValidationController")
+@Swagger.Controller.ValidationController
 public class ValidationController extends BaseController {
-    @Autowired
-    private ValidationService service;
+    private final ValidationService service;
+
+    public ValidationController(ValidationService service) {this.service = service;}
 
     @GetMapping("/requests/validation/{refId}")
     public Validation getValidationByLeaRefId(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "refId") String refId) throws Exception {

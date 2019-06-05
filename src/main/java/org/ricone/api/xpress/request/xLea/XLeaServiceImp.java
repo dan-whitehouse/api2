@@ -18,11 +18,19 @@ import java.util.List;
 @Transactional
 @Service("XPress:XLeas:XLeaService")
 public class XLeaServiceImp implements XLeaService {
-    @Autowired private XLeaDAO dao;
-    @Autowired private XLeaMapper mapper;
-    @Autowired private XLeaFilterer filterer;
-    @Autowired private XLeaEventLogDAO eventLogDAO;
-    @Autowired private XLeaEventLogMapper eventLogMapper;
+    private final XLeaDAO dao;
+    private final XLeaMapper mapper;
+    private final XLeaFilterer filterer;
+    private final XLeaEventLogDAO eventLogDAO;
+    private final XLeaEventLogMapper eventLogMapper;
+
+    public XLeaServiceImp(XLeaDAO dao, XLeaMapper mapper, XLeaFilterer filterer, XLeaEventLogDAO eventLogDAO, XLeaEventLogMapper eventLogMapper) {
+        this.dao = dao;
+        this.mapper = mapper;
+        this.filterer = filterer;
+        this.eventLogDAO = eventLogDAO;
+        this.eventLogMapper = eventLogMapper;
+    }
 
     @Override
     public XLeaResponse findByRefId(ControllerData metadata, String refId) throws Exception {

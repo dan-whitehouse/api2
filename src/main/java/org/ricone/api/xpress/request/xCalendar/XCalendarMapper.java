@@ -9,6 +9,7 @@ import org.ricone.api.core.model.SchoolCalendar;
 import org.ricone.api.core.model.SchoolCalendarSession;
 import org.ricone.api.core.model.wrapper.EventLogWrapper;
 import org.ricone.api.core.model.wrapper.SchoolCalendarWrapper;
+import org.ricone.api.xpress.component.BaseMapper;
 import org.ricone.api.xpress.model.*;
 import org.springframework.stereotype.Component;
 
@@ -16,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component("XPress:XCalendars:XCalendarMapper")
-public class XCalendarMapper {
+public class XCalendarMapper extends BaseMapper {
 
     public XCalendarMapper() {
     }

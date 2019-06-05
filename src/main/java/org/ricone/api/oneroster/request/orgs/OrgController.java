@@ -20,7 +20,9 @@ import javax.servlet.http.HttpServletResponse;
 @RestController("OneRoster:Orgs:OrgController")
 @Api(value = "Org", description = "One Roster - Orgs", tags = {"Org"})
 class OrgController extends BaseController {
-	@Autowired private OrgService service;
+	private final OrgService service;
+
+	public OrgController(OrgService service) {this.service = service;}
 
 	@ResponseBody @GetMapping(value = "/ims/oneroster/v1p1/orgs/{id}")
 	@ApiOperation(value = "getOrg", tags = {"Org"})

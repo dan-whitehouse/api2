@@ -22,8 +22,9 @@ import java.util.Optional;
 @RestController("XPress:XCourses:XCourseController")
 @Swagger.Controller.XCourseController
 public class XCourseController extends BaseController {
-	@Autowired
-	private XCourseService service;
+	private final XCourseService service;
+
+	public XCourseController(XCourseService service) {this.service = service;}
 
 	@ACL.Get.XCourse.ById
 	@GetMapping(value = "/requests/xCourses/{refId}", produces = {"application/json", "application/xml"})

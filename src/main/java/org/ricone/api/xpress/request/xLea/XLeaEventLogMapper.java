@@ -19,9 +19,10 @@ import java.util.List;
 
 @Component("XPress:XLeas:XLeaEventLogMapper")
 public class XLeaEventLogMapper {
-    @Autowired private XLeaMapper mapper;
+    private final XLeaMapper mapper;
 
-    public XLeaEventLogMapper() {
+    public XLeaEventLogMapper(XLeaMapper mapper) {
+        this.mapper = mapper;
     }
 
     public XLeasResponse convert(List<EventLogWrapper<LeaEventLog>> instance) {

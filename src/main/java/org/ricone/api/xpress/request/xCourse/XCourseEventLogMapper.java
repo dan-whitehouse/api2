@@ -19,9 +19,10 @@ import java.util.List;
 
 @Component("XPress:XCourses:XCourseEventLogMapper")
 public class XCourseEventLogMapper {
-    @Autowired private XCourseMapper mapper;
+    private final XCourseMapper mapper;
 
-    public XCourseEventLogMapper() {
+    public XCourseEventLogMapper(XCourseMapper mapper) {
+        this.mapper = mapper;
     }
 
     public XCoursesResponse convert(List<EventLogWrapper<CourseEventLog>> instance) {

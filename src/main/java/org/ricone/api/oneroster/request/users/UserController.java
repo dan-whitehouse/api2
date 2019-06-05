@@ -20,8 +20,9 @@ import javax.servlet.http.HttpServletResponse;
 @RestController("OneRoster:Users:UserController")
 @Api(value = "User", description = "One Roster - Users", tags = {"User"})
 public class UserController extends BaseController {
-	@Autowired
-	private UserService service;
+	private final UserService service;
+
+	public UserController(UserService service) {this.service = service;}
 
 	@ResponseBody @GetMapping(value = "/ims/oneroster/v1p1/users/{id}")
 	@ApiOperation(value = "getUser", tags = {"User"})

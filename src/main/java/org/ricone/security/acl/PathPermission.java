@@ -1,4 +1,4 @@
-package org.ricone.security.jwt;
+package org.ricone.security.acl;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -30,7 +30,8 @@ public class PathPermission implements Serializable {
     public PathPermission() {
     }
 
-    public PathPermission(String path, Boolean get, Boolean post, Boolean put, Boolean delete) {
+    public PathPermission(String appId, String path, Boolean get, Boolean post, Boolean put, Boolean delete) {
+        this.appId = appId;
         this.path = path;
         this.get = get;
         this.post = post;

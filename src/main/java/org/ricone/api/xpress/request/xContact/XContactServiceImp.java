@@ -18,11 +18,19 @@ import java.util.List;
 @Transactional
 @Service("XPress:XContacts:XContactService")
 public class XContactServiceImp implements XContactService {
-    @Autowired private XContactDAO dao;
-    @Autowired private XContactMapper mapper;
-    @Autowired private XContactFilterer filterer;
-    @Autowired private XContactEventLogDAO eventLogDAO;
-    @Autowired private XContactEventLogMapper eventLogMapper;
+    private final XContactDAO dao;
+    private final XContactMapper mapper;
+    private final XContactFilterer filterer;
+    private final XContactEventLogDAO eventLogDAO;
+    private final XContactEventLogMapper eventLogMapper;
+
+    public XContactServiceImp(XContactDAO dao, XContactMapper mapper, XContactFilterer filterer, XContactEventLogDAO eventLogDAO, XContactEventLogMapper eventLogMapper) {
+        this.dao = dao;
+        this.mapper = mapper;
+        this.filterer = filterer;
+        this.eventLogDAO = eventLogDAO;
+        this.eventLogMapper = eventLogMapper;
+    }
 
     @Override
     public XContactResponse findByRefId(ControllerData metadata, String refId) throws Exception {

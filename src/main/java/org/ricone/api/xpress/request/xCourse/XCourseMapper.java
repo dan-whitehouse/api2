@@ -6,6 +6,7 @@ import org.ricone.api.core.model.Course;
 import org.ricone.api.core.model.CourseGrade;
 import org.ricone.api.core.model.CourseIdentifier;
 import org.ricone.api.core.model.wrapper.CourseWrapper;
+import org.ricone.api.xpress.component.BaseMapper;
 import org.ricone.api.xpress.model.*;
 import org.springframework.stereotype.Component;
 
@@ -14,10 +15,7 @@ import java.util.List;
 import java.util.Set;
 
 @Component("XPress:XCourses:XCourseMapper")
-public class XCourseMapper {
-
-    private final String LEA_COURSE_ID = "LEA";
-    private final String SCHOOL_COURSE_ID = "School";
+public class XCourseMapper extends BaseMapper {
 
     public XCourseMapper() {
     }
@@ -69,10 +67,10 @@ public class XCourseMapper {
             //Identifiers
             List<OtherId> otherIdList = new ArrayList<>();
             for (CourseIdentifier id : instance.getCourseIdentifiers()) {
-                if(LEA_COURSE_ID.equalsIgnoreCase(id.getIdentificationSystemCode())) {
+                if(LEA_ID.equalsIgnoreCase(id.getIdentificationSystemCode())) {
                     xCourse.setLeaCourseId(id.getCourseId());
                 }
-                else if(SCHOOL_COURSE_ID.equalsIgnoreCase(id.getIdentificationSystemCode())) {
+                else if(SCHOOL_ID.equalsIgnoreCase(id.getIdentificationSystemCode())) {
                     xCourse.setSchoolCourseId(id.getCourseId());
                 }
                 else {

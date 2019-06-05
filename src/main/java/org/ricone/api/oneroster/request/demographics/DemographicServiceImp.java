@@ -16,9 +16,15 @@ import java.util.List;
 @Transactional
 @Service("OneRoster:Demographics:DemographicService")
 class DemographicServiceImp implements DemographicService {
-	@Autowired private DemographicDAO dao;
-	@Autowired private DemographicMapper mapper;
-	@Autowired private DemographicFieldSelector selector;
+	private final DemographicDAO dao;
+	private final DemographicMapper mapper;
+	private final DemographicFieldSelector selector;
+
+	public DemographicServiceImp(DemographicDAO dao, DemographicMapper mapper, DemographicFieldSelector selector) {
+		this.dao = dao;
+		this.mapper = mapper;
+		this.selector = selector;
+	}
 
 	@Override
 	public DemographicResponse getDemographic(RequestData metadata, String refId) throws Exception {

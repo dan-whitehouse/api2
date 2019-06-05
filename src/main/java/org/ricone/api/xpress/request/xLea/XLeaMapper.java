@@ -6,6 +6,7 @@ import org.hibernate.MappingException;
 import org.ricone.api.core.model.Lea;
 import org.ricone.api.core.model.LeaTelephone;
 import org.ricone.api.core.model.wrapper.LeaWrapper;
+import org.ricone.api.xpress.component.BaseMapper;
 import org.ricone.api.xpress.model.*;
 import org.springframework.stereotype.Component;
 
@@ -13,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component("XPress:XLeas:XLeaMapper")
-public class XLeaMapper {
+public class XLeaMapper extends BaseMapper {
 
     public XLeaMapper() {
     }

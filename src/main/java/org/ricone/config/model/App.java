@@ -9,7 +9,7 @@ import org.apache.commons.lang3.BooleanUtils;
 import org.ricone.api.core.model.Lea;
 import org.ricone.api.core.model.School;
 import org.ricone.api.core.model.SchoolIdentifier;
-import org.ricone.security.jwt.PathPermission;
+import org.ricone.security.acl.PathPermission;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

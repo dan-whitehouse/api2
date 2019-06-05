@@ -1,6 +1,6 @@
 package org.ricone.api.xpress.component;
 
-public class BaseDAO {
+public abstract class BaseDAO {
     /* Joins */
     protected final String JOIN_LEA = "lea";
     protected final String JOIN_LEA_TELEPHONES = "leaTelephones";
@@ -44,7 +44,7 @@ public class BaseDAO {
     protected final String STUDENT_ID_REF_ID = "studentIdentifierRefId";
     protected final String STUDENT_CONTACT_REF_ID = "studentContactRefId";
 
-
+    /* School Years */
     protected final String LEA_SCHOOL_YEAR = "leaSchoolYear";
     protected final String COURSE_SCHOOL_YEAR = "courseSchoolYear";
     protected final String COURSE_SECTION_SCHOOL_YEAR = "courseSectionSchoolYear";

@@ -3,11 +3,21 @@ package org.ricone.security.jwt;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.fasterxml.jackson.dataformat.xml.JacksonXmlModule;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule;
 import org.apache.commons.lang3.StringUtils;
+import org.ricone.config.ConfigService;
 import org.ricone.config.cache.AppCache;
 import org.ricone.config.model.App;
+import org.ricone.config.model.DataXML;
 import org.ricone.config.model.District;
+import org.ricone.init.CacheService;
 import org.ricone.security.PropertiesLoader;
+import org.ricone.security.acl.Environment;
+import org.ricone.security.acl.PathPermission;
+import org.ricone.security.acl.PathPermissionMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
@@ -22,10 +32,14 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
-    public JWTAuthorizationFilter(AuthenticationManager authManager) {
+    private final CacheService cacheService;
+
+    public JWTAuthorizationFilter(AuthenticationManager authManager, CacheService cacheService) {
         super(authManager);
+        this.cacheService = cacheService;
     }
 
     @Override
@@ -39,7 +53,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
         }
         else {
             Application application = getDisabledSecurityAccount();
-            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(application, null, getACLs(application.getApp()));
+            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(application, null, getFakeACLs(application.getApp()));
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
         chain.doFilter(req, res);
@@ -60,7 +74,9 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 
         Application application = null;
         if(decodedToken != null) {
+
             App app = AppCache.getInstance().get(decodedToken.getApplication_id());
+            //App app = cacheService.getAppById(decodedToken.getApplication_id());
             if(app != null) {
                 application = new Application(app, decodedToken);
             }
@@ -82,7 +98,65 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
         return null; //DecodedToken or Application was null... 403 Forbidden
     }
 
+
     private Collection<GrantedAuthority> getACLs(App app) {
+        Collection<GrantedAuthority> grantedAuthorities = new ArrayList<>();
+
+        //Get ACL Path Permissions
+       /* try {
+            XmlMapper xmlMapper = new XmlMapper();
+            xmlMapper.registerModule(new JaxbAnnotationModule());
+            xmlMapper.registerModule(new JacksonXmlModule());
+
+            DataXML dataXML = cacheService.getDataXMLByAppId(app.getId());
+
+            Environment environment = xmlMapper.readValue(dataXML.getXml().getXml(), Environment.class);
+
+            PathPermissionMapper mapper = new PathPermissionMapper();
+            List<PathPermission> pathPermissions = new ArrayList<>();
+            environment.getProvisionedZones().getProvisionedZone().getServices().getService().forEach(service -> {
+                pathPermissions.add(mapper.map(environment.getDefaultZone().getId(), service));
+            });
+
+            pathPermissions.forEach(pathPermission -> {
+                //app.getPermissions().forEach(pathPermission -> {
+                if(pathPermission.getGet()) {
+                    grantedAuthorities.add(new SimpleGrantedAuthority("get:" + pathPermission.getPath()));
+                }
+                if(pathPermission.getPost()) {
+                    grantedAuthorities.add(new SimpleGrantedAuthority("post:" + pathPermission.getPath()));
+                }
+                if(pathPermission.getPut()) {
+                    grantedAuthorities.add(new SimpleGrantedAuthority("put:" + pathPermission.getPath()));
+                }
+                if(pathPermission.getDelete()) {
+                    grantedAuthorities.add(new SimpleGrantedAuthority("delete:" + pathPermission.getPath()));
+                }
+            });
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }*/
+
+        app.getPermissions().forEach(pathPermission -> {
+            if(pathPermission.getGet()) {
+                grantedAuthorities.add(new SimpleGrantedAuthority("get:" + pathPermission.getPath()));
+            }
+            if(pathPermission.getPost()) {
+                grantedAuthorities.add(new SimpleGrantedAuthority("post:" + pathPermission.getPath()));
+            }
+            if(pathPermission.getPut()) {
+                grantedAuthorities.add(new SimpleGrantedAuthority("put:" + pathPermission.getPath()));
+            }
+            if(pathPermission.getDelete()) {
+                grantedAuthorities.add(new SimpleGrantedAuthority("delete:" + pathPermission.getPath()));
+            }
+        });
+        return grantedAuthorities;
+    }
+
+
+    private Collection<GrantedAuthority> getFakeACLs(App app) {
         Collection<GrantedAuthority> grantedAuthorities = new ArrayList<>();
 
         FakePermissionsLoader.getPathPermissions().forEach(pathPermission -> {

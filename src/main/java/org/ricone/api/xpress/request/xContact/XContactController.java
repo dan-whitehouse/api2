@@ -21,8 +21,9 @@ import java.util.Optional;
 @RestController("XPress:XContacts:XContactController")
 @Swagger.Controller.XContactController
 public class XContactController extends BaseController {
-	@Autowired
-	private XContactService service;
+	private final XContactService service;
+
+	public XContactController(XContactService service) {this.service = service;}
 
 	@ACL.Get.XContact.ByRefId
 	@GetMapping(value = "/requests/xContacts/{refId}", produces = {"application/json", "application/xml"})

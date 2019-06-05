@@ -20,8 +20,9 @@ import javax.servlet.http.HttpServletResponse;
 @RestController("OneRoster:Enrollments:EnrollmentController")
 @Api(value = "Enrollment", description = "One Roster - Enrollments", tags = {"Enrollment"})
 class EnrollmentController extends BaseController {
-	@Autowired
-	private EnrollmentService service;
+	private final EnrollmentService service;
+
+	public EnrollmentController(EnrollmentService service) {this.service = service;}
 
 	@ResponseBody @GetMapping(value = "/ims/oneroster/v1p1/enrollments/{id}")
 	@ApiOperation(value = "getEnrollment", tags = {"Enrollment"})

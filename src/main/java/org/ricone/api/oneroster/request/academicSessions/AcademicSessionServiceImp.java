@@ -16,9 +16,15 @@ import java.util.List;
 @Transactional
 @Service("OneRoster:AcademicSessions:AcademicSessionService")
 class AcademicSessionServiceImp implements AcademicSessionService {
-	@Autowired private AcademicSessionDAO dao;
-	@Autowired private AcademicSessionMapper mapper;
-	@Autowired private AcademicSessionFieldSelector fieldSelector;
+	private final AcademicSessionDAO dao;
+	private final AcademicSessionMapper mapper;
+	private final AcademicSessionFieldSelector fieldSelector;
+
+	public AcademicSessionServiceImp(AcademicSessionDAO dao, AcademicSessionMapper mapper, AcademicSessionFieldSelector fieldSelector) {
+		this.dao = dao;
+		this.mapper = mapper;
+		this.fieldSelector = fieldSelector;
+	}
 
 	@Override
 	public AcademicSessionResponse getAcademicSession(RequestData metadata, String refId) throws Exception {

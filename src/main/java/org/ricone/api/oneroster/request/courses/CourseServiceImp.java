@@ -16,9 +16,15 @@ import java.util.List;
 @Transactional
 @Service("OneRoster:Courses:CourseService")
 class CourseServiceImp implements CourseService {
-	@Autowired private CourseDAO dao;
-	@Autowired private CourseMapper mapper;
-	@Autowired private CourseFieldSelector selector;
+	private final CourseDAO dao;
+	private final CourseMapper mapper;
+	private final CourseFieldSelector selector;
+
+	public CourseServiceImp(CourseDAO dao, CourseMapper mapper, CourseFieldSelector selector) {
+		this.dao = dao;
+		this.mapper = mapper;
+		this.selector = selector;
+	}
 
 	@Override
 	public CourseResponse getCourse(RequestData metadata, String refId) throws Exception {

@@ -5,6 +5,7 @@ import org.apache.commons.lang3.BooleanUtils;
 import org.hibernate.MappingException;
 import org.ricone.api.core.model.*;
 import org.ricone.api.core.model.wrapper.StudentContactWrapper;
+import org.ricone.api.xpress.component.BaseMapper;
 import org.ricone.api.xpress.model.*;
 import org.springframework.stereotype.Component;
 
@@ -13,9 +14,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Component("XPress:XContacts:XContactMapper")
-public class XContactMapper {
-    private final String LOCAL_ID = "District";
-    private final String PRIMARY_ADDRESS_TYPE = "Mailing";
+public class XContactMapper extends BaseMapper {
 
     public XContactMapper() {
     }

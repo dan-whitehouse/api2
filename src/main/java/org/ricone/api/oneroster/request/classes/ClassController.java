@@ -20,8 +20,9 @@ import javax.servlet.http.HttpServletResponse;
 @RestController("OneRoster:Classes:ClassController")
 @Api(value = "Class", description = "One Roster - Classes", tags = {"Class"})
 class ClassController extends BaseController {
-	@Autowired
-	private ClassService service;
+	private final ClassService service;
+
+	public ClassController(ClassService service) {this.service = service;}
 
 	@ResponseBody @GetMapping(value = "/ims/oneroster/v1p1/classes/{id}")
 	@ApiOperation(value = "getClass", tags = {"Class"})

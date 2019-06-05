@@ -22,8 +22,9 @@ import java.util.Optional;
 @RestController("XPress:XRosters:XRosterController")
 @Swagger.Controller.XRosterController
 public class XRosterController extends BaseController {
-	@Autowired
-	private XRosterService service;
+	private final XRosterService service;
+
+	public XRosterController(XRosterService service) {this.service = service;}
 
 	@ACL.Get.XRoster.ById
 	@GetMapping(value = "/requests/xRosters/{refId}", produces = {"application/json", "application/xml"})

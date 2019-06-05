@@ -52,8 +52,8 @@
 			    layout: "StandaloneLayout",
 			    //onComplete: customScripts,
 				requestInterceptor: (req) => {
-					req.headers.Authorization = "Bearer xxxxxxx"
-					return req
+					req.headers.Authorization = "Bearer xxxxxxx";
+					return req;
 				}
 				/*responseInterceptor:function(response){
 					/*response.headers.Authorization = "Bearer " + token;
@@ -71,10 +71,10 @@
 					addAuthDropdown()
 				}*/
 
-			  })
+			  });
 			  // End Swagger UI call region
 			
-			  window.ui = ui
+			  window.ui = ui;
 			}
 		</script>
 		<footer>
@@ -167,7 +167,7 @@
 		<!-- Fix Response Content Order -->
 		<script>
 			function updateContentTypeOrder() {
-				$('select[class="content-type"] option[value="application/json"]').insertBefore($('select[name="content-type"] option[value="application/xml"]'));
+				$('select[class="value-type"] option[value="application/json"]').insertBefore($('select[name="value-type"] option[value="application/xml"]'));
 			}
 		</script>
 

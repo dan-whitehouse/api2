@@ -27,10 +27,12 @@ import java.util.List;
 
 @Component("XPress:XStudents:XStudentUsernamePasswordMapper")
 public class XStudentUsernamePasswordMapper {
-    @Autowired private UserPasswordGenerator generator;
-    @Autowired private UsernamePasswordDAO dao;
+    private final UserPasswordGenerator generator;
+    private final UsernamePasswordDAO dao;
 
-    public XStudentUsernamePasswordMapper() {
+    public XStudentUsernamePasswordMapper(UserPasswordGenerator generator, UsernamePasswordDAO dao) {
+        this.generator = generator;
+        this.dao = dao;
     }
 
     public XStudentsResponse convert(List<StudentWrapper> instance, ControllerData metadata, String schoolRefId) throws Exception {

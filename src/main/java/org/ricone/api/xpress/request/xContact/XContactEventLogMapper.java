@@ -19,9 +19,10 @@ import java.util.List;
 
 @Component("XPress:XContacts:XContactEventLogMapper")
 public class XContactEventLogMapper {
-    @Autowired private XContactMapper mapper;
+    private final XContactMapper mapper;
 
-    public XContactEventLogMapper() {
+    public XContactEventLogMapper(XContactMapper mapper) {
+        this.mapper = mapper;
     }
 
     public XContactsResponse convert(List<EventLogWrapper<ContactEventLog>> instance) {

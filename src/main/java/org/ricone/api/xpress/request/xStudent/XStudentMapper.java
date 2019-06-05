@@ -6,21 +6,14 @@ import org.apache.commons.lang3.time.DateFormatUtils;
 import org.hibernate.MappingException;
 import org.ricone.api.core.model.*;
 import org.ricone.api.core.model.wrapper.StudentWrapper;
+import org.ricone.api.xpress.component.BaseMapper;
 import org.ricone.api.xpress.model.*;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
 
 @Component("XPress:XStudents:XStudentMapper")
-public class XStudentMapper {
-
-    private final String LOCAL_ID = "District";
-    private final String STATE_ID = "State";
-    private final String PRIMARY_ADDRESS_TYPE = "Mailing";
-    private final String MEMBERSHIP_TYPE_CODE = "Home";
-    private final String SYSTEM_TYPE_CODE = "CEDS";
-    private final String ENTRY_TYPE = "Entry";
-    private final String EXIT_TYPE = "Exit";
+public class XStudentMapper extends BaseMapper {
 
     public XStudentMapper() {
     }

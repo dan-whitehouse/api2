@@ -8,6 +8,7 @@ import org.ricone.api.core.model.StaffAssignment;
 import org.ricone.api.core.model.StaffEmail;
 import org.ricone.api.core.model.StaffIdentifier;
 import org.ricone.api.core.model.wrapper.StaffWrapper;
+import org.ricone.api.xpress.component.BaseMapper;
 import org.ricone.api.xpress.model.*;
 import org.springframework.stereotype.Component;
 
@@ -15,10 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component("XPress:XStaffs:XStaffMapper")
-public class XStaffMapper {
-
-    private final String LOCAL_ID = "District";
-    private final String STATE_ID = "State";
+public class XStaffMapper extends BaseMapper {
 
     public XStaffMapper() {
     }

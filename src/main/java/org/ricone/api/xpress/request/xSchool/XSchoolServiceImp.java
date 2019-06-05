@@ -18,11 +18,19 @@ import java.util.List;
 @Transactional
 @Service("XPress:XSchools:XSchoolService")
 public class XSchoolServiceImp implements XSchoolService {
-    @Autowired private XSchoolDAO dao;
-    @Autowired private XSchoolMapper mapper;
-    @Autowired private XSchoolFilterer filterer;
-    @Autowired private XSchoolEventLogDAOImp eventLogDAO;
-    @Autowired private XSchoolEventLogMapper eventLogMapper;
+    private final XSchoolDAO dao;
+    private final XSchoolMapper mapper;
+    private final XSchoolFilterer filterer;
+    private final XSchoolEventLogDAOImp eventLogDAO;
+    private final XSchoolEventLogMapper eventLogMapper;
+
+    public XSchoolServiceImp(XSchoolDAO dao, XSchoolMapper mapper, XSchoolFilterer filterer, XSchoolEventLogDAOImp eventLogDAO, XSchoolEventLogMapper eventLogMapper) {
+        this.dao = dao;
+        this.mapper = mapper;
+        this.filterer = filterer;
+        this.eventLogDAO = eventLogDAO;
+        this.eventLogMapper = eventLogMapper;
+    }
 
     @Override
     public XSchoolResponse findByRefId(ControllerData metadata, String refId) throws Exception {

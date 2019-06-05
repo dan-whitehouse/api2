@@ -6,6 +6,7 @@ import org.apache.commons.lang3.time.DateFormatUtils;
 import org.hibernate.MappingException;
 import org.ricone.api.core.model.*;
 import org.ricone.api.core.model.wrapper.CourseSectionWrapper;
+import org.ricone.api.xpress.component.BaseMapper;
 import org.ricone.api.xpress.model.*;
 import org.springframework.stereotype.Component;
 
@@ -13,9 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component("XPress:XRosters:XRosterMapper")
-public class XRosterMapper {
-
-    private final String LOCAL_ID = "District";
+public class XRosterMapper extends BaseMapper {
 
     public XRosterMapper() {
     }

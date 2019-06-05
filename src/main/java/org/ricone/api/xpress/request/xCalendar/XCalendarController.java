@@ -22,8 +22,9 @@ import java.util.Optional;
 @RestController("XPress:XCalendars:XCalendarController")
 @Swagger.Controller.XCalendarController
 public class XCalendarController extends BaseController {
-	@Autowired
-	private XCalendarService service;
+	private final XCalendarService service;
+
+	public XCalendarController(XCalendarService service) {this.service = service;}
 
 	@ACL.Get.XCalendar.ById
 	@GetMapping(value = "/requests/xCalendars/{refId}", produces = {"application/json", "application/xml"})

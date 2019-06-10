@@ -8,20 +8,24 @@ import org.ricone.api.xpress.model.XCalendarResponse;
 import org.ricone.api.xpress.model.XCalendarsResponse;
 import org.ricone.config.cache.FilterCache;
 import org.ricone.config.model.XCalendarFilter;
+import org.ricone.init.CacheService;
 import org.springframework.stereotype.Component;
 
 import java.util.Iterator;
 
 @Component("XPress:XCalendars:XCalendarFilterer")
 public class XCalendarFilterer {
-    public XCalendarFilterer() {
+    private final CacheService cacheService;
+
+    public XCalendarFilterer(CacheService cacheService) {
+        this.cacheService = cacheService;
     }
 
-    XCalendarsResponse apply(XCalendarsResponse response, ControllerData metaData) {
+    XCalendarsResponse apply(XCalendarsResponse response, ControllerData metadata) {
         Iterator<XCalendar> iterator = response.getXCalendars().getXCalendar().iterator();
         while (iterator.hasNext()) {
             XCalendar i = iterator.next();
-            i = filter(i, FilterCache.getInstance().getXCalendarFilter(i.getDistrictId(), metaData.getApplication().getApp()));
+            i = filter(i, cacheService.getXCalendarFilter(i.getDistrictId(), metadata.getApplication().getApp().getId()));
 
             // Remove object from list if empty
             if (i.isEmptyObject()) {
@@ -34,8 +38,8 @@ public class XCalendarFilterer {
         return response;
     }
 
-    XCalendarResponse apply(XCalendarResponse response, ControllerData metaData) {
-        response.setXCalendar(filter(response.getXCalendar(), FilterCache.getInstance().getXCalendarFilter(response.getXCalendar().getDistrictId(), metaData.getApplication().getApp())));
+    XCalendarResponse apply(XCalendarResponse response, ControllerData metadata) {
+        response.setXCalendar(filter(response.getXCalendar(), cacheService.getXCalendarFilter(response.getXCalendar().getDistrictId(), metadata.getApplication().getApp().getId())));
         if (response.getXCalendar().isEmptyObject()) {
             return null;
         }

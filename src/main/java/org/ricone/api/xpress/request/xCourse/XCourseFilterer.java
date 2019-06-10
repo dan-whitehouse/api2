@@ -5,20 +5,24 @@ import org.ricone.api.xpress.component.ControllerData;
 import org.ricone.api.xpress.model.*;
 import org.ricone.config.cache.FilterCache;
 import org.ricone.config.model.XCourseFilter;
+import org.ricone.init.CacheService;
 import org.springframework.stereotype.Component;
 
 import java.util.Iterator;
 
 @Component("XPress:XCourses:XCourseFilterer")
 public class XCourseFilterer {
-    public XCourseFilterer() {
+    private final CacheService cacheService;
+
+    public XCourseFilterer(CacheService cacheService) {
+        this.cacheService = cacheService;
     }
 
-    XCoursesResponse apply(XCoursesResponse response, ControllerData metaData) {
+    XCoursesResponse apply(XCoursesResponse response, ControllerData metadata) {
         Iterator<XCourse> iterator = response.getXCourses().getXCourse().iterator();
         while (iterator.hasNext()) {
             XCourse i = iterator.next();
-            i = filter(i, FilterCache.getInstance().getXCourseFilter(i.getDistrictId(), metaData.getApplication().getApp()));
+            i = filter(i, cacheService.getXCourseFilter(i.getDistrictId(), metadata.getApplication().getApp().getId()));
 
             // Remove object from list if empty
             if (i.isEmptyObject()) {
@@ -31,8 +35,8 @@ public class XCourseFilterer {
         return response;
     }
 
-    XCourseResponse apply(XCourseResponse response, ControllerData metaData) {
-        response.setXCourse(filter(response.getXCourse(), FilterCache.getInstance().getXCourseFilter(response.getXCourse().getDistrictId(), metaData.getApplication().getApp())));
+    XCourseResponse apply(XCourseResponse response, ControllerData metadata) {
+        response.setXCourse(filter(response.getXCourse(), cacheService.getXCourseFilter(response.getXCourse().getDistrictId(), metadata.getApplication().getApp().getId())));
         if (response.getXCourse().isEmptyObject()) {
             return null;
         }

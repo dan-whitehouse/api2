@@ -30,14 +30,14 @@ public class FilterCache {
 		cache = CacheBuilder.newBuilder().expireAfterWrite(EXPIRE, TimeUnit.MINUTES).build(new CacheLoader<String, IFilter<?>>() {
 			@Override
 			public IFilter<?> load(String cacheId) {
-			logger.debug("Loading Filter from Config: " + cacheId);
+			//logger.debug("Loading Filter from Config: " + cacheId);
 			return loadCache(cacheId);
 			}
 		});
 	}
 
 	public IFilter<?> get(String cacheId) {
-		logger.debug("Loading Filter from Cache: " + cacheId);
+		//logger.debug("Loading Filter from Cache: " + cacheId);
 		return cache.getUnchecked(cacheId);
 	}
 

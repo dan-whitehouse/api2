@@ -22,6 +22,7 @@ public class StudentComposite implements Serializable {
         this.studentSchoolYear = studentSchoolYear;
     }
 
+
     @Override
     public int hashCode() {
         final int prime = 31;

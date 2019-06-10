@@ -52,7 +52,7 @@ public class XCourseDAOImp extends BaseDAO implements XCourseDAO {
 			cb.and(
 				schoolYearEquals,
 				cb.equal(from.get(PRIMARY_KEY), refId),
-				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 			)
 		);
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
@@ -93,7 +93,7 @@ public class XCourseDAOImp extends BaseDAO implements XCourseDAO {
 		select.where(
 			cb.and(
 				schoolYearEquals,
-				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 			)
 		);
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
@@ -139,7 +139,7 @@ public class XCourseDAOImp extends BaseDAO implements XCourseDAO {
 			cb.and(
 				schoolYearEquals,
 				cb.equal(lea.get("leaRefId"), refId),
-				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 			)
 		);
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
@@ -185,7 +185,7 @@ public class XCourseDAOImp extends BaseDAO implements XCourseDAO {
 			cb.and(
 				schoolYearEquals,
 				cb.equal(school.get("schoolRefId"), refId),
-				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 			)
 		);
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
@@ -232,7 +232,7 @@ public class XCourseDAOImp extends BaseDAO implements XCourseDAO {
 			cb.and(
 				schoolYearEquals,
 				cb.equal(courseSections.get("courseSectionRefId"), refId),
-				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 			)
 		);
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
@@ -266,7 +266,7 @@ public class XCourseDAOImp extends BaseDAO implements XCourseDAO {
 		select.where(
 			cb.and(
 				cb.equal(from.get(PRIMARY_KEY), refId), 
-				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 			)
 		);
 		return em.createQuery(select).getSingleResult();
@@ -284,7 +284,7 @@ public class XCourseDAOImp extends BaseDAO implements XCourseDAO {
 
 		select.distinct(true);
 		select.select(cb.greatest(from.<Integer>get(SCHOOL_YEAR_KEY)));
-		select.where(lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()));
+		select.where(lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds()));
 
 		return em.createQuery(select).getSingleResult();
 	}
@@ -304,7 +304,7 @@ public class XCourseDAOImp extends BaseDAO implements XCourseDAO {
 		select.where(
 			cb.and(
 				cb.equal(lea.get("leaRefId"), refId), 
-				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 			)
 		);
 		return em.createQuery(select).getSingleResult();
@@ -325,7 +325,7 @@ public class XCourseDAOImp extends BaseDAO implements XCourseDAO {
 		select.where(
 			cb.and(
 				cb.equal(school.get("schoolRefId"), refId), 
-				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 			)
 		);
 		return em.createQuery(select).getSingleResult();
@@ -347,7 +347,7 @@ public class XCourseDAOImp extends BaseDAO implements XCourseDAO {
 		select.where(
 			cb.and(
 				cb.equal(courseSections.get("courseSectionRefId"), refId), 
-				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 			)
 		);
 		return em.createQuery(select).getSingleResult();
@@ -376,7 +376,7 @@ public class XCourseDAOImp extends BaseDAO implements XCourseDAO {
 		select.where(
 			cb.and(
 				schoolYearEquals,
-				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 			)
 		);
 		return em.createQuery(select).getSingleResult().intValue();
@@ -406,7 +406,7 @@ public class XCourseDAOImp extends BaseDAO implements XCourseDAO {
 			cb.and(
 				schoolYearEquals,
 				cb.equal(lea.get("leaRefId"), refId), 
-				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 			)
 		);
 		return em.createQuery(select).getSingleResult().intValue();
@@ -436,7 +436,7 @@ public class XCourseDAOImp extends BaseDAO implements XCourseDAO {
 			cb.and(
 				schoolYearEquals,
 				cb.equal(school.get("schoolRefId"), refId), 
-				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 			)
 		);
 		return em.createQuery(select).getSingleResult().intValue();
@@ -467,7 +467,7 @@ public class XCourseDAOImp extends BaseDAO implements XCourseDAO {
 			cb.and(
 				schoolYearEquals,
 				cb.equal(courseSections.get("courseSectionRefId"), refId), 
-				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 			)
 		);
 		return em.createQuery(select).getSingleResult().intValue();

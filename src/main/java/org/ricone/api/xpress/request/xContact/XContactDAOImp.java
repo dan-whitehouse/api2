@@ -53,7 +53,7 @@ public class XContactDAOImp extends BaseDAO implements XContactDAO {
 			cb.and(
 				schoolYearEquals,
 				cb.equal(from.get(PRIMARY_KEY), refId),
-				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 			)
 		);
 
@@ -94,7 +94,7 @@ public class XContactDAOImp extends BaseDAO implements XContactDAO {
 		select.where(
 			cb.and(
 				schoolYearEquals,
-				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 			)
 		);
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
@@ -141,7 +141,7 @@ public class XContactDAOImp extends BaseDAO implements XContactDAO {
 			cb.and(
 				schoolYearEquals,
 				cb.equal(lea.get("leaRefId"), refId),
-				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 			)
 		);
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
@@ -188,7 +188,7 @@ public class XContactDAOImp extends BaseDAO implements XContactDAO {
 			cb.and(
 				schoolYearEquals,
 				cb.equal(school.get("schoolRefId"), refId),
-				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 			)
 		);
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
@@ -235,7 +235,7 @@ public class XContactDAOImp extends BaseDAO implements XContactDAO {
 			cb.and(
 				schoolYearEquals,
 				cb.equal(student.get("studentRefId"), refId),
-				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 			)
 		);
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
@@ -270,7 +270,7 @@ public class XContactDAOImp extends BaseDAO implements XContactDAO {
 		select.where(
 			cb.and(
 				cb.equal(from.get(PRIMARY_KEY), refId),
-				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 			)
 		);
 
@@ -290,7 +290,7 @@ public class XContactDAOImp extends BaseDAO implements XContactDAO {
 
 		select.distinct(true);
 		select.select(cb.greatest(from.<Integer>get(SCHOOL_YEAR_KEY)));
-		select.where(lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()));
+		select.where(lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds()));
 
 		return em.createQuery(select).getSingleResult();
 	}
@@ -311,7 +311,7 @@ public class XContactDAOImp extends BaseDAO implements XContactDAO {
 		select.where(
 			cb.and(
 				cb.equal(lea.get("leaRefId"), refId),
-				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 			)
 		);
 		return em.createQuery(select).getSingleResult();
@@ -333,7 +333,7 @@ public class XContactDAOImp extends BaseDAO implements XContactDAO {
 		select.where(
 			cb.and(
 				cb.equal(school.get("schoolRefId"), refId),
-				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 			)
 		);
 		return em.createQuery(select).getSingleResult();
@@ -355,7 +355,7 @@ public class XContactDAOImp extends BaseDAO implements XContactDAO {
 		select.where(
 			cb.and(
 				cb.equal(student.get("studentRefId"), refId),
-				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 			)
 		);
 		return em.createQuery(select).getSingleResult();
@@ -385,7 +385,7 @@ public class XContactDAOImp extends BaseDAO implements XContactDAO {
 		select.where(
 			cb.and(
 				schoolYearEquals,
-				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 			)
 		);
 		return em.createQuery(select).getSingleResult().intValue();
@@ -416,7 +416,7 @@ public class XContactDAOImp extends BaseDAO implements XContactDAO {
 			cb.and(
 				schoolYearEquals,
 				cb.equal(lea.get("leaRefId"), refId),
-				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 			)
 		);
 		return em.createQuery(select).getSingleResult().intValue();
@@ -447,7 +447,7 @@ public class XContactDAOImp extends BaseDAO implements XContactDAO {
 			cb.and(
 				schoolYearEquals,
 				cb.equal(school.get("schoolRefId"), refId),
-				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 			)
 		);
 		return em.createQuery(select).getSingleResult().intValue();
@@ -478,7 +478,7 @@ public class XContactDAOImp extends BaseDAO implements XContactDAO {
 			cb.and(
 				schoolYearEquals,
 				cb.equal(student.get("studentRefId"), refId),
-				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 			)
 		);
 		return em.createQuery(select).getSingleResult().intValue();
@@ -491,8 +491,9 @@ public class XContactDAOImp extends BaseDAO implements XContactDAO {
 		Hibernate.initialize(instance.getStudentContact().getStudentContactIdentifiers());
 		Hibernate.initialize(instance.getStudentContact().getStudentContactOtherNames());
 		Hibernate.initialize(instance.getStudentContact().getStudentContactTelephones());
-		Hibernate.initialize(instance.getStudentContact().getStudentContactRelationships());
-		instance.getStudentContact().getStudentContactRelationships().forEach(cr -> Hibernate.initialize(cr.getStudent()));
+		//FIXME: AT the moment I am getting an EntityNotFoundException, so I turned off the mapping for this.
+		/*Hibernate.initialize(instance.getStudentContact().getStudentContactRelationships());
+		instance.getStudentContact().getStudentContactRelationships().forEach(cr -> Hibernate.initialize(cr.getStudent()));*/
 	}
 
 	private void initialize(List<StudentContactWrapper> instance) {
@@ -502,8 +503,9 @@ public class XContactDAOImp extends BaseDAO implements XContactDAO {
 			Hibernate.initialize(wrapper.getStudentContact().getStudentContactIdentifiers());
 			Hibernate.initialize(wrapper.getStudentContact().getStudentContactOtherNames());
 			Hibernate.initialize(wrapper.getStudentContact().getStudentContactTelephones());
-			Hibernate.initialize(wrapper.getStudentContact().getStudentContactRelationships());
-			wrapper.getStudentContact().getStudentContactRelationships().forEach(cr -> Hibernate.initialize(cr.getStudent()));
+			//FIXME: AT the moment I am getting an EntityNotFoundException, so I turned off the mapping for this.
+			/*Hibernate.initialize(wrapper.getStudentContact().getStudentContactRelationships());
+			wrapper.getStudentContact().getStudentContactRelationships().forEach(cr -> Hibernate.initialize(cr.getStudent()));*/
 		});
 	}
 }

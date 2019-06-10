@@ -57,7 +57,7 @@ public class XStaffDAOImp extends BaseDAO implements XStaffDAO {
 			cb.and(
 				schoolYearEquals,
 				cb.equal(from.get(PRIMARY_KEY), refId),
-				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 			)
 		);
 
@@ -100,7 +100,7 @@ public class XStaffDAOImp extends BaseDAO implements XStaffDAO {
 				schoolYearEquals,
 				cb.equal(staffIdentifiers.get(ID_KEY), localId),
 				cb.equal(staffIdentifiers.get(IDENTIFICATION_SYSTEM_CODE), SYSTEM_CODE_DISTRICT),
-				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 			)
 		);
 
@@ -143,7 +143,7 @@ public class XStaffDAOImp extends BaseDAO implements XStaffDAO {
 				schoolYearEquals,
 				cb.equal(staffIdentifiers.get(ID_KEY), stateId),
 				cb.equal(staffIdentifiers.get(IDENTIFICATION_SYSTEM_CODE), SYSTEM_CODE_STATE),
-				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 			)
 		);
 
@@ -184,7 +184,7 @@ public class XStaffDAOImp extends BaseDAO implements XStaffDAO {
 		select.where(
 			cb.and(
 				schoolYearEquals,
-				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 			)
 		);
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
@@ -231,7 +231,7 @@ public class XStaffDAOImp extends BaseDAO implements XStaffDAO {
 			cb.and(
 				schoolYearEquals,
 				cb.equal(lea.get("leaRefId"), refId),
-				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 			)
 		);
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
@@ -278,7 +278,7 @@ public class XStaffDAOImp extends BaseDAO implements XStaffDAO {
 			cb.and(
 				schoolYearEquals,
 				cb.equal(school.get("schoolRefId"), refId),
-				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 			)
 		);
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
@@ -328,7 +328,7 @@ public class XStaffDAOImp extends BaseDAO implements XStaffDAO {
 			cb.and(
 				schoolYearEquals,
 				cb.equal(course.get("courseRefId"), refId),
-				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 			)
 		);
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
@@ -377,7 +377,7 @@ public class XStaffDAOImp extends BaseDAO implements XStaffDAO {
 			cb.and(
 				schoolYearEquals,
 				cb.equal(courseSection.get("courseSectionRefId"), refId),
-				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 			)
 		);
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
@@ -428,7 +428,7 @@ public class XStaffDAOImp extends BaseDAO implements XStaffDAO {
 			cb.and(
 				schoolYearEquals,
 				cb.equal(student.get("studentRefId"), refId),
-				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 			)
 		);
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
@@ -463,7 +463,7 @@ public class XStaffDAOImp extends BaseDAO implements XStaffDAO {
 		select.where(
 			cb.and(
 				cb.equal(from.get(PRIMARY_KEY), refId),
-				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 			)
 		);
 		return em.createQuery(select).getSingleResult();
@@ -486,7 +486,7 @@ public class XStaffDAOImp extends BaseDAO implements XStaffDAO {
 			cb.and(
 				cb.equal(staffIdentifiers.get(ID_KEY), localId),
 				cb.equal(staffIdentifiers.get(IDENTIFICATION_SYSTEM_CODE), SYSTEM_CODE_DISTRICT),
-				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 			)
 		);
 		return em.createQuery(select).getSingleResult();
@@ -509,7 +509,7 @@ public class XStaffDAOImp extends BaseDAO implements XStaffDAO {
 			cb.and(
 				cb.equal(staffIdentifiers.get(ID_KEY), stateId),
 				cb.equal(staffIdentifiers.get(IDENTIFICATION_SYSTEM_CODE), SYSTEM_CODE_STATE),
-				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 			)
 		);
 		return em.createQuery(select).getSingleResult();
@@ -528,7 +528,7 @@ public class XStaffDAOImp extends BaseDAO implements XStaffDAO {
 
 		select.distinct(true);
 		select.select(cb.greatest(from.<Integer>get(SCHOOL_YEAR_KEY)));
-		select.where(lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()));
+		select.where(lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds()));
 
 		return em.createQuery(select).getSingleResult();
 	}
@@ -549,7 +549,7 @@ public class XStaffDAOImp extends BaseDAO implements XStaffDAO {
 		select.where(
 			cb.and(
 				cb.equal(lea.get("leaRefId"), refId),
-				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 			)
 		);
 		return em.createQuery(select).getSingleResult();
@@ -571,7 +571,7 @@ public class XStaffDAOImp extends BaseDAO implements XStaffDAO {
 		select.where(
 			cb.and(
 				cb.equal(school.get("schoolRefId"), refId),
-				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 			)
 		);
 		return em.createQuery(select).getSingleResult();
@@ -596,7 +596,7 @@ public class XStaffDAOImp extends BaseDAO implements XStaffDAO {
 		select.where(
 			cb.and(
 				cb.equal(course.get("courseRefId"), refId),
-				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 			)
 		);
 		return em.createQuery(select).getSingleResult();
@@ -620,7 +620,7 @@ public class XStaffDAOImp extends BaseDAO implements XStaffDAO {
 		select.where(
 			cb.and(
 				cb.equal(courseSection.get("courseSectionRefId"), refId),
-				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 			)
 		);
 		return em.createQuery(select).getSingleResult();
@@ -646,7 +646,7 @@ public class XStaffDAOImp extends BaseDAO implements XStaffDAO {
 		select.where(
 			cb.and(
 				cb.equal(student.get("studentRefId"), refId), 
-				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 			)
 		);
 		return em.createQuery(select).getSingleResult();
@@ -676,7 +676,7 @@ public class XStaffDAOImp extends BaseDAO implements XStaffDAO {
 		select.where(
 			cb.and(
 				schoolYearEquals,
-				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 			)
 		);
 		return em.createQuery(select).getSingleResult().intValue();
@@ -707,7 +707,7 @@ public class XStaffDAOImp extends BaseDAO implements XStaffDAO {
 			cb.and(
 				schoolYearEquals,
 				cb.equal(lea.get("leaRefId"), refId),
-				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 			)
 		);
 		return em.createQuery(select).getSingleResult().intValue();
@@ -738,7 +738,7 @@ public class XStaffDAOImp extends BaseDAO implements XStaffDAO {
 			cb.and(
 				schoolYearEquals,
 				cb.equal(school.get("schoolRefId"), refId),
-				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 			)
 		);
 		return em.createQuery(select).getSingleResult().intValue();
@@ -772,7 +772,7 @@ public class XStaffDAOImp extends BaseDAO implements XStaffDAO {
 			cb.and(
 				schoolYearEquals,
 				cb.equal(course.get("courseRefId"), refId),
-				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 			)
 		);
 		return em.createQuery(select).getSingleResult().intValue();
@@ -805,7 +805,7 @@ public class XStaffDAOImp extends BaseDAO implements XStaffDAO {
 			cb.and(
 				schoolYearEquals,
 				cb.equal(courseSection.get("courseSectionRefId"), refId),
-				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 			)
 		);
 		return em.createQuery(select).getSingleResult().intValue();
@@ -840,7 +840,7 @@ public class XStaffDAOImp extends BaseDAO implements XStaffDAO {
 			cb.and(
 				schoolYearEquals,
 				cb.equal(student.get("studentRefId"), refId),
-				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 			)
 		);
 		return em.createQuery(select).getSingleResult().intValue();

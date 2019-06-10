@@ -1,5 +1,7 @@
 package org.ricone.init;
 
+import com.github.benmanes.caffeine.cache.AsyncCache;
+import com.github.benmanes.caffeine.cache.AsyncLoadingCache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -15,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 @EnableCaching
 public class CacheConfig {
    private final Logger logger = LogManager.getLogger(this.getClass());
-   final static String CACHE_CONFIG = "configCache";
+   final static String CACHE_TOKEN = "tokenCache";
    final static String CACHE_APP = "appCache";
    final static String CACHE_ACL = "dataXMLCache";
    final static String CACHE_DISTRICT = "districtCache";
@@ -25,8 +27,8 @@ public class CacheConfig {
    final static String CACHE_FILTER = "filterCache";
 
    @Bean
-   public Cache configCache() {
-      return new CaffeineCache(CACHE_CONFIG, Caffeine.newBuilder()
+   public Cache tokenCache() {
+      return new CaffeineCache(CACHE_TOKEN, Caffeine.newBuilder()
               .expireAfterWrite(10, TimeUnit.DAYS)
               .build());
    }
@@ -34,7 +36,7 @@ public class CacheConfig {
    @Bean
    public Cache appCache() {
       return new CaffeineCache(CACHE_APP, Caffeine.newBuilder()
-            .expireAfterWrite(20, TimeUnit.MINUTES)
+            .expireAfterWrite(10, TimeUnit.MINUTES)
             .build());
    }
 
@@ -48,35 +50,35 @@ public class CacheConfig {
    @Bean
    public Cache districtCache() {
       return new CaffeineCache(CACHE_DISTRICT, Caffeine.newBuilder()
-              .expireAfterWrite(15, TimeUnit.MINUTES)
+              .expireAfterWrite(10, TimeUnit.MINUTES)
               .build());
    }
 
    @Bean
    public Cache districtKVCache() {
       return new CaffeineCache(CACHE_DISTRICT_KV, Caffeine.newBuilder()
-              .expireAfterWrite(15, TimeUnit.MINUTES)
+              .expireAfterWrite(10, TimeUnit.MINUTES)
               .build());
    }
 
    @Bean
    public Cache schoolCache() {
       return new CaffeineCache(CACHE_SCHOOL, Caffeine.newBuilder()
-              .expireAfterWrite(15, TimeUnit.MINUTES)
+              .expireAfterWrite(10, TimeUnit.MINUTES)
               .build());
    }
 
    @Bean
    public Cache schoolKVCache() {
       return new CaffeineCache(CACHE_SCHOOL_KV, Caffeine.newBuilder()
-              .expireAfterWrite(15, TimeUnit.MINUTES)
+              .expireAfterWrite(10, TimeUnit.MINUTES)
               .build());
    }
 
    @Bean
    public Cache filterCache() {
       return new CaffeineCache(CACHE_FILTER, Caffeine.newBuilder()
-              .expireAfterWrite(20, TimeUnit.MINUTES)
+              .expireAfterWrite(10, TimeUnit.MINUTES)
               .build());
    }
 }

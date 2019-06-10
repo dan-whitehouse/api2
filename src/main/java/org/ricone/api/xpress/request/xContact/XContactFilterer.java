@@ -5,20 +5,24 @@ import org.ricone.api.xpress.component.ControllerData;
 import org.ricone.api.xpress.model.*;
 import org.ricone.config.cache.FilterCache;
 import org.ricone.config.model.XContactFilter;
+import org.ricone.init.CacheService;
 import org.springframework.stereotype.Component;
 
 import java.util.Iterator;
 
 @Component("XPress:XContacts:XContactFilterer")
 public class XContactFilterer {
-    public XContactFilterer() {
+    private final CacheService cacheService;
+
+    public XContactFilterer(CacheService cacheService) {
+        this.cacheService = cacheService;
     }
 
-    XContactsResponse apply(XContactsResponse response, ControllerData metaData) {
+    XContactsResponse apply(XContactsResponse response, ControllerData metadata) {
         Iterator<XContact> iterator = response.getXContacts().getXContact().iterator();
         while (iterator.hasNext()) {
             XContact i = iterator.next();
-            i = filter(i, FilterCache.getInstance().getXContactFilter(i.getDistrictId(), metaData.getApplication().getApp()));
+            i = filter(i, cacheService.getXContactFilter(i.getDistrictId(), metadata.getApplication().getApp().getId()));
 
             // Remove object from list if empty
             if (i.isEmptyObject()) {
@@ -31,8 +35,8 @@ public class XContactFilterer {
         return response;
     }
 
-    XContactResponse apply(XContactResponse response, ControllerData metaData) {
-        response.setXContact(filter(response.getXContact(), FilterCache.getInstance().getXContactFilter(response.getXContact().getDistrictId(), metaData.getApplication().getApp())));
+    XContactResponse apply(XContactResponse response, ControllerData metadata) {
+        response.setXContact(filter(response.getXContact(), cacheService.getXContactFilter(response.getXContact().getDistrictId(), metadata.getApplication().getApp().getId())));
         if (response.getXContact().isEmptyObject()) {
             return null;
         }

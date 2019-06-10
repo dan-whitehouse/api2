@@ -11,9 +11,9 @@ import org.ricone.api.xpress.component.aupp.UsernamePasswordDAO;
 import org.ricone.api.xpress.component.error.exception.ForbiddenException;
 import org.ricone.api.xpress.model.AppProvisioningInfo;
 import org.ricone.api.xpress.model.XStudent;
+import org.ricone.api.xpress.model.XStudents;
 import org.ricone.api.xpress.model.XStudentsResponse;
 import org.ricone.error.NoContentException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -36,13 +36,13 @@ public class XStudentUsernamePasswordMapper {
     }
 
     public XStudentsResponse convert(List<StudentWrapper> instance, ControllerData metadata, String schoolRefId) throws Exception {
-        // Needed to populate App Leas so metaData.getApp().getDistrictKVsBySchool isn't empty
+        // Needed to populate App Leas so metaData.getApp().getDistrictKVsBySchoolRefId isn't empty
         dao.initAppLeas(metadata, schoolRefId);
 
         //Grab The Correct KV Map (Could be for a District or School
         HashMap<String, String> kvMap = getKVs(metadata, schoolRefId);
 
-        XStudentsResponse response = new XStudentsResponse();
+        XStudentsResponse response = new XStudentsResponse(new XStudents());
         for (StudentWrapper wrapper : instance) {
             XStudent xStudent = map(metadata, kvMap, wrapper.getStudent());
             if (xStudent != null) {
@@ -72,9 +72,9 @@ public class XStudentUsernamePasswordMapper {
     }
 
     private HashMap<String, String> getKVs(ControllerData metadata, String refId) throws ForbiddenException {
-        HashMap<String, String> kvMap = metadata.getApplication().getApp().getSchoolKVsBySchool(refId);
+        HashMap<String, String> kvMap = metadata.getApplication().getSchoolKVsBySchoolRefId(refId);
         if(MapUtils.isEmpty(kvMap)) {
-            kvMap = metadata.getApplication().getApp().getDistrictKVsBySchool(refId);
+            kvMap = metadata.getApplication().getDistrictKVsBySchoolRefId(refId);
         }
 
         if(MapUtils.isEmpty(kvMap)) {

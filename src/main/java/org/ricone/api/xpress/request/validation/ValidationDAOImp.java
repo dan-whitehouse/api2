@@ -36,7 +36,7 @@ public class ValidationDAOImp extends BaseDAO implements ValidationDAO {
 			cb.and(
 				cb.equal(from.get(STUDENT_SCHOOL_YEAR), metadata.getSchoolYear()),
 				cb.equal(lea.get(LEA_REF_ID), leaRefId),
-				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 			)
 		);
 
@@ -61,7 +61,7 @@ public class ValidationDAOImp extends BaseDAO implements ValidationDAO {
 				cb.equal(from.get(STUDENT_EMAIL_SCHOOL_YEAR), metadata.getSchoolYear()),
 				cb.equal(from.get("primaryEmailAddressIndicator"), true),
 				cb.equal(lea.get(LEA_REF_ID), leaRefId),
-				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 			)
 		);
 
@@ -86,7 +86,7 @@ public class ValidationDAOImp extends BaseDAO implements ValidationDAO {
 				cb.equal(from.get(STUDENT_ID_SCHOOL_YEAR), metadata.getSchoolYear()),
 				cb.equal(from.get("identificationSystemCode"), "District"),
 				cb.equal(lea.get(LEA_REF_ID), leaRefId),
-				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 			)
 		);
 
@@ -110,7 +110,7 @@ public class ValidationDAOImp extends BaseDAO implements ValidationDAO {
 			cb.and(
 				cb.equal(from.get(STAFF_SCHOOL_YEAR), metadata.getSchoolYear()),
 				cb.equal(lea.get(LEA_REF_ID), leaRefId),
-				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 			)
 		);
 
@@ -134,7 +134,7 @@ public class ValidationDAOImp extends BaseDAO implements ValidationDAO {
 				cb.equal(from.get(STAFF_EMAIL_SCHOOL_YEAR), metadata.getSchoolYear()),
 				cb.equal(from.get("primaryEmailAddressIndicator"), true),
 				cb.equal(lea.get(LEA_REF_ID), leaRefId),
-				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 			)
 		);
 
@@ -158,7 +158,7 @@ public class ValidationDAOImp extends BaseDAO implements ValidationDAO {
 				cb.equal(from.get(STAFF_ID_SCHOOL_YEAR), metadata.getSchoolYear()),
 				cb.equal(from.get("identificationSystemCode"), "District"),
 				cb.equal(lea.get(LEA_REF_ID), leaRefId),
-				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 			)
 		);
 
@@ -180,7 +180,7 @@ public class ValidationDAOImp extends BaseDAO implements ValidationDAO {
 				cb.equal(from.get(STUDENT_ENROLLMENT_SCHOOL_YEAR), metadata.getSchoolYear()),
 				cb.equal(from.get("membershipTypeCode"), "Home"),
 				cb.equal(school.get(SCHOOL_REF_ID), schoolRefId),
-				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 			)
 		);
 
@@ -202,7 +202,7 @@ public class ValidationDAOImp extends BaseDAO implements ValidationDAO {
 				cb.equal(from.get(STUDENT_ENROLLMENT_SCHOOL_YEAR), metadata.getSchoolYear()),
 				cb.notEqual(from.get("membershipTypeCode"), "Home"),
 				cb.equal(school.get(SCHOOL_REF_ID), schoolRefId),
-				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 			)
 		);
 
@@ -224,7 +224,7 @@ public class ValidationDAOImp extends BaseDAO implements ValidationDAO {
 				cb.equal(from.get(STAFF_ASSIGNMENT_SCHOOL_YEAR), metadata.getSchoolYear()),
 				cb.equal(from.get("primaryAssignment"), true),
 				cb.equal(school.get(SCHOOL_REF_ID), schoolRefId),
-				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 			)
 		);
 
@@ -246,7 +246,7 @@ public class ValidationDAOImp extends BaseDAO implements ValidationDAO {
 				cb.equal(from.get(STAFF_ASSIGNMENT_SCHOOL_YEAR), metadata.getSchoolYear()),
 				cb.notEqual(from.get("primaryAssignment"), true),
 				cb.equal(school.get(SCHOOL_REF_ID), schoolRefId),
-				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 			)
 		);
 
@@ -269,7 +269,7 @@ public class ValidationDAOImp extends BaseDAO implements ValidationDAO {
 			cb.and(
 				cb.equal(from.get(COURSE_SCHOOL_YEAR), metadata.getSchoolYear()),
 				cb.equal(school.get(SCHOOL_REF_ID), schoolRefId),
-				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 			)
 		);
 
@@ -291,7 +291,7 @@ public class ValidationDAOImp extends BaseDAO implements ValidationDAO {
 			cb.and(
 				cb.equal(from.get(COURSE_SECTION_SCHOOL_YEAR), metadata.getSchoolYear()),
 				cb.equal(school.get(SCHOOL_REF_ID), schoolRefId),
-				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 			)
 		);
 

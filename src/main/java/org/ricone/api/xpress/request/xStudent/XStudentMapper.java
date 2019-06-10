@@ -335,8 +335,12 @@ public class XStudentMapper extends BaseMapper {
 
     private StudentContacts mapStudentContacts(Set<StudentContactRelationship> relationships) {
         StudentContacts studentContacts = new StudentContacts();
+
         for (StudentContactRelationship relationship : relationships) {
-            studentContacts.getContactPersonRefId().add(relationship.getStudentContact().getStudentContactRefId());
+            //Added @NotFound(action = NotFoundAction.IGNORE) to StudentContactRelationship model. Now requires checking if null.
+            if(relationship.getStudentContact() != null) {
+                studentContacts.getContactPersonRefId().add(relationship.getStudentContact().getStudentContactRefId());
+            }
         }
 
         if(studentContacts.isEmptyObject()) {

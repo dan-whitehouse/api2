@@ -5,6 +5,7 @@ import org.ricone.api.xpress.component.ControllerData;
 import org.ricone.api.xpress.model.*;
 import org.ricone.config.cache.FilterCache;
 import org.ricone.config.model.XSchoolFilter;
+import org.ricone.init.CacheService;
 import org.springframework.stereotype.Component;
 
 
@@ -12,14 +13,17 @@ import java.util.Iterator;
 
 @Component("XPress:XSchools:XSchoolFilterer")
 public class XSchoolFilterer {
-    public XSchoolFilterer() {
+    private final CacheService cacheService;
+
+    public XSchoolFilterer(CacheService cacheService) {
+        this.cacheService = cacheService;
     }
 
-    XSchoolsResponse apply(XSchoolsResponse response, ControllerData metaData) {
+    XSchoolsResponse apply(XSchoolsResponse response, ControllerData metadata) {
         Iterator<XSchool> iterator = response.getXSchools().getXSchool().iterator();
         while (iterator.hasNext()) {
             XSchool i = iterator.next();
-            i = filter(i, FilterCache.getInstance().getXSchoolFilter(i.getDistrictId(), metaData.getApplication().getApp()));
+            i = filter(i, cacheService.getXSchoolFilter(i.getDistrictId(), metadata.getApplication().getApp().getId()));
 
             // Remove object from list if empty
             if (i.isEmptyObject()) {
@@ -32,8 +36,8 @@ public class XSchoolFilterer {
         return response;
     }
 
-    XSchoolResponse apply(XSchoolResponse response, ControllerData metaData) {
-        response.setXSchool(filter(response.getXSchool(), FilterCache.getInstance().getXSchoolFilter(response.getXSchool().getDistrictId(), metaData.getApplication().getApp())));
+    XSchoolResponse apply(XSchoolResponse response, ControllerData metadata) {
+        response.setXSchool(filter(response.getXSchool(), cacheService.getXSchoolFilter(response.getXSchool().getDistrictId(), metadata.getApplication().getApp().getId())));
         if (response.getXSchool().isEmptyObject()) {
             return null;
         }

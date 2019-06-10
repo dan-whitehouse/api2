@@ -35,7 +35,7 @@ public class FilterService extends AbstractService {
             return response.getBody();
         }
         catch (Exception e) {
-            logger.debug("Loading Default XLeaFilter, " + districtId + SEPARATOR + appId + SEPARATOR + "XLea failed to load from Config");
+            //logger.debug("Loading Default XLeaFilter, " + districtId + SEPARATOR + appId + SEPARATOR + "XLea failed to load from Config");
             return new XLeaFilter();
         }
     }
@@ -46,7 +46,7 @@ public class FilterService extends AbstractService {
             return response.getBody();
         }
         catch (Exception e) {
-            logger.debug("Loading Default XSchoolFilter, " + districtId + SEPARATOR + appId + SEPARATOR + "XSchool failed to load from Config");
+            //logger.debug("Loading Default XSchoolFilter, " + districtId + SEPARATOR + appId + SEPARATOR + "XSchool failed to load from Config");
             return new XSchoolFilter();
         }
     }
@@ -57,7 +57,7 @@ public class FilterService extends AbstractService {
             return response.getBody();
         }
         catch (Exception e) {
-            logger.debug("Loading Default XCalendarFilter, " + districtId + SEPARATOR + appId + SEPARATOR + "XCalendar failed to load from Config");
+            //logger.debug("Loading Default XCalendarFilter, " + districtId + SEPARATOR + appId + SEPARATOR + "XCalendar failed to load from Config");
             return new XCalendarFilter();
         }
     }
@@ -68,7 +68,7 @@ public class FilterService extends AbstractService {
             return response.getBody();
         }
         catch (Exception e) {
-            logger.debug("Loading Default XCourseFilter, " + districtId + SEPARATOR + appId + SEPARATOR + "XCourse failed to load from Config");
+            //logger.debug("Loading Default XCourseFilter, " + districtId + SEPARATOR + appId + SEPARATOR + "XCourse failed to load from Config");
             return new XCourseFilter();
         }
     }
@@ -79,7 +79,7 @@ public class FilterService extends AbstractService {
             return response.getBody();
         }
         catch (Exception e) {
-            logger.debug("Loading Default XRosterFilter, " + districtId + SEPARATOR + appId + SEPARATOR + "XRoster failed to load from Config");
+            //logger.debug("Loading Default XRosterFilter, " + districtId + SEPARATOR + appId + SEPARATOR + "XRoster failed to load from Config");
             return new XRosterFilter();
         }
     }
@@ -90,7 +90,7 @@ public class FilterService extends AbstractService {
             return response.getBody();
         }
         catch (Exception e) {
-            logger.debug("Loading Default XStaffFilter, " + districtId + SEPARATOR + appId + SEPARATOR + "XStaff failed to load from Config");
+            //logger.debug("Loading Default XStaffFilter, " + districtId + SEPARATOR + appId + SEPARATOR + "XStaff failed to load from Config");
             return new XStaffFilter();
         }
     }
@@ -101,7 +101,7 @@ public class FilterService extends AbstractService {
             return response.getBody();
         }
         catch (Exception e) {
-            logger.debug("Loading Default XStudentFilter, " + districtId + SEPARATOR + appId + SEPARATOR + "XStudent failed to load from Config");
+            //logger.debug("Loading Default XStudentFilter, " + districtId + SEPARATOR + appId + SEPARATOR + "XStudent failed to load from Config");
             return new XStudentFilter();
         }
     }
@@ -112,7 +112,7 @@ public class FilterService extends AbstractService {
             return response.getBody();
         }
         catch (Exception e) {
-            logger.debug("Loading Default XContactFilter, " + districtId + SEPARATOR + appId + SEPARATOR + "XContact failed to load from Config");
+            //logger.debug("Loading Default XContactFilter, " + districtId + SEPARATOR + appId + SEPARATOR + "XContact failed to load from Config");
             return new XContactFilter();
         }
     }

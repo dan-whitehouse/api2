@@ -5,20 +5,24 @@ import org.ricone.api.xpress.component.ControllerData;
 import org.ricone.api.xpress.model.*;
 import org.ricone.config.cache.FilterCache;
 import org.ricone.config.model.XRosterFilter;
+import org.ricone.init.CacheService;
 import org.springframework.stereotype.Component;
 
 import java.util.Iterator;
 
 @Component("XPress:XRosters:XRosterFilterer")
 public class XRosterFilterer {
-    public XRosterFilterer() {
+    private final CacheService cacheService;
+
+    public XRosterFilterer(CacheService cacheService) {
+        this.cacheService = cacheService;
     }
 
-    XRostersResponse apply(XRostersResponse response, ControllerData metaData) {
+    XRostersResponse apply(XRostersResponse response, ControllerData metadata) {
         Iterator<XRoster> iterator = response.getXRosters().getXRoster().iterator();
         while (iterator.hasNext()) {
             XRoster i = iterator.next();
-            i = filter(i, FilterCache.getInstance().getXRosterFilter(i.getDistrictId(), metaData.getApplication().getApp()));
+            i = filter(i, cacheService.getXRosterFilter(i.getDistrictId(), metadata.getApplication().getApp().getId()));
 
             // Remove object from list if empty
             if (i.isEmptyObject()) {
@@ -31,8 +35,8 @@ public class XRosterFilterer {
         return response;
     }
 
-    XRosterResponse apply(XRosterResponse response, ControllerData metaData) {
-        response.setXRoster(filter(response.getXRoster(), FilterCache.getInstance().getXRosterFilter(response.getXRoster().getDistrictId(), metaData.getApplication().getApp())));
+    XRosterResponse apply(XRosterResponse response, ControllerData metadata) {
+        response.setXRoster(filter(response.getXRoster(), cacheService.getXRosterFilter(response.getXRoster().getDistrictId(), metadata.getApplication().getApp().getId())));
         if (response.getXRoster().isEmptyObject()) {
             return null;
         }

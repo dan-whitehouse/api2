@@ -49,7 +49,7 @@ public class XLeaDAOImp extends BaseDAO implements XLeaDAO {
 			cb.and(
 				schoolYearEquals,
 				cb.equal(from.get(PRIMARY_KEY), refId),
-				from.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+				from.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 			)
 		);
 
@@ -87,7 +87,7 @@ public class XLeaDAOImp extends BaseDAO implements XLeaDAO {
 			cb.and(
 				schoolYearEquals,
 				cb.equal(from.get(getIdTypeValue(idType)), id),
-				from.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+				from.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 			)
 		);
 
@@ -103,43 +103,49 @@ public class XLeaDAOImp extends BaseDAO implements XLeaDAO {
 
 	@Override
 	public List<LeaWrapper> findAll(ControllerData metadata) {
-		final CriteriaBuilder cb = em.getCriteriaBuilder();
-		final CriteriaQuery<LeaWrapper> select = cb.createQuery(LeaWrapper.class);
-		final Root<Lea> from = select.from(Lea.class);
-		final SetJoin<Lea, LeaTelephone> leaTelephones = (SetJoin<Lea, LeaTelephone>) from.<Lea, LeaTelephone>join(JOIN_LEA_TELEPHONES, JoinType.LEFT);
+		try {
+			final CriteriaBuilder cb = em.getCriteriaBuilder();
+			final CriteriaQuery<LeaWrapper> select = cb.createQuery(LeaWrapper.class);
+			final Root<Lea> from = select.from(Lea.class);
+			final SetJoin<Lea, LeaTelephone> leaTelephones = (SetJoin<Lea, LeaTelephone>) from.<Lea, LeaTelephone>join(JOIN_LEA_TELEPHONES, JoinType.LEFT);
 
-		Predicate schoolYearEquals;
-		if(metadata.hasSchoolYear()) {
-			schoolYearEquals = cb.equal(from.get(SCHOOL_YEAR_KEY), metadata.getSchoolYear());
-			metadata.getResponse().addHeader(ControllerData.SCHOOL_YEAR_KEY, metadata.getSchoolYear());
+			Predicate schoolYearEquals;
+			if(metadata.hasSchoolYear()) {
+				schoolYearEquals = cb.equal(from.get(SCHOOL_YEAR_KEY), metadata.getSchoolYear());
+				metadata.getResponse().addHeader(ControllerData.SCHOOL_YEAR_KEY, metadata.getSchoolYear());
+			}
+			else {
+				Integer schoolYear = greatestSchoolYearAll(metadata);
+				schoolYearEquals = cb.equal(from.get(SCHOOL_YEAR_KEY), schoolYear);
+				metadata.getResponse().addHeader(ControllerData.SCHOOL_YEAR_KEY, String.valueOf(schoolYear));
+			}
+
+			select.distinct(true);
+			select.select(cb.construct(LeaWrapper.class, from.get(LOCAL_ID_KEY), from));
+			select.where(
+					cb.and(
+							schoolYearEquals,
+							from.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
+					)
+			);
+			select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
+
+			Query q = em.createQuery(select);
+			if(metadata.getPaging().isPaged()) {
+				q.setFirstResult((metadata.getPaging().getPageNumber() - 1) * metadata.getPaging().getPageSize());
+				q.setMaxResults(metadata.getPaging().getPageSize());
+
+				//Set ControllerData Paging Total Objects - Headers will no be included
+				metadata.getPaging().setTotalObjects(countAll(metadata));
+			}
+			List<LeaWrapper> instance = q.getResultList();
+			initialize(instance);
+			return instance;
 		}
-		else {
-			Integer schoolYear = greatestSchoolYearAll(metadata);
-			schoolYearEquals = cb.equal(from.get(SCHOOL_YEAR_KEY), schoolYear);
-			metadata.getResponse().addHeader(ControllerData.SCHOOL_YEAR_KEY, String.valueOf(schoolYear));
+		catch(Exception e) {
+			e.printStackTrace();
 		}
-
-		select.distinct(true);
-		select.select(cb.construct(LeaWrapper.class, from.get(LOCAL_ID_KEY), from));
-		select.where(
-				cb.and(
-						schoolYearEquals,
-						from.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
-				)
-		);
-		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
-
-		Query q = em.createQuery(select);
-		if(metadata.getPaging().isPaged()) {
-			q.setFirstResult((metadata.getPaging().getPageNumber() - 1) * metadata.getPaging().getPageSize());
-			q.setMaxResults(metadata.getPaging().getPageSize());
-
-			//Set ControllerData Paging Total Objects - Headers will no be included
-			metadata.getPaging().setTotalObjects(countAll(metadata));
-		}
-		List<LeaWrapper> instance = q.getResultList();
-		initialize(instance);
-		return instance;
+		return null;
 	}
 
 	@Override
@@ -167,7 +173,7 @@ public class XLeaDAOImp extends BaseDAO implements XLeaDAO {
 				cb.and(
 						schoolYearEquals,
 						cb.equal(schools.get("schoolRefId"), refId),
-						from.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+						from.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 				)
 		);
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
@@ -212,7 +218,7 @@ public class XLeaDAOImp extends BaseDAO implements XLeaDAO {
 				cb.and(
 						schoolYearEquals,
 						cb.equal(schoolCalendars.get("schoolCalendarRefId"), refId),
-						from.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+						from.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 				)
 		);
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
@@ -257,7 +263,7 @@ public class XLeaDAOImp extends BaseDAO implements XLeaDAO {
 				cb.and(
 						schoolYearEquals,
 						cb.equal(courses.get("courseRefId"), refId),
-						from.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+						from.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 				)
 		);
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
@@ -303,7 +309,7 @@ public class XLeaDAOImp extends BaseDAO implements XLeaDAO {
 				cb.and(
 						schoolYearEquals,
 						cb.equal(courseSections.get("courseSectionRefId"), refId),
-						from.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+						from.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 				)
 		);
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
@@ -349,7 +355,7 @@ public class XLeaDAOImp extends BaseDAO implements XLeaDAO {
 				cb.and(
 						schoolYearEquals,
 						cb.equal(staff.get("staffRefId"), refId),
-						from.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+						from.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 				)
 		);
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
@@ -395,7 +401,7 @@ public class XLeaDAOImp extends BaseDAO implements XLeaDAO {
 				cb.and(
 						schoolYearEquals,
 						cb.equal(student.get("studentRefId"), refId),
-						from.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+						from.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 				)
 		);
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
@@ -443,7 +449,7 @@ public class XLeaDAOImp extends BaseDAO implements XLeaDAO {
 				cb.and(
 						schoolYearEquals,
 						cb.equal(contact.get("studentContactRefId"), refId),
-						from.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+						from.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 				)
 		);
 		select.orderBy(cb.asc(from.get(PRIMARY_KEY)));
@@ -474,14 +480,14 @@ public class XLeaDAOImp extends BaseDAO implements XLeaDAO {
 		select.where(
 			cb.and(
 				cb.equal(from.get(PRIMARY_KEY), refId),
-				from.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+				from.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 			)
 		);
 		return em.createQuery(select).getSingleResult();
 	}
 
 	@Override
-	public Integer greatestSchoolYearById(ControllerData metaData, String id, String idType) {
+	public Integer greatestSchoolYearById(ControllerData metadata, String id, String idType) {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<Integer> select = cb.createQuery(Integer.class);
 		final Root<Lea> from = select.from(Lea.class);
@@ -492,14 +498,14 @@ public class XLeaDAOImp extends BaseDAO implements XLeaDAO {
 		select.where(
 			cb.and(
 				cb.equal(from.get(getIdTypeValue(idType)), id),
-				from.get(ControllerData.LEA_LOCAL_ID).in(metaData.getApplication().getApp().getDistrictLocalIds())
+				from.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 			)
 		);
 		return em.createQuery(select).getSingleResult();
 	}
 
 	@Override
-	public Integer greatestSchoolYearAll(ControllerData metaData) {
+	public Integer greatestSchoolYearAll(ControllerData metadata) {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<Integer> select = cb.createQuery(Integer.class);
 		final Root<Lea> from = select.from(Lea.class);
@@ -507,7 +513,7 @@ public class XLeaDAOImp extends BaseDAO implements XLeaDAO {
 
 		select.distinct(true);
 		select.select(cb.greatest(from.<Integer>get(SCHOOL_YEAR_KEY)));
-		select.where(from.get(ControllerData.LEA_LOCAL_ID).in(metaData.getApplication().getApp().getDistrictLocalIds()));
+		select.where(from.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds()));
 		return em.createQuery(select).getSingleResult();
 	}
 
@@ -524,7 +530,7 @@ public class XLeaDAOImp extends BaseDAO implements XLeaDAO {
 		select.where(
 			cb.and(
 				cb.equal(schools.get("schoolRefId"), refId),
-				from.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+				from.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 			)
 		);
 		return em.createQuery(select).getSingleResult();
@@ -544,7 +550,7 @@ public class XLeaDAOImp extends BaseDAO implements XLeaDAO {
 		select.where(
 			cb.and(
 				cb.equal(schoolCalendars.get("schoolCalendarRefId"), refId),
-				from.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+				from.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 			)
 		);
 		return em.createQuery(select).getSingleResult();
@@ -564,7 +570,7 @@ public class XLeaDAOImp extends BaseDAO implements XLeaDAO {
 		select.where(
 			cb.and(
 				cb.equal(courses.get("courseRefId"), refId),
-				from.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+				from.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 			)
 		);
 		return em.createQuery(select).getSingleResult();
@@ -585,7 +591,7 @@ public class XLeaDAOImp extends BaseDAO implements XLeaDAO {
 		select.where(
 			cb.and(
 				cb.equal(courseSections.get("courseSectionRefId"), refId),
-				from.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+				from.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 			)
 		);
 		return em.createQuery(select).getSingleResult();
@@ -606,7 +612,7 @@ public class XLeaDAOImp extends BaseDAO implements XLeaDAO {
 		select.where(
 			cb.and(
 				cb.equal(staff.get("staffRefId"), refId),
-				from.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+				from.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 			)
 		);
 
@@ -628,7 +634,7 @@ public class XLeaDAOImp extends BaseDAO implements XLeaDAO {
 		select.where(
 			cb.and(
 				cb.equal(student.get("studentRefId"), refId),
-				from.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+				from.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 			)
 		);
 		return em.createQuery(select).getSingleResult();
@@ -651,14 +657,14 @@ public class XLeaDAOImp extends BaseDAO implements XLeaDAO {
 		select.where(
 			cb.and(
 				cb.equal(contact.get("studentContactRefId"), refId),
-				from.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+				from.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 			)
 		);
 		return em.createQuery(select).getSingleResult();
 	}
 
 	@Override
-	public int countAll(ControllerData metaData) {
+	public int countAll(ControllerData metadata) {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<Long> select = cb.createQuery(Long.class);
 		final Root<Lea> from = select.from(Lea.class);
@@ -666,11 +672,11 @@ public class XLeaDAOImp extends BaseDAO implements XLeaDAO {
 		final SetJoin<Lea, School> schools = (SetJoin<Lea, School>) from.<Lea, School>join(JOIN_SCHOOLS, JoinType.LEFT);
 
 		Predicate schoolYearEquals;
-		if(metaData.hasSchoolYear()) {
-			schoolYearEquals = cb.equal(from.get(SCHOOL_YEAR_KEY), metaData.getSchoolYear());
+		if(metadata.hasSchoolYear()) {
+			schoolYearEquals = cb.equal(from.get(SCHOOL_YEAR_KEY), metadata.getSchoolYear());
 		}
 		else {
-			schoolYearEquals = cb.equal(from.get(SCHOOL_YEAR_KEY), greatestSchoolYearAll(metaData));
+			schoolYearEquals = cb.equal(from.get(SCHOOL_YEAR_KEY), greatestSchoolYearAll(metadata));
 		}
 
 		select.distinct(true);
@@ -678,7 +684,7 @@ public class XLeaDAOImp extends BaseDAO implements XLeaDAO {
 		select.where (
 			cb.and (
 				schoolYearEquals,
-				from.get(ControllerData.LEA_LOCAL_ID).in(metaData.getApplication().getApp().getDistrictLocalIds())
+				from.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 			)
 		);
 		return em.createQuery(select).getSingleResult().intValue();
@@ -706,7 +712,7 @@ public class XLeaDAOImp extends BaseDAO implements XLeaDAO {
 			cb.and (
 				schoolYearEquals,
 				cb.equal(schools.get("schoolRefId"), refId),
-				from.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+				from.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 			)
 		);
 		return em.createQuery(select).getSingleResult().intValue();
@@ -735,7 +741,7 @@ public class XLeaDAOImp extends BaseDAO implements XLeaDAO {
 			cb.and (
 				schoolYearEquals,
 				cb.equal(schoolCalendars.get("schoolCalendarRefId"), refId),
-				from.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+				from.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 			)
 		);
 		return em.createQuery(select).getSingleResult().intValue();
@@ -764,7 +770,7 @@ public class XLeaDAOImp extends BaseDAO implements XLeaDAO {
 			cb.and (
 				schoolYearEquals,
 				cb.equal(courses.get("courseRefId"), refId),
-				from.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+				from.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 			)
 		);
 		return em.createQuery(select).getSingleResult().intValue();
@@ -794,7 +800,7 @@ public class XLeaDAOImp extends BaseDAO implements XLeaDAO {
 			cb.and (
 				schoolYearEquals,
 				cb.equal(courseSections.get("courseSectionRefId"), refId),
-				from.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+				from.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 			)
 		);
 		return em.createQuery(select).getSingleResult().intValue();
@@ -824,7 +830,7 @@ public class XLeaDAOImp extends BaseDAO implements XLeaDAO {
 			cb.and (
 				schoolYearEquals,
 				cb.equal(staff.get("staffRefId"), refId),
-				from.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+				from.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 			)
 		);
 		return em.createQuery(select).getSingleResult().intValue();
@@ -854,7 +860,7 @@ public class XLeaDAOImp extends BaseDAO implements XLeaDAO {
 			cb.and (
 				schoolYearEquals,
 				cb.equal(student.get("studentRefId"), refId),
-				from.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+				from.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 			)
 		);
 		return em.createQuery(select).getSingleResult().intValue();
@@ -886,7 +892,7 @@ public class XLeaDAOImp extends BaseDAO implements XLeaDAO {
 			cb.and (
 				schoolYearEquals,
 				cb.equal(contact.get("studentContactRefId"), refId),
-				from.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+				from.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 			)
 		);
 		return em.createQuery(select).getSingleResult().intValue();

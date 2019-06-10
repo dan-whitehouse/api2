@@ -2,6 +2,8 @@ package org.ricone.api.core.model;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 import org.ricone.api.core.model.composite.StudentContactRelationshipComposite;
 
 import javax.persistence.*;
@@ -21,6 +23,7 @@ public class StudentContactRelationship implements Serializable {
 	@Id private Integer studentContactRelationshipSchoolYear;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
+	@NotFound(action = NotFoundAction.IGNORE)
 	@JoinColumns({
 		@JoinColumn(name="StudentContactRefId", referencedColumnName="studentContactRefId", nullable = false),
 		@JoinColumn(name="StudentContactSchoolYear", referencedColumnName="studentContactSchoolYear", nullable = false)
@@ -28,6 +31,7 @@ public class StudentContactRelationship implements Serializable {
 	private StudentContact studentContact;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
+	@NotFound(action = NotFoundAction.IGNORE)
 	@JoinColumns({
 		@JoinColumn(name="StudentRefId", referencedColumnName="studentRefId", nullable = false),
 		@JoinColumn(name="StudentSchoolYear", referencedColumnName="studentSchoolYear", nullable = false)

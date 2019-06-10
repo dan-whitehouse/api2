@@ -64,22 +64,11 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
             return null;  //Token was blank... 403 Forbidden
         }
 
-        DecodedToken decodedToken = null;
-        try {
-            decodedToken = TokenDecoder.decodeToken(authRequest.getToken());
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
+        DecodedToken decodedToken = TokenDecoder.decodeToken(authRequest.getToken());
 
         Application application = null;
         if(decodedToken != null) {
-
-            App app = AppCache.getInstance().get(decodedToken.getApplication_id());
-            //App app = cacheService.getAppById(decodedToken.getApplication_id());
-            if(app != null) {
-                application = new Application(app, decodedToken);
-            }
+            application = new Application(decodedToken.getApplication_id(), decodedToken.getTokenString(), cacheService);
         }
 
         try {
@@ -87,7 +76,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
                 JWT.require(Algorithm.HMAC256(application.getApp().getProviderSecret().getBytes()))
                         .withIssuer(PropertiesLoader.getInstance().getProperty("security.auth.jwt.issuer"))
                         .build().verify(authRequest.getToken());
-                return new UsernamePasswordAuthenticationToken(application, decodedToken.getTokenString(), getACLs(application.getApp()));
+                return new UsernamePasswordAuthenticationToken(application, decodedToken.getTokenString(), getACLs(application));
             }
         }
         catch (JWTVerificationException exception) {
@@ -99,46 +88,9 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
     }
 
 
-    private Collection<GrantedAuthority> getACLs(App app) {
+    private Collection<GrantedAuthority> getACLs(Application application) {
         Collection<GrantedAuthority> grantedAuthorities = new ArrayList<>();
-
-        //Get ACL Path Permissions
-       /* try {
-            XmlMapper xmlMapper = new XmlMapper();
-            xmlMapper.registerModule(new JaxbAnnotationModule());
-            xmlMapper.registerModule(new JacksonXmlModule());
-
-            DataXML dataXML = cacheService.getDataXMLByAppId(app.getId());
-
-            Environment environment = xmlMapper.readValue(dataXML.getXml().getXml(), Environment.class);
-
-            PathPermissionMapper mapper = new PathPermissionMapper();
-            List<PathPermission> pathPermissions = new ArrayList<>();
-            environment.getProvisionedZones().getProvisionedZone().getServices().getService().forEach(service -> {
-                pathPermissions.add(mapper.map(environment.getDefaultZone().getId(), service));
-            });
-
-            pathPermissions.forEach(pathPermission -> {
-                //app.getPermissions().forEach(pathPermission -> {
-                if(pathPermission.getGet()) {
-                    grantedAuthorities.add(new SimpleGrantedAuthority("get:" + pathPermission.getPath()));
-                }
-                if(pathPermission.getPost()) {
-                    grantedAuthorities.add(new SimpleGrantedAuthority("post:" + pathPermission.getPath()));
-                }
-                if(pathPermission.getPut()) {
-                    grantedAuthorities.add(new SimpleGrantedAuthority("put:" + pathPermission.getPath()));
-                }
-                if(pathPermission.getDelete()) {
-                    grantedAuthorities.add(new SimpleGrantedAuthority("delete:" + pathPermission.getPath()));
-                }
-            });
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }*/
-
-        app.getPermissions().forEach(pathPermission -> {
+        application.getPermissions().forEach(pathPermission -> {
             if(pathPermission.getGet()) {
                 grantedAuthorities.add(new SimpleGrantedAuthority("get:" + pathPermission.getPath()));
             }
@@ -188,6 +140,6 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
         DecodedToken decodedToken = new DecodedToken();
         decodedToken.setTokenString("password");
 
-        return new Application(app, decodedToken);
+        return new Application(decodedToken.getApplication_id(), decodedToken.getTokenString(), cacheService);
     }
 }

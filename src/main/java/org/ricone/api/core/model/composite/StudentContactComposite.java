@@ -10,8 +10,8 @@ import java.io.Serializable;
 public class StudentContactComposite implements Serializable {
     private static final long serialVersionUID = 5432768876720311346L;
 
-    private String studentContactRefId;
-    private Integer studentContactSchoolYear;
+    protected String studentContactRefId;
+    protected Integer studentContactSchoolYear;
 
     public StudentContactComposite() {
 
@@ -25,7 +25,7 @@ public class StudentContactComposite implements Serializable {
     @Override
     public boolean equals(Object o) {
         if(this == o) return true;
-        if(o == null || getClass() != o.getClass()) return false;
+        if(!(o instanceof StudentContactComposite)) return false;
 
         StudentContactComposite that = (StudentContactComposite) o;
 
@@ -39,5 +39,10 @@ public class StudentContactComposite implements Serializable {
         int result = studentContactRefId != null ? studentContactRefId.hashCode() : 0;
         result = 31 * result + (studentContactSchoolYear != null ? studentContactSchoolYear.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "StudentContactComposite{" + "studentContactRefId='" + studentContactRefId + '\'' + ", studentContactSchoolYear=" + studentContactSchoolYear + '}';
     }
 }

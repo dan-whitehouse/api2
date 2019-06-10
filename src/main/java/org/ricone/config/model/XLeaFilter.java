@@ -1,14 +1,12 @@
 package org.ricone.config.model;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.annotation.JsonRootName;
+import com.fasterxml.jackson.annotation.*;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = true)
 @JsonPropertyOrder({"refId", "localId", "leaRefId", "stateProvinceId", "ncesId", "leaName", "addressaddressType", "addressline1", "addressline2", "addresscity", "addressstateProvince", "addresscountryCode", "addresspostalCode", "phoneNumberphoneNumberType", "phoneNumbernumber", "phoneNumberprimaryIndicator", "otherPhoneNumbersphoneNumberphoneNumberType", "otherPhoneNumbersphoneNumbernumber", "otherPhoneNumbersphoneNumberprimaryIndicator", "id"})
 public class XLeaFilter implements IFilter<XLeaFilter>, Serializable {
     @JsonProperty("refId")

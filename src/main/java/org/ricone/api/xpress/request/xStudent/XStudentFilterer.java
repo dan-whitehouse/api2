@@ -5,20 +5,24 @@ import org.ricone.api.xpress.component.ControllerData;
 import org.ricone.api.xpress.model.*;
 import org.ricone.config.cache.FilterCache;
 import org.ricone.config.model.XStudentFilter;
+import org.ricone.init.CacheService;
 import org.springframework.stereotype.Component;
 
 import java.util.Iterator;
 
 @Component("XPress:XStudents:XStudentFilterer")
 public class XStudentFilterer {
-    public XStudentFilterer() {
+    private final CacheService cacheService;
+
+    public XStudentFilterer(CacheService cacheService) {
+        this.cacheService = cacheService;
     }
 
-    XStudentsResponse apply(XStudentsResponse response, ControllerData metaData) {
+    XStudentsResponse apply(XStudentsResponse response, ControllerData metadata) {
         Iterator<XStudent> iterator = response.getXStudents().getXStudent().iterator();
         while (iterator.hasNext()) {
             XStudent i = iterator.next();
-            i = filter(i, FilterCache.getInstance().getXStudentFilter(i.getDistrictId(), metaData.getApplication().getApp()));
+            i = filter(i, cacheService.getXStudentFilter(i.getDistrictId(), metadata.getApplication().getApp().getId()));
 
             // Remove object from list if empty
             if (i.isEmptyObject()) {
@@ -31,8 +35,8 @@ public class XStudentFilterer {
         return response;
     }
 
-    XStudentResponse apply(XStudentResponse response, ControllerData metaData) {
-        response.setXStudent(filter(response.getXStudent(), FilterCache.getInstance().getXStudentFilter(response.getXStudent().getDistrictId(), metaData.getApplication().getApp())));
+    XStudentResponse apply(XStudentResponse response, ControllerData metadata) {
+        response.setXStudent(filter(response.getXStudent(), cacheService.getXStudentFilter(response.getXStudent().getDistrictId(), metadata.getApplication().getApp().getId())));
         if (response.getXStudent().isEmptyObject()) {
             return null;
         }

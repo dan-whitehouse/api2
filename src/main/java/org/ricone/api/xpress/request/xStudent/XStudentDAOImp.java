@@ -281,7 +281,7 @@ public class XStudentDAOImp extends BaseDAO implements XStudentDAO {
 	}
 
 	private Predicate whereFindByRefId(ControllerData metadata, String refId, CriteriaBuilder cb, CriteriaQuery<?> select, Root<Student> from, SetJoin<Student, StudentEnrollment> studentEnrollments, Join<School, Lea> lea) {
-		Predicate localIdInControllerData = lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds());
+		Predicate localIdInControllerData = lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds());
 		Predicate schoolYearEquals = cb.equal(from.get(SCHOOL_YEAR_KEY), metadata.getSchoolYear());
 		Integer greatestSchoolYear = greatestSchoolYearByRefId(metadata, refId);
 
@@ -312,7 +312,7 @@ public class XStudentDAOImp extends BaseDAO implements XStudentDAO {
 
 			subQuery1.select(studentEnrollmentsSq1.get(ENROLLMENT_KEY));
 			subQuery1.where(
-				leaSq1.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()),
+				leaSq1.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds()),
 				schoolYearEqualsSq1,
 				cb.equal(fromSq1.get(PRIMARY_KEY), refId),
 				cb.equal(studentEnrollmentsSq1.get("membershipTypeCode"), "Home"),
@@ -334,7 +334,7 @@ public class XStudentDAOImp extends BaseDAO implements XStudentDAO {
 
 			subQuery2.select(studentEnrollmentsSq2.get(ENROLLMENT_KEY));
 			subQuery2.where(
-				leaSq2.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()),
+				leaSq2.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds()),
 				schoolYearEqualsSq2,
 				cb.equal(fromSq2.get(PRIMARY_KEY), refId),
 				cb.equal(studentEnrollmentsSq2.get("membershipTypeCode"), "Home"),
@@ -350,7 +350,7 @@ public class XStudentDAOImp extends BaseDAO implements XStudentDAO {
 	}
 
 	private Predicate whereFindByLocalId(ControllerData metadata, String localId, CriteriaBuilder cb, CriteriaQuery<?> select, Root<Student> from, SetJoin<Student, StudentEnrollment> studentEnrollments, Join<School, Lea> lea, SetJoin<Student, StudentIdentifier> studentIdentifiers) {
-		Predicate localIdInControllerData = lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds());
+		Predicate localIdInControllerData = lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds());
 		Predicate schoolYearEquals = cb.equal(from.get(SCHOOL_YEAR_KEY), metadata.getSchoolYear());
 		Integer greatestSchoolYear = greatestSchoolYearByLocalId(metadata, localId);
 
@@ -382,7 +382,7 @@ public class XStudentDAOImp extends BaseDAO implements XStudentDAO {
 
 			subQuery1.select(studentEnrollmentsSq1.get(ENROLLMENT_KEY));
 			subQuery1.where(
-				leaSq1.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()),
+				leaSq1.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds()),
 				schoolYearEqualsSq1,
 				cb.equal(studentIdentifiersSq1.get(ID_KEY), localId),
 				cb.equal(studentIdentifiersSq1.get(IDENTIFICATION_SYSTEM_CODE), SYSTEM_CODE_DISTRICT),
@@ -406,7 +406,7 @@ public class XStudentDAOImp extends BaseDAO implements XStudentDAO {
 
 			subQuery2.select(studentEnrollmentsSq2.get(ENROLLMENT_KEY));
 			subQuery2.where(
-				leaSq2.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()),
+				leaSq2.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds()),
 				schoolYearEqualsSq2,
 				cb.equal(studentIdentifiersSq2.get(ID_KEY), localId),
 				cb.equal(studentIdentifiersSq2.get(IDENTIFICATION_SYSTEM_CODE), SYSTEM_CODE_DISTRICT),
@@ -425,7 +425,7 @@ public class XStudentDAOImp extends BaseDAO implements XStudentDAO {
 	}
 
 	private Predicate whereFindByStateId(ControllerData metadata, String stateId, CriteriaBuilder cb, CriteriaQuery<?> select, Root<Student> from, SetJoin<Student, StudentEnrollment> studentEnrollments, Join<School, Lea> lea, SetJoin<Student, StudentIdentifier> studentIdentifiers) {
-		Predicate localIdInControllerData = lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds());
+		Predicate localIdInControllerData = lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds());
 		Predicate schoolYearEquals = cb.equal(from.get(SCHOOL_YEAR_KEY), metadata.getSchoolYear());
 		Integer greatestSchoolYear = greatestSchoolYearByStateId(metadata, stateId);
 
@@ -457,7 +457,7 @@ public class XStudentDAOImp extends BaseDAO implements XStudentDAO {
 
 			subQuery1.select(studentEnrollmentsSq1.get(ENROLLMENT_KEY));
 			subQuery1.where(
-				leaSq1.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()),
+				leaSq1.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds()),
 				schoolYearEqualsSq1,
 				cb.equal(studentIdentifiersSq1.get(ID_KEY), stateId),
 				cb.equal(studentIdentifiersSq1.get(IDENTIFICATION_SYSTEM_CODE), SYSTEM_CODE_STATE),
@@ -481,7 +481,7 @@ public class XStudentDAOImp extends BaseDAO implements XStudentDAO {
 
 			subQuery2.select(studentEnrollmentsSq2.get(ENROLLMENT_KEY));
 			subQuery2.where(
-				leaSq2.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()),
+				leaSq2.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds()),
 				schoolYearEqualsSq2,
 				cb.equal(studentIdentifiersSq2.get(ID_KEY), stateId),
 				cb.equal(studentIdentifiersSq2.get(IDENTIFICATION_SYSTEM_CODE), SYSTEM_CODE_STATE),
@@ -499,7 +499,7 @@ public class XStudentDAOImp extends BaseDAO implements XStudentDAO {
 	}
 
 	private Predicate whereFindAll(ControllerData metadata, CriteriaBuilder cb, CriteriaQuery<?> select, Root<Student> from, SetJoin<Student, StudentEnrollment> studentEnrollments, Join<School, Lea> lea) {
-		Predicate localIdInControllerData = lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds());
+		Predicate localIdInControllerData = lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds());
 		Predicate schoolYearEquals = cb.equal(from.get(SCHOOL_YEAR_KEY), metadata.getSchoolYear());
 		Integer greatestSchoolYear = greatestSchoolYearAll(metadata);
 
@@ -530,7 +530,7 @@ public class XStudentDAOImp extends BaseDAO implements XStudentDAO {
 
 			subQuery1.select(studentEnrollmentsSq1.get(ENROLLMENT_KEY));
 			subQuery1.where(
-				leaSq1.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()),
+				leaSq1.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds()),
 				schoolYearEqualsSq1,
 				cb.equal(studentEnrollmentsSq1.get("membershipTypeCode"), "Home"),
 				cb.isNotNull(studentEnrollmentsSq1.get("enrollmentExitDate"))
@@ -551,7 +551,7 @@ public class XStudentDAOImp extends BaseDAO implements XStudentDAO {
 
 			subQuery2.select(studentEnrollmentsSq2.get(ENROLLMENT_KEY));
 			subQuery2.where(
-				leaSq2.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()),
+				leaSq2.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds()),
 				schoolYearEqualsSq2,
 				cb.equal(studentEnrollmentsSq2.get("membershipTypeCode"), "Home"),
 				cb.equal(entryExitCodesSq2.get("entryExitType"), "Exit"),
@@ -566,7 +566,7 @@ public class XStudentDAOImp extends BaseDAO implements XStudentDAO {
 	}
 
 	private Predicate whereFindAllByLeaRefId(ControllerData metadata, String refId, CriteriaBuilder cb, CriteriaQuery<?> select, Root<Student> from, SetJoin<Student, StudentEnrollment> studentEnrollments, Join<School, Lea> lea) {
-		Predicate localIdInControllerData = lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds());
+		Predicate localIdInControllerData = lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds());
 		Predicate schoolYearEquals = cb.equal(from.get(SCHOOL_YEAR_KEY), metadata.getSchoolYear());
 		Integer greatestSchoolYear = greatestSchoolYearAllByLeaRefId(metadata, refId);
 
@@ -597,7 +597,7 @@ public class XStudentDAOImp extends BaseDAO implements XStudentDAO {
 
 			subQuery1.select(studentEnrollmentsSq1.get(ENROLLMENT_KEY));
 			subQuery1.where(
-				leaSq1.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()),
+				leaSq1.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds()),
 				schoolYearEqualsSq1,
 				cb.equal(leaSq1.get("leaRefId"), refId),
 				cb.equal(studentEnrollmentsSq1.get("membershipTypeCode"), "Home"),
@@ -619,7 +619,7 @@ public class XStudentDAOImp extends BaseDAO implements XStudentDAO {
 
 			subQuery2.select(studentEnrollmentsSq2.get(ENROLLMENT_KEY));
 			subQuery2.where(
-				leaSq2.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()),
+				leaSq2.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds()),
 				schoolYearEqualsSq2,
 				cb.equal(leaSq2.get("leaRefId"), refId),
 				cb.equal(studentEnrollmentsSq2.get("membershipTypeCode"), "Home"),
@@ -635,7 +635,7 @@ public class XStudentDAOImp extends BaseDAO implements XStudentDAO {
 	}
 
 	private Predicate whereFindAllBySchoolRefId(ControllerData metadata, String refId, CriteriaBuilder cb, CriteriaQuery<?> select, Root<Student> from, SetJoin<Student, StudentEnrollment> studentEnrollments, Join<School, Lea> lea, Join<StudentEnrollment, School> school) {
-		Predicate localIdInControllerData = lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds());
+		Predicate localIdInControllerData = lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds());
 		Predicate schoolYearEquals = cb.equal(from.get(SCHOOL_YEAR_KEY), metadata.getSchoolYear());
 		Integer greatestSchoolYear = greatestSchoolYearAllBySchoolRefId(metadata, refId);
 
@@ -666,7 +666,7 @@ public class XStudentDAOImp extends BaseDAO implements XStudentDAO {
 
 			subQuery1.select(studentEnrollmentsSq1.get(ENROLLMENT_KEY));
 			subQuery1.where(
-				leaSq1.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()),
+				leaSq1.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds()),
 				schoolYearEqualsSq1,
 				cb.equal(schoolSq1.get("schoolRefId"), refId),
 				cb.equal(studentEnrollmentsSq1.get("membershipTypeCode"), "Home"),
@@ -688,7 +688,7 @@ public class XStudentDAOImp extends BaseDAO implements XStudentDAO {
 
 			subQuery2.select(studentEnrollmentsSq2.get(ENROLLMENT_KEY));
 			subQuery2.where(
-				leaSq2.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()),
+				leaSq2.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds()),
 				schoolYearEqualsSq2,
 				cb.equal(schoolSq2.get("schoolRefId"), refId),
 				cb.equal(studentEnrollmentsSq2.get("membershipTypeCode"), "Home"),
@@ -704,7 +704,7 @@ public class XStudentDAOImp extends BaseDAO implements XStudentDAO {
 	}
 
 	private Predicate whereFindAllByRosterRefId(ControllerData metadata, String refId, CriteriaBuilder cb, CriteriaQuery<?> select, Root<Student> from,  SetJoin<Student, StudentEnrollment> studentEnrollments, Join<School, Lea> lea, Join<StudentCourseSection, CourseSection> courseSection) {
-		Predicate localIdInControllerData = lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds());
+		Predicate localIdInControllerData = lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds());
 		Predicate schoolYearEquals = cb.equal(from.get(SCHOOL_YEAR_KEY), metadata.getSchoolYear());
 		Integer greatestSchoolYear = greatestSchoolYearAllByRosterRefId(metadata, refId);
 
@@ -737,7 +737,7 @@ public class XStudentDAOImp extends BaseDAO implements XStudentDAO {
 
 			subQuery1.select(studentEnrollmentsSq1.get(ENROLLMENT_KEY));
 			subQuery1.where(
-				leaSq1.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()),
+				leaSq1.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds()),
 				schoolYearEqualsSq1,
 				cb.equal(courseSectionSq1.get("courseSectionRefId"), refId),
 				cb.equal(studentEnrollmentsSq1.get("membershipTypeCode"), "Home"),
@@ -761,7 +761,7 @@ public class XStudentDAOImp extends BaseDAO implements XStudentDAO {
 
 			subQuery2.select(studentEnrollmentsSq2.get(ENROLLMENT_KEY));
 			subQuery2.where(
-				leaSq2.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()),
+				leaSq2.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds()),
 				schoolYearEqualsSq2,
 				cb.equal(courseSectionSq2.get("courseSectionRefId"), refId),
 				cb.equal(studentEnrollmentsSq2.get("membershipTypeCode"), "Home"),
@@ -777,7 +777,7 @@ public class XStudentDAOImp extends BaseDAO implements XStudentDAO {
 	}
 
 	private Predicate whereFindAllByStaffRefId(ControllerData metadata, String refId, CriteriaBuilder cb, CriteriaQuery<?> select, Root<Student> from,  SetJoin<Student, StudentEnrollment> studentEnrollments, Join<School, Lea> lea, Join<StaffCourseSection, Staff> staff) {
-		Predicate localIdInControllerData = lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds());
+		Predicate localIdInControllerData = lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds());
 		Predicate schoolYearEquals = cb.equal(from.get(SCHOOL_YEAR_KEY), metadata.getSchoolYear());
 		Integer greatestSchoolYear = greatestSchoolYearAllByStaffRefId(metadata, refId);
 
@@ -812,7 +812,7 @@ public class XStudentDAOImp extends BaseDAO implements XStudentDAO {
 
 			subQuery1.select(studentEnrollmentsSq1.get(ENROLLMENT_KEY));
 			subQuery1.where(
-				leaSq1.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()),
+				leaSq1.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds()),
 				schoolYearEqualsSq1,
 				cb.equal(staffSq1.get("staffRefId"), refId),
 				cb.equal(studentEnrollmentsSq1.get("membershipTypeCode"), "Home"),
@@ -838,7 +838,7 @@ public class XStudentDAOImp extends BaseDAO implements XStudentDAO {
 
 			subQuery2.select(studentEnrollmentsSq2.get(ENROLLMENT_KEY));
 			subQuery2.where(
-				leaSq2.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()),
+				leaSq2.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds()),
 				schoolYearEqualsSq2,
 				cb.equal(staffSq2.get("staffRefId"), refId),
 				cb.equal(studentEnrollmentsSq2.get("membershipTypeCode"), "Home"),
@@ -854,7 +854,7 @@ public class XStudentDAOImp extends BaseDAO implements XStudentDAO {
 	}
 
 	private Predicate whereFindAllByContactRefId(ControllerData metadata, String refId, CriteriaBuilder cb, CriteriaQuery<?> select, Root<Student> from,  SetJoin<Student, StudentEnrollment> studentEnrollments, Join<School, Lea> lea, Join<StudentContactRelationship, StudentContact> studentContact) {
-		Predicate localIdInControllerData = lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds());
+		Predicate localIdInControllerData = lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds());
 		Predicate schoolYearEquals = cb.equal(from.get(SCHOOL_YEAR_KEY), metadata.getSchoolYear());
 		Integer greatestSchoolYear = greatestSchoolYearAllByContactRefId(metadata, refId);
 
@@ -887,7 +887,7 @@ public class XStudentDAOImp extends BaseDAO implements XStudentDAO {
 
 			subQuery1.select(studentEnrollmentsSq1.get(ENROLLMENT_KEY));
 			subQuery1.where(
-				leaSq1.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()),
+				leaSq1.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds()),
 				schoolYearEqualsSq1,
 				cb.equal(studentContactSq1.get("studentContactRefId"), refId),
 				cb.equal(studentEnrollmentsSq1.get("membershipTypeCode"), "Home"),
@@ -911,7 +911,7 @@ public class XStudentDAOImp extends BaseDAO implements XStudentDAO {
 
 			subQuery2.select(studentEnrollmentsSq2.get(ENROLLMENT_KEY));
 			subQuery2.where(
-				leaSq2.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()),
+				leaSq2.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds()),
 				schoolYearEqualsSq2,
 				cb.equal(studentContactSq2.get("studentContactRefId"), refId),
 				cb.equal(studentEnrollmentsSq2.get("membershipTypeCode"), "Home"),
@@ -937,7 +937,7 @@ public class XStudentDAOImp extends BaseDAO implements XStudentDAO {
 
 		select.distinct(true);
 		select.select(cb.greatest(from.<Integer>get(SCHOOL_YEAR_KEY)));
-		select.where(cb.and(cb.equal(from.get(PRIMARY_KEY), refId), lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())));
+		select.where(cb.and(cb.equal(from.get(PRIMARY_KEY), refId), lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())));
 
 		return em.createQuery(select).getSingleResult();
 	}
@@ -954,7 +954,7 @@ public class XStudentDAOImp extends BaseDAO implements XStudentDAO {
 
 		select.distinct(true);
 		select.select(cb.greatest(from.<Integer>get(SCHOOL_YEAR_KEY)));
-		select.where(cb.and(cb.equal(studentIdentifiers.get(ID_KEY), localId), cb.equal(studentIdentifiers.get(IDENTIFICATION_SYSTEM_CODE), SYSTEM_CODE_DISTRICT), lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())));
+		select.where(cb.and(cb.equal(studentIdentifiers.get(ID_KEY), localId), cb.equal(studentIdentifiers.get(IDENTIFICATION_SYSTEM_CODE), SYSTEM_CODE_DISTRICT), lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())));
 
 		return em.createQuery(select).getSingleResult();
 	}
@@ -971,7 +971,7 @@ public class XStudentDAOImp extends BaseDAO implements XStudentDAO {
 
 		select.distinct(true);
 		select.select(cb.greatest(from.<Integer>get(SCHOOL_YEAR_KEY)));
-		select.where(cb.and(cb.equal(studentIdentifiers.get(ID_KEY), stateId), cb.equal(studentIdentifiers.get(IDENTIFICATION_SYSTEM_CODE), SYSTEM_CODE_STATE), lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())));
+		select.where(cb.and(cb.equal(studentIdentifiers.get(ID_KEY), stateId), cb.equal(studentIdentifiers.get(IDENTIFICATION_SYSTEM_CODE), SYSTEM_CODE_STATE), lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())));
 
 		return em.createQuery(select).getSingleResult();
 	}
@@ -987,7 +987,7 @@ public class XStudentDAOImp extends BaseDAO implements XStudentDAO {
 
 		select.distinct(true);
 		select.select(cb.greatest(from.<Integer>get(SCHOOL_YEAR_KEY)));
-		select.where(lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()));
+		select.where(lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds()));
 
 		return em.createQuery(select).getSingleResult();
 	}
@@ -1003,7 +1003,7 @@ public class XStudentDAOImp extends BaseDAO implements XStudentDAO {
 
 		select.distinct(true);
 		select.select(cb.greatest(from.<Integer>get(SCHOOL_YEAR_KEY)));
-		select.where(cb.and(cb.equal(lea.get("leaRefId"), refId), lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())));
+		select.where(cb.and(cb.equal(lea.get("leaRefId"), refId), lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())));
 
 		return em.createQuery(select).getSingleResult();
 	}
@@ -1019,7 +1019,7 @@ public class XStudentDAOImp extends BaseDAO implements XStudentDAO {
 
 		select.distinct(true);
 		select.select(cb.greatest(from.<Integer>get(SCHOOL_YEAR_KEY)));
-		select.where(cb.and(cb.equal(school.get("schoolRefId"), refId), lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())));
+		select.where(cb.and(cb.equal(school.get("schoolRefId"), refId), lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())));
 
 		return em.createQuery(select).getSingleResult();
 	}
@@ -1037,7 +1037,7 @@ public class XStudentDAOImp extends BaseDAO implements XStudentDAO {
 
 		select.distinct(true);
 		select.select(cb.greatest(from.<Integer>get(SCHOOL_YEAR_KEY)));
-		select.where(cb.and(cb.equal(courseSection.get("courseSectionRefId"), refId), lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())));
+		select.where(cb.and(cb.equal(courseSection.get("courseSectionRefId"), refId), lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())));
 
 		return em.createQuery(select).getSingleResult();
 	}
@@ -1057,7 +1057,7 @@ public class XStudentDAOImp extends BaseDAO implements XStudentDAO {
 
 		select.distinct(true);
 		select.select(cb.greatest(from.<Integer>get(SCHOOL_YEAR_KEY)));
-		select.where(cb.and(cb.equal(staff.get("staffRefId"), refId), lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())));
+		select.where(cb.and(cb.equal(staff.get("staffRefId"), refId), lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())));
 
 		return em.createQuery(select).getSingleResult();
 	}
@@ -1075,7 +1075,7 @@ public class XStudentDAOImp extends BaseDAO implements XStudentDAO {
 
 		select.distinct(true);
 		select.select(cb.greatest(from.<Integer>get(SCHOOL_YEAR_KEY)));
-		select.where(cb.and(cb.equal(studentContact.get("studentContactRefId"), refId), lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())));
+		select.where(cb.and(cb.equal(studentContact.get("studentContactRefId"), refId), lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())));
 
 		return em.createQuery(select).getSingleResult();
 	}
@@ -1202,7 +1202,11 @@ public class XStudentDAOImp extends BaseDAO implements XStudentDAO {
 		Hibernate.initialize(instance.getStudent().getStudentOtherNames());
 		Hibernate.initialize(instance.getStudent().getStudentRaces());
 		Hibernate.initialize(instance.getStudent().getStudentTelephones());
+
 		Hibernate.initialize(instance.getStudent().getStudentContactRelationships());
+		instance.getStudent().getStudentContactRelationships().forEach(relationship -> {
+			Hibernate.initialize(relationship.getStudentContact());
+		});
 
 		Hibernate.initialize(instance.getStudent().getStudentEnrollments());
 		instance.getStudent().getStudentEnrollments().forEach(se -> {
@@ -1234,7 +1238,11 @@ public class XStudentDAOImp extends BaseDAO implements XStudentDAO {
 			Hibernate.initialize(wrapper.getStudent().getStudentOtherNames());
 			Hibernate.initialize(wrapper.getStudent().getStudentRaces());
 			Hibernate.initialize(wrapper.getStudent().getStudentTelephones());
+
 			Hibernate.initialize(wrapper.getStudent().getStudentContactRelationships());
+			wrapper.getStudent().getStudentContactRelationships().forEach(relationship -> {
+				Hibernate.initialize(relationship.getStudentContact());
+			});
 
 			Hibernate.initialize(wrapper.getStudent().getStudentEnrollments());
 			wrapper.getStudent().getStudentEnrollments().forEach(se -> {

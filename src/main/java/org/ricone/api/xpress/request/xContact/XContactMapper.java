@@ -140,7 +140,8 @@ public class XContactMapper extends BaseMapper {
             }
 
             //Relationships
-            List<Relationship> relationshipList = new ArrayList<>();
+            //FIXME: AT the moment I am getting an EntityNotFoundException, so I turned off the mapping for this.
+            /*List<Relationship> relationshipList = new ArrayList<>();
             for (StudentContactRelationship studentContactRelationship : instance.getStudentContactRelationships()) {
                 Relationship relationship = mapRelationship(studentContactRelationship);
                 if(relationship != null) {
@@ -151,7 +152,7 @@ public class XContactMapper extends BaseMapper {
                 Relationships relationships = new Relationships();
                 relationships.setRelationship(relationshipList);
                 xContact.setRelationships(relationships);
-            }
+            }*/
 
             //Metadata
             xContact.setMetadata(mapMetadata(instance));

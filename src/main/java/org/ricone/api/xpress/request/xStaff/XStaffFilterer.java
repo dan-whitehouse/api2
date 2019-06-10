@@ -6,20 +6,24 @@ import org.ricone.api.xpress.component.ControllerData;
 import org.ricone.api.xpress.model.*;
 import org.ricone.config.cache.FilterCache;
 import org.ricone.config.model.XStaffFilter;
+import org.ricone.init.CacheService;
 import org.springframework.stereotype.Component;
 
 import java.util.Iterator;
 
 @Component("XPress:XStaffs:XStaffFilterer")
 public class XStaffFilterer {
-    public XStaffFilterer() {
+    private final CacheService cacheService;
+
+    public XStaffFilterer(CacheService cacheService) {
+        this.cacheService = cacheService;
     }
 
-    XStaffsResponse apply(XStaffsResponse response, ControllerData metaData) {
+    XStaffsResponse apply(XStaffsResponse response, ControllerData metadata) {
         Iterator<XStaff> iterator = response.getXStaffs().getXStaff().iterator();
         while (iterator.hasNext()) {
             XStaff i = iterator.next();
-            i = filter(i, FilterCache.getInstance().getXStaffFilter(i.getDistrictId(), metaData.getApplication().getApp()));
+            i = filter(i, cacheService.getXStaffFilter(i.getDistrictId(), metadata.getApplication().getApp().getId()));
 
             // Remove object from list if empty
             if (i.isEmptyObject()) {
@@ -32,8 +36,8 @@ public class XStaffFilterer {
         return response;
     }
 
-    XStaffResponse apply(XStaffResponse response, ControllerData metaData) {
-        response.setXStaff(filter(response.getXStaff(), FilterCache.getInstance().getXStaffFilter(response.getXStaff().getDistrictId(), metaData.getApplication().getApp())));
+    XStaffResponse apply(XStaffResponse response, ControllerData metadata) {
+        response.setXStaff(filter(response.getXStaff(), cacheService.getXStaffFilter(response.getXStaff().getDistrictId(), metadata.getApplication().getApp().getId())));
         if (response.getXStaff().isEmptyObject()) {
             return null;
         }

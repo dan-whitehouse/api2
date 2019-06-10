@@ -14,7 +14,6 @@ import org.ricone.api.xpress.model.XStaff;
 import org.ricone.api.xpress.model.XStaffs;
 import org.ricone.api.xpress.model.XStaffsResponse;
 import org.ricone.error.NoContentException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -37,7 +36,7 @@ public class XStaffUsernamePasswordMapper {
     }
 
     public XStaffsResponse convert(List<StaffWrapper> instance, ControllerData metadata, String schoolRefId) throws Exception{
-        // Needed to populate App Leas so metaData.getApp().getDistrictKVsBySchool isn't empty
+        // Needed to populate App Leas so metaData.getApp().getDistrictKVsBySchoolRefId isn't empty
         dao.initAppLeas(metadata, schoolRefId);
 
         //Grab The Correct KV Map (Could be for a District or School
@@ -73,9 +72,9 @@ public class XStaffUsernamePasswordMapper {
     }
 
     private HashMap<String, String> getKVs(ControllerData metadata, String refId) throws ForbiddenException {
-        HashMap<String, String> kvMap = metadata.getApplication().getApp().getSchoolKVsBySchool(refId);
+        HashMap<String, String> kvMap = metadata.getApplication().getSchoolKVsBySchoolRefId(refId);
         if(MapUtils.isEmpty(kvMap)) {
-            kvMap = metadata.getApplication().getApp().getDistrictKVsBySchool(refId);
+            kvMap = metadata.getApplication().getDistrictKVsBySchoolRefId(refId);
         }
 
         if(MapUtils.isEmpty(kvMap)) {

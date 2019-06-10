@@ -6,6 +6,8 @@ import org.ricone.api.xpress.component.ControllerData;
 import org.ricone.api.xpress.model.*;
 import org.ricone.config.cache.FilterCache;
 import org.ricone.config.model.XLeaFilter;
+import org.ricone.init.CacheService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
@@ -17,14 +19,17 @@ import org.springframework.util.CollectionUtils;
 
 @Component("XPress:XLeas:XLeaFilterer")
 public class XLeaFilterer {
-	public XLeaFilterer() {
+	private final CacheService cacheService;
+
+	public XLeaFilterer(CacheService cacheService) {
+		this.cacheService = cacheService;
 	}
 
-	XLeasResponse apply(XLeasResponse response, ControllerData metaData) {
+	XLeasResponse apply(XLeasResponse response, ControllerData metadata) {
 		Iterator<XLea> iterator = response.getXLeas().getXLeas().iterator();
 		while (iterator.hasNext()) {
 			XLea i = iterator.next();
-			i = filter(i, FilterCache.getInstance().getXLeaFilter(i.getDistrictId(), metaData.getApplication().getApp()));
+			i = filter(i, cacheService.getXLeaFilter(i.getDistrictId(), metadata.getApplication().getApp().getId()));
 
 			// Remove object from list if empty
 			if (i.isEmptyObject()) {
@@ -37,8 +42,8 @@ public class XLeaFilterer {
 		return response;
 	}
 
-	XLeaResponse apply(XLeaResponse response, ControllerData metaData) {
-		response.setXLea(filter(response.getXLea(), FilterCache.getInstance().getXLeaFilter(response.getXLea().getDistrictId(), metaData.getApplication().getApp())));
+	XLeaResponse apply(XLeaResponse response, ControllerData metadata) {
+		response.setXLea(filter(response.getXLea(), cacheService.getXLeaFilter(response.getXLea().getDistrictId(), metadata.getApplication().getApp().getId())));
 		if (response.getXLea().isEmptyObject()) {
 			return null;
 		}

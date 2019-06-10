@@ -229,4 +229,9 @@ public class StudentContact implements Serializable {
 	public void setStudentContactOtherNames(Set<StudentContactOtherName> studentContactOtherNames) {
 		this.studentContactOtherNames = studentContactOtherNames;
 	}
+
+	@Override
+	public String toString() {
+		return "StudentContact{" + "studentContactRefId='" + studentContactRefId + '\'' + ", studentContactSchoolYear=" + studentContactSchoolYear + '}';
+	}
 }

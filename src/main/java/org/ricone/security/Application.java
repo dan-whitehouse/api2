@@ -1,4 +1,4 @@
-package org.ricone.security.jwt;
+package org.ricone.security;
 
 import com.fasterxml.jackson.dataformat.xml.JacksonXmlModule;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;

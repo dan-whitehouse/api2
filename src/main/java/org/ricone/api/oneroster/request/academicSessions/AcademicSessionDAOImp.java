@@ -37,7 +37,7 @@ class AcademicSessionDAOImp extends BaseDAO implements AcademicSessionDAO {
 		final Predicate methodSpecificPredicate = cb.and(
 			cb.equal(from.get(SOURCED_ID), refId),
 			cb.equal(from.get(SOURCED_SCHOOL_YEAR), 2019),
-			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			from.get(DISTRICT_ID).in(metadata.getApplication().getDistrictLocalIds())
 		);
 
 		select.distinct(true);
@@ -65,7 +65,7 @@ class AcademicSessionDAOImp extends BaseDAO implements AcademicSessionDAO {
 		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
 			cb.equal(from.get(SOURCED_SCHOOL_YEAR), 2019),
-			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			from.get(DISTRICT_ID).in(metadata.getApplication().getDistrictLocalIds())
 		);
 
 		select.distinct(true);
@@ -97,7 +97,7 @@ class AcademicSessionDAOImp extends BaseDAO implements AcademicSessionDAO {
 			cb.equal(from.get(SOURCED_ID), refId),
 			cb.equal(from.get(SOURCED_SCHOOL_YEAR), 2019),
 			cb.equal(from.get(TYPE), SCHOOL_YEAR),
-			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			from.get(DISTRICT_ID).in(metadata.getApplication().getDistrictLocalIds())
 		);
 
 		select.distinct(true);
@@ -126,7 +126,7 @@ class AcademicSessionDAOImp extends BaseDAO implements AcademicSessionDAO {
 		final Predicate methodSpecificPredicate = cb.and(
 			cb.equal(from.get(SOURCED_SCHOOL_YEAR), 2019),
 			cb.equal(from.get(TYPE), SCHOOL_YEAR),
-			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			from.get(DISTRICT_ID).in(metadata.getApplication().getDistrictLocalIds())
 		);
 
 		select.distinct(true);
@@ -158,7 +158,7 @@ class AcademicSessionDAOImp extends BaseDAO implements AcademicSessionDAO {
 			cb.equal(from.get(SOURCED_ID), refId),
 			cb.equal(from.get(SOURCED_SCHOOL_YEAR), 2019),
 			cb.equal(from.get(TYPE), TERM),
-			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			from.get(DISTRICT_ID).in(metadata.getApplication().getDistrictLocalIds())
 		);
 
 		select.distinct(true);
@@ -187,7 +187,7 @@ class AcademicSessionDAOImp extends BaseDAO implements AcademicSessionDAO {
 		final Predicate methodSpecificPredicate = cb.and(
 			cb.equal(from.get(SOURCED_SCHOOL_YEAR), 2019),
 			cb.equal(from.get(TYPE), TERM),
-			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			from.get(DISTRICT_ID).in(metadata.getApplication().getDistrictLocalIds())
 		);
 
 		select.distinct(true);
@@ -217,7 +217,7 @@ class AcademicSessionDAOImp extends BaseDAO implements AcademicSessionDAO {
 		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
 			cb.equal(from.get(SOURCED_SCHOOL_YEAR), 2019),
-			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			from.get(DISTRICT_ID).in(metadata.getApplication().getDistrictLocalIds())
 		);
 
 		select.select(cb.countDistinct(from));
@@ -240,7 +240,7 @@ class AcademicSessionDAOImp extends BaseDAO implements AcademicSessionDAO {
 		final Predicate methodSpecificPredicate = cb.and(
 			cb.equal(from.get(SOURCED_SCHOOL_YEAR), 2019),
 			cb.equal(from.get(TYPE), SCHOOL_YEAR),
-			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			from.get(DISTRICT_ID).in(metadata.getApplication().getDistrictLocalIds())
 		);
 
 		select.select(cb.countDistinct(from));
@@ -263,7 +263,7 @@ class AcademicSessionDAOImp extends BaseDAO implements AcademicSessionDAO {
 		final Predicate methodSpecificPredicate = cb.and(
 			cb.equal(from.get(SOURCED_SCHOOL_YEAR), 2019),
 			cb.equal(from.get(TYPE), TERM),
-			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			from.get(DISTRICT_ID).in(metadata.getApplication().getDistrictLocalIds())
 		);
 
 		select.select(cb.countDistinct(from));

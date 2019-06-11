@@ -37,7 +37,7 @@ class OrgDAOImp extends BaseDAO implements OrgDAO {
 		final Predicate methodSpecificPredicate = cb.and(
 			cb.equal(from.get(SOURCED_ID), refId),
 			cb.equal(from.get(SOURCED_SCHOOL_YEAR), 2019),
-			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			from.get(DISTRICT_ID).in(metadata.getApplication().getDistrictLocalIds())
 		);
 
 		select.distinct(true);
@@ -65,7 +65,7 @@ class OrgDAOImp extends BaseDAO implements OrgDAO {
 		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
 			cb.equal(from.get(SOURCED_SCHOOL_YEAR), 2019),
-			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			from.get(DISTRICT_ID).in(metadata.getApplication().getDistrictLocalIds())
 		);
 
 		select.distinct(true);
@@ -98,7 +98,7 @@ class OrgDAOImp extends BaseDAO implements OrgDAO {
 			cb.equal(from.get(SOURCED_ID), refId),
 			cb.equal(from.get(SOURCED_SCHOOL_YEAR), 2019),
 			cb.equal(from.get(TYPE), SCHOOL),
-			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			from.get(DISTRICT_ID).in(metadata.getApplication().getDistrictLocalIds())
 		);
 
 		select.distinct(true);
@@ -127,7 +127,7 @@ class OrgDAOImp extends BaseDAO implements OrgDAO {
 		final Predicate methodSpecificPredicate = cb.and(
 			cb.equal(from.get(SOURCED_SCHOOL_YEAR), 2019),
 			cb.equal(from.get(TYPE), SCHOOL),
-			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			from.get(DISTRICT_ID).in(metadata.getApplication().getDistrictLocalIds())
 		);
 
 		select.distinct(true);
@@ -159,7 +159,7 @@ class OrgDAOImp extends BaseDAO implements OrgDAO {
 		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
 			cb.equal(from.get(SOURCED_SCHOOL_YEAR), 2019),
-			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			from.get(DISTRICT_ID).in(metadata.getApplication().getDistrictLocalIds())
 		);
 
 		select.select(cb.countDistinct(from));
@@ -182,7 +182,7 @@ class OrgDAOImp extends BaseDAO implements OrgDAO {
 		final Predicate methodSpecificPredicate = cb.and(
 			cb.equal(from.get(SOURCED_SCHOOL_YEAR), 2019),
 			cb.equal(from.get(TYPE), SCHOOL),
-			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			from.get(DISTRICT_ID).in(metadata.getApplication().getDistrictLocalIds())
 		);
 
 		select.select(cb.countDistinct(from));

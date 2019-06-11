@@ -1,13 +1,15 @@
 package org.ricone.security.jwt;
 
+import org.ricone.security.BaseDecodedToken;
+
 import java.util.Date;
 
-public class DecodedToken {
+public class DecodedToken extends BaseDecodedToken {
     private String application_id;
     private Date iat;
     private Date exp;
     private String iss;
-    private String tokenString;
+
 
     public DecodedToken() {
         super();
@@ -43,13 +45,5 @@ public class DecodedToken {
 
     public void setIss(String iss) {
         this.iss = iss;
-    }
-
-    public String getTokenString() {
-        return tokenString;
-    }
-
-    public void setTokenString(String tokenString) {
-        this.tokenString = tokenString;
     }
 }

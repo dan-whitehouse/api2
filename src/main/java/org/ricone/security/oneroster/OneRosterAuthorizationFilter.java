@@ -1,4 +1,4 @@
-package org.ricone.security.jwt;
+package org.ricone.security.oneroster;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -7,8 +7,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.ricone.config.model.App;
 import org.ricone.config.model.District;
 import org.ricone.init.CacheService;
-import org.ricone.security.Application;
 import org.ricone.security.PropertiesLoader;
+import org.ricone.security.Application;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
@@ -24,32 +24,25 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
+public class OneRosterAuthorizationFilter extends BasicAuthenticationFilter {
     private final CacheService cacheService;
 
-    public JWTAuthorizationFilter(AuthenticationManager authManager, CacheService cacheService) {
+    public OneRosterAuthorizationFilter(AuthenticationManager authManager, CacheService cacheService) {
         super(authManager);
         this.cacheService = cacheService;
     }
 
     @Override
     protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException, ServletException {
-        logger.debug("GOING TO JWT FILTER");
+        logger.debug("GOING TO OAUTH FILTER");
         SecurityContextHolder.clearContext();
 
         AuthRequest authRequest = new AuthRequest(req);
         if(authRequest.isAuthEnabled()) {
             if(authRequest.isHeader() || (authRequest.isParameter() && authRequest.isAllowTokenParameter())) {
                 UsernamePasswordAuthenticationToken authentication = getAuthentication(req, authRequest);
-                if(authentication != null) {
-                    SecurityContextHolder.getContext().setAuthentication(authentication);
-                }
+                SecurityContextHolder.getContext().setAuthentication(authentication);
             }
-        }
-        else {
-            Application application = getDisabledSecurityAccount();
-            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(application, null, getFakeACLs(application.getApp()));
-            SecurityContextHolder.getContext().setAuthentication(authentication);
         }
         chain.doFilter(req, res);
     }
@@ -63,11 +56,15 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 
         Application application = null;
         if(decodedToken != null) {
-            application = new Application(decodedToken.getApplication_id(), decodedToken.getToken(), cacheService);
+            application = new Application(decodedToken.getAppId(), decodedToken.getToken(), cacheService);
         }
 
         try {
-            if(application != null && StringUtils.isNotBlank(application.getApp().getProviderSecret())) {
+                if(!System.getenv("provider_id").equalsIgnoreCase(decodedToken.getProviderId())) {
+                    throw new JWTVerificationException("Provider Ids Don't Match....");
+                }
+
+                if(application != null && StringUtils.isNotBlank(application.getApp().getProviderSecret())) {
                 JWT.require(Algorithm.HMAC256(application.getApp().getProviderSecret().getBytes()))
                         .withIssuer(PropertiesLoader.getInstance().getProperty("security.auth.jwt.issuer"))
                         .build().verify(authRequest.getToken());
@@ -100,41 +97,5 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
             }
         });
         return grantedAuthorities;
-    }
-
-
-    private Collection<GrantedAuthority> getFakeACLs(App app) {
-        Collection<GrantedAuthority> grantedAuthorities = new ArrayList<>();
-
-        FakePermissionsLoader.getPathPermissions().forEach(pathPermission -> {
-            if(pathPermission.getGet()) {
-                grantedAuthorities.add(new SimpleGrantedAuthority("get:" + pathPermission.getPath()));
-            }
-            if(pathPermission.getPost()) {
-                grantedAuthorities.add(new SimpleGrantedAuthority("post:" + pathPermission.getPath()));
-            }
-            if(pathPermission.getPut()) {
-                grantedAuthorities.add(new SimpleGrantedAuthority("put:" + pathPermission.getPath()));
-            }
-            if(pathPermission.getDelete()) {
-                grantedAuthorities.add(new SimpleGrantedAuthority("delete:" + pathPermission.getPath()));
-            }
-        });
-        return grantedAuthorities;
-    }
-
-    private Application getDisabledSecurityAccount() {
-        District district = new District();
-        district.setId("530501");
-
-        App app = new App();
-        app.setId("NoSecurityAccount");
-        app.setPublic(true);
-        app.getDistricts().add(district);
-
-        DecodedToken decodedToken = new DecodedToken();
-        decodedToken.setToken("password");
-
-        return new Application(decodedToken.getApplication_id(), decodedToken.getToken(), cacheService);
     }
 }

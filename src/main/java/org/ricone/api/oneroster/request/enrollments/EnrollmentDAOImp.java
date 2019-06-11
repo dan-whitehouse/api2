@@ -38,7 +38,7 @@ class EnrollmentDAOImp extends BaseDAO implements EnrollmentDAO {
 		final Predicate methodSpecificPredicate = cb.and(
 			cb.equal(from.get(SOURCED_ID), refId),
 			cb.equal(from.get(SOURCED_SCHOOL_YEAR), 2019),
-			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			from.get(DISTRICT_ID).in(metadata.getApplication().getDistrictLocalIds())
 		);
 
 		select.distinct(true);
@@ -65,7 +65,7 @@ class EnrollmentDAOImp extends BaseDAO implements EnrollmentDAO {
 		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
 			cb.equal(from.get(SOURCED_SCHOOL_YEAR), 2019),
-			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			from.get(DISTRICT_ID).in(metadata.getApplication().getDistrictLocalIds())
 		);
 
 		select.distinct(true);
@@ -95,7 +95,7 @@ class EnrollmentDAOImp extends BaseDAO implements EnrollmentDAO {
 		final Predicate methodSpecificPredicate = cb.and(
 			cb.equal(from.get(SOURCED_SCHOOL_YEAR), 2019),
 			cb.equal(from.get(ORG).get(SOURCED_ID), refId),
-			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			from.get(DISTRICT_ID).in(metadata.getApplication().getDistrictLocalIds())
 		);
 
 		select.distinct(true);
@@ -126,7 +126,7 @@ class EnrollmentDAOImp extends BaseDAO implements EnrollmentDAO {
 			cb.equal(from.get(SOURCED_SCHOOL_YEAR), 2019),
 			cb.equal(from.get(ORG).get(SOURCED_ID), schoolId),
 			cb.equal(from.get(CLASS).get(SOURCED_ID), classId),
-			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			from.get(DISTRICT_ID).in(metadata.getApplication().getDistrictLocalIds())
 		);
 
 		select.distinct(true);
@@ -155,7 +155,7 @@ class EnrollmentDAOImp extends BaseDAO implements EnrollmentDAO {
 		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
 			cb.equal(from.get(SOURCED_SCHOOL_YEAR), 2019),
-			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			from.get(DISTRICT_ID).in(metadata.getApplication().getDistrictLocalIds())
 		);
 
 		select.select(cb.countDistinct(from));
@@ -177,7 +177,7 @@ class EnrollmentDAOImp extends BaseDAO implements EnrollmentDAO {
 		final Predicate methodSpecificPredicate = cb.and(
 			cb.equal(from.get(SOURCED_SCHOOL_YEAR), 2019),
 			cb.equal(from.get(ORG).get(SOURCED_ID), refId),
-			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			from.get(DISTRICT_ID).in(metadata.getApplication().getDistrictLocalIds())
 		);
 
 		select.select(cb.countDistinct(from));
@@ -200,7 +200,7 @@ class EnrollmentDAOImp extends BaseDAO implements EnrollmentDAO {
 			cb.equal(from.get(SOURCED_SCHOOL_YEAR), 2019),
 			cb.equal(from.get(ORG).get(SOURCED_ID), schoolId),
 			cb.equal(from.get(CLASS).get(SOURCED_ID), classId),
-			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			from.get(DISTRICT_ID).in(metadata.getApplication().getDistrictLocalIds())
 		);
 
 		select.select(cb.countDistinct(from));

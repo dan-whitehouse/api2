@@ -1,11 +1,10 @@
-package org.ricone.security.jwt;
+package org.ricone.security.oneroster;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.ricone.security.BaseTokenDecoder;
 
 import java.io.IOException;
-import java.util.Base64;
 
 class TokenDecoder extends BaseTokenDecoder {
     static DecodedToken decodeToken(String token) {

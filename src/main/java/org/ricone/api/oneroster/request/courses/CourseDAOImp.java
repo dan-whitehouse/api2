@@ -35,7 +35,7 @@ class CourseDAOImp extends BaseDAO implements CourseDAO {
 		final Predicate methodSpecificPredicate = cb.and(
 			cb.equal(from.get(SOURCED_ID), refId),
 			cb.equal(from.get(SOURCED_SCHOOL_YEAR), 2019),
-			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			from.get(DISTRICT_ID).in(metadata.getApplication().getDistrictLocalIds())
 		);
 
 		select.distinct(true);
@@ -62,7 +62,7 @@ class CourseDAOImp extends BaseDAO implements CourseDAO {
 		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
 			cb.equal(from.get(SOURCED_SCHOOL_YEAR), 2019),
-			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			from.get(DISTRICT_ID).in(metadata.getApplication().getDistrictLocalIds())
 		);
 
 		select.distinct(true);
@@ -92,7 +92,7 @@ class CourseDAOImp extends BaseDAO implements CourseDAO {
 		final Predicate methodSpecificPredicate = cb.and(
 			cb.equal(from.get(ORG).get(SOURCED_ID), refId),
 			cb.equal(from.get(SOURCED_SCHOOL_YEAR), 2019),
-			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			from.get(DISTRICT_ID).in(metadata.getApplication().getDistrictLocalIds())
 		);
 
 		select.distinct(true);
@@ -121,7 +121,7 @@ class CourseDAOImp extends BaseDAO implements CourseDAO {
 		//Define Method Specific Predicates
 		final Predicate methodSpecificPredicate = cb.and(
 			cb.equal(from.get(SOURCED_SCHOOL_YEAR), 2019),
-			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			from.get(DISTRICT_ID).in(metadata.getApplication().getDistrictLocalIds())
 		);
 
 		select.select(cb.countDistinct(from));
@@ -143,7 +143,7 @@ class CourseDAOImp extends BaseDAO implements CourseDAO {
 		final Predicate methodSpecificPredicate = cb.and(
 			cb.equal(from.get(ORG).get(SOURCED_ID), refId),
 			cb.equal(from.get(SOURCED_SCHOOL_YEAR), 2019),
-			from.get(DISTRICT_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+			from.get(DISTRICT_ID).in(metadata.getApplication().getDistrictLocalIds())
 		);
 
 		select.select(cb.countDistinct(from));

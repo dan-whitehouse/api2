@@ -1,4 +1,4 @@
-package org.ricone.security.oneroster;
+package org.ricone.security.jwt;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -22,11 +22,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class OneRosterAuthorizationFilter extends BasicAuthenticationFilter {
+
+public class XPressAuthorizationFilter extends BasicAuthenticationFilter {
     private final CacheService cacheService;
     private final Environment environment;
 
-    public OneRosterAuthorizationFilter(AuthenticationManager authManager, CacheService cacheService, Environment environment) {
+    public XPressAuthorizationFilter(AuthenticationManager authManager, CacheService cacheService, Environment environment) {
         super(authManager);
         this.cacheService = cacheService;
         this.environment = environment;
@@ -36,35 +37,32 @@ public class OneRosterAuthorizationFilter extends BasicAuthenticationFilter {
     protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException, ServletException {
         AuthRequest authRequest = new AuthRequest(req);
         if(authRequest.isAuthEnabled()) {
-            if(authRequest.isHeader() || (authRequest.isParameter() && authRequest.isAllowTokenParameter())) {
-                UsernamePasswordAuthenticationToken authentication = getAuthentication(req, authRequest);
+            UsernamePasswordAuthenticationToken authentication = getAuthentication(req, authRequest.getToken());
+            if(authentication != null) {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         }
         chain.doFilter(req, res);
     }
 
-    private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest req, AuthRequest authRequest) {
+    private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest req, String token) {
         try {
-            if(StringUtils.isBlank(authRequest.getToken())) {
-                throw new JWTVerificationException("Token was empty");
+            if(StringUtils.isBlank(token)) {
+                throw new JWTVerificationException("token was empty....");
             }
 
-            DecodedToken decodedToken = TokenDecoder.decodeToken(authRequest.getToken());
+            DecodedToken decodedToken = TokenDecoder.decodeToken(token);
 
             Application application = null;
             if(decodedToken != null) {
-                if(!environment.getProperty("security.auth.jwt.provider.id").equalsIgnoreCase(decodedToken.getProviderId())) {
-                    throw new JWTVerificationException("This token isn't valid here.");
-                }
-                application = new Application(decodedToken.getAppId(), decodedToken.getToken(), cacheService);
+                application = new Application(decodedToken.getApplicationId(), token, cacheService);
             }
 
-            if(application != null && StringUtils.isNotBlank(application.getApp().getProviderSecret())) {
+            if(application != null && application.getApp().hasProviderSecret()) {
                 JWT.require(Algorithm.HMAC256(application.getApp().getProviderSecret().getBytes()))
                         .withIssuer(environment.getProperty("security.auth.jwt.issuer"))
-                        .build().verify(authRequest.getToken());
-                return new UsernamePasswordAuthenticationToken(application, decodedToken.getToken(), getACLs(application));
+                        .build().verify(token);
+                return new UsernamePasswordAuthenticationToken(application, token, getACLs(application));
             }
         }
         catch (JWTVerificationException exception) {

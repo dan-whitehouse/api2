@@ -1,14 +1,14 @@
-package org.ricone.init;
+package org.ricone.config.cache;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ricone.config.AbstractService;
 import org.ricone.config.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.core.env.Environment;
 import org.springframework.http.*;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.client.RestClientException;
@@ -16,8 +16,10 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
-import static org.ricone.init.CacheConfig.*;
+import static org.ricone.config.cache.CacheConfig.*;
 
 @Repository("CacheRepository")
 public class CacheRepository {
@@ -95,7 +97,9 @@ public class CacheRepository {
 			headers.set(AUTHORIZATION, token);
 			HttpEntity<?> entity = new HttpEntity<>(headers);
 			response = rt.exchange((getUrl() + "app/" + appId + "/district"), HttpMethod.GET, entity, new ParameterizedTypeReference<List<District>>() {});
-			return response.getBody();
+			return Objects.requireNonNull(response.getBody()).stream()
+					.filter(district -> district.getEnabled() && district.getProviderId().equalsIgnoreCase(getProvider()))
+					.collect(Collectors.toList());
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -103,7 +107,10 @@ public class CacheRepository {
 		return null;
 	}
 
-	@Caching(put = {@CachePut(value = CACHE_DISTRICT_KV, key = "#schoolRefId", condition = "#result != null")})
+	@Caching(put = {
+		@CachePut(value = CACHE_DISTRICT_KV, key = "#schoolRefId", condition = "#result != null"),
+		@CachePut(value = CACHE_DISTRICT_KV, key = "#districtId", condition = "#result != null")
+	})
 	public HashMap<String, String> getDistrictKVsByDistrictId(String schoolRefId, String districtId, String token) throws RestClientException {
 		logger.debug("Getting DistrictKVs From Config");
 
@@ -146,9 +153,12 @@ public class CacheRepository {
 		return null;
 	}
 
-	@Caching(put = {@CachePut(value = CACHE_SCHOOL_KV, key = "#schoolRefId", condition = "#result != null")})
+	@Caching(put = {
+		@CachePut(value = CACHE_SCHOOL_KV, key = "#schoolRefId", condition = "#result != null"),
+		@CachePut(value = CACHE_SCHOOL_KV, key = "#schoolId", condition = "#result != null")
+	})
 	public HashMap<String, String> getSchoolKVsBySchoolId(String schoolRefId, String schoolId, String token) throws RestClientException {
-		logger.debug("Getting SchoolKVs From Config");
+		logger.debug("Getting SchoolKVs From Config: " + schoolRefId + " | " + schoolId);
 
 		RestTemplate rt = new RestTemplate();
 		HttpHeaders headers = new HttpHeaders();

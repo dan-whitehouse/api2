@@ -1,12 +1,10 @@
 package org.ricone.api.xpress.request.xStaff;
 
 import org.apache.commons.collections4.CollectionUtils;
-
 import org.ricone.api.xpress.component.ControllerData;
 import org.ricone.api.xpress.model.*;
-import org.ricone.config.cache.FilterCache;
 import org.ricone.config.model.XStaffFilter;
-import org.ricone.init.CacheService;
+import org.ricone.config.cache.CacheService;
 import org.springframework.stereotype.Component;
 
 import java.util.Iterator;
@@ -53,7 +51,7 @@ public class XStaffFilterer {
         }
 
         //Name
-        if(instance.getName() != null && !instance.getName().isEmptyObject()) {
+        if(instance.getName() != null) {
             if(!filter.getNamefamilyName()) {
                 instance.getName().setFamilyName(null);
             }
@@ -72,6 +70,11 @@ public class XStaffFilterer {
             if(!filter.getNametype()) {
                 instance.getName().setType(null);
             }
+
+            // Remove object if empty
+            if (instance.getName().isEmptyObject()) {
+                instance.setName(null);
+            }
         }
 
         //Email
@@ -81,6 +84,11 @@ public class XStaffFilterer {
             }
             if(!filter.getEmailemailAddress()) {
                 instance.getEmail().setEmailAddress(null);
+            }
+
+            // Remove object if empty
+            if (instance.getEmail().isEmptyObject()) {
+                instance.setEmail(null);
             }
         }
 
@@ -94,13 +102,18 @@ public class XStaffFilterer {
 
         //Other Identifiers
         if(instance.getOtherIds() != null) {
-            for (OtherId i : instance.getOtherIds().getOtherId()) {
+            instance.getOtherIds().getOtherId().forEach(otherId -> {
                 if(!filter.getOtherIdsotherIdid()) {
-                    i.setId(null);
+                    otherId.setId(null);
                 }
                 if(!filter.getOtherIdsotherIdtype()) {
-                    i.setType(null);
+                    otherId.setType(null);
                 }
+            });
+            instance.getOtherIds().getOtherId().removeIf(OtherId::isEmptyObject);
+
+            if (CollectionUtils.isEmpty(instance.getOtherIds().getOtherId())) {
+                instance.setOtherIds(null);
             }
         }
 
@@ -115,20 +128,31 @@ public class XStaffFilterer {
             if(!filter.getPrimaryAssignmentschoolRefId()) {
                 instance.getPrimaryAssignment().setSchoolRefId(null);
             }
+
+            // Remove object if empty
+            if (instance.getPrimaryAssignment().isEmptyObject()) {
+                instance.setPrimaryAssignment(null);
+            }
         }
 
         //Other Assignments
         if(instance.getOtherAssignments() != null) {
-            for (StaffPersonAssignment i : instance.getOtherAssignments().getStaffPersonAssignment()) {
+            instance.getOtherAssignments().getStaffPersonAssignment().forEach(personAssignment -> {
                 if(!filter.getOtherAssignmentsstaffPersonAssignmentleaRefId()) {
-                    i.setLeaRefId(null);
+                    personAssignment.setLeaRefId(null);
                 }
                 if(!filter.getOtherAssignmentsstaffPersonAssignmentschoolRefId()) {
-                    i.setSchoolRefId(null);
+                    personAssignment.setSchoolRefId(null);
                 }
                 if(!filter.getOtherAssignmentsstaffPersonAssignmentjobFunction()) {
-                    i.setJobFunction(null);
+                    personAssignment.setJobFunction(null);
                 }
+            });
+
+            instance.getOtherAssignments().getStaffPersonAssignment().removeIf(StaffPersonAssignment::isEmptyObject);
+
+            if (CollectionUtils.isEmpty(instance.getOtherAssignments().getStaffPersonAssignment())) {
+                instance.setOtherAssignments(null);
             }
         }
         return instance;

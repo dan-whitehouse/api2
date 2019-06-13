@@ -4,7 +4,6 @@ import org.ricone.api.core.model.wrapper.LeaWrapper;
 import org.ricone.api.xpress.component.ControllerData;
 import org.ricone.api.xpress.model.validation.Validation;
 import org.ricone.api.xpress.request.xLea.XLeaDAO;
-import org.ricone.config.FilterService;
 import org.ricone.error.NoContentException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.logging.LogManager;
 
 /**
  * @author Dan Whitehouse <daniel.whitehouse@neric.org>
@@ -23,12 +21,18 @@ import java.util.logging.LogManager;
 @Transactional
 @Service("RICOne:Validation:ValidationService")
 public class ValidationServiceImp implements ValidationService {
-    @Autowired private ValidationDAO dao;
-    @Autowired private ValidationMapper mapper;
-    @Autowired private XLeaDAO leaDAO;
+    private final ValidationDAO dao;
+    private final ValidationMapper mapper;
+    private final XLeaDAO leaDAO;
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @Override
+	public ValidationServiceImp(ValidationDAO dao, ValidationMapper mapper, XLeaDAO leaDAO) {
+		this.dao = dao;
+		this.mapper = mapper;
+		this.leaDAO = leaDAO;
+	}
+
+	@Override
     public Validation findByLeaRefId(ControllerData metadata, String refId) throws Exception {
         LeaWrapper wrapper = leaDAO.findByRefId(metadata, refId);
         if(wrapper == null) {

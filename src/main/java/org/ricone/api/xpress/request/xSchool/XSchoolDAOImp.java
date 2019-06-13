@@ -51,9 +51,6 @@ public class XSchoolDAOImp extends BaseDAO implements XSchoolDAO {
 			metadata.getResponse().addHeader(ControllerData.SCHOOL_YEAR_KEY, String.valueOf(schoolYear));
 		}
 
-
-		logger.debug("districts in app: " +metadata.getApplication().getApp().getId() + " - " + metadata.getApplication().getDistrictLocalIds());
-
 		select.distinct(true);
 		select.select(cb.construct(SchoolWrapper.class, lea.get(ControllerData.LEA_LOCAL_ID), from));
 		select.where(

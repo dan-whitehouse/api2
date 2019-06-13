@@ -1,15 +1,16 @@
 package org.ricone.api.xpress.request.xLea;
 
-import java.util.Iterator;
-
+import org.apache.commons.collections4.CollectionUtils;
 import org.ricone.api.xpress.component.ControllerData;
-import org.ricone.api.xpress.model.*;
-import org.ricone.config.cache.FilterCache;
+import org.ricone.api.xpress.model.PhoneNumber;
+import org.ricone.api.xpress.model.XLea;
+import org.ricone.api.xpress.model.XLeaResponse;
+import org.ricone.api.xpress.model.XLeasResponse;
 import org.ricone.config.model.XLeaFilter;
-import org.ricone.init.CacheService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.ricone.config.cache.CacheService;
 import org.springframework.stereotype.Component;
-import org.springframework.util.CollectionUtils;
+
+import java.util.Iterator;
 
 /**
  * @author Dan Whitehouse <daniel.whitehouse@neric.org>
@@ -116,17 +117,22 @@ public class XLeaFilterer {
 		}
 
 		// Other Phone Numbers
-		if (instance.getOtherPhoneNumbers() != null) {
-			for (PhoneNumber i : instance.getOtherPhoneNumbers().getPhoneNumber()) {
-				if(!filter.getOtherPhoneNumbersphoneNumbernumber()) {
-					i.setNumber(null);
+		if(instance.getOtherPhoneNumbers() != null) {
+			instance.getOtherPhoneNumbers().getPhoneNumber().forEach(phoneNumber -> {
+				if (!filter.getOtherPhoneNumbersphoneNumbernumber()) {
+					phoneNumber.setNumber(null);
 				}
-				if(!filter.getOtherPhoneNumbersphoneNumberphoneNumberType()) {
-					i.setPhoneNumberType(null);
+				if (!filter.getOtherPhoneNumbersphoneNumberphoneNumberType()) {
+					phoneNumber.setPhoneNumberType(null);
 				}
-				if(!filter.getOtherPhoneNumbersphoneNumberprimaryIndicator()) {
-					i.setPrimaryIndicator(null);
+				if (!filter.getOtherPhoneNumbersphoneNumberprimaryIndicator()) {
+					phoneNumber.setPrimaryIndicator(null);
 				}
+			});
+			instance.getOtherPhoneNumbers().getPhoneNumber().removeIf(PhoneNumber::isEmptyObject);
+
+			if (CollectionUtils.isEmpty(instance.getOtherPhoneNumbers().getPhoneNumber())) {
+				instance.setOtherPhoneNumbers(null);
 			}
 		}
 		return instance;

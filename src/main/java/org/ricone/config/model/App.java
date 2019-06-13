@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.ricone.api.core.model.Lea;
 import org.ricone.api.core.model.School;
 import org.ricone.api.core.model.SchoolIdentifier;
@@ -332,134 +333,8 @@ public class App implements Serializable {
     }
 
     /* Custom Methods */
-
-    public List<District> getDistricts() {
-        return districts;
+    public boolean hasProviderSecret() {
+        return StringUtils.isNotBlank(this.providerSecret);
     }
-
-    public void setDistricts(List<District> districts) {
-        this.districts = districts;
-    }
-
-    public List<Lea> getLeas() {
-        return leas;
-    }
-
-    public void setLeas(List<Lea> leas) {
-        this.leas = leas;
-    }
-
-    public List<PathPermission> getPermissions() {
-        return permissions;
-    }
-
-    public void setPermissions(List<PathPermission> permissions) {
-        this.permissions = permissions;
-    }
-
-    @JsonIgnore
-    public List<String> getDistrictLocalIds() {
-        return districts.stream().map(District::getId).collect(Collectors.toList());
-    }
-
-    @JsonIgnore
-    public HashMap<String, String> getDistrictKVsBySchool(String schoolRefId) {
-        for (District district : districts) {
-            if(district.getLea() != null) {
-                if(CollectionUtils.isNotEmpty(district.getLea().getSchools())) {
-                    Optional<School> oSchool = district.getLea().getSchools().stream().filter(school -> school.getSchoolRefId().equalsIgnoreCase(schoolRefId)).findFirst();
-                    if(oSchool.isPresent()) {
-                        return district.getKv();
-                    }
-                }
-            }
-        }
-        return null;
-    }
-
-    @JsonIgnore
-    public HashMap<String, String> getSchoolKVsBySchool(String schoolRefId) {
-        for (District district : districts) {
-            if(district.getLea() != null) {
-                if (CollectionUtils.isNotEmpty(district.getLea().getSchools())) {
-                    Optional<School> school = district.getLea().getSchools().stream().filter(sch -> sch.getSchoolRefId().equalsIgnoreCase(schoolRefId)).findFirst();
-                    if (school.isPresent()) {
-                        Optional<SchoolIdentifier> schoolId = school.get().getSchoolIdentifiers().stream().filter(id -> id.getIdentificationSystemCode().equalsIgnoreCase("SEA")).findFirst();
-                        if(schoolId.isPresent()) {
-                            Optional<org.ricone.config.model.School> schoolFromConfig = district.getSchools().stream().filter(sch -> sch.getStateLocId().equalsIgnoreCase(schoolId.get().getSchoolId())).findFirst();
-                            if(schoolFromConfig.isPresent()) {
-                                return schoolFromConfig.get().getKv();
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return null;
-    }
-
-    /*@JsonIgnore
-    public Lea getLea(String refId) {
-        if(CollectionUtils.isNotEmpty(leas)) {
-            Optional<Lea> instance = leas.stream().filter(lea -> lea.getLeaRefId().equalsIgnoreCase(refId)).findFirst();
-            if(instance.isPresent()) {
-                return instance.get();
-            }
-        }
-        return null;
-    }
-
-    @JsonIgnore
-    public School getSchool(String refId) {
-        if(CollectionUtils.isNotEmpty(leas)) {
-            for (Lea lea : leas) {
-                if(CollectionUtils.isNotEmpty(lea.getSchools())) {
-                    Optional<School> instance = lea.getSchools().stream().filter(school -> school.getSchoolRefId().equalsIgnoreCase(refId)).findFirst();
-                    if(instance.isPresent()) {
-                        return instance.get();
-                    }
-                }
-            }
-        }
-        return null;
-    }
-
-    @JsonIgnore
-    public District getDistrictByLea(String refId) {
-        if(CollectionUtils.isNotEmpty(leas)) {
-            Optional<Lea> lea = leas.stream().filter(l -> l.getLeaRefId().equalsIgnoreCase(refId)).findFirst();
-            if(lea.isPresent()) {
-                return districts.stream().filter(d -> d.getId().equalsIgnoreCase(lea.get().getLeaId())).findFirst().get();
-            }
-        }
-        return null;
-    }
-
-    @JsonIgnore
-    public District getDistrictBySchool(String refId) {
-        if(CollectionUtils.isNotEmpty(leas)) {
-            Optional<Lea> lea = leas.stream().filter(l -> l.getLeaRefId().equalsIgnoreCase(refId)).findFirst();
-            if(lea.isPresent() && CollectionUtils.isNotEmpty(lea.get().getSchools())) {
-                Optional<School> school = lea.get().getSchools().stream().filter(s -> s.getSchoolRefId().equalsIgnoreCase(refId)).findFirst();
-                if(school.isPresent()) {
-                    return districts.stream().filter(d -> d.getId().equalsIgnoreCase(lea.get().getLeaId())).findFirst().get();
-                }
-            }
-        }
-        return null;
-    }
-
-    @JsonIgnore
-    public HashMap<String, String> getDistrictKVsByLea(String refId) {
-        for (District district : districts) {
-            if(CollectionUtils.isNotEmpty(leas)) {
-                Optional<Lea> oLea = leas.stream().filter(lea -> lea.getLeaId().equalsIgnoreCase(district.getId())).findFirst();
-                if(oLea.isPresent()) {
-                    return district.getKv();
-                }
-            }
-        }
-        return null;
-    }*/
 }
 

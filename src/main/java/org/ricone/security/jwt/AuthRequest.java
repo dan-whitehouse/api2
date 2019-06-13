@@ -24,6 +24,9 @@ public class AuthRequest {
         else if(isParameter) { //Parameter tokens are allowed, and parameter is set
             token = request.getParameter("access_token");
         }
+        else {
+            token = null;
+        }
     }
 
     private boolean allowTokenParams() {

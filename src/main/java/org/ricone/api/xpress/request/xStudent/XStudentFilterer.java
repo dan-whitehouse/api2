@@ -3,9 +3,8 @@ package org.ricone.api.xpress.request.xStudent;
 import org.apache.commons.collections4.CollectionUtils;
 import org.ricone.api.xpress.component.ControllerData;
 import org.ricone.api.xpress.model.*;
-import org.ricone.config.cache.FilterCache;
 import org.ricone.config.model.XStudentFilter;
-import org.ricone.init.CacheService;
+import org.ricone.config.cache.CacheService;
 import org.springframework.stereotype.Component;
 
 import java.util.Iterator;
@@ -68,29 +67,39 @@ public class XStudentFilterer {
             if(!filter.getNametype()) {
                 instance.getName().setType(null);
             }
+
+            // Remove object if empty
+            if (instance.getName().isEmptyObject()) {
+                instance.setName(null);
+            }
         }
 
         //Other Names
         if(instance.getOtherNames() != null) {
-            for (Name i : instance.getOtherNames().getName()) {
+            instance.getOtherNames().getName().forEach(name -> {
                 if(!filter.getOtherNamesnamefamilyName()) {
-                    i.setFamilyName(null);
+                    name.setFamilyName(null);
                 }
                 if(!filter.getOtherNamesnamegivenName()) {
-                    i.setGivenName(null);
+                    name.setGivenName(null);
                 }
                 if(!filter.getOtherNamesnamemiddleName()) {
-                    i.setMiddleName(null);
+                    name.setMiddleName(null);
                 }
                 if(!filter.getOtherNamesnameprefix()) {
-                    i.setPrefix(null);
+                    name.setPrefix(null);
                 }
                 if(!filter.getOtherNamesnamesuffix()) {
-                    i.setSuffix(null);
+                    name.setSuffix(null);
                 }
                 if(!filter.getOtherNamesnametype()) {
-                    i.setType(null);
+                    name.setType(null);
                 }
+            });
+            instance.getOtherNames().getName().removeIf(Name::isEmptyObject);
+
+            if (CollectionUtils.isEmpty(instance.getOtherNames().getName())) {
+                instance.setOtherNames(null);
             }
         }
 
@@ -114,6 +123,11 @@ public class XStudentFilterer {
             if(!filter.getDemographicsraces()) {
                 instance.getDemographics().setRaces(null);
             }
+
+            // Remove object if empty
+            if (instance.getDemographics().isEmptyObject()) {
+                instance.setDemographics(null);
+            }
         }
 
         //Email
@@ -124,19 +138,30 @@ public class XStudentFilterer {
             if(!filter.getEmailemailAddress()) {
                 instance.getEmail().setEmailAddress(null);
             }
+
+            // Remove object if empty
+            if (instance.getEmail().isEmptyObject()) {
+                instance.setEmail(null);
+            }
         }
 
         //Other Email
         if(instance.getOtherEmails() != null) {
-            for (Email i : instance.getOtherEmails().getEmail()) {
+            instance.getOtherEmails().getEmail().forEach(email -> {
                 if(!filter.getOtherEmailsemailemailType()) {
-                    i.setEmailType(null);
+                    email.setEmailType(null);
                 }
                 if(!filter.getOtherEmailsemailemailAddress()) {
-                    i.setEmailAddress(null);
+                    email.setEmailAddress(null);
                 }
+            });
+            instance.getOtherEmails().getEmail().removeIf(Email::isEmptyObject);
+
+            if (CollectionUtils.isEmpty(instance.getOtherEmails().getEmail())) {
+                instance.setOtherEmails(null);
             }
         }
+
 
         //Identifiers
         if(!filter.getLocalId()) {
@@ -148,13 +173,18 @@ public class XStudentFilterer {
 
         //Other Identifiers
         if(instance.getOtherIds() != null) {
-            for (OtherId i : instance.getOtherIds().getOtherId()) {
+            instance.getOtherIds().getOtherId().forEach(otherId -> {
                 if(!filter.getOtherIdsotherIdid()) {
-                    i.setId(null);
+                    otherId.setId(null);
                 }
                 if(!filter.getOtherIdsotherIdtype()) {
-                    i.setType(null);
+                    otherId.setType(null);
                 }
+            });
+            instance.getOtherIds().getOtherId().removeIf(OtherId::isEmptyObject);
+
+            if (CollectionUtils.isEmpty(instance.getOtherIds().getOtherId())) {
+                instance.setOtherIds(null);
             }
         }
 
@@ -181,6 +211,11 @@ public class XStudentFilterer {
             if(!filter.getAddressstateProvince()) {
                 instance.getAddress().setStateProvince(null);
             }
+
+            // Remove object if empty
+            if (instance.getAddress().isEmptyObject()) {
+                instance.setAddress(null);
+            }
         }
 
 
@@ -195,20 +230,30 @@ public class XStudentFilterer {
             if(!filter.getPhoneNumberprimaryIndicator()) {
                 instance.getPhoneNumber().setPrimaryIndicator(null);
             }
+
+            // Remove object if empty
+            if (instance.getPhoneNumber().isEmptyObject()) {
+                instance.setPhoneNumber(null);
+            }
         }
 
         //Other Phone Numbers
         if(instance.getOtherPhoneNumbers() != null) {
-            for (PhoneNumber i : instance.getOtherPhoneNumbers().getPhoneNumber()) {
-                if(!filter.getOtherPhoneNumbersphoneNumbernumber()) {
-                    i.setNumber(null);
+            instance.getOtherPhoneNumbers().getPhoneNumber().forEach(phoneNumber -> {
+                if (!filter.getOtherPhoneNumbersphoneNumbernumber()) {
+                    phoneNumber.setNumber(null);
                 }
-                if(!filter.getOtherPhoneNumbersphoneNumberphoneNumberType()) {
-                    i.setPhoneNumberType(null);
+                if (!filter.getOtherPhoneNumbersphoneNumberphoneNumberType()) {
+                    phoneNumber.setPhoneNumberType(null);
                 }
-                if(!filter.getOtherPhoneNumbersphoneNumberprimaryIndicator()) {
-                    i.setPrimaryIndicator(null);
+                if (!filter.getOtherPhoneNumbersphoneNumberprimaryIndicator()) {
+                    phoneNumber.setPrimaryIndicator(null);
                 }
+            });
+            instance.getOtherPhoneNumbers().getPhoneNumber().removeIf(PhoneNumber::isEmptyObject);
+
+            if (CollectionUtils.isEmpty(instance.getOtherPhoneNumbers().getPhoneNumber())) {
+                instance.setOtherPhoneNumbers(null);
             }
         }
 
@@ -216,12 +261,22 @@ public class XStudentFilterer {
         //Enrollments
         if(instance.getEnrollment() != null) {
             filterEnrollment(instance.getEnrollment(), filter);
+
+            // Remove object if empty
+            if (instance.getEnrollment().isEmptyObject()) {
+                instance.setEnrollment(null);
+            }
         }
 
         //Other Enrollments
         if(instance.getOtherEnrollments() != null) {
-            for (Enrollment i : instance.getOtherEnrollments().getEnrollment()) {
-                filterOtherEnrollment(i, filter);
+            instance.getOtherEnrollments().getEnrollment().forEach(enrollment -> {
+                filterOtherEnrollment(enrollment, filter);
+            });
+            instance.getOtherEnrollments().getEnrollment().removeIf(Enrollment::isEmptyObject);
+
+            if (CollectionUtils.isEmpty(instance.getOtherEnrollments().getEnrollment())) {
+                instance.setOtherEnrollments(null);
             }
         }
 
@@ -236,17 +291,27 @@ public class XStudentFilterer {
             if(!filter.getAcademicSummarycumulativeWeightedGpa()) {
                 instance.getAcademicSummary().setCumulativeWeightedGpa(null);
             }
+
+            // Remove object if empty
+            if (instance.getAcademicSummary().isEmptyObject()) {
+                instance.setAcademicSummary(null);
+            }
         }
 
         //Languages
         if(instance.getLanguages() != null) {
-            for (Language i : instance.getLanguages().getLanguage()) {
+            instance.getLanguages().getLanguage().forEach(language -> {
                 if(!filter.getLanguageslanguagetype()) {
-                    i.setType(null);
+                    language.setType(null);
                 }
                 if(!filter.getLanguageslanguagecode()) {
-                    i.setCode(null);
+                    language.setCode(null);
                 }
+            });
+            instance.getLanguages().getLanguage().removeIf(Language::isEmptyObject);
+
+            if (CollectionUtils.isEmpty(instance.getLanguages().getLanguage())) {
+                instance.setLanguages(null);
             }
         }
 
@@ -297,14 +362,20 @@ public class XStudentFilterer {
                 enrollment.getEntryType().setCode(null);
             }
 
-            for (OtherCode i : enrollment.getEntryType().getOtherCode()) {
-                if(!filter.getEnrollmententryTypeotherCodeListcodesetName()) {
-                    i.setCodesetName(null);
-                }
-                if(!filter.getEnrollmententryTypeotherCodeListcode()) {
-                    i.setOtherCodeValue(null);
-                }
+            if(enrollment.getEntryType() != null) {
+                enrollment.getEntryType().getOtherCode().forEach(code -> {
+                    if(!filter.getEnrollmententryTypeotherCodeListcodesetName()) {
+                        code.setCodesetName(null);
+                    }
+                    if(!filter.getEnrollmententryTypeotherCodeListcode()) {
+                        code.setOtherCodeValue(null);
+                    }
+                });
+                enrollment.getEntryType().getOtherCode().removeIf(OtherCode::isEmptyObject);
 
+                if (CollectionUtils.isEmpty(enrollment.getEntryType().getOtherCode())) {
+                    enrollment.setEntryType(null);
+                }
             }
         }
 
@@ -314,19 +385,25 @@ public class XStudentFilterer {
                 enrollment.getExitType().setCode(null);
             }
 
-            for (OtherCode i : enrollment.getExitType().getOtherCode()) {
-                if(!filter.getEnrollmentexitTypeotherCodeListcodesetName()) {
-                    i.setCodesetName(null);
-                }
-                if(!filter.getEnrollmentexitTypeotherCodeListcode()) {
-                    i.setOtherCodeValue(null);
-                }
+            if(enrollment.getExitType() != null) {
+                enrollment.getExitType().getOtherCode().forEach(code -> {
+                    if(!filter.getEnrollmentexitTypeotherCodeListcodesetName()) {
+                        code.setCodesetName(null);
+                    }
+                    if(!filter.getEnrollmentexitTypeotherCodeListcode()) {
+                        code.setOtherCodeValue(null);
+                    }
+                });
+                enrollment.getExitType().getOtherCode().removeIf(OtherCode::isEmptyObject);
 
+                if (CollectionUtils.isEmpty(enrollment.getExitType().getOtherCode())) {
+                    enrollment.setExitType(null);
+                }
             }
         }
 
         //Home Room Teacher
-        if(enrollment.getHomeRoomTeacher() != null && !enrollment.getHomeRoomTeacher().isEmptyObject()) {
+        if(enrollment.getHomeRoomTeacher() != null) {
             if(!filter.getEnrollmenthomeRoomTeacherrefId()) {
                 enrollment.getHomeRoomTeacher().setRefId(null);
             }
@@ -339,10 +416,15 @@ public class XStudentFilterer {
             if(!filter.getEnrollmenthomeRoomTeacherfamilyName()) {
                 enrollment.getHomeRoomTeacher().setFamilyName(null);
             }
+
+            // Remove object if empty
+            if (enrollment.getHomeRoomTeacher().isEmptyObject()) {
+                enrollment.setHomeRoomTeacher(null);
+            }
         }
 
         //Counselor
-        if(enrollment.getCounselor() != null && !enrollment.getCounselor().isEmptyObject()) {
+        if(enrollment.getCounselor() != null) {
             if(!filter.getEnrollmentcounselorrefId()) {
                 enrollment.getCounselor().setRefId(null);
             }
@@ -354,6 +436,11 @@ public class XStudentFilterer {
             }
             if(!filter.getEnrollmentcounselorfamilyName()) {
                 enrollment.getCounselor().setFamilyName(null);
+            }
+
+            // Remove object if empty
+            if (enrollment.getCounselor().isEmptyObject()) {
+                enrollment.setCounselor(null);
             }
         }
     }
@@ -396,12 +483,19 @@ public class XStudentFilterer {
                 enrollment.getEntryType().setCode(null);
             }
 
-            for (OtherCode i : enrollment.getEntryType().getOtherCode()) {
-                if(!filter.getEnrollmententryTypeotherCodeListcodesetName()) {
-                    i.setCodesetName(null);
-                }
-                if(!filter.getEnrollmententryTypeotherCodeListcode()) {
-                    i.setOtherCodeValue(null);
+            if(enrollment.getEntryType() != null) {
+                enrollment.getEntryType().getOtherCode().forEach(code -> {
+                    if(!filter.getEnrollmententryTypeotherCodeListcodesetName()) {
+                        code.setCodesetName(null);
+                    }
+                    if(!filter.getEnrollmententryTypeotherCodeListcode()) {
+                        code.setOtherCodeValue(null);
+                    }
+                });
+                enrollment.getEntryType().getOtherCode().removeIf(OtherCode::isEmptyObject);
+
+                if (CollectionUtils.isEmpty(enrollment.getEntryType().getOtherCode())) {
+                    enrollment.setEntryType(null);
                 }
             }
         }
@@ -412,14 +506,20 @@ public class XStudentFilterer {
                 enrollment.getExitType().setCode(null);
             }
 
-            for (OtherCode i : enrollment.getExitType().getOtherCode()) {
-                if(!filter.getEnrollmentexitTypeotherCodeListcodesetName()) {
-                    i.setCodesetName(null);
-                }
-                if(!filter.getEnrollmentexitTypeotherCodeListcode()) {
-                    i.setOtherCodeValue(null);
-                }
+            if(enrollment.getExitType() != null) {
+                enrollment.getExitType().getOtherCode().forEach(code -> {
+                    if(!filter.getEnrollmentexitTypeotherCodeListcodesetName()) {
+                        code.setCodesetName(null);
+                    }
+                    if(!filter.getEnrollmentexitTypeotherCodeListcode()) {
+                        code.setOtherCodeValue(null);
+                    }
+                });
+                enrollment.getExitType().getOtherCode().removeIf(OtherCode::isEmptyObject);
 
+                if (CollectionUtils.isEmpty(enrollment.getExitType().getOtherCode())) {
+                    enrollment.setExitType(null);
+                }
             }
         }
 
@@ -437,6 +537,11 @@ public class XStudentFilterer {
             if(!filter.getOtherEnrollmentsenrollmenthomeRoomTeacherfamilyName()) {
                 enrollment.getHomeRoomTeacher().setFamilyName(null);
             }
+
+            // Remove object if empty
+            if (enrollment.getHomeRoomTeacher().isEmptyObject()) {
+                enrollment.setHomeRoomTeacher(null);
+            }
         }
 
         //Counselor
@@ -452,6 +557,11 @@ public class XStudentFilterer {
             }
             if(!filter.getOtherEnrollmentsenrollmentcounselorfamilyName()) {
                 enrollment.getCounselor().setFamilyName(null);
+            }
+
+            // Remove object if empty
+            if (enrollment.getCounselor().isEmptyObject()) {
+                enrollment.setCounselor(null);
             }
         }
     }

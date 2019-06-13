@@ -37,7 +37,7 @@ public class XCalendarEventLogDAOImp extends BaseDAO implements XCalendarEventLo
 		select.where(
 			cb.and(
 				cb.greaterThanOrEqualTo(from.get(EVENT_TIMESTAMP), metadata.getChangesSinceLocalDateTime()),
-				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 			)
 		);
 		select.orderBy(cb.asc(from.get(EVENT_TIMESTAMP)));
@@ -66,7 +66,7 @@ public class XCalendarEventLogDAOImp extends BaseDAO implements XCalendarEventLo
 		select.where(
 			cb.and(
 				cb.greaterThanOrEqualTo(from.get(EVENT_TIMESTAMP), metadata.getChangesSinceLocalDateTime()),
-				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()),
+				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds()),
 				cb.equal(lea.get(LEA_REF_ID), refId)
 			)
 		);
@@ -98,7 +98,7 @@ public class XCalendarEventLogDAOImp extends BaseDAO implements XCalendarEventLo
 		select.where(
 			cb.and(
 				cb.greaterThanOrEqualTo(from.get(EVENT_TIMESTAMP), metadata.getChangesSinceLocalDateTime()),
-				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()),
+				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds()),
 				cb.equal(school.get(SCHOOL_REF_ID), refId)
 			)
 		);
@@ -130,7 +130,7 @@ public class XCalendarEventLogDAOImp extends BaseDAO implements XCalendarEventLo
 		select.where(
 			cb.and(
 				cb.greaterThanOrEqualTo(from.get(EVENT_TIMESTAMP), metadata.getChangesSinceLocalDateTime()),
-				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds())
+				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds())
 			)
 		);
 		select.orderBy(cb.asc(from.get(EVENT_TIMESTAMP)));
@@ -150,7 +150,7 @@ public class XCalendarEventLogDAOImp extends BaseDAO implements XCalendarEventLo
 		select.where(
 			cb.and(
 				cb.greaterThanOrEqualTo(from.get(EVENT_TIMESTAMP), metadata.getChangesSinceLocalDateTime()),
-				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()),
+				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds()),
 				cb.equal(lea.get(LEA_REF_ID), refId)
 			)
 		);
@@ -173,7 +173,7 @@ public class XCalendarEventLogDAOImp extends BaseDAO implements XCalendarEventLo
 		select.where(
 			cb.and(
 				cb.greaterThanOrEqualTo(from.get(EVENT_TIMESTAMP), metadata.getChangesSinceLocalDateTime()),
-				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()),
+				lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds()),
 					cb.equal(school.get(SCHOOL_REF_ID), refId)
 			)
 		);
@@ -192,7 +192,7 @@ public class XCalendarEventLogDAOImp extends BaseDAO implements XCalendarEventLo
 		final Join<CalendarEventLog, Lea> lea = from.join(JOIN_LEA, JoinType.LEFT);
 
 		select.select(cb.greatest(from.<Date>get(EVENT_TIMESTAMP)));
-		select.where(lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()));
+		select.where(lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds()));
 		select.orderBy(cb.asc(from.get(EVENT_TIMESTAMP)));
 
 		Date instance = em.createQuery(select).getSingleResult();

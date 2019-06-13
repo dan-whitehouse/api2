@@ -1,4 +1,4 @@
-package org.ricone.init;
+package org.ricone.config.cache;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,14 +18,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
-import static org.ricone.init.CacheConfig.*;
+import static org.ricone.config.cache.CacheConfig.*;
 
 @Service
 @Scope(proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class CacheService {
 	private final Logger logger = LogManager.getLogger(this.getClass());
 	private final CacheRepository cacheRepository;
-	private final CacheService self;
+	private final CacheService self; /* !Important */
 	private final XSchoolDAO schoolDAO;
 	private final static String key = "testKey";
 
@@ -86,6 +86,17 @@ public class CacheService {
 		return null;
 	}
 
+	@Cacheable(value = CACHE_DISTRICT_KV, key = "#districtId", unless = "#result != null")
+	public HashMap<String, String> getDistrictKVsByDistrictId(String districtId) {
+		try {
+			return cacheRepository.getDistrictKVsByDistrictId(districtId, districtId, self.getAccessToken(key));
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
 	@Cacheable(value = CACHE_SCHOOL, key = "#districtId", unless = "#result != null")
 	public List<School> getSchoolsByDistrictId(String districtId) {
 		return cacheRepository.getSchoolsByDistrictId(districtId, self.getAccessToken(key));
@@ -104,6 +115,17 @@ public class CacheService {
 				logger.debug("SchoolId: " + schoolIdentifier.get().getSchoolId());
 				return cacheRepository.getSchoolKVsBySchoolId(schoolRefId, schoolIdentifier.get().getSchoolId(), self.getAccessToken(key));
 			}
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	@Cacheable(value = CACHE_SCHOOL_KV, key = "#schoolId", unless = "#result != null")
+	public HashMap<String, String> getSchoolKVsBySchoolId(String schoolId) {
+		try {
+			return cacheRepository.getSchoolKVsBySchoolId(schoolId, schoolId, self.getAccessToken(key));
 		}
 		catch(Exception e) {
 			e.printStackTrace();

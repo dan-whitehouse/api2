@@ -7,7 +7,7 @@ import java.util.Objects;
 import java.util.stream.Stream;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 @JsonPropertyOrder({"phoneNumberType", "number", "primaryIndicator"})
 public class PhoneNumber {
 	@JsonProperty("phoneNumberType")

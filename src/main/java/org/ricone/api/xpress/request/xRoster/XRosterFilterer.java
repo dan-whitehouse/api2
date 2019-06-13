@@ -3,9 +3,8 @@ package org.ricone.api.xpress.request.xRoster;
 import org.apache.commons.collections4.CollectionUtils;
 import org.ricone.api.xpress.component.ControllerData;
 import org.ricone.api.xpress.model.*;
-import org.ricone.config.cache.FilterCache;
 import org.ricone.config.model.XRosterFilter;
-import org.ricone.init.CacheService;
+import org.ricone.config.cache.CacheService;
 import org.springframework.stereotype.Component;
 
 import java.util.Iterator;
@@ -47,6 +46,9 @@ public class XRosterFilterer {
         if(!filter.getRefId()) {
             instance.setRefId(null);
         }
+        if (!filter.getSectionRefId()) {
+            instance.setSectionRefId(null);
+        }
 
         //Course & School Data
         if(!filter.getCourseRefId()) {
@@ -72,59 +74,70 @@ public class XRosterFilterer {
 
         //Meeting Times
         if(instance.getMeetingTimes() != null) {
-            for (MeetingTime i : instance.getMeetingTimes().getMeetingTime()) {
+            instance.getMeetingTimes().getMeetingTime().forEach(meetingTime -> {
                 if(!filter.getMeetingTimesmeetingTimeroomNumber()) {
-                    i.setRoomNumber(null);
+                    meetingTime.setRoomNumber(null);
                 }
                 if(!filter.getMeetingTimessessionCode()) {
-                    i.setSessionCode(null);
+                    meetingTime.setSessionCode(null);
                 }
                 if(!filter.getMeetingTimesmeetingTimeTableDay()) {
-                    i.setTimeTableDay(null);
+                    meetingTime.setTimeTableDay(null);
                 }
                 if(!filter.getMeetingTimesmeetingTimetimeTablePeriod()) {
-                    i.setTimeTablePeriod(null);
+                    meetingTime.setTimeTablePeriod(null);
                 }
                 if(!filter.getMeetingTimesmeetingTimeclassBeginningTime()) {
-                    i.setClassBeginningTime(null);
+                    meetingTime.setClassBeginningTime(null);
                 }
                 if(!filter.getMeetingTimesmeetingTimeclassEndingTime()) {
-                    i.setClassEndingTime(null);
+                    meetingTime.setClassEndingTime(null);
                 }
 
                 //Class Meeting Days
-                if(i.getClassMeetingDays() != null) {
+                if(meetingTime.getClassMeetingDays() != null) {
                     if(!filter.getMeetingTimesmeetingTimeclassMeetingDaysbellScheduleDay()) {
-                        i.getClassMeetingDays().setBellScheduleDay(null);
+                        meetingTime.getClassMeetingDays().setBellScheduleDay(null);
                     }
                 }
 
                 //Calendar
                 if(!filter.getMeetingTimesschoolCalendarRefId()) {
-                    i.setSchoolCalendarRefId(null);
+                    meetingTime.setSchoolCalendarRefId(null);
                 }
+            });
+
+            instance.getMeetingTimes().getMeetingTime().removeIf(MeetingTime::isEmptyObject);
+
+            if (CollectionUtils.isEmpty(instance.getMeetingTimes().getMeetingTime())) {
+                instance.setMeetingTimes(null);
             }
         }
 
 
         //Students
         if(instance.getStudents() != null) {
-            for (StudentReference i : instance.getStudents().getStudentReference()) {
+            instance.getStudents().getStudentReference().forEach(studentReference -> {
                 if(!filter.getStudentsstudentReferencerefID()) {
-                    i.setRefId(null);
+                    studentReference.setRefId(null);
                 }
                 if(!filter.getStudentsstudentReferencelocalId()) {
-                    i.setLocalId(null);
+                    studentReference.setLocalId(null);
                 }
                 if(!filter.getStudentsstudentReferencegivenName()) {
-                    i.setGivenName(null);
+                    studentReference.setGivenName(null);
                 }
                 if(!filter.getStudentsstudentReferencefamilyName()) {
-                    i.setFamilyName(null);
+                    studentReference.setFamilyName(null);
                 }
+            });
+
+            instance.getStudents().getStudentReference().removeIf(StudentReference::isEmptyObject);
+
+            if (CollectionUtils.isEmpty(instance.getStudents().getStudentReference())) {
+                instance.setStudents(null);
             }
         }
-
 
         //Primary Staff
         if(instance.getPrimaryStaff() != null) {
@@ -145,6 +158,11 @@ public class XRosterFilterer {
                 if(!filter.getPrimaryStaffstaffPersonReferencefamilyName()) {
                     instance.getPrimaryStaff().getStaffPersonReference().setFamilyName(null);
                 }
+
+                // Remove object if empty
+                if (instance.getPrimaryStaff().getStaffPersonReference().isEmptyObject()) {
+                    instance.getPrimaryStaff().setStaffPersonReference(null);
+                }
             }
             if(!filter.getPrimaryStaffpercentResponsible()) {
                 instance.getPrimaryStaff().setPercentResponsible(null);
@@ -152,31 +170,47 @@ public class XRosterFilterer {
             if(!filter.getPrimaryStaffteacherOfRecord()) {
                 instance.getPrimaryStaff().setTeacherOfRecord(null);
             }
+
+            // Remove object if empty
+            if (instance.getPrimaryStaff().isEmptyObject()) {
+                instance.setPrimaryStaff(null);
+            }
         }
 
         //Other Staffs
         if(instance.getOtherStaffs() != null) {
-            for (OtherStaff i : instance.getOtherStaffs().getOtherStaff()) {
-                if(i.getStaffPersonReference() != null) {
+            instance.getOtherStaffs().getOtherStaff().forEach(staff -> {
+                if(staff.getStaffPersonReference() != null) {
                     if(!filter.getPrimaryStaffstaffPersonReferencerefId()) {
-                        i.getStaffPersonReference().setRefId(null);
+                        staff.getStaffPersonReference().setRefId(null);
                     }
                     if(!filter.getPrimaryStaffstaffPersonReferencelocalId()) {
-                        i.getStaffPersonReference().setLocalId(null);
+                        staff.getStaffPersonReference().setLocalId(null);
                     }
                     if(!filter.getPrimaryStaffstaffPersonReferencegivenName()) {
-                        i.getStaffPersonReference().setGivenName(null);
+                        staff.getStaffPersonReference().setGivenName(null);
                     }
                     if(!filter.getPrimaryStaffstaffPersonReferencefamilyName()) {
-                        i.getStaffPersonReference().setFamilyName(null);
+                        staff.getStaffPersonReference().setFamilyName(null);
+                    }
+
+                    // Make null so that the iterator can remove it if it is empty
+                    if (staff.getStaffPersonReference().isEmptyObject()) {
+                        staff.setStaffPersonReference(null);
                     }
                 }
                 if(!filter.getPrimaryStaffpercentResponsible()) {
-                    i.setPercentResponsible(null);
+                    staff.setPercentResponsible(null);
                 }
                 if(!filter.getPrimaryStaffteacherOfRecord()) {
-                    i.setTeacherOfRecord(null);
+                    staff.setTeacherOfRecord(null);
                 }
+            });
+
+            instance.getOtherStaffs().getOtherStaff().removeIf(OtherStaff::isEmptyObject);
+
+            if (CollectionUtils.isEmpty(instance.getOtherStaffs().getOtherStaff())) {
+                instance.setOtherStaffs(null);
             }
         }
         return instance;

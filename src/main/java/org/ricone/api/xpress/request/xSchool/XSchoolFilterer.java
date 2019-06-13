@@ -3,11 +3,9 @@ package org.ricone.api.xpress.request.xSchool;
 import org.apache.commons.collections4.CollectionUtils;
 import org.ricone.api.xpress.component.ControllerData;
 import org.ricone.api.xpress.model.*;
-import org.ricone.config.cache.FilterCache;
 import org.ricone.config.model.XSchoolFilter;
-import org.ricone.init.CacheService;
+import org.ricone.config.cache.CacheService;
 import org.springframework.stereotype.Component;
-
 
 import java.util.Iterator;
 
@@ -78,6 +76,11 @@ public class XSchoolFilterer {
             if(!filter.getAddressstateProvince()) {
                 instance.getAddress().setStateProvince(null);
             }
+
+            // Remove object if empty
+            if (instance.getAddress().isEmptyObject()) {
+                instance.setAddress(null);
+            }
         }
 
         //Primary Phone Number
@@ -91,21 +94,31 @@ public class XSchoolFilterer {
             if(!filter.getPhoneNumberprimaryIndicator()) {
                 instance.getPhoneNumber().setPrimaryIndicator(null);
             }
+
+            // Remove object if empty
+            if (instance.getPhoneNumber().isEmptyObject()) {
+                instance.setPhoneNumber(null);
+            }
         }
 
 
         //Other Phone Numbers
-        if (instance.getOtherPhoneNumbers() != null) {
-            for (PhoneNumber i : instance.getOtherPhoneNumbers().getPhoneNumber()) {
-                if(!filter.getOtherPhoneNumbersphoneNumbernumber()) {
-                    i.setNumber(null);
+        if(instance.getOtherPhoneNumbers() != null) {
+            instance.getOtherPhoneNumbers().getPhoneNumber().forEach(phoneNumber -> {
+                if (!filter.getOtherPhoneNumbersphoneNumbernumber()) {
+                    phoneNumber.setNumber(null);
                 }
-                if(!filter.getOtherPhoneNumbersphoneNumberphoneNumberType()) {
-                    i.setPhoneNumberType(null);
+                if (!filter.getOtherPhoneNumbersphoneNumberphoneNumberType()) {
+                    phoneNumber.setPhoneNumberType(null);
                 }
-                if(!filter.getOtherPhoneNumbersphoneNumberprimaryIndicator()) {
-                    i.setPrimaryIndicator(null);
+                if (!filter.getOtherPhoneNumbersphoneNumberprimaryIndicator()) {
+                    phoneNumber.setPrimaryIndicator(null);
                 }
+            });
+            instance.getOtherPhoneNumbers().getPhoneNumber().removeIf(PhoneNumber::isEmptyObject);
+
+            if (CollectionUtils.isEmpty(instance.getOtherPhoneNumbers().getPhoneNumber())) {
+                instance.setOtherPhoneNumbers(null);
             }
         }
 
@@ -123,13 +136,19 @@ public class XSchoolFilterer {
         }
 
         //Other Identifiers
-        if(instance.getOtherIds() != null)
-        for (OtherId i : instance.getOtherIds().getOtherId()) {
-            if(!filter.getOtherIdsotherIdid()) {
-                i.setId(null);
-            }
-            if(!filter.getOtherIdsotherIdtype()) {
-                i.setType(null);
+        if(instance.getOtherIds() != null) {
+            instance.getOtherIds().getOtherId().forEach(otherId -> {
+                if(!filter.getOtherIdsotherIdid()) {
+                    otherId.setId(null);
+                }
+                if(!filter.getOtherIdsotherIdtype()) {
+                    otherId.setType(null);
+                }
+            });
+            instance.getOtherIds().getOtherId().removeIf(OtherId::isEmptyObject);
+
+            if (CollectionUtils.isEmpty(instance.getOtherIds().getOtherId())) {
+                instance.setOtherIds(null);
             }
         }
         return instance;

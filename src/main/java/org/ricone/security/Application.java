@@ -6,7 +6,7 @@ import com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule;
 import org.ricone.config.model.App;
 import org.ricone.config.model.DataXML;
 import org.ricone.config.model.District;
-import org.ricone.init.CacheService;
+import org.ricone.config.cache.CacheService;
 import org.ricone.security.acl.Environment;
 import org.ricone.security.acl.PathPermission;
 import org.ricone.security.acl.PathPermissionMapper;

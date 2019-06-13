@@ -8,6 +8,8 @@ import org.ricone.api.core.model.LeaTelephone;
 import org.ricone.api.core.model.wrapper.LeaWrapper;
 import org.ricone.api.xpress.component.BaseMapper;
 import org.ricone.api.xpress.model.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -15,6 +17,7 @@ import java.util.List;
 
 @Component("XPress:XLeas:XLeaMapper")
 public class XLeaMapper extends BaseMapper {
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     public XLeaMapper() {
     }
@@ -51,7 +54,6 @@ public class XLeaMapper extends BaseMapper {
             xLea.setLocalId(instance.getLeaId());
             xLea.setStateProvinceId(instance.getLeaSeaId());
             xLea.setNcesId(instance.getLeaNcesId());
-
 
             //Address
             Address address = mapAddress(instance);

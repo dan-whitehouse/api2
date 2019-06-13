@@ -1,4 +1,4 @@
-package org.ricone.init;
+package org.ricone.config.cache;
 
 import com.github.benmanes.caffeine.cache.AsyncCache;
 import com.github.benmanes.caffeine.cache.AsyncLoadingCache;

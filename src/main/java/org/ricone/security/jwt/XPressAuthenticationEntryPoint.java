@@ -22,30 +22,36 @@ import java.io.IOException;
 import java.util.UUID;
 
 @Component("restAuthenticationEntryPoint")
-public class JWTAuthenticationEntryPoint implements AuthenticationEntryPoint {
+public class XPressAuthenticationEntryPoint implements AuthenticationEntryPoint {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authenticationException) throws IOException, ServletException {
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        try {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 
-        response.setContentType(request.getContentType());
-        if(StringUtils.isBlank(request.getContentType())) {
-            response.setContentType("application/json");
-        }
+            response.setContentType(request.getContentType());
+            if(StringUtils.isBlank(request.getContentType())) {
+                response.setContentType("application/json");
+            }
 
-        ObjectMapper mapper = new ObjectMapper();
-        if(request.getContentType().equalsIgnoreCase("application/xml")) {
-            mapper = new XmlMapper();
-        }
+            ObjectMapper mapper = new ObjectMapper();
+            if(request.getContentType() != null) {
+                if(request.getContentType().equalsIgnoreCase("application/xml")) {
+                    mapper = new XmlMapper();
+                }
+            }
 
-        response.getOutputStream().println(
-            mapper.writeValueAsString(
-                new XErrorResponse(
+            response.getOutputStream().println(
+                mapper.writeValueAsString(
+                    new XErrorResponse(
                         //https://medium.com/fullstackblog/spring-security-jwt-token-expired-custom-response-b85437914b81
-                    new XError(UUID.randomUUID().toString(), 401, "Unauthorized", (String)request.getAttribute("JWTVerificationException"))
+                        new XError(UUID.randomUUID().toString(), 401, "Unauthorized", (String)request.getAttribute("JWTVerificationException"))
+                    )
                 )
-            )
-        );
-
+            );
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
     }
 }

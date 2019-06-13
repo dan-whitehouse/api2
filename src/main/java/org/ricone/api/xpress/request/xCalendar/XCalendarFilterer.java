@@ -2,13 +2,9 @@ package org.ricone.api.xpress.request.xCalendar;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.ricone.api.xpress.component.ControllerData;
-import org.ricone.api.xpress.model.SessionList;
-import org.ricone.api.xpress.model.XCalendar;
-import org.ricone.api.xpress.model.XCalendarResponse;
-import org.ricone.api.xpress.model.XCalendarsResponse;
-import org.ricone.config.cache.FilterCache;
+import org.ricone.api.xpress.model.*;
 import org.ricone.config.model.XCalendarFilter;
-import org.ricone.init.CacheService;
+import org.ricone.config.cache.CacheService;
 import org.springframework.stereotype.Component;
 
 import java.util.Iterator;
@@ -58,35 +54,39 @@ public class XCalendarFilterer {
         }
 
         //Sessions
-        if (instance.getSessions() != null) {
-            for (SessionList i : instance.getSessions().getSessionList()) {
+        if(instance.getSessions() != null) {
+            instance.getSessions().getSessionList().forEach(session -> {
                 if(!filter.getSessionssessionListdescription()) {
-                    i.setDescription(null);
+                    session.setDescription(null);
                 }
                 if(!filter.getSessionssessionListsessionCode()) {
-                    i.setSessionCode(null);
+                    session.setSessionCode(null);
                 }
                 if(!filter.getSessionssessionListsessionType()) {
-                    i.setSessionType(null);
+                    session.setSessionType(null);
                 }
                 if(!filter.getSessionssessionListlinkedSessionCode()) {
-                    i.setLinkedSessionCode(null);
+                    session.setLinkedSessionCode(null);
                 }
                 if(!filter.getSessionssessionListmarkingTerm()) {
-                    i.setMarkingTerm(null);
+                    session.setMarkingTerm(null);
                 }
                 if(!filter.getSessionssessionListschedulingTerm()) {
-                    i.setSchedulingTerm(null);
+                    session.setSchedulingTerm(null);
                 }
                 if(!filter.getSessionssessionListstartDate()) {
-                    i.setStartDate(null);
+                    session.setStartDate(null);
                 }
                 if(!filter.getSessionssessionListendDate()) {
-                    i.setEndDate(null);
+                    session.setEndDate(null);
                 }
+            });
+            instance.getSessions().getSessionList().removeIf(SessionList::isEmptyObject);
+
+            if (CollectionUtils.isEmpty(instance.getSessions().getSessionList())) {
+                instance.setSessions(null);
             }
         }
-
         return instance;
     }
 }

@@ -10,7 +10,7 @@ import java.util.Map;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"app_id", "ims.global.org.security.scope", "provider_id", "href", "iat", "exp", "iss"})
 public class DecodedToken extends BaseDecodedToken implements Serializable {
-
+	private final static long serialVersionUID = -2898266389932101215L;
 	@JsonProperty("app_id")
 	private String appId;
 	@JsonProperty("ims.global.org.security.scope")
@@ -27,7 +27,7 @@ public class DecodedToken extends BaseDecodedToken implements Serializable {
 	private String iss;
 	@JsonIgnore
 	private Map<String, Object> additionalProperties = new HashMap<String, Object>();
-	private final static long serialVersionUID = -2898266389932101215L;
+
 
 	/**
 	 * No args constructor for use in serialization
@@ -59,7 +59,6 @@ public class DecodedToken extends BaseDecodedToken implements Serializable {
 	public String getAppId() {
 		return appId;
 	}
-
 	@JsonProperty("app_id")
 	public void setAppId(String appId) {
 		this.appId = appId;
@@ -69,7 +68,6 @@ public class DecodedToken extends BaseDecodedToken implements Serializable {
 	public String getImsGlobalOrgSecurityScope() {
 		return imsGlobalOrgSecurityScope;
 	}
-
 	@JsonProperty("ims.global.org.security.scope")
 	public void setImsGlobalOrgSecurityScope(String imsGlobalOrgSecurityScope) {
 		this.imsGlobalOrgSecurityScope = imsGlobalOrgSecurityScope;
@@ -79,7 +77,6 @@ public class DecodedToken extends BaseDecodedToken implements Serializable {
 	public String getProviderId() {
 		return providerId;
 	}
-
 	@JsonProperty("provider_id")
 	public void setProviderId(String providerId) {
 		this.providerId = providerId;
@@ -89,7 +86,6 @@ public class DecodedToken extends BaseDecodedToken implements Serializable {
 	public String getHref() {
 		return href;
 	}
-
 	@JsonProperty("href")
 	public void setHref(String href) {
 		this.href = href;
@@ -99,7 +95,6 @@ public class DecodedToken extends BaseDecodedToken implements Serializable {
 	public Integer getIat() {
 		return iat;
 	}
-
 	@JsonProperty("iat")
 	public void setIat(Integer iat) {
 		this.iat = iat;
@@ -109,7 +104,6 @@ public class DecodedToken extends BaseDecodedToken implements Serializable {
 	public Integer getExp() {
 		return exp;
 	}
-
 	@JsonProperty("exp")
 	public void setExp(Integer exp) {
 		this.exp = exp;
@@ -119,7 +113,6 @@ public class DecodedToken extends BaseDecodedToken implements Serializable {
 	public String getIss() {
 		return iss;
 	}
-
 	@JsonProperty("iss")
 	public void setIss(String iss) {
 		this.iss = iss;
@@ -129,7 +122,6 @@ public class DecodedToken extends BaseDecodedToken implements Serializable {
 	public Map<String, Object> getAdditionalProperties() {
 		return this.additionalProperties;
 	}
-
 	@JsonAnySetter
 	public void setAdditionalProperty(String name, Object value) {
 		this.additionalProperties.put(name, value);

@@ -3,9 +3,8 @@ package org.ricone.api.xpress.request.xContact;
 import org.apache.commons.collections4.CollectionUtils;
 import org.ricone.api.xpress.component.ControllerData;
 import org.ricone.api.xpress.model.*;
-import org.ricone.config.cache.FilterCache;
 import org.ricone.config.model.XContactFilter;
-import org.ricone.init.CacheService;
+import org.ricone.config.cache.CacheService;
 import org.springframework.stereotype.Component;
 
 import java.util.Iterator;
@@ -72,25 +71,30 @@ public class XContactFilterer {
 
         //Other Names
         if(instance.getOtherNames() != null) {
-            for (Name i : instance.getOtherNames().getName()) {
+            instance.getOtherNames().getName().forEach(name -> {
                 if(!filter.getOtherNamesnamefamilyName()) {
-                    i.setFamilyName(null);
+                    name.setFamilyName(null);
                 }
                 if(!filter.getOtherNamesnamegivenName()) {
-                    i.setGivenName(null);
+                    name.setGivenName(null);
                 }
                 if(!filter.getOtherNamesnamemiddleName()) {
-                    i.setMiddleName(null);
+                    name.setMiddleName(null);
                 }
                 if(!filter.getOtherNamesnameprefix()) {
-                    i.setPrefix(null);
+                    name.setPrefix(null);
                 }
                 if(!filter.getOtherNamesnamesuffix()) {
-                    i.setSuffix(null);
+                    name.setSuffix(null);
                 }
                 if(!filter.getOtherNamesnametype()) {
-                    i.setType(null);
+                    name.setType(null);
                 }
+            });
+            instance.getOtherNames().getName().removeIf(Name::isEmptyObject);
+
+            if (CollectionUtils.isEmpty(instance.getOtherNames().getName())) {
+                instance.setOtherNames(null);
             }
         }
 
@@ -102,17 +106,27 @@ public class XContactFilterer {
             if(!filter.getEmailemailAddress()) {
                 instance.getEmail().setEmailAddress(null);
             }
+
+            // Remove object if empty
+            if (instance.getEmail().isEmptyObject()) {
+                instance.setEmail(null);
+            }
         }
 
         //Other Email
         if(instance.getOtherEmails() != null) {
-            for (Email i : instance.getOtherEmails().getEmail()) {
+            instance.getOtherEmails().getEmail().forEach(email -> {
                 if(!filter.getOtherEmailsemailemailType()) {
-                    i.setEmailType(null);
+                    email.setEmailType(null);
                 }
                 if(!filter.getOtherEmailsemailemailAddress()) {
-                    i.setEmailAddress(null);
+                    email.setEmailAddress(null);
                 }
+            });
+            instance.getOtherEmails().getEmail().removeIf(Email::isEmptyObject);
+
+            if (CollectionUtils.isEmpty(instance.getOtherEmails().getEmail())) {
+                instance.setOtherEmails(null);
             }
         }
 
@@ -123,13 +137,18 @@ public class XContactFilterer {
 
         //Other Identifiers
         if(instance.getOtherIds() != null) {
-            for (OtherId i : instance.getOtherIds().getOtherId()) {
+            instance.getOtherIds().getOtherId().forEach(otherId -> {
                 if(!filter.getOtherIdsotherIdid()) {
-                    i.setId(null);
+                    otherId.setId(null);
                 }
                 if(!filter.getOtherIdsotherIdtype()) {
-                    i.setType(null);
+                    otherId.setType(null);
                 }
+            });
+            instance.getOtherIds().getOtherId().removeIf(OtherId::isEmptyObject);
+
+            if (CollectionUtils.isEmpty(instance.getOtherIds().getOtherId())) {
+                instance.setOtherIds(null);
             }
         }
 
@@ -156,6 +175,11 @@ public class XContactFilterer {
             if(!filter.getAddressstateProvince()) {
                 instance.getAddress().setStateProvince(null);
             }
+
+            // Remove object if empty
+            if (instance.getAddress().isEmptyObject()) {
+                instance.setAddress(null);
+            }
         }
 
 
@@ -170,56 +194,71 @@ public class XContactFilterer {
             if(!filter.getPhoneNumberprimaryIndicator()) {
                 instance.getPhoneNumber().setPrimaryIndicator(null);
             }
+
+            // Remove object if empty
+            if (instance.getPhoneNumber().isEmptyObject()) {
+                instance.setPhoneNumber(null);
+            }
         }
 
         //Other Phone Numbers
         if(instance.getOtherPhoneNumbers() != null) {
-            for (PhoneNumber i : instance.getOtherPhoneNumbers().getPhoneNumber()) {
-                if(!filter.getOtherPhoneNumbersphoneNumbernumber()) {
-                    i.setNumber(null);
+            instance.getOtherPhoneNumbers().getPhoneNumber().forEach(phoneNumber -> {
+                if (!filter.getOtherPhoneNumbersphoneNumbernumber()) {
+                    phoneNumber.setNumber(null);
                 }
-                if(!filter.getOtherPhoneNumbersphoneNumberphoneNumberType()) {
-                    i.setPhoneNumberType(null);
+                if (!filter.getOtherPhoneNumbersphoneNumberphoneNumberType()) {
+                    phoneNumber.setPhoneNumberType(null);
                 }
-                if(!filter.getOtherPhoneNumbersphoneNumberprimaryIndicator()) {
-                    i.setPrimaryIndicator(null);
+                if (!filter.getOtherPhoneNumbersphoneNumberprimaryIndicator()) {
+                    phoneNumber.setPrimaryIndicator(null);
                 }
+            });
+            instance.getOtherPhoneNumbers().getPhoneNumber().removeIf(PhoneNumber::isEmptyObject);
+
+            if (CollectionUtils.isEmpty(instance.getOtherPhoneNumbers().getPhoneNumber())) {
+                instance.setOtherPhoneNumbers(null);
             }
         }
 
         //Academic Summary
         if(instance.getRelationships() != null) {
-            for (Relationship i : instance.getRelationships().getRelationship()) {
+            instance.getRelationships().getRelationship().forEach(relationship -> {
                 if(!filter.getRelationshipsrelationshipcommunicationsIndicator()) {
-                    i.setCommunicationsIndicator(null);
+                    relationship.setCommunicationsIndicator(null);
                 }
                 if(!filter.getRelationshipsrelationshipcontactSequence()) {
-                    i.setContactSequence(null);
+                    relationship.setContactSequence(null);
                 }
                 if(!filter.getRelationshipsrelationshipcustodialIndicator()) {
-                    i.setCustodialIndicator(null);
+                    relationship.setCustodialIndicator(null);
                 }
                 if(!filter.getRelationshipsrelationshipemergencyContactIndicator()) {
-                    i.setEmergencyContactIndicator(null);
+                    relationship.setEmergencyContactIndicator(null);
                 }
                 if(!filter.getRelationshipsrelationshipfinancialResponsibilityIndicator()) {
-                    i.setFinancialResponsibilityIndicator(null);
+                    relationship.setFinancialResponsibilityIndicator(null);
                 }
                 if(!filter.getRelationshipsrelationshiplivesWith()) {
-                    i.setLivesWith(null);
+                    relationship.setLivesWith(null);
                 }
                 if(!filter.getRelationshipsrelationshipprimaryContactIndicator()) {
-                    i.setPrimaryContactIndicator(null);
+                    relationship.setPrimaryContactIndicator(null);
                 }
                 if(!filter.getRelationshipsrelationshiprelationshipCode()) {
-                    i.setRelationshipCode(null);
+                    relationship.setRelationshipCode(null);
                 }
                 if(!filter.getRelationshipsrelationshiprestrictions()) {
-                    i.setRestrictions(null);
+                    relationship.setRestrictions(null);
                 }
                 if(!filter.getRelationshipsrelationshipstudentRefId()) {
-                    i.setStudentRefId(null);
+                    relationship.setStudentRefId(null);
                 }
+            });
+            instance.getRelationships().getRelationship().removeIf(Relationship::isEmptyObject);
+
+            if (CollectionUtils.isEmpty(instance.getRelationships().getRelationship())) {
+                instance.setRelationships(null);
             }
         }
         return instance;

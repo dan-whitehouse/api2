@@ -7,7 +7,6 @@ import org.ricone.api.core.model.Student;
 import org.ricone.api.core.model.wrapper.StudentWrapper;
 import org.ricone.api.xpress.component.ControllerData;
 import org.ricone.api.xpress.component.aupp.UserPasswordGenerator;
-import org.ricone.api.xpress.component.aupp.UsernamePasswordDAO;
 import org.ricone.api.xpress.component.error.exception.ForbiddenException;
 import org.ricone.api.xpress.model.AppProvisioningInfo;
 import org.ricone.api.xpress.model.XStudent;
@@ -22,23 +21,18 @@ import java.util.List;
 /**
  * @author Dan Whitehouse <daniel.whitehouse@neric.org>
  * @version 2.0.0
- * @since 2019-05-15
+ * @since 2019-06-13
  */
 
 @Component("XPress:XStudents:XStudentUsernamePasswordMapper")
 public class XStudentUsernamePasswordMapper {
     private final UserPasswordGenerator generator;
-    private final UsernamePasswordDAO dao;
 
-    public XStudentUsernamePasswordMapper(UserPasswordGenerator generator, UsernamePasswordDAO dao) {
+    public XStudentUsernamePasswordMapper(UserPasswordGenerator generator) {
         this.generator = generator;
-        this.dao = dao;
     }
 
     public XStudentsResponse convert(List<StudentWrapper> instance, ControllerData metadata, String schoolRefId) throws Exception {
-        // Needed to populate App Leas so metaData.getApp().getDistrictKVsBySchoolRefId isn't empty
-        dao.initAppLeas(metadata, schoolRefId);
-
         //Grab The Correct KV Map (Could be for a District or School
         HashMap<String, String> kvMap = getKVs(metadata, schoolRefId);
 

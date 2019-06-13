@@ -2,10 +2,12 @@ package org.ricone.api.xpress.request.xCourse;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.ricone.api.xpress.component.ControllerData;
-import org.ricone.api.xpress.model.*;
-import org.ricone.config.cache.FilterCache;
+import org.ricone.api.xpress.model.OtherId;
+import org.ricone.api.xpress.model.XCourse;
+import org.ricone.api.xpress.model.XCourseResponse;
+import org.ricone.api.xpress.model.XCoursesResponse;
 import org.ricone.config.model.XCourseFilter;
-import org.ricone.init.CacheService;
+import org.ricone.config.cache.CacheService;
 import org.springframework.stereotype.Component;
 
 import java.util.Iterator;
@@ -78,12 +80,20 @@ public class XCourseFilterer {
         }
 
         //Other Identifiers
-        for (OtherId i : instance.getOtherIds().getOtherId()) {
-            if(!filter.getOtherIdsotherIdid()) {
-                i.setId(null);
-            }
-            if(!filter.getOtherIdsotherIdtype()) {
-                i.setType(null);
+        if(instance.getOtherIds() != null) {
+            instance.getOtherIds().getOtherId().forEach(otherId -> {
+                if(!filter.getOtherIdsotherIdid()) {
+                    otherId.setId(null);
+                }
+                if(!filter.getOtherIdsotherIdtype()) {
+                    otherId.setType(null);
+                }
+            });
+
+            instance.getOtherIds().getOtherId().removeIf(OtherId::isEmptyObject);
+
+            if (CollectionUtils.isEmpty(instance.getOtherIds().getOtherId())) {
+                instance.setOtherIds(null);
             }
         }
 

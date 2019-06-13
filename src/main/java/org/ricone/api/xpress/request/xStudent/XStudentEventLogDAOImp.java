@@ -312,7 +312,7 @@ public class XStudentEventLogDAOImp extends BaseDAO implements XStudentEventLogD
 		final Join<StudentEventLog, Lea> lea = from.join(JOIN_LEA, JoinType.LEFT);
 
 		select.select(cb.greatest(from.<Date>get(EVENT_TIMESTAMP)));
-		select.where(lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()));
+		select.where(lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds()));
 		select.orderBy(cb.asc(from.get(EVENT_TIMESTAMP)));
 
 		Date instance = em.createQuery(select).getSingleResult();
@@ -326,7 +326,7 @@ public class XStudentEventLogDAOImp extends BaseDAO implements XStudentEventLogD
 	
 	private Predicate whereFindAll(ControllerData metadata, CriteriaBuilder cb, CriteriaQuery<?> select, Root<StudentEventLog> from, SetJoin<Student, StudentEnrollment> studentEnrollments, Join<StudentEventLog, Lea> lea) {
 		Predicate iso8601GreaterThanEqualTo = cb.greaterThanOrEqualTo(from.get(EVENT_TIMESTAMP), metadata.getChangesSinceLocalDateTime());
-		Predicate localIdInControllerData = lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds());
+		Predicate localIdInControllerData = lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds());
 
 		if(metadata.getApplication().getApp().includeExitedStudents()) {
 			return cb.and(iso8601GreaterThanEqualTo, localIdInControllerData);
@@ -342,7 +342,7 @@ public class XStudentEventLogDAOImp extends BaseDAO implements XStudentEventLogD
 			subQuery1.select(studentEnrollmentsSq1.get(STUDENT_ENROLLMENT_REF_ID));
 			subQuery1.where
 			(
-				leaSq1.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()),
+				leaSq1.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds()),
 				cb.equal(studentEnrollmentsSq1.get("membershipTypeCode"), "Home"),
 				cb.isNotNull(studentEnrollmentsSq1.get("enrollmentExitDate"))
 			);
@@ -358,7 +358,7 @@ public class XStudentEventLogDAOImp extends BaseDAO implements XStudentEventLogD
 			subQuery2.select(studentEnrollmentsSq2.get(STUDENT_ENROLLMENT_REF_ID));
 			subQuery2.where
 			(
-				leaSq2.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()),
+				leaSq2.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds()),
 				cb.equal(studentEnrollmentsSq2.get("membershipTypeCode"), "Home"),
 				cb.equal(entryExitCodesSq2.get("entryExitType"), "Exit"),
 				cb.equal(entryExitCodesSq2.get("systemTypeCode"), "CEDS")
@@ -373,7 +373,7 @@ public class XStudentEventLogDAOImp extends BaseDAO implements XStudentEventLogD
 
 	private Predicate whereFindAllByLeaRefId(ControllerData metadata, CriteriaBuilder cb, CriteriaQuery<?> select, Root<StudentEventLog> from, SetJoin<Student, StudentEnrollment> studentEnrollments, Join<StudentEventLog, Lea> lea, String refId) {
 		Predicate iso8601GreaterThanEqualTo = cb.greaterThanOrEqualTo(from.get(EVENT_TIMESTAMP), metadata.getChangesSinceLocalDateTime());
-		Predicate localIdInControllerData = lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds());
+		Predicate localIdInControllerData = lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds());
 
 		if(metadata.getApplication().getApp().includeExitedStudents()) {
 			return cb.and(iso8601GreaterThanEqualTo, localIdInControllerData, cb.equal(lea.get(LEA_REF_ID), refId));
@@ -389,7 +389,7 @@ public class XStudentEventLogDAOImp extends BaseDAO implements XStudentEventLogD
 			subQuery1.select(studentEnrollmentsSq1.get(STUDENT_ENROLLMENT_REF_ID));
 			subQuery1.where
 			(
-				leaSq1.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()),
+				leaSq1.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds()),
 				cb.equal(leaSq1.get(LEA_REF_ID), refId),
 				cb.equal(studentEnrollmentsSq1.get("membershipTypeCode"), "Home"),
 				cb.isNotNull(studentEnrollmentsSq1.get("enrollmentExitDate"))
@@ -406,7 +406,7 @@ public class XStudentEventLogDAOImp extends BaseDAO implements XStudentEventLogD
 			subQuery2.select(studentEnrollmentsSq2.get(STUDENT_ENROLLMENT_REF_ID));
 			subQuery2.where
 			(
-				leaSq2.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()),
+				leaSq2.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds()),
 				cb.equal(leaSq2.get(LEA_REF_ID), refId),
 				cb.equal(studentEnrollmentsSq2.get("membershipTypeCode"), "Home"),
 				cb.equal(entryExitCodesSq2.get("entryExitType"), "Exit"),
@@ -422,7 +422,7 @@ public class XStudentEventLogDAOImp extends BaseDAO implements XStudentEventLogD
 
 	private Predicate whereFindAllBySchoolRefId(ControllerData metadata, CriteriaBuilder cb, CriteriaQuery<?> select, Root<StudentEventLog> from, SetJoin<Student, StudentEnrollment> studentEnrollments, Join<StudentEventLog, Lea> lea, Join<StudentEnrollment, School> school, String refId) {
 		Predicate iso8601GreaterThanEqualTo = cb.greaterThanOrEqualTo(from.get(EVENT_TIMESTAMP), metadata.getChangesSinceLocalDateTime());
-		Predicate localIdInControllerData = lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds());
+		Predicate localIdInControllerData = lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds());
 
 		if(metadata.getApplication().getApp().includeExitedStudents()) {
 			return cb.and(iso8601GreaterThanEqualTo, localIdInControllerData, cb.equal(school.get(SCHOOL_REF_ID), refId));
@@ -439,7 +439,7 @@ public class XStudentEventLogDAOImp extends BaseDAO implements XStudentEventLogD
 			subQuery1.select(studentEnrollmentsSq1.get(STUDENT_ENROLLMENT_REF_ID));
 			subQuery1.where
 			(
-				leaSq1.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()),
+				leaSq1.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds()),
 				cb.equal(schoolSq1.get(SCHOOL_REF_ID), refId),
 				cb.equal(studentEnrollmentsSq1.get("membershipTypeCode"), "Home"),
 				cb.isNotNull(studentEnrollmentsSq1.get("enrollmentExitDate"))
@@ -457,7 +457,7 @@ public class XStudentEventLogDAOImp extends BaseDAO implements XStudentEventLogD
 			subQuery2.select(studentEnrollmentsSq2.get(STUDENT_ENROLLMENT_REF_ID));
 			subQuery2.where
 			(
-				leaSq2.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()),
+				leaSq2.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds()),
 				cb.equal(schoolSq2.get(SCHOOL_REF_ID), refId),
 				cb.equal(studentEnrollmentsSq2.get("membershipTypeCode"), "Home"),
 				cb.equal(entryExitCodesSq2.get("entryExitType"), "Exit"),
@@ -473,7 +473,7 @@ public class XStudentEventLogDAOImp extends BaseDAO implements XStudentEventLogD
 
 	private Predicate whereFindAllByRosterRefId(ControllerData metadata, CriteriaBuilder cb, CriteriaQuery<?> select, Root<StudentEventLog> from, SetJoin<Student, StudentEnrollment> studentEnrollments, Join<StudentEventLog, Lea> lea, Join<StudentCourseSection, CourseSection> courseSection, String refId) {
 		Predicate iso8601GreaterThanEqualTo = cb.greaterThanOrEqualTo(from.get(EVENT_TIMESTAMP), metadata.getChangesSinceLocalDateTime());
-		Predicate localIdInControllerData = lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds());
+		Predicate localIdInControllerData = lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds());
 
 		if(metadata.getApplication().getApp().includeExitedStudents()) {
 			return cb.and(iso8601GreaterThanEqualTo, localIdInControllerData, cb.equal(courseSection.get(COURSE_SECTION_REF_ID), refId));
@@ -492,7 +492,7 @@ public class XStudentEventLogDAOImp extends BaseDAO implements XStudentEventLogD
 			subQuery1.select(studentEnrollmentsSq1.get(STUDENT_ENROLLMENT_REF_ID));
 			subQuery1.where
 			(
-				leaSq1.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()),
+				leaSq1.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds()),
 				cb.equal(courseSectionSq1.get(COURSE_SECTION_REF_ID), refId),
 				cb.equal(studentEnrollmentsSq1.get("membershipTypeCode"), "Home"),
 				cb.isNotNull(studentEnrollmentsSq1.get("enrollmentExitDate"))
@@ -511,7 +511,7 @@ public class XStudentEventLogDAOImp extends BaseDAO implements XStudentEventLogD
 			subQuery2.select(studentEnrollmentsSq2.get(STUDENT_ENROLLMENT_REF_ID));
 			subQuery2.where
 			(
-				leaSq2.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()),
+				leaSq2.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds()),
 				cb.equal(courseSectionSq2.get(COURSE_SECTION_REF_ID), refId),
 				cb.equal(studentEnrollmentsSq2.get("membershipTypeCode"), "Home"),
 				cb.equal(entryExitCodesSq2.get("entryExitType"), "Exit"),
@@ -527,7 +527,7 @@ public class XStudentEventLogDAOImp extends BaseDAO implements XStudentEventLogD
 
 	private Predicate whereFindAllByStaffRefId(ControllerData metadata, CriteriaBuilder cb, CriteriaQuery<?> select, Root<StudentEventLog> from, SetJoin<Student, StudentEnrollment> studentEnrollments, Join<StudentEventLog, Lea> lea, Join<StaffCourseSection, Staff> staff, String refId) {
 		Predicate iso8601GreaterThanEqualTo = cb.greaterThanOrEqualTo(from.get(EVENT_TIMESTAMP), metadata.getChangesSinceLocalDateTime());
-		Predicate localIdInControllerData = lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds());
+		Predicate localIdInControllerData = lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds());
 		Predicate staffRefIdEqualsRefId = cb.equal(staff.get(STAFF_REF_ID), refId);
 
 		if(metadata.getApplication().getApp().includeExitedStudents()) {
@@ -549,7 +549,7 @@ public class XStudentEventLogDAOImp extends BaseDAO implements XStudentEventLogD
 			subQuery1.select(studentEnrollmentsSq1.get(STUDENT_ENROLLMENT_REF_ID));
 			subQuery1.where
 			(
-				leaSq1.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()),
+				leaSq1.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds()),
 				cb.equal(staffSq1.get(STAFF_REF_ID), refId),
 				cb.equal(studentEnrollmentsSq1.get("membershipTypeCode"), "Home"),
 				cb.isNotNull(studentEnrollmentsSq1.get("enrollmentExitDate"))
@@ -571,7 +571,7 @@ public class XStudentEventLogDAOImp extends BaseDAO implements XStudentEventLogD
 			subQuery2.select(studentEnrollmentsSq2.get(STUDENT_ENROLLMENT_REF_ID));
 			subQuery2.where
 			(
-				leaSq2.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()),
+				leaSq2.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds()),
 				cb.equal(staffSq2.get(STAFF_REF_ID), refId),
 				cb.equal(studentEnrollmentsSq2.get("membershipTypeCode"), "Home"),
 				cb.equal(entryExitCodesSq2.get("entryExitType"), "Exit"),
@@ -587,7 +587,7 @@ public class XStudentEventLogDAOImp extends BaseDAO implements XStudentEventLogD
 
 	private Predicate whereFindAllByContactRefId(ControllerData metadata, CriteriaBuilder cb, CriteriaQuery<?> select, Root<StudentEventLog> from, SetJoin<Student, StudentEnrollment> studentEnrollments, Join<StudentEventLog, Lea> lea, Join<StudentContactRelationship, StudentContact> studentContact, String refId) {
 		Predicate iso8601GreaterThanEqualTo = cb.greaterThanOrEqualTo(from.get(EVENT_TIMESTAMP), metadata.getChangesSinceLocalDateTime());
-		Predicate localIdInControllerData = lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds());
+		Predicate localIdInControllerData = lea.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds());
 		Predicate studentContactRefIdEqualsRefId = cb.equal(studentContact.get(STUDENT_CONTACT_REF_ID), refId);
 
 		if(metadata.getApplication().getApp().includeExitedStudents()) {
@@ -607,7 +607,7 @@ public class XStudentEventLogDAOImp extends BaseDAO implements XStudentEventLogD
 			subQuery1.select(studentEnrollmentsSq1.get(STUDENT_ENROLLMENT_REF_ID));
 			subQuery1.where
 			(
-				leaSq1.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()),
+				leaSq1.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds()),
 				cb.equal(studentContactSq1.get(STUDENT_CONTACT_REF_ID), refId),
 				cb.equal(studentEnrollmentsSq1.get("membershipTypeCode"), "Home"),
 				cb.isNotNull(studentEnrollmentsSq1.get("enrollmentExitDate"))
@@ -627,7 +627,7 @@ public class XStudentEventLogDAOImp extends BaseDAO implements XStudentEventLogD
 			subQuery2.select(studentEnrollmentsSq2.get(STUDENT_ENROLLMENT_REF_ID));
 			subQuery2.where
 			(
-				leaSq2.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getApp().getDistrictLocalIds()),
+				leaSq2.get(ControllerData.LEA_LOCAL_ID).in(metadata.getApplication().getDistrictLocalIds()),
 				cb.equal(studentContactSq2.get(STUDENT_CONTACT_REF_ID), refId),
 				cb.equal(studentEnrollmentsSq2.get("membershipTypeCode"), "Home"),
 				cb.equal(entryExitCodesSq2.get("entryExitType"), "Exit"),

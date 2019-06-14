@@ -6,16 +6,14 @@ import org.ricone.api.xpress.model.PhoneNumber;
 import org.ricone.api.xpress.model.XLea;
 import org.ricone.api.xpress.model.XLeaResponse;
 import org.ricone.api.xpress.model.XLeasResponse;
-import org.ricone.config.model.XLeaFilter;
 import org.ricone.config.cache.CacheService;
+import org.ricone.config.model.XLeaFilter;
 import org.springframework.stereotype.Component;
-
-import java.util.Iterator;
 
 /**
  * @author Dan Whitehouse <daniel.whitehouse@neric.org>
- * @version 1.1.0
- * @since 2018-02-16
+ * @version 2.0.0
+ * @since 2019-06-14
  */
 
 @Component("XPress:XLeas:XLeaFilterer")
@@ -27,16 +25,14 @@ public class XLeaFilterer {
 	}
 
 	XLeasResponse apply(XLeasResponse response, ControllerData metadata) {
-		Iterator<XLea> iterator = response.getXLeas().getXLeas().iterator();
-		while (iterator.hasNext()) {
-			XLea i = iterator.next();
-			i = filter(i, cacheService.getXLeaFilter(i.getDistrictId(), metadata.getApplication().getApp().getId()));
+		//Filter All
+		response.getXLeas().getXLeas().forEach(xLea -> {
+			filter(xLea, cacheService.getXLeaFilter(xLea.getDistrictId(), metadata.getApplication().getApp().getId()));
+		});
 
-			// Remove object from list if empty
-			if (i.isEmptyObject()) {
-				iterator.remove();
-			}
-		}
+		//Remove All Empty Instances
+		response.getXLeas().getXLeas().removeIf(XLea::isEmptyObject);
+
 		if (CollectionUtils.isEmpty(response.getXLeas().getXLeas())) {
 			return null;
 		}
@@ -44,14 +40,14 @@ public class XLeaFilterer {
 	}
 
 	XLeaResponse apply(XLeaResponse response, ControllerData metadata) {
-		response.setXLea(filter(response.getXLea(), cacheService.getXLeaFilter(response.getXLea().getDistrictId(), metadata.getApplication().getApp().getId())));
+		filter(response.getXLea(), cacheService.getXLeaFilter(response.getXLea().getDistrictId(), metadata.getApplication().getApp().getId()));
 		if (response.getXLea().isEmptyObject()) {
 			return null;
 		}
 		return response;
 	}
 
-	private XLea filter(XLea instance, XLeaFilter filter) {
+	private void filter(XLea instance, XLeaFilter filter) {
 		if (!filter.getRefId()) {
 			instance.setRefId(null);
 		}
@@ -135,6 +131,5 @@ public class XLeaFilterer {
 				instance.setOtherPhoneNumbers(null);
 			}
 		}
-		return instance;
 	}
 }

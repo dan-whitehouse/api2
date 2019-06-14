@@ -3,11 +3,15 @@ package org.ricone.api.xpress.request.xRoster;
 import org.apache.commons.collections4.CollectionUtils;
 import org.ricone.api.xpress.component.ControllerData;
 import org.ricone.api.xpress.model.*;
-import org.ricone.config.model.XRosterFilter;
 import org.ricone.config.cache.CacheService;
+import org.ricone.config.model.XRosterFilter;
 import org.springframework.stereotype.Component;
 
-import java.util.Iterator;
+/**
+ * @author Dan Whitehouse <daniel.whitehouse@neric.org>
+ * @version 2.0.0
+ * @since 2019-06-14
+ */
 
 @Component("XPress:XRosters:XRosterFilterer")
 public class XRosterFilterer {
@@ -18,16 +22,14 @@ public class XRosterFilterer {
     }
 
     XRostersResponse apply(XRostersResponse response, ControllerData metadata) {
-        Iterator<XRoster> iterator = response.getXRosters().getXRoster().iterator();
-        while (iterator.hasNext()) {
-            XRoster i = iterator.next();
-            i = filter(i, cacheService.getXRosterFilter(i.getDistrictId(), metadata.getApplication().getApp().getId()));
+        //Filter All
+        response.getXRosters().getXRoster().forEach(xRoster -> {
+            filter(xRoster, cacheService.getXRosterFilter(xRoster.getDistrictId(), metadata.getApplication().getApp().getId()));
+        });
 
-            // Remove object from list if empty
-            if (i.isEmptyObject()) {
-                iterator.remove();
-            }
-        }
+        //Remove All Empty Instances
+        response.getXRosters().getXRoster().removeIf(XRoster::isEmptyObject);
+
         if (CollectionUtils.isEmpty(response.getXRosters().getXRoster())) {
             return null;
         }
@@ -35,14 +37,14 @@ public class XRosterFilterer {
     }
 
     XRosterResponse apply(XRosterResponse response, ControllerData metadata) {
-        response.setXRoster(filter(response.getXRoster(), cacheService.getXRosterFilter(response.getXRoster().getDistrictId(), metadata.getApplication().getApp().getId())));
+        filter(response.getXRoster(), cacheService.getXRosterFilter(response.getXRoster().getDistrictId(), metadata.getApplication().getApp().getId()));
         if (response.getXRoster().isEmptyObject()) {
             return null;
         }
         return response;
     }
 
-    public XRoster filter(XRoster instance, XRosterFilter filter) {
+    private void filter(XRoster instance, XRosterFilter filter) {
         if(!filter.getRefId()) {
             instance.setRefId(null);
         }
@@ -98,6 +100,10 @@ public class XRosterFilterer {
                 if(meetingTime.getClassMeetingDays() != null) {
                     if(!filter.getMeetingTimesmeetingTimeclassMeetingDaysbellScheduleDay()) {
                         meetingTime.getClassMeetingDays().setBellScheduleDay(null);
+                    }
+
+                    if (meetingTime.getClassMeetingDays().isEmptyObject()) {
+                        meetingTime.setClassMeetingDays(null);
                     }
                 }
 
@@ -213,6 +219,5 @@ public class XRosterFilterer {
                 instance.setOtherStaffs(null);
             }
         }
-        return instance;
     }
 }

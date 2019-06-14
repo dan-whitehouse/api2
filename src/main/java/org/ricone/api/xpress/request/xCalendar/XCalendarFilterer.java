@@ -2,12 +2,19 @@ package org.ricone.api.xpress.request.xCalendar;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.ricone.api.xpress.component.ControllerData;
-import org.ricone.api.xpress.model.*;
-import org.ricone.config.model.XCalendarFilter;
+import org.ricone.api.xpress.model.SessionList;
+import org.ricone.api.xpress.model.XCalendar;
+import org.ricone.api.xpress.model.XCalendarResponse;
+import org.ricone.api.xpress.model.XCalendarsResponse;
 import org.ricone.config.cache.CacheService;
+import org.ricone.config.model.XCalendarFilter;
 import org.springframework.stereotype.Component;
 
-import java.util.Iterator;
+/**
+ * @author Dan Whitehouse <daniel.whitehouse@neric.org>
+ * @version 2.0.0
+ * @since 2019-06-14
+ */
 
 @Component("XPress:XCalendars:XCalendarFilterer")
 public class XCalendarFilterer {
@@ -18,16 +25,14 @@ public class XCalendarFilterer {
     }
 
     XCalendarsResponse apply(XCalendarsResponse response, ControllerData metadata) {
-        Iterator<XCalendar> iterator = response.getXCalendars().getXCalendar().iterator();
-        while (iterator.hasNext()) {
-            XCalendar i = iterator.next();
-            i = filter(i, cacheService.getXCalendarFilter(i.getDistrictId(), metadata.getApplication().getApp().getId()));
+        //Filter All
+        response.getXCalendars().getXCalendar().forEach(xCalendar -> {
+            filter(xCalendar, cacheService.getXCalendarFilter(xCalendar.getDistrictId(), metadata.getApplication().getApp().getId()));
+        });
 
-            // Remove object from list if empty
-            if (i.isEmptyObject()) {
-                iterator.remove();
-            }
-        }
+        //Remove All Empty Instances
+        response.getXCalendars().getXCalendar().removeIf(XCalendar::isEmptyObject);
+
         if (CollectionUtils.isEmpty(response.getXCalendars().getXCalendar())) {
             return null;
         }
@@ -35,14 +40,14 @@ public class XCalendarFilterer {
     }
 
     XCalendarResponse apply(XCalendarResponse response, ControllerData metadata) {
-        response.setXCalendar(filter(response.getXCalendar(), cacheService.getXCalendarFilter(response.getXCalendar().getDistrictId(), metadata.getApplication().getApp().getId())));
+        filter(response.getXCalendar(), cacheService.getXCalendarFilter(response.getXCalendar().getDistrictId(), metadata.getApplication().getApp().getId()));
         if (response.getXCalendar().isEmptyObject()) {
             return null;
         }
         return response;
     }
 
-    public XCalendar filter(XCalendar instance, XCalendarFilter filter) {
+    private void filter(XCalendar instance, XCalendarFilter filter) {
         if(!filter.getRefId()) {
             instance.setRefId(null);
         }
@@ -87,6 +92,5 @@ public class XCalendarFilterer {
                 instance.setSessions(null);
             }
         }
-        return instance;
     }
 }

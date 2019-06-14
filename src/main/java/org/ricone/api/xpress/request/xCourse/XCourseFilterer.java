@@ -6,11 +6,15 @@ import org.ricone.api.xpress.model.OtherId;
 import org.ricone.api.xpress.model.XCourse;
 import org.ricone.api.xpress.model.XCourseResponse;
 import org.ricone.api.xpress.model.XCoursesResponse;
-import org.ricone.config.model.XCourseFilter;
 import org.ricone.config.cache.CacheService;
+import org.ricone.config.model.XCourseFilter;
 import org.springframework.stereotype.Component;
 
-import java.util.Iterator;
+/**
+ * @author Dan Whitehouse <daniel.whitehouse@neric.org>
+ * @version 2.0.0
+ * @since 2019-06-14
+ */
 
 @Component("XPress:XCourses:XCourseFilterer")
 public class XCourseFilterer {
@@ -21,16 +25,14 @@ public class XCourseFilterer {
     }
 
     XCoursesResponse apply(XCoursesResponse response, ControllerData metadata) {
-        Iterator<XCourse> iterator = response.getXCourses().getXCourse().iterator();
-        while (iterator.hasNext()) {
-            XCourse i = iterator.next();
-            i = filter(i, cacheService.getXCourseFilter(i.getDistrictId(), metadata.getApplication().getApp().getId()));
+        //Filter All
+        response.getXCourses().getXCourse().forEach(xCourse -> {
+            filter(xCourse, cacheService.getXCourseFilter(xCourse.getDistrictId(), metadata.getApplication().getApp().getId()));
+        });
 
-            // Remove object from list if empty
-            if (i.isEmptyObject()) {
-                iterator.remove();
-            }
-        }
+        //Remove All Empty Instances
+        response.getXCourses().getXCourse().removeIf(XCourse::isEmptyObject);
+
         if (CollectionUtils.isEmpty(response.getXCourses().getXCourse())) {
             return null;
         }
@@ -38,14 +40,14 @@ public class XCourseFilterer {
     }
 
     XCourseResponse apply(XCourseResponse response, ControllerData metadata) {
-        response.setXCourse(filter(response.getXCourse(), cacheService.getXCourseFilter(response.getXCourse().getDistrictId(), metadata.getApplication().getApp().getId())));
+        filter(response.getXCourse(), cacheService.getXCourseFilter(response.getXCourse().getDistrictId(), metadata.getApplication().getApp().getId()));
         if (response.getXCourse().isEmptyObject()) {
             return null;
         }
         return response;
     }
 
-    public XCourse filter(XCourse instance, XCourseFilter filter) {
+    private void filter(XCourse instance, XCourseFilter filter) {
         if(!filter.getRefId()) {
             instance.setRefId(null);
         }
@@ -101,7 +103,5 @@ public class XCourseFilterer {
         if(!filter.getApplicableEducationLevelsapplicableEducationLevel()) {
             instance.setApplicableEducationLevels(null);
         }
-
-        return instance;
     }
 }

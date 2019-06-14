@@ -68,7 +68,7 @@ public class XCourseServiceImp implements XCourseService {
             return filterer.apply(eventLogMapper.convert(instance), metadata);
         }
 
-        List<CourseWrapper> instance = dao.findAllBySchoolRefId(metadata, refId);
+        List<CourseWrapper> instance = dao.findAllByLeaRefId(metadata, refId);
         if(CollectionUtils.isEmpty(instance)) {
             throw new NoContentException();
         }

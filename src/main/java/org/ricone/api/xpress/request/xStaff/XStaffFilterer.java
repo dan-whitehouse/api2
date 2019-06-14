@@ -3,11 +3,15 @@ package org.ricone.api.xpress.request.xStaff;
 import org.apache.commons.collections4.CollectionUtils;
 import org.ricone.api.xpress.component.ControllerData;
 import org.ricone.api.xpress.model.*;
-import org.ricone.config.model.XStaffFilter;
 import org.ricone.config.cache.CacheService;
+import org.ricone.config.model.XStaffFilter;
 import org.springframework.stereotype.Component;
 
-import java.util.Iterator;
+/**
+ * @author Dan Whitehouse <daniel.whitehouse@neric.org>
+ * @version 2.0.0
+ * @since 2019-06-14
+ */
 
 @Component("XPress:XStaffs:XStaffFilterer")
 public class XStaffFilterer {
@@ -18,16 +22,14 @@ public class XStaffFilterer {
     }
 
     XStaffsResponse apply(XStaffsResponse response, ControllerData metadata) {
-        Iterator<XStaff> iterator = response.getXStaffs().getXStaff().iterator();
-        while (iterator.hasNext()) {
-            XStaff i = iterator.next();
-            i = filter(i, cacheService.getXStaffFilter(i.getDistrictId(), metadata.getApplication().getApp().getId()));
+        //Filter All
+        response.getXStaffs().getXStaff().forEach(xStaff -> {
+            filter(xStaff, cacheService.getXStaffFilter(xStaff.getDistrictId(), metadata.getApplication().getApp().getId()));
+        });
 
-            // Remove object from list if empty
-            if (i.isEmptyObject()) {
-                iterator.remove();
-            }
-        }
+        //Remove All Empty Instances
+        response.getXStaffs().getXStaff().removeIf(XStaff::isEmptyObject);
+
         if (CollectionUtils.isEmpty(response.getXStaffs().getXStaff())) {
             return null;
         }
@@ -35,14 +37,14 @@ public class XStaffFilterer {
     }
 
     XStaffResponse apply(XStaffResponse response, ControllerData metadata) {
-        response.setXStaff(filter(response.getXStaff(), cacheService.getXStaffFilter(response.getXStaff().getDistrictId(), metadata.getApplication().getApp().getId())));
+        filter(response.getXStaff(), cacheService.getXStaffFilter(response.getXStaff().getDistrictId(), metadata.getApplication().getApp().getId()));
         if (response.getXStaff().isEmptyObject()) {
             return null;
         }
         return response;
     }
 
-    public XStaff filter(XStaff instance, XStaffFilter filter) {
+    private void filter(XStaff instance, XStaffFilter filter) {
         if(!filter.getRefId()) {
             instance.setRefId(null);
         }
@@ -125,8 +127,8 @@ public class XStaffFilterer {
             if(!filter.getPrimaryAssignmentschoolRefId()) {
                 instance.getPrimaryAssignment().setSchoolRefId(null);
             }
-            if(!filter.getPrimaryAssignmentschoolRefId()) {
-                instance.getPrimaryAssignment().setSchoolRefId(null);
+            if(!filter.getPrimaryAssignmentjobFunction()) {
+                instance.getPrimaryAssignment().setJobFunction(null);
             }
 
             // Remove object if empty
@@ -155,6 +157,5 @@ public class XStaffFilterer {
                 instance.setOtherAssignments(null);
             }
         }
-        return instance;
     }
 }

@@ -3,11 +3,15 @@ package org.ricone.api.xpress.request.xContact;
 import org.apache.commons.collections4.CollectionUtils;
 import org.ricone.api.xpress.component.ControllerData;
 import org.ricone.api.xpress.model.*;
-import org.ricone.config.model.XContactFilter;
 import org.ricone.config.cache.CacheService;
+import org.ricone.config.model.XContactFilter;
 import org.springframework.stereotype.Component;
 
-import java.util.Iterator;
+/**
+ * @author Dan Whitehouse <daniel.whitehouse@neric.org>
+ * @version 2.0.0
+ * @since 2019-06-14
+ */
 
 @Component("XPress:XContacts:XContactFilterer")
 public class XContactFilterer {
@@ -18,16 +22,14 @@ public class XContactFilterer {
     }
 
     XContactsResponse apply(XContactsResponse response, ControllerData metadata) {
-        Iterator<XContact> iterator = response.getXContacts().getXContact().iterator();
-        while (iterator.hasNext()) {
-            XContact i = iterator.next();
-            i = filter(i, cacheService.getXContactFilter(i.getDistrictId(), metadata.getApplication().getApp().getId()));
+        //Filter All
+        response.getXContacts().getXContact().forEach(xContact -> {
+            filter(xContact, cacheService.getXContactFilter(xContact.getDistrictId(), metadata.getApplication().getApp().getId()));
+        });
 
-            // Remove object from list if empty
-            if (i.isEmptyObject()) {
-                iterator.remove();
-            }
-        }
+        //Remove All Empty Instances
+        response.getXContacts().getXContact().removeIf(XContact::isEmptyObject);
+
         if (CollectionUtils.isEmpty(response.getXContacts().getXContact())) {
             return null;
         }
@@ -45,6 +47,9 @@ public class XContactFilterer {
     public XContact filter(XContact instance, XContactFilter filter) {
         if(!filter.getRefId()) {
             instance.setRefId(null);
+        }
+        if (!filter.getSex()) {
+            instance.setSex(null);
         }
 
         //Name
@@ -66,6 +71,11 @@ public class XContactFilterer {
             }
             if(!filter.getNametype()) {
                 instance.getName().setType(null);
+            }
+
+            // Remove object if empty
+            if (instance.getName().isEmptyObject()) {
+                instance.setName(null);
             }
         }
 

@@ -3,11 +3,15 @@ package org.ricone.api.xpress.request.xSchool;
 import org.apache.commons.collections4.CollectionUtils;
 import org.ricone.api.xpress.component.ControllerData;
 import org.ricone.api.xpress.model.*;
-import org.ricone.config.model.XSchoolFilter;
 import org.ricone.config.cache.CacheService;
+import org.ricone.config.model.XSchoolFilter;
 import org.springframework.stereotype.Component;
 
-import java.util.Iterator;
+/**
+ * @author Dan Whitehouse <daniel.whitehouse@neric.org>
+ * @version 2.0.0
+ * @since 2019-06-14
+ */
 
 @Component("XPress:XSchools:XSchoolFilterer")
 public class XSchoolFilterer {
@@ -18,16 +22,14 @@ public class XSchoolFilterer {
     }
 
     XSchoolsResponse apply(XSchoolsResponse response, ControllerData metadata) {
-        Iterator<XSchool> iterator = response.getXSchools().getXSchool().iterator();
-        while (iterator.hasNext()) {
-            XSchool i = iterator.next();
-            i = filter(i, cacheService.getXSchoolFilter(i.getDistrictId(), metadata.getApplication().getApp().getId()));
+        //Filter All
+        response.getXSchools().getXSchool().forEach(xSchool -> {
+            filter(xSchool, cacheService.getXSchoolFilter(xSchool.getDistrictId(), metadata.getApplication().getApp().getId()));
+        });
 
-            // Remove object from list if empty
-            if (i.isEmptyObject()) {
-                iterator.remove();
-            }
-        }
+        //Remove All Empty Instances
+        response.getXSchools().getXSchool().removeIf(XSchool::isEmptyObject);
+
         if (CollectionUtils.isEmpty(response.getXSchools().getXSchool())) {
             return null;
         }
@@ -35,14 +37,14 @@ public class XSchoolFilterer {
     }
 
     XSchoolResponse apply(XSchoolResponse response, ControllerData metadata) {
-        response.setXSchool(filter(response.getXSchool(), cacheService.getXSchoolFilter(response.getXSchool().getDistrictId(), metadata.getApplication().getApp().getId())));
+        filter(response.getXSchool(), cacheService.getXSchoolFilter(response.getXSchool().getDistrictId(), metadata.getApplication().getApp().getId()));
         if (response.getXSchool().isEmptyObject()) {
             return null;
         }
         return response;
     }
 
-    private XSchool filter(XSchool instance, XSchoolFilter filter) {
+    private void filter(XSchool instance, XSchoolFilter filter) {
         if(!filter.getRefId()) {
             instance.setRefId(null);
         }
@@ -84,7 +86,7 @@ public class XSchoolFilterer {
         }
 
         //Primary Phone Number
-        if(instance.getPhoneNumber() != null && !instance.getPhoneNumber().isEmptyObject()) {
+        if(instance.getPhoneNumber() != null) {
             if(!filter.getPhoneNumbernumber()) {
                 instance.getPhoneNumber().setNumber(null);
             }
@@ -151,6 +153,5 @@ public class XSchoolFilterer {
                 instance.setOtherIds(null);
             }
         }
-        return instance;
     }
 }

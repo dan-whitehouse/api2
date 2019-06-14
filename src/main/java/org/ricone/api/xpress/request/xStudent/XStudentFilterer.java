@@ -3,11 +3,15 @@ package org.ricone.api.xpress.request.xStudent;
 import org.apache.commons.collections4.CollectionUtils;
 import org.ricone.api.xpress.component.ControllerData;
 import org.ricone.api.xpress.model.*;
-import org.ricone.config.model.XStudentFilter;
 import org.ricone.config.cache.CacheService;
+import org.ricone.config.model.XStudentFilter;
 import org.springframework.stereotype.Component;
 
-import java.util.Iterator;
+/**
+ * @author Dan Whitehouse <daniel.whitehouse@neric.org>
+ * @version 2.0.0
+ * @since 2019-06-14
+ */
 
 @Component("XPress:XStudents:XStudentFilterer")
 public class XStudentFilterer {
@@ -18,16 +22,14 @@ public class XStudentFilterer {
     }
 
     XStudentsResponse apply(XStudentsResponse response, ControllerData metadata) {
-        Iterator<XStudent> iterator = response.getXStudents().getXStudent().iterator();
-        while (iterator.hasNext()) {
-            XStudent i = iterator.next();
-            i = filter(i, cacheService.getXStudentFilter(i.getDistrictId(), metadata.getApplication().getApp().getId()));
+        //Filter All
+        response.getXStudents().getXStudent().forEach(xStudent -> {
+            filter(xStudent, cacheService.getXStudentFilter(xStudent.getDistrictId(), metadata.getApplication().getApp().getId()));
+        });
 
-            // Remove object from list if empty
-            if (i.isEmptyObject()) {
-                iterator.remove();
-            }
-        }
+        //Remove All Empty Instances
+        response.getXStudents().getXStudent().removeIf(XStudent::isEmptyObject);
+
         if (CollectionUtils.isEmpty(response.getXStudents().getXStudent())) {
             return null;
         }
@@ -35,14 +37,14 @@ public class XStudentFilterer {
     }
 
     XStudentResponse apply(XStudentResponse response, ControllerData metadata) {
-        response.setXStudent(filter(response.getXStudent(), cacheService.getXStudentFilter(response.getXStudent().getDistrictId(), metadata.getApplication().getApp().getId())));
+        filter(response.getXStudent(), cacheService.getXStudentFilter(response.getXStudent().getDistrictId(), metadata.getApplication().getApp().getId()));
         if (response.getXStudent().isEmptyObject()) {
             return null;
         }
         return response;
     }
 
-    public XStudent filter(XStudent instance, XStudentFilter filter) {
+    private void filter(XStudent instance, XStudentFilter filter) {
         if(!filter.getRefId()) {
             instance.setRefId(null);
         }
@@ -319,8 +321,6 @@ public class XStudentFilterer {
         if(!filter.getStudentContactscontactPersonRefId()) {
             instance.setStudentContacts(null);
         }
-
-        return instance;
     }
 
 

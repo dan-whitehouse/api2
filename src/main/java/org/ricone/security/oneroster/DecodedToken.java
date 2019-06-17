@@ -1,7 +1,6 @@
 package org.ricone.security.oneroster;
 
 import com.fasterxml.jackson.annotation.*;
-import org.ricone.security.BaseDecodedToken;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -9,7 +8,7 @@ import java.util.Map;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"app_id", "ims.global.org.security.scope", "provider_id", "href", "iat", "exp", "iss"})
-public class DecodedToken extends BaseDecodedToken implements Serializable {
+public class DecodedToken implements Serializable {
 	private final static long serialVersionUID = -2898266389932101215L;
 	@JsonProperty("app_id")
 	private String appId;
@@ -28,31 +27,8 @@ public class DecodedToken extends BaseDecodedToken implements Serializable {
 	@JsonIgnore
 	private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
-
-	/**
-	 * No args constructor for use in serialization
-	 */
 	public DecodedToken() {
-	}
-
-	/**
-	 * @param exp
-	 * @param appId
-	 * @param iss
-	 * @param providerId
-	 * @param iat
-	 * @param href
-	 * @param imsGlobalOrgSecurityScope
-	 */
-	public DecodedToken(String appId, String imsGlobalOrgSecurityScope, String providerId, String href, Integer iat, Integer exp, String iss) {
 		super();
-		this.appId = appId;
-		this.imsGlobalOrgSecurityScope = imsGlobalOrgSecurityScope;
-		this.providerId = providerId;
-		this.href = href;
-		this.iat = iat;
-		this.exp = exp;
-		this.iss = iss;
 	}
 
 	@JsonProperty("app_id")

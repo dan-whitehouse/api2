@@ -1,4 +1,4 @@
-package org.ricone.security.jwt;
+package org.ricone.security.xpress;
 
 import org.ricone.security.acl.PathPermission;
 

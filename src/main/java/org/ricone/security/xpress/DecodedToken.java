@@ -1,4 +1,4 @@
-package org.ricone.security.jwt;
+package org.ricone.security.xpress;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;

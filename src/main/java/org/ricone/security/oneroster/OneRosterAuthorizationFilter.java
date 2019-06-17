@@ -2,7 +2,9 @@ package org.ricone.security.oneroster;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.exceptions.SignatureVerificationException;
 import org.apache.commons.lang3.StringUtils;
 import org.ricone.config.cache.CacheService;
 import org.ricone.security.Application;
@@ -21,6 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Objects;
 
 public class OneRosterAuthorizationFilter extends BasicAuthenticationFilter {
     private final CacheService cacheService;
@@ -36,10 +39,8 @@ public class OneRosterAuthorizationFilter extends BasicAuthenticationFilter {
     protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException, ServletException {
         AuthRequest authRequest = new AuthRequest(req);
         if(authRequest.isAuthEnabled()) {
-            if(authRequest.isHeader() || (authRequest.isParameter() && authRequest.isAllowTokenParameter())) {
-                UsernamePasswordAuthenticationToken authentication = getAuthentication(req, authRequest);
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-            }
+            UsernamePasswordAuthenticationToken authentication = getAuthentication(req, authRequest);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
         }
         chain.doFilter(req, res);
     }
@@ -47,15 +48,15 @@ public class OneRosterAuthorizationFilter extends BasicAuthenticationFilter {
     private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest req, AuthRequest authRequest) {
         try {
             if(StringUtils.isBlank(authRequest.getToken())) {
-                throw new JWTVerificationException("Token was empty");
+                throw new JWTVerificationException(environment.getProperty("security.auth.error.token-blank"));
             }
 
             DecodedToken decodedToken = TokenDecoder.decodeToken(authRequest.getToken());
 
             Application application = null;
             if(decodedToken != null) {
-                if(!environment.getProperty("security.auth.jwt.provider.id").equalsIgnoreCase(decodedToken.getProviderId())) {
-                    throw new JWTVerificationException("This token isn't valid here.");
+                if(!Objects.requireNonNull(environment.getProperty("security.auth.jwt.provider.id")).equalsIgnoreCase(decodedToken.getProviderId())) {
+                    throw new JWTVerificationException(environment.getProperty("security.auth.error.wrong-provider"));
                 }
                 application = new Application(decodedToken.getAppId(), decodedToken.getToken(), cacheService);
             }
@@ -67,10 +68,12 @@ public class OneRosterAuthorizationFilter extends BasicAuthenticationFilter {
                 return new UsernamePasswordAuthenticationToken(application, decodedToken.getToken(), getACLs(application));
             }
         }
+        catch(SignatureVerificationException | JWTDecodeException exception) {
+            req.setAttribute("JWTVerificationException", environment.getProperty("security.auth.error.invalid"));
+        }
         catch (JWTVerificationException exception) {
             //https://medium.com/fullstackblog/spring-security-jwt-token-expired-custom-response-b85437914b81
             req.setAttribute("JWTVerificationException", exception.getMessage());
-            return null;
         }
         return null; //DecodedToken or Application was null... 403 Forbidden
     }

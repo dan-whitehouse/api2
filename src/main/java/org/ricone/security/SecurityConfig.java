@@ -1,8 +1,9 @@
 package org.ricone.security;
 
 import org.ricone.config.cache.CacheService;
-import org.ricone.security.jwt.XPressAuthenticationEntryPoint;
-import org.ricone.security.jwt.XPressAuthorizationFilter;
+import org.ricone.security.xpress.XPressAuthenticationEntryPoint;
+import org.ricone.security.xpress.XPressAuthorizationFilter;
+import org.ricone.security.oneroster.OneRosterAuthenticationEntryPoint;
 import org.ricone.security.oneroster.OneRosterAuthorizationFilter;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
@@ -66,7 +67,10 @@ public class SecurityConfig {
 			http.antMatcher("/ims/oneroster/v1p1/**")
 				.authorizeRequests().anyRequest().authenticated()
 				.and().addFilter(new OneRosterAuthorizationFilter(authenticationManagerBean(), cacheService, environment))
-				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+					.exceptionHandling().authenticationEntryPoint(new OneRosterAuthenticationEntryPoint())
+				.and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		}
 	}
+
+
 }

@@ -1,8 +1,10 @@
-package org.ricone.security.jwt;
+package org.ricone.security.xpress;
 
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.ricone.security.PropertiesLoader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -11,22 +13,32 @@ public class AuthRequest {
     private boolean isParameter;
     private boolean isHeader;
     private String token;
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     AuthRequest(HttpServletRequest request) {
         allowTokenParameter = allowTokenParams();
         isHeader = StringUtils.isNotBlank(request.getHeader("Authorization"));
         isParameter = StringUtils.isNotBlank(request.getParameter("access_token"));
 
-        if(isHeader) {
-            //Strip away the key if Bearer, otherwise it will keep it's key and fail
-            token = StringUtils.replace(request.getHeader("Authorization"), "Bearer ", "");
+        try {
+            if(isHeader) {
+                //Strip away the key if Bearer, otherwise it will keep it's key and fail
+                token = StringUtils.replace(request.getHeader("Authorization"), "Bearer", "");
+                if(StringUtils.containsWhitespace(token)) {
+                    token = StringUtils.deleteWhitespace(token);
+                }
+            }
+            else if(isParameter) { //Parameter tokens are allowed, and parameter is set
+                token = request.getParameter("access_token");
+            }
+            else {
+                token = null;
+            }
         }
-        else if(isParameter) { //Parameter tokens are allowed, and parameter is set
-            token = request.getParameter("access_token");
+        catch(Exception e) {
+            e.printStackTrace();
         }
-        else {
-            token = null;
-        }
+
     }
 
     private boolean allowTokenParams() {

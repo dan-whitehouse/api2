@@ -19,10 +19,16 @@ public class AuthRequest {
 
         if(isHeader) {
             //Strip away the key if Bearer, otherwise it will keep it's key and fail
-            token = StringUtils.replace(request.getHeader("Authorization"), "Bearer ", "");
+            token = StringUtils.replace(request.getHeader("Authorization"), "Bearer", "");
+            if(StringUtils.containsWhitespace(token)) {
+                token = StringUtils.deleteWhitespace(token);
+            }
         }
         else if(isParameter) { //Parameter tokens are allowed, and parameter is set
             token = request.getParameter("access_token");
+        }
+        else {
+            token = null;
         }
     }
 

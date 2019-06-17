@@ -1,8 +1,10 @@
-package org.ricone.security.jwt;
+package org.ricone.security.xpress;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.exceptions.SignatureVerificationException;
 import org.apache.commons.lang3.StringUtils;
 import org.ricone.config.cache.CacheService;
 import org.ricone.security.Application;
@@ -48,7 +50,7 @@ public class XPressAuthorizationFilter extends BasicAuthenticationFilter {
     private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest req, String token) {
         try {
             if(StringUtils.isBlank(token)) {
-                throw new JWTVerificationException("token was empty....");
+                throw new JWTVerificationException(environment.getProperty("security.auth.error.token-blank"));
             }
 
             DecodedToken decodedToken = TokenDecoder.decodeToken(token);
@@ -58,6 +60,7 @@ public class XPressAuthorizationFilter extends BasicAuthenticationFilter {
                 application = new Application(decodedToken.getApplicationId(), token, cacheService);
             }
 
+
             if(application != null && application.getApp().hasProviderSecret()) {
                 JWT.require(Algorithm.HMAC256(application.getApp().getProviderSecret().getBytes()))
                         .withIssuer(environment.getProperty("security.auth.jwt.issuer"))
@@ -65,7 +68,11 @@ public class XPressAuthorizationFilter extends BasicAuthenticationFilter {
                 return new UsernamePasswordAuthenticationToken(application, token, getACLs(application));
             }
         }
+        catch(SignatureVerificationException | JWTDecodeException exception) {
+            req.setAttribute("JWTVerificationException", environment.getProperty("security.auth.error.invalid"));
+        }
         catch (JWTVerificationException exception) {
+            exception.printStackTrace();
             //https://medium.com/fullstackblog/spring-security-jwt-token-expired-custom-response-b85437914b81
             req.setAttribute("JWTVerificationException", exception.getMessage());
             return null;

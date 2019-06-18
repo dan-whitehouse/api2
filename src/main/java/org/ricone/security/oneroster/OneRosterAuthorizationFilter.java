@@ -30,7 +30,7 @@ public class OneRosterAuthorizationFilter extends BaseAuthenticationFilter {
 
         Application application = null;
         if(decodedToken != null) {
-            if(!Objects.requireNonNull(environment.getProperty("security.auth.jwt.provider.id")).equalsIgnoreCase(decodedToken.getProviderId())) {
+            if(!Objects.requireNonNull(environment.getProperty("security.auth.provider.id")).equalsIgnoreCase(decodedToken.getProviderId())) {
                 throw new JWTVerificationException(environment.getProperty("security.auth.error.wrong-provider"));
             }
             application = new Application(decodedToken.getAppId(), token, cacheService);

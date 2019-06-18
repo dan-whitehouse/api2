@@ -1,7 +1,5 @@
 package org.ricone.config.cache;
 
-import com.github.benmanes.caffeine.cache.AsyncCache;
-import com.github.benmanes.caffeine.cache.AsyncLoadingCache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -10,10 +8,11 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.caffeine.CaffeineCache;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 
+import javax.annotation.Priority;
 import java.util.concurrent.TimeUnit;
-
-@Configuration
+@Configuration("CacheConfig")
 @EnableCaching
 public class CacheConfig {
    private final Logger logger = LogManager.getLogger(this.getClass());

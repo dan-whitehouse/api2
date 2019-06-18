@@ -24,7 +24,6 @@ import java.util.Collection;
 	Notes: https://medium.com/fullstackblog/spring-security-jwt-token-expired-custom-response-b85437914b81
 */
 
-
 public abstract class BaseAuthenticationFilter extends BasicAuthenticationFilter {
 	private final Environment environment;
 
@@ -35,7 +34,7 @@ public abstract class BaseAuthenticationFilter extends BasicAuthenticationFilter
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException, ServletException {
-		AuthRequest authRequest = new AuthRequest(req);
+		AuthRequest authRequest = new AuthRequest(req, environment);
 		if(authRequest.isAuthEnabled()) {
 			UsernamePasswordAuthenticationToken authentication = getAuthentication(req, authRequest.getToken());
 			if(authentication != null) {

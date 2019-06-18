@@ -27,7 +27,7 @@ public class DecodedToken implements Serializable {
 	@JsonIgnore
 	private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
-	public DecodedToken() {
+	DecodedToken() {
 		super();
 	}
 

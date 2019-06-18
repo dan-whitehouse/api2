@@ -3,12 +3,9 @@ package org.ricone.config.cache;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ricone.config.model.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Caching;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.core.env.Environment;
 import org.springframework.http.*;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.client.RestClientException;
@@ -165,12 +162,12 @@ public class CacheRepository {
 		try {
 			headers.set(AUTHORIZATION, token);
 			HttpEntity<?> entity = new HttpEntity<>(headers);
-			ResponseEntity<SchoolAPIKV[]> response = rt.exchange((getUrl() + "/school/" + schoolId + "/apikv"), HttpMethod.GET, entity, SchoolAPIKV[].class);
+			ResponseEntity<SchoolKV[]> response = rt.exchange((getUrl() + "/school/" + schoolId + "/apikv"), HttpMethod.GET, entity, SchoolKV[].class);
 
 			HashMap<String, String> infoMap = null;
 			if(response.getBody() != null) {
 				infoMap = new HashMap<>();
-				for (SchoolAPIKV info : response.getBody()) {
+				for (SchoolKV info : response.getBody()) {
 					infoMap.put(info.getField(), info.getValue());
 				}
 			}
@@ -182,7 +179,6 @@ public class CacheRepository {
 	}
 
 	/* Dynamic Filters */
-
 	@Caching(put = {@CachePut(value = CACHE_FILTER, key = "#districtId + '_' + #appId + '_XLea'", condition = "#result != null")})
 	public XLeaFilter getXLeaFilter(String districtId, String appId, String token) throws RestClientException {
 		logger.debug("Getting XLea Filter: " + districtId + '_' + appId + " From Config");
@@ -327,6 +323,7 @@ public class CacheRepository {
 		}
 	}
 
+	/* Other */
 	private String getProvider() {
 		return System.getenv("provider_id");
 	}

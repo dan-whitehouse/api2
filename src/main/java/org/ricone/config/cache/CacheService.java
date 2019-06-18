@@ -10,6 +10,7 @@ import org.ricone.config.model.*;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.core.annotation.Order;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,7 @@ import java.util.Optional;
 
 import static org.ricone.config.cache.CacheConfig.*;
 
-@Service
+@Service("CacheService")
 @Scope(proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class CacheService {
 	private final Logger logger = LogManager.getLogger(this.getClass());
@@ -48,6 +49,7 @@ public class CacheService {
 
 
 	public CacheService(CacheRepository cacheRepository, CacheService cacheService, XSchoolDAO schoolDAO) {
+		logger.debug("Loading Service: " + "CacheService");
 		this.cacheRepository = cacheRepository;
 		this.self = cacheService;
 		this.schoolDAO = schoolDAO;

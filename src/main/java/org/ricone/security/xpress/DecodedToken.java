@@ -24,7 +24,6 @@ public class DecodedToken  implements Serializable {
         super();
     }
 
-
     @JsonProperty("application_id")
     public String getApplicationId() {
         return application_id;

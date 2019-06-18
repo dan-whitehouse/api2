@@ -9,7 +9,6 @@ import java.io.Serializable;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"app_id", "path", "get", "post", "put", "delete", "head"})
 public class PathPermission implements Serializable {
-
     @JsonProperty("app_id")
     private String appId;
     @JsonProperty("path")
@@ -24,13 +23,7 @@ public class PathPermission implements Serializable {
     private Boolean delete;
     private final static long serialVersionUID = 8122198094551476636L;
 
-    /**
-     * No args constructor for use in serialization
-     */
-    public PathPermission() {
-    }
-
-    public PathPermission(String appId, String path, Boolean get, Boolean post, Boolean put, Boolean delete) {
+    PathPermission(String appId, String path, Boolean get, Boolean post, Boolean put, Boolean delete) {
         this.appId = appId;
         this.path = path;
         this.get = get;
@@ -43,7 +36,6 @@ public class PathPermission implements Serializable {
     public String getAppId() {
         return appId;
     }
-
     @JsonProperty("app_id")
     public void setAppId(String appId) {
         this.appId = appId;
@@ -53,7 +45,6 @@ public class PathPermission implements Serializable {
     public String getPath() {
         return path;
     }
-
     @JsonProperty("path")
     public void setPath(String path) {
         this.path = path;
@@ -63,7 +54,6 @@ public class PathPermission implements Serializable {
     public Boolean getGet() {
         return get;
     }
-
     @JsonProperty("get")
     public void setGet(Boolean get) {
         this.get = get;
@@ -73,7 +63,6 @@ public class PathPermission implements Serializable {
     public Boolean getPost() {
         return post;
     }
-
     @JsonProperty("post")
     public void setPost(Boolean post) {
         this.post = post;
@@ -83,7 +72,6 @@ public class PathPermission implements Serializable {
     public Boolean getPut() {
         return put;
     }
-
     @JsonProperty("put")
     public void setPut(Boolean put) {
         this.put = put;
@@ -93,7 +81,6 @@ public class PathPermission implements Serializable {
     public Boolean getDelete() {
         return delete;
     }
-
     @JsonProperty("delete")
     public void setDelete(Boolean delete) {
         this.delete = delete;

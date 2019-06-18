@@ -6,13 +6,13 @@ package org.ricone.config.model;
  * @since 2018-12-06
  */
 
-public class SchoolAPIKV {
+public class SchoolKV {
 	private String id;
 	private String school_id;
 	private String field;
 	private String value;
 
-	public SchoolAPIKV() {
+	public SchoolKV() {
 		super();
 	}
 

@@ -1,7 +1,6 @@
 package org.ricone.security.acl;
 
 public class PathPermissionMapper {
-
 	public PathPermission map(String appId, Service service) {
 		boolean get = false, post = false, put = false, delete = false;
 		for (Right right : service.getRights().getRight()) {

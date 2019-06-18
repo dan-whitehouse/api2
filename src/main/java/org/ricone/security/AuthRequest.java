@@ -4,20 +4,25 @@ import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 
 public class AuthRequest {
+    private final Environment environment;
     private boolean allowTokenParameter;
     private boolean isParameter;
     private boolean isHeader;
     private String token;
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    AuthRequest(HttpServletRequest request) {
-        allowTokenParameter = allowTokenParams();
-        isHeader = StringUtils.isNotBlank(request.getHeader("Authorization"));
-        isParameter = StringUtils.isNotBlank(request.getParameter("access_token"));
+    AuthRequest(HttpServletRequest request, Environment environment) {
+        this.environment = environment;
+        this.allowTokenParameter = allowTokenParams();
+        this.isHeader = StringUtils.isNotBlank(request.getHeader("Authorization"));
+        this.isParameter = StringUtils.isNotBlank(request.getParameter("access_token"));
 
         try {
             if(isHeader) {
@@ -27,7 +32,7 @@ public class AuthRequest {
                     token = StringUtils.deleteWhitespace(token);
                 }
             }
-            else if(isParameter) { //Parameter tokens are allowed, and parameter is set
+            else if(isParameter && allowTokenParameter) { //Parameter tokens are allowed, and parameter is set
                 token = request.getParameter("access_token");
             }
             else {
@@ -37,15 +42,14 @@ public class AuthRequest {
         catch(Exception e) {
             e.printStackTrace();
         }
-
     }
 
     private boolean allowTokenParams() {
-        return BooleanUtils.toBoolean(PropertiesLoader.getInstance().getProperty("security.auth.jwt.allowTokenParameter"));
+        return BooleanUtils.toBoolean(environment.getProperty("security.auth.jwt.allowTokenParameter"));
     }
 
     boolean isAuthEnabled() {
-        return BooleanUtils.toBoolean(PropertiesLoader.getInstance().getProperty("security.auth.enabled"));
+        return BooleanUtils.toBoolean(environment.getProperty("security.auth.enabled"));
     }
 
     boolean isAllowTokenParameter() {

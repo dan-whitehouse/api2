@@ -12,7 +12,6 @@ import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
-
 public class XPressAuthorizationFilter extends BaseAuthenticationFilter {
     private final CacheService cacheService;
     private final Environment environment;

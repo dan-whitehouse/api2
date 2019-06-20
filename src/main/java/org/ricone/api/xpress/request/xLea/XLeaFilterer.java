@@ -6,7 +6,7 @@ import org.ricone.api.xpress.model.PhoneNumber;
 import org.ricone.api.xpress.model.XLea;
 import org.ricone.api.xpress.model.XLeaResponse;
 import org.ricone.api.xpress.model.XLeasResponse;
-import org.ricone.config.cache.CacheService;
+import org.ricone.config.cache.AppService;
 import org.ricone.config.model.XLeaFilter;
 import org.springframework.stereotype.Component;
 
@@ -18,9 +18,9 @@ import org.springframework.stereotype.Component;
 
 @Component("XPress:XLeas:XLeaFilterer")
 public class XLeaFilterer {
-	private final CacheService cacheService;
+	private final AppService cacheService;
 
-	public XLeaFilterer(CacheService cacheService) {
+	public XLeaFilterer(AppService cacheService) {
 		this.cacheService = cacheService;
 	}
 

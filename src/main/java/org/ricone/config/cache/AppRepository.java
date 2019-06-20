@@ -18,34 +18,11 @@ import java.util.stream.Collectors;
 
 import static org.ricone.config.cache.CacheConfig.*;
 
-@Repository("CacheRepository")
-public class CacheRepository {
+@Repository("Config:AppRepository")
+public class AppRepository {
 	private final static String AUTHORIZATION = "Authorization";
 	private final Logger logger = LogManager.getLogger(this.getClass());
 
-	@Caching(put = {@CachePut(value = CACHE_TOKEN, key = "#providerId", condition = "#result != null")})
-	public String getAccessToken(String providerId) throws RestClientException {
-		try {
-			RestTemplate rt = new RestTemplate();
-
-			HttpHeaders headers = new HttpHeaders();
-			headers.setContentType(MediaType.APPLICATION_JSON);
-			HttpEntity<Login> request = new HttpEntity<>(new Login(getUsername(), getPassword()), headers);
-
-			Credential credential = rt.postForObject(getUrl() + "users/login", request, Credential.class);
-			if(credential != null) {
-				logger.debug("Getting Config Token From Config: " + credential.getId());
-				return credential.getId();
-			}
-			logger.debug("Getting Config Token From Config: " + null);
-			return null;
-		}
-		catch (RestClientException e) {
-			e.printStackTrace();
-			logger.debug("Getting Config Token From Config: catch....");
-			return null;
-		}
-	}
 
 	@Caching(put = {@CachePut(value = CACHE_APP, key = "#result.id", condition = "#result != null")})
 	public App getAppByAppId(String appId, String token) {
@@ -330,13 +307,5 @@ public class CacheRepository {
 
 	private String getUrl() {
 		return System.getenv("config_url");
-	}
-
-	private String getUsername() {
-		return System.getenv("api_config_username");
-	}
-
-	private String getPassword() {
-		return System.getenv("api_config_password");
 	}
 }

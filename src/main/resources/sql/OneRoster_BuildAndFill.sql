@@ -13,8 +13,6 @@ DROP TABLE IF EXISTS
 	onerosterv1p1_academicsession,
 	onerosterv1p1_orgchild,
 	onerosterv1p1_org;
-     
-
 
 /* Org */
 create table OneRosterV1P1_Org (

@@ -6,7 +6,7 @@ import com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule;
 import org.ricone.config.model.App;
 import org.ricone.config.model.DataXML;
 import org.ricone.config.model.District;
-import org.ricone.config.cache.CacheService;
+import org.ricone.config.cache.AppService;
 import org.ricone.security.acl.Environment;
 import org.ricone.security.acl.PathPermission;
 import org.ricone.security.acl.PathPermissionMapper;
@@ -26,12 +26,12 @@ public class Application implements UserDetails {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
     private String appId;
     private String token;
-    private CacheService cacheService;
+    private AppService service;
 
-    public Application(String appId, String token, CacheService cacheService) {
+    public Application(String appId, String token, AppService cacheService) {
         this.appId = appId;
         this.token = token;
-        this.cacheService = cacheService;
+        this.service = cacheService;
     }
 
     @Override
@@ -47,7 +47,7 @@ public class Application implements UserDetails {
 
     @Override
     public String getUsername() {
-        return cacheService.getAppById(appId).getId();
+        return service.getAppById(appId).getId();
     }
 
     @Override
@@ -67,11 +67,11 @@ public class Application implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return cacheService.getAppById(appId).getPublic();
+        return service.getAppById(appId).getPublic();
     }
 
     public App getApp() {
-        return cacheService.getAppById(appId);
+        return service.getAppById(appId);
     }
 
     public List<PathPermission> getPermissions() {
@@ -82,7 +82,7 @@ public class Application implements UserDetails {
             xmlMapper.registerModule(new JaxbAnnotationModule());
             xmlMapper.registerModule(new JacksonXmlModule());
 
-            DataXML dataXML = cacheService.getDataXMLByAppId(appId);
+            DataXML dataXML = service.getDataXMLByAppId(appId);
             Environment environment = xmlMapper.readValue(dataXML.getXml().getXml(), Environment.class);
 
             PathPermissionMapper mapper = new PathPermissionMapper();
@@ -97,14 +97,14 @@ public class Application implements UserDetails {
     }
 
     public List<String> getDistrictLocalIds() {
-        return cacheService.getDistrictsByAppId(appId).stream().map(District::getId).collect(Collectors.toList());
+        return service.getDistrictsByAppId(appId).stream().map(District::getId).collect(Collectors.toList());
     }
 
     public HashMap<String, String> getDistrictKVsBySchoolRefId(String schoolRefId) {
-        return cacheService.getDistrictKVsBySchoolRefId(schoolRefId);
+        return service.getDistrictKVsBySchoolRefId(schoolRefId);
     }
 
     public HashMap<String, String> getSchoolKVsBySchoolRefId(String schoolRefId) {
-        return cacheService.getSchoolKVsBySchoolRefId(schoolRefId);
+        return service.getSchoolKVsBySchoolRefId(schoolRefId);
     }
 }

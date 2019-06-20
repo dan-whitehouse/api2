@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Configuration
+@ComponentScan(basePackages = {"org.ricone.config.cache"})
 @PropertySource("classpath:security.properties")
 public class DataSourceConfig {
     private final ProviderService service;
@@ -24,16 +25,13 @@ public class DataSourceConfig {
         this.service = service;
     }
 
-    @Bean
+    @Bean @DependsOn({"tokenCache"})
     public DataSource getDataSource() {
         HashMap<String, String> pkv = null;
 
-        logger.debug("------------------------");
         ProviderPasswordKV credentials = getCredentials();
         if(credentials != null) {
-
             pkv = service.getProviderKV(environment.getProperty("security.auth.provider.id"));
-
 
             DataSourceBuilder dataSourceBuilder = DataSourceBuilder.create();
             dataSourceBuilder.url(pkv.get("db.core.url"));
@@ -42,21 +40,7 @@ public class DataSourceConfig {
             return dataSourceBuilder.build();
         }
         return null;
-
-
-        /*HashMap<String, String> pkv = null;
-        HashMap<String, ProviderPasswordKV> ppkv = null;
-        ProviderPasswordKV credentials = ConfigService.getInstance().getProviderPasswordKV(ConfigUtil.getInstance().getProviderId(), ppkv.get("db.core").getId(), ConfigUtil.getInstance().getProviderKey());
-
-        DataSourceBuilder dataSourceBuilder = DataSourceBuilder.create();
-        dataSourceBuilder.driverClassName(pkv.get("db.driver"));
-        dataSourceBuilder.url(pkv.get("db.core.url"));
-        dataSourceBuilder.username(credentials.getUsername());
-        dataSourceBuilder.password(credentials.getPassword());
-        return dataSourceBuilder.build();*/
-
     }
-
 
     private ProviderPasswordKV getCredentials() {
         HashMap<String, ProviderPasswordKV> ppkv = service.getProviderPasswordKV(environment.getProperty("security.auth.provider.id"));
@@ -66,10 +50,5 @@ public class DataSourceConfig {
             }
         }
         return null;
-        /*ppkv.forEach((k, v) -> {
-            logger.debug(k + " - " + v.getId() + " | " + v.getName() + " | " + v.getPassword());
-            ProviderPasswordKV c = service.getProviderPasswordKV(environment.getProperty("security.auth.provider.id"), v.getId(), environment.getProperty("security.auth.provider.key"));
-            logger.debug("\t \u21b3" + k + " - " + c.getId() + " | " + c.getUsername() + " | " + c.getPassword());
-        });*/
     }
 }

@@ -1,6 +1,7 @@
 package org.ricone.security.oneroster;
 
 import com.fasterxml.jackson.annotation.*;
+import org.ricone.security.BaseDecodedToken;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -8,7 +9,7 @@ import java.util.Map;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"app_id", "ims.global.org.security.scope", "provider_id", "href", "iat", "exp", "iss"})
-public class DecodedToken implements Serializable {
+public class OneRosterDecodedToken implements Serializable {
 	private final static long serialVersionUID = -2898266389932101215L;
 	@JsonProperty("app_id")
 	private String appId;
@@ -27,7 +28,7 @@ public class DecodedToken implements Serializable {
 	@JsonIgnore
 	private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
-	DecodedToken() {
+	OneRosterDecodedToken() {
 		super();
 	}
 

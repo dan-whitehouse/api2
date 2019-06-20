@@ -18,35 +18,12 @@ import java.util.stream.Collectors;
 
 import static org.ricone.config.cache.CacheConfig.*;
 
-@Repository("PasswordRepository")
+@Repository("Config:ProviderRepository")
 public class ProviderRepository {
 	private final static String AUTHORIZATION = "Authorization";
 	private final Logger logger = LogManager.getLogger(this.getClass());
 
-	@Caching(put = {@CachePut(value = CACHE_TOKEN, key = "#providerId", condition = "#result != null")})
-	public String getAccessToken(String providerId) throws RestClientException {
-		try {
-			RestTemplate rt = new RestTemplate();
-
-			HttpHeaders headers = new HttpHeaders();
-			headers.setContentType(MediaType.APPLICATION_JSON);
-			HttpEntity<Login> request = new HttpEntity<>(new Login(getUsername(), getPassword()), headers);
-
-			Credential credential = rt.postForObject(getUrl() + "users/login", request, Credential.class);
-			if(credential != null) {
-				logger.debug("Getting Config Token From Config: " + credential.getId());
-				return credential.getId();
-			}
-			//logger.debug("Getting Config Token From Config: " + null);
-			return null;
-		}
-		catch (RestClientException e) {
-			e.printStackTrace();
-			//logger.debug("Getting Config Token From Config: catch....");
-			return null;
-		}
-	}
-
+	/* Non Cached */
 	HashMap<String, String> getProviderKV(String providerId, String token) throws RestClientException {
 		RestTemplate rt = new RestTemplate();
 		HttpHeaders headers = new HttpHeaders();
@@ -69,7 +46,7 @@ public class ProviderRepository {
 		return null;
 	}
 
-	/* Non Cached */
+
 	HashMap<String, ProviderPasswordKV> getProviderPasswordKV(String providerId, String token) throws RestClientException {
 		RestTemplate rt = new RestTemplate();
 		HttpHeaders headers = new HttpHeaders();

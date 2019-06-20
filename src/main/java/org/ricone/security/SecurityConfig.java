@@ -1,10 +1,12 @@
 package org.ricone.security;
 
-import org.ricone.config.cache.CacheService;
+import org.ricone.config.cache.AppService;
+import org.ricone.logging.LoggingFilter;
 import org.ricone.security.xpress.XPressAuthenticationEntryPoint;
 import org.ricone.security.xpress.XPressAuthorizationFilter;
 import org.ricone.security.oneroster.OneRosterAuthenticationEntryPoint;
 import org.ricone.security.oneroster.OneRosterAuthorizationFilter;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.annotation.Order;
@@ -32,12 +34,17 @@ public class SecurityConfig {
 	@Configuration @Order(1)
 	@PropertySource("classpath:security.properties")
 	public static class XPressWebSecurityConfigurationAdapter extends WebSecurityConfigurerAdapter {
-		private final CacheService cacheService;
+		private final AppService service;
 		private final Environment environment;
 
-		public XPressWebSecurityConfigurationAdapter(CacheService cacheService, Environment environment) {
-			this.cacheService = cacheService;
+		public XPressWebSecurityConfigurationAdapter(AppService cacheService, Environment environment) {
+			this.service = cacheService;
 			this.environment = environment;
+		}
+
+		@Bean
+		protected XPressAuthorizationFilter xPressAuthorizationFilter() throws Exception {
+			return new XPressAuthorizationFilter(authenticationManagerBean(), service, environment);
 		}
 
 		@Override
@@ -45,30 +52,43 @@ public class SecurityConfig {
 			//https://auth0.com/blog/implementing-jwt-authentication-on-spring-boot/
 			http.antMatcher("/requests/**")
 				.authorizeRequests().anyRequest().authenticated()
-				.and().addFilter(new XPressAuthorizationFilter(authenticationManagerBean(), cacheService, environment))
+				.and()
+					.addFilter(xPressAuthorizationFilter())
+					.addFilterAfter(new LoggingFilter(environment), XPressAuthorizationFilter.class)
 					.exceptionHandling().authenticationEntryPoint(new XPressAuthenticationEntryPoint())
-				.and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+				.and()
+					.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+
+			;
 		}
 	}
 
 	@Configuration @Order(2)
 	@PropertySource("classpath:security.properties")
 	public static class OneRosterWebSecurityConfigurationAdapter extends WebSecurityConfigurerAdapter {
-		private final CacheService cacheService;
+		private final AppService service;
 		private final Environment environment;
 
-		public OneRosterWebSecurityConfigurationAdapter(CacheService cacheService, Environment environment) {
-			this.cacheService = cacheService;
+		public OneRosterWebSecurityConfigurationAdapter(AppService cacheService, Environment environment) {
+			this.service = cacheService;
 			this.environment = environment;
+		}
+
+		@Bean
+		protected OneRosterAuthorizationFilter oneRosterAuthorizationFilter() throws Exception {
+			return new OneRosterAuthorizationFilter(authenticationManagerBean(), service, environment);
 		}
 
 		@Override
 		protected void configure(HttpSecurity http) throws Exception {
 			http.antMatcher("/ims/oneroster/v1p1/**")
 				.authorizeRequests().anyRequest().authenticated()
-				.and().addFilter(new OneRosterAuthorizationFilter(authenticationManagerBean(), cacheService, environment))
+				.and()
+					.addFilter(oneRosterAuthorizationFilter())
+					.addFilterAfter(new LoggingFilter(environment), OneRosterAuthorizationFilter.class)
 					.exceptionHandling().authenticationEntryPoint(new OneRosterAuthenticationEntryPoint())
-				.and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+				.and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+			;
 		}
 	}
 

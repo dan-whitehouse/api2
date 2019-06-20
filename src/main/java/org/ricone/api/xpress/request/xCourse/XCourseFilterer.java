@@ -6,7 +6,7 @@ import org.ricone.api.xpress.model.OtherId;
 import org.ricone.api.xpress.model.XCourse;
 import org.ricone.api.xpress.model.XCourseResponse;
 import org.ricone.api.xpress.model.XCoursesResponse;
-import org.ricone.config.cache.CacheService;
+import org.ricone.config.cache.AppService;
 import org.ricone.config.model.XCourseFilter;
 import org.springframework.stereotype.Component;
 
@@ -18,9 +18,9 @@ import org.springframework.stereotype.Component;
 
 @Component("XPress:XCourses:XCourseFilterer")
 public class XCourseFilterer {
-    private final CacheService cacheService;
+    private final AppService cacheService;
 
-    public XCourseFilterer(CacheService cacheService) {
+    public XCourseFilterer(AppService cacheService) {
         this.cacheService = cacheService;
     }
 

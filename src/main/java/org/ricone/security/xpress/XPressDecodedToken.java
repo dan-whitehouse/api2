@@ -3,13 +3,14 @@ package org.ricone.security.xpress;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import org.ricone.security.BaseDecodedToken;
 
 import java.io.Serializable;
 import java.util.Date;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"application_id", "iat", "exp", "iss"})
-public class DecodedToken  implements Serializable {
+public class XPressDecodedToken implements Serializable {
     private final static long serialVersionUID = -2798265389832101234L;
     @JsonProperty("application_id")
     private String application_id;
@@ -20,7 +21,7 @@ public class DecodedToken  implements Serializable {
     @JsonProperty("iss")
     private String iss;
 
-    DecodedToken() {
+    XPressDecodedToken() {
         super();
     }
 

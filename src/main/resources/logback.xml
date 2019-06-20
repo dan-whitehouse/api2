@@ -1,0 +1,41 @@
+<configuration>
+
+    <!--
+        https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-logging.html
+        https://stackoverflow.com/questions/30571319/spring-boot-logging-pattern
+        https://github.com/spring-projects/spring-boot/blob/master/spring-boot-project/spring-boot/src/main/java/org/springframework/boot/logging/logback/DefaultLogbackConfiguration.java
+     -->
+
+    <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter" />
+    <conversionRule conversionWord="wex" converterClass="org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter" />
+    <conversionRule conversionWord="wEx" converterClass="org.springframework.boot.logging.logback.ExtendedWhitespaceThrowableProxyConverter" />
+    <conversionRule conversionWord="uuid" converterClass="org.ricone.logging.UUIDConverter" />
+
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>
+                %clr(%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){blue} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}
+            </Pattern>
+        </layout>
+    </appender>
+
+    <appender name="socket" class="com.splunk.logging.TcpAppender">
+        <RemoteHost>splunkforwarder.ricone.org</RemoteHost>
+        <Port>2020</Port>
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>UUID=%uuid, Severity=%p, %m%n</pattern>
+        </layout>
+    </appender>
+
+    <logger name="splunk.logger" additivity="false" level="INFO">
+        <appender-ref ref="socket"/>
+    </logger>
+
+    <logger name="org.springframework.boot" additivity="false" level="DEBUG">
+        <!--<appender-ref ref="console"/>-->
+    </logger>
+
+    <root level="INFO">
+        <appender-ref ref="console"/>
+    </root>
+</configuration>

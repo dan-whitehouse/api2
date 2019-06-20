@@ -3,7 +3,7 @@ package org.ricone.api.xpress.request.xSchool;
 import org.apache.commons.collections4.CollectionUtils;
 import org.ricone.api.xpress.component.ControllerData;
 import org.ricone.api.xpress.model.*;
-import org.ricone.config.cache.CacheService;
+import org.ricone.config.cache.AppService;
 import org.ricone.config.model.XSchoolFilter;
 import org.springframework.stereotype.Component;
 
@@ -15,9 +15,9 @@ import org.springframework.stereotype.Component;
 
 @Component("XPress:XSchools:XSchoolFilterer")
 public class XSchoolFilterer {
-    private final CacheService cacheService;
+    private final AppService cacheService;
 
-    public XSchoolFilterer(CacheService cacheService) {
+    public XSchoolFilterer(AppService cacheService) {
         this.cacheService = cacheService;
     }
 

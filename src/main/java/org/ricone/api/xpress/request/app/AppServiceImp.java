@@ -4,7 +4,7 @@ import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.ricone.api.xpress.component.ControllerData;
 import org.ricone.config.model.App;
-import org.ricone.config.cache.CacheService;
+import org.ricone.config.cache.AppService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,10 +12,10 @@ import java.util.HashMap;
 
 @Transactional
 @Service("Core:App:AppService")
-public class AppServiceImp implements AppService {
-    private final CacheService cacheService;
+public class AppServiceImp implements org.ricone.api.xpress.request.app.AppService {
+    private final AppService cacheService;
 
-    public AppServiceImp(CacheService cacheService) {this.cacheService = cacheService;}
+    public AppServiceImp(AppService cacheService) {this.cacheService = cacheService;}
 
     //TODO - District Filters output seems to be missing the ID field.
 

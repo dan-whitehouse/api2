@@ -18,7 +18,7 @@ public class AuthRequest {
     private String token;
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    AuthRequest(HttpServletRequest request, Environment environment) {
+    public AuthRequest(HttpServletRequest request, Environment environment) {
         this.environment = environment;
         this.allowTokenParameter = allowTokenParams();
         this.isHeader = StringUtils.isNotBlank(request.getHeader("Authorization"));

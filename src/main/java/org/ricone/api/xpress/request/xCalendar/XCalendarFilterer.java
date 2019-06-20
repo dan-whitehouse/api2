@@ -6,7 +6,7 @@ import org.ricone.api.xpress.model.SessionList;
 import org.ricone.api.xpress.model.XCalendar;
 import org.ricone.api.xpress.model.XCalendarResponse;
 import org.ricone.api.xpress.model.XCalendarsResponse;
-import org.ricone.config.cache.CacheService;
+import org.ricone.config.cache.AppService;
 import org.ricone.config.model.XCalendarFilter;
 import org.springframework.stereotype.Component;
 
@@ -18,9 +18,9 @@ import org.springframework.stereotype.Component;
 
 @Component("XPress:XCalendars:XCalendarFilterer")
 public class XCalendarFilterer {
-    private final CacheService cacheService;
+    private final AppService cacheService;
 
-    public XCalendarFilterer(CacheService cacheService) {
+    public XCalendarFilterer(AppService cacheService) {
         this.cacheService = cacheService;
     }
 

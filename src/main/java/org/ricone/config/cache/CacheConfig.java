@@ -3,9 +3,13 @@ package org.ricone.config.cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.cache.CacheManagerCustomizer;
 import org.springframework.cache.Cache;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.caffeine.CaffeineCache;
+import org.springframework.cache.caffeine.CaffeineCacheManager;
+import org.springframework.cache.concurrent.ConcurrentMapCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -24,6 +28,11 @@ public class CacheConfig {
    final static String CACHE_SCHOOL = "schoolCache";
    final static String CACHE_SCHOOL_KV = "schoolKVCache";
    final static String CACHE_FILTER = "filterCache";
+
+   @Bean
+   public CaffeineCacheManager caffeineCacheManager() {
+      return new CaffeineCacheManager();
+   }
 
    @Bean
    public Cache tokenCache() {

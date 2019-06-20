@@ -3,7 +3,7 @@ package org.ricone.api.xpress.request.xStaff;
 import org.apache.commons.collections4.CollectionUtils;
 import org.ricone.api.xpress.component.ControllerData;
 import org.ricone.api.xpress.model.*;
-import org.ricone.config.cache.CacheService;
+import org.ricone.config.cache.AppService;
 import org.ricone.config.model.XStaffFilter;
 import org.springframework.stereotype.Component;
 
@@ -15,9 +15,9 @@ import org.springframework.stereotype.Component;
 
 @Component("XPress:XStaffs:XStaffFilterer")
 public class XStaffFilterer {
-    private final CacheService cacheService;
+    private final AppService cacheService;
 
-    public XStaffFilterer(CacheService cacheService) {
+    public XStaffFilterer(AppService cacheService) {
         this.cacheService = cacheService;
     }
 

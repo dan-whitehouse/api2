@@ -4,9 +4,10 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import org.apache.commons.lang3.StringUtils;
-import org.ricone.config.cache.CacheService;
+import org.ricone.config.cache.AppService;
 import org.ricone.security.Application;
 import org.ricone.security.BaseAuthenticationFilter;
+import org.ricone.security.BaseDecodedToken;
 import org.ricone.security.TokenDecoder;
 import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,10 +16,10 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import java.util.Objects;
 
 public class OneRosterAuthorizationFilter extends BaseAuthenticationFilter {
-    private final CacheService cacheService;
+    private final AppService cacheService;
     private final Environment environment;
 
-    public OneRosterAuthorizationFilter(AuthenticationManager authManager, CacheService cacheService, Environment environment) {
+    public OneRosterAuthorizationFilter(AuthenticationManager authManager, AppService cacheService, Environment environment) {
         super(authManager, environment);
         this.cacheService = cacheService;
         this.environment = environment;
@@ -26,10 +27,11 @@ public class OneRosterAuthorizationFilter extends BaseAuthenticationFilter {
 
     @Override
     protected UsernamePasswordAuthenticationToken getUsernamePasswordAuthenticationToken(String token) throws JWTVerificationException {
-        DecodedToken decodedToken = TokenDecoder.decodeToken(token, DecodedToken.class);
+        OneRosterDecodedToken decodedToken = TokenDecoder.decodeToken(token, OneRosterDecodedToken.class);
 
         Application application = null;
         if(decodedToken != null) {
+            logger.debug(decodedToken.getAppId());
             if(!Objects.requireNonNull(environment.getProperty("security.auth.provider.id")).equalsIgnoreCase(decodedToken.getProviderId())) {
                 throw new JWTVerificationException(environment.getProperty("security.auth.error.wrong-provider"));
             }

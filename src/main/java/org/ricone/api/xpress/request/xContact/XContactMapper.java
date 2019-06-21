@@ -2,10 +2,10 @@ package org.ricone.api.xpress.request.xContact;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
-import org.hibernate.MappingException;
 import org.ricone.api.core.model.*;
 import org.ricone.api.core.model.wrapper.StudentContactWrapper;
 import org.ricone.api.xpress.component.BaseMapper;
+import org.ricone.api.xpress.component.error.exception.MappingException;
 import org.ricone.api.xpress.model.*;
 import org.springframework.stereotype.Component;
 
@@ -19,7 +19,7 @@ public class XContactMapper extends BaseMapper {
     public XContactMapper() {
     }
 
-    public XContactsResponse convert(List<StudentContactWrapper> instance) {
+    public XContactsResponse convert(List<StudentContactWrapper> instance) throws MappingException {
         List<XContact> list = new ArrayList<>();
         for (StudentContactWrapper wrapper : instance) {
             XContact xContact = map(wrapper.getStudentContact(), wrapper.getDistrictId());
@@ -36,7 +36,7 @@ public class XContactMapper extends BaseMapper {
         return response;
     }
 
-    public XContactResponse convert(StudentContactWrapper instance) {
+    public XContactResponse convert(StudentContactWrapper instance) throws MappingException {
         XContactResponse response = new XContactResponse();
         XContact xContact = map(instance.getStudentContact(), instance.getDistrictId());
         if(xContact != null) {
@@ -45,7 +45,7 @@ public class XContactMapper extends BaseMapper {
         return response;
     }
 
-    public XContact map(StudentContact instance, String districtId) {
+    public XContact map(StudentContact instance, String districtId) throws MappingException {
         try {
             XContact xContact = new XContact();
             xContact.setDistrictId(districtId); //Required by Filtering

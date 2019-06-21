@@ -1,14 +1,12 @@
 package org.ricone.api.xpress.component.error;
 
 import org.ricone.api.xpress.component.error.exception.*;
-import org.ricone.api.xpress.component.error.exception.ForbiddenException;
 import org.ricone.api.xpress.model.XError;
 import org.ricone.api.xpress.model.XErrorResponse;
 import org.ricone.error.NoContentException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.bind.annotation.*;
 

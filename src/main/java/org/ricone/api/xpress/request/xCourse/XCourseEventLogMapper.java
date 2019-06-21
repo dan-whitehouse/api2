@@ -3,6 +3,7 @@ package org.ricone.api.xpress.request.xCourse;
 import org.ricone.api.core.model.CourseEventLog;
 import org.ricone.api.core.model.LeaEventLog;
 import org.ricone.api.core.model.wrapper.EventLogWrapper;
+import org.ricone.api.xpress.component.error.exception.MappingException;
 import org.ricone.api.xpress.model.*;
 import org.ricone.api.xpress.request.xLea.XLeaMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,7 @@ public class XCourseEventLogMapper {
         this.mapper = mapper;
     }
 
-    public XCoursesResponse convert(List<EventLogWrapper<CourseEventLog>> instance) {
+    public XCoursesResponse convert(List<EventLogWrapper<CourseEventLog>> instance) throws MappingException {
         List<XCourse> list = new ArrayList<>();
         for (EventLogWrapper<CourseEventLog> wrapper : instance) {
             XCourse xCourse = map(wrapper.getEventLog(), wrapper.getDistrictId());
@@ -42,7 +43,7 @@ public class XCourseEventLogMapper {
         return response;
     }
 
-    private XCourse map(CourseEventLog eventLog, String districtId) {
+    private XCourse map(CourseEventLog eventLog, String districtId) throws MappingException {
         XCourse instance;
         if ("D".equalsIgnoreCase(eventLog.getEventType())) {
             instance = new XCourse();

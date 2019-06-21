@@ -28,7 +28,8 @@
     </appender>
 
     <logger name="splunk.logger" additivity="false" level="INFO">
-        <appender-ref ref="socket"/>
+        <!--<appender-ref ref="socket"/>-->
+       <!-- <appender-ref ref="console"/>-->
     </logger>
 
     <logger name="org.springframework.boot" additivity="false" level="DEBUG">

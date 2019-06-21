@@ -2,13 +2,13 @@ package org.ricone.api.xpress.request.xSchool;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
-import org.hibernate.MappingException;
 import org.ricone.api.core.model.School;
 import org.ricone.api.core.model.SchoolGrade;
 import org.ricone.api.core.model.SchoolIdentifier;
 import org.ricone.api.core.model.SchoolTelephone;
 import org.ricone.api.core.model.wrapper.SchoolWrapper;
 import org.ricone.api.xpress.component.BaseMapper;
+import org.ricone.api.xpress.component.error.exception.MappingException;
 import org.ricone.api.xpress.model.*;
 import org.springframework.stereotype.Component;
 
@@ -22,7 +22,7 @@ public class XSchoolMapper extends BaseMapper {
     public XSchoolMapper() {
     }
 
-    public XSchoolsResponse convert(List<SchoolWrapper> instance) {
+    public XSchoolsResponse convert(List<SchoolWrapper> instance) throws MappingException {
         List<XSchool> list = new ArrayList<>();
         for (SchoolWrapper wrapper : instance) {
             XSchool xSchool = map(wrapper.getSchool(), wrapper.getDistrictId());
@@ -39,7 +39,7 @@ public class XSchoolMapper extends BaseMapper {
         return response;
     }
 
-    public XSchoolResponse convert(SchoolWrapper instance) {
+    public XSchoolResponse convert(SchoolWrapper instance) throws MappingException {
         XSchoolResponse response = new XSchoolResponse();
         XSchool xSchool = map(instance.getSchool(), instance.getDistrictId());
         if(xSchool != null) {
@@ -49,7 +49,7 @@ public class XSchoolMapper extends BaseMapper {
     }
 
 
-    public XSchool map(School instance, String districtId) {
+    public XSchool map(School instance, String districtId) throws MappingException {
         try {
             XSchool xSchool = new XSchool();
             xSchool.setDistrictId(districtId); //Required by Filtering

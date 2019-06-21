@@ -2,6 +2,7 @@ package org.ricone.api.xpress.request.xSchool;
 
 import org.ricone.api.core.model.SchoolEventLog;
 import org.ricone.api.core.model.wrapper.EventLogWrapper;
+import org.ricone.api.xpress.component.error.exception.MappingException;
 import org.ricone.api.xpress.model.XSchool;
 import org.ricone.api.xpress.model.XSchools;
 import org.ricone.api.xpress.model.XSchoolsResponse;
@@ -25,7 +26,7 @@ public class XSchoolEventLogMapper {
         this.mapper = mapper;
     }
 
-    public XSchoolsResponse convert(List<EventLogWrapper<SchoolEventLog>> instance) {
+    public XSchoolsResponse convert(List<EventLogWrapper<SchoolEventLog>> instance) throws MappingException {
         List<XSchool> list = new ArrayList<>();
         for (EventLogWrapper<SchoolEventLog> wrapper : instance) {
             XSchool xSchool = map(wrapper.getEventLog(), wrapper.getDistrictId());
@@ -42,7 +43,7 @@ public class XSchoolEventLogMapper {
         return response;
     }
 
-    private XSchool map(SchoolEventLog eventLog, String districtId) {
+    private XSchool map(SchoolEventLog eventLog, String districtId) throws MappingException {
         XSchool instance;
         if ("D".equalsIgnoreCase(eventLog.getEventType())) {
             instance = new XSchool();

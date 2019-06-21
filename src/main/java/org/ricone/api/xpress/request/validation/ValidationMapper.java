@@ -1,7 +1,7 @@
 package org.ricone.api.xpress.request.validation;
 
-import org.hibernate.MappingException;
 import org.ricone.api.core.model.Lea;
+import org.ricone.api.xpress.component.error.exception.MappingException;
 import org.ricone.api.xpress.model.validation.*;
 import org.springframework.stereotype.Component;
 
@@ -17,7 +17,7 @@ public class ValidationMapper {
     public ValidationMapper() {
     }
 
-    Validation mapLea(Lea lea, int studentCount, int studentEmailsCount, int studentLocalIdsCount, int staffCount, int staffEmailsCount, int staffLocalIdsCount) {
+    Validation mapLea(Lea lea, int studentCount, int studentEmailsCount, int studentLocalIdsCount, int staffCount, int staffEmailsCount, int staffLocalIdsCount) throws MappingException {
         try {
             Validation validation = new Validation(new Districts());
             District district = new District();

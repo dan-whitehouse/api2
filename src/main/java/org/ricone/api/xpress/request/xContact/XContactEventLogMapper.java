@@ -3,6 +3,7 @@ package org.ricone.api.xpress.request.xContact;
 import org.ricone.api.core.model.ContactEventLog;
 import org.ricone.api.core.model.LeaEventLog;
 import org.ricone.api.core.model.wrapper.EventLogWrapper;
+import org.ricone.api.xpress.component.error.exception.MappingException;
 import org.ricone.api.xpress.model.*;
 import org.ricone.api.xpress.request.xLea.XLeaMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,7 @@ public class XContactEventLogMapper {
         this.mapper = mapper;
     }
 
-    public XContactsResponse convert(List<EventLogWrapper<ContactEventLog>> instance) {
+    public XContactsResponse convert(List<EventLogWrapper<ContactEventLog>> instance) throws MappingException {
         List<XContact> list = new ArrayList<>();
         for (EventLogWrapper<ContactEventLog> wrapper : instance) {
             XContact xContact = map(wrapper.getEventLog(), wrapper.getDistrictId());
@@ -42,7 +43,7 @@ public class XContactEventLogMapper {
         return response;
     }
 
-    private XContact map(ContactEventLog eventLog, String districtId) {
+    private XContact map(ContactEventLog eventLog, String districtId) throws MappingException {
         XContact instance;
         if ("D".equalsIgnoreCase(eventLog.getEventType())) {
             instance = new XContact();

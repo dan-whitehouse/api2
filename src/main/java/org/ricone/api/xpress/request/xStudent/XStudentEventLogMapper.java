@@ -2,6 +2,7 @@ package org.ricone.api.xpress.request.xStudent;
 
 import org.ricone.api.core.model.StudentEventLog;
 import org.ricone.api.core.model.wrapper.EventLogWrapper;
+import org.ricone.api.xpress.component.error.exception.MappingException;
 import org.ricone.api.xpress.model.XStudent;
 import org.ricone.api.xpress.model.XStudents;
 import org.ricone.api.xpress.model.XStudentsResponse;
@@ -25,7 +26,7 @@ public class XStudentEventLogMapper {
         this.mapper = mapper;
     }
 
-    public XStudentsResponse convert(List<EventLogWrapper<StudentEventLog>> instance) {
+    public XStudentsResponse convert(List<EventLogWrapper<StudentEventLog>> instance) throws MappingException {
         List<XStudent> list = new ArrayList<>();
         for (EventLogWrapper<StudentEventLog> wrapper : instance) {
             XStudent xStudent = map(wrapper.getEventLog(), wrapper.getDistrictId());
@@ -42,7 +43,7 @@ public class XStudentEventLogMapper {
         return response;
     }
 
-    private XStudent map(StudentEventLog eventLog, String districtId) {
+    private XStudent map(StudentEventLog eventLog, String districtId) throws MappingException {
         XStudent instance;
         if ("D".equalsIgnoreCase(eventLog.getEventType())) {
             instance = new XStudent();

@@ -2,6 +2,7 @@ package org.ricone.api.xpress.request.xStaff;
 
 import org.ricone.api.core.model.StaffEventLog;
 import org.ricone.api.core.model.wrapper.EventLogWrapper;
+import org.ricone.api.xpress.component.error.exception.MappingException;
 import org.ricone.api.xpress.model.XStaff;
 import org.ricone.api.xpress.model.XStaffs;
 import org.ricone.api.xpress.model.XStaffsResponse;
@@ -25,7 +26,7 @@ public class XStaffEventLogMapper {
         this.mapper = mapper;
     }
 
-    public XStaffsResponse convert(List<EventLogWrapper<StaffEventLog>> instance) {
+    public XStaffsResponse convert(List<EventLogWrapper<StaffEventLog>> instance) throws MappingException {
         List<XStaff> list = new ArrayList<>();
         for (EventLogWrapper<StaffEventLog> wrapper : instance) {
             XStaff xStaff = map(wrapper.getEventLog(), wrapper.getDistrictId());
@@ -42,7 +43,7 @@ public class XStaffEventLogMapper {
         return response;
     }
 
-    private XStaff map(StaffEventLog eventLog, String districtId) {
+    private XStaff map(StaffEventLog eventLog, String districtId) throws MappingException {
         XStaff instance;
         if ("D".equalsIgnoreCase(eventLog.getEventType())) {
             instance = new XStaff();

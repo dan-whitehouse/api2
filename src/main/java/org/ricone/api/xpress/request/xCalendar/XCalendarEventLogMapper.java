@@ -2,6 +2,7 @@ package org.ricone.api.xpress.request.xCalendar;
 
 import org.ricone.api.core.model.CalendarEventLog;
 import org.ricone.api.core.model.wrapper.EventLogWrapper;
+import org.ricone.api.xpress.component.error.exception.MappingException;
 import org.ricone.api.xpress.model.XCalendar;
 import org.ricone.api.xpress.model.XCalendars;
 import org.ricone.api.xpress.model.XCalendarsResponse;
@@ -25,7 +26,7 @@ public class XCalendarEventLogMapper {
         this.mapper = mapper;
     }
 
-    public XCalendarsResponse convert(List<EventLogWrapper<CalendarEventLog>> instance) {
+    public XCalendarsResponse convert(List<EventLogWrapper<CalendarEventLog>> instance) throws MappingException {
         List<XCalendar> list = new ArrayList<>();
         for (EventLogWrapper<CalendarEventLog> wrapper : instance) {
             XCalendar xCalendar = map(wrapper.getEventLog(), wrapper.getDistrictId());
@@ -42,7 +43,7 @@ public class XCalendarEventLogMapper {
         return response;
     }
 
-    private XCalendar map(CalendarEventLog eventLog, String districtId) {
+    private XCalendar map(CalendarEventLog eventLog, String districtId) throws MappingException {
         XCalendar instance;
         if ("D".equalsIgnoreCase(eventLog.getEventType())) {
             instance = new XCalendar();

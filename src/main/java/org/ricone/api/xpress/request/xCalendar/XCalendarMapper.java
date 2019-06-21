@@ -3,13 +3,11 @@ package org.ricone.api.xpress.request.xCalendar;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
-import org.hibernate.MappingException;
-import org.ricone.api.core.model.CalendarEventLog;
 import org.ricone.api.core.model.SchoolCalendar;
 import org.ricone.api.core.model.SchoolCalendarSession;
-import org.ricone.api.core.model.wrapper.EventLogWrapper;
 import org.ricone.api.core.model.wrapper.SchoolCalendarWrapper;
 import org.ricone.api.xpress.component.BaseMapper;
+import org.ricone.api.xpress.component.error.exception.MappingException;
 import org.ricone.api.xpress.model.*;
 import org.springframework.stereotype.Component;
 
@@ -22,7 +20,7 @@ public class XCalendarMapper extends BaseMapper {
     public XCalendarMapper() {
     }
 
-    public XCalendarsResponse convert(List<SchoolCalendarWrapper> instance) {
+    public XCalendarsResponse convert(List<SchoolCalendarWrapper> instance) throws MappingException {
         List<XCalendar> list = new ArrayList<>();
         for (SchoolCalendarWrapper wrapper : instance) {
             XCalendar xCalendar = map(wrapper.getSchoolCalendar(), wrapper.getDistrictId());
@@ -39,7 +37,7 @@ public class XCalendarMapper extends BaseMapper {
         return response;
     }
 
-    public XCalendarResponse convert(SchoolCalendarWrapper instance) {
+    public XCalendarResponse convert(SchoolCalendarWrapper instance) throws MappingException {
         XCalendarResponse response = new XCalendarResponse();
         XCalendar xCalendar = map(instance.getSchoolCalendar(), instance.getDistrictId());
         if(xCalendar != null) {
@@ -48,7 +46,7 @@ public class XCalendarMapper extends BaseMapper {
         return response;
     }
 
-    public XCalendar map(SchoolCalendar instance, String districtId) {
+    public XCalendar map(SchoolCalendar instance, String districtId) throws MappingException {
         try {
             XCalendar xCalendar = new XCalendar();
             xCalendar.setDistrictId(districtId); //Required by Filtering
@@ -107,39 +105,5 @@ public class XCalendarMapper extends BaseMapper {
 
     private Metadata mapMetadata(SchoolCalendar schoolCalendar) {
         return new Metadata(schoolCalendar.getSchoolCalendarSchoolYear());
-    }
-
-    /** Event Mapping Methods **/
-    public XCalendarsResponse convertEventLogs(List<EventLogWrapper<CalendarEventLog>> instance) {
-        List<XCalendar> list = new ArrayList<>();
-        for (EventLogWrapper<CalendarEventLog> wrapper : instance) {
-            XCalendar xCalendar = mapEventLog(wrapper.getEventLog(), wrapper.getDistrictId());
-            if (xCalendar != null) {
-                list.add(xCalendar);
-            }
-        }
-
-        XCalendarsResponse response = new XCalendarsResponse();
-        XCalendars xCalendars = new XCalendars();
-        xCalendars.setXCalendar(list);
-
-        response.setXCalendars(xCalendars);
-        return response;
-    }
-
-    private XCalendar mapEventLog(CalendarEventLog eventLog, String districtId) {
-        XCalendar instance;
-        if ("D".equalsIgnoreCase(eventLog.getEventType())) {
-            instance = new XCalendar();
-            instance.setRefId(eventLog.getObjectRefId());
-        }
-        else {
-            instance = map(eventLog.getSchoolCalendar(), districtId);
-            if(instance == null) {
-                instance = new XCalendar();
-                instance.setRefId(eventLog.getObjectRefId());
-            }
-        }
-        return instance;
     }
 }

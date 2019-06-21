@@ -2,6 +2,7 @@ package org.ricone.api.xpress.request.xRoster;
 
 import org.ricone.api.core.model.RosterEventLog;
 import org.ricone.api.core.model.wrapper.EventLogWrapper;
+import org.ricone.api.xpress.component.error.exception.MappingException;
 import org.ricone.api.xpress.model.XRoster;
 import org.ricone.api.xpress.model.XRosters;
 import org.ricone.api.xpress.model.XRostersResponse;
@@ -25,7 +26,7 @@ public class XRosterEventLogMapper {
         this.mapper = mapper;
     }
 
-    public XRostersResponse convert(List<EventLogWrapper<RosterEventLog>> instance) {
+    public XRostersResponse convert(List<EventLogWrapper<RosterEventLog>> instance) throws MappingException {
         List<XRoster> list = new ArrayList<>();
         for (EventLogWrapper<RosterEventLog> wrapper : instance) {
             XRoster xRoster = map(wrapper.getEventLog(), wrapper.getDistrictId());
@@ -42,7 +43,7 @@ public class XRosterEventLogMapper {
         return response;
     }
 
-    private XRoster map(RosterEventLog eventLog, String districtId) {
+    private XRoster map(RosterEventLog eventLog, String districtId) throws MappingException {
         XRoster instance;
         if ("D".equalsIgnoreCase(eventLog.getEventType())) {
             instance = new XRoster();

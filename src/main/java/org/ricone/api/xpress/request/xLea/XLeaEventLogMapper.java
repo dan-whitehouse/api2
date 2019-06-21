@@ -2,6 +2,7 @@ package org.ricone.api.xpress.request.xLea;
 
 import org.ricone.api.core.model.LeaEventLog;
 import org.ricone.api.core.model.wrapper.EventLogWrapper;
+import org.ricone.api.xpress.component.error.exception.MappingException;
 import org.ricone.api.xpress.model.XLea;
 import org.ricone.api.xpress.model.XLeas;
 import org.ricone.api.xpress.model.XLeasResponse;
@@ -25,7 +26,7 @@ public class XLeaEventLogMapper {
         this.mapper = mapper;
     }
 
-    public XLeasResponse convert(List<EventLogWrapper<LeaEventLog>> instance) {
+    public XLeasResponse convert(List<EventLogWrapper<LeaEventLog>> instance) throws MappingException {
         List<XLea> list = new ArrayList<>();
         for (EventLogWrapper<LeaEventLog> wrapper : instance) {
             XLea xLea = map(wrapper.getEventLog(), wrapper.getDistrictId());
@@ -42,7 +43,7 @@ public class XLeaEventLogMapper {
         return response;
     }
 
-    private XLea map(LeaEventLog eventLog, String districtId) {
+    private XLea map(LeaEventLog eventLog, String districtId) throws MappingException {
         XLea instance;
         if ("D".equalsIgnoreCase(eventLog.getEventType())) {
             instance = new XLea();

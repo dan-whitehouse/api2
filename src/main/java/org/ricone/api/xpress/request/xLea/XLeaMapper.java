@@ -2,11 +2,11 @@ package org.ricone.api.xpress.request.xLea;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
-import org.hibernate.MappingException;
 import org.ricone.api.core.model.Lea;
 import org.ricone.api.core.model.LeaTelephone;
 import org.ricone.api.core.model.wrapper.LeaWrapper;
 import org.ricone.api.xpress.component.BaseMapper;
+import org.ricone.api.xpress.component.error.exception.MappingException;
 import org.ricone.api.xpress.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +22,7 @@ public class XLeaMapper extends BaseMapper {
     public XLeaMapper() {
     }
 
-    public XLeasResponse convert(List<LeaWrapper> instance) {
+    public XLeasResponse convert(List<LeaWrapper> instance) throws MappingException {
         List<XLea> list = new ArrayList<>();
         for (LeaWrapper wrapper : instance) {
             XLea xLea = map(wrapper.getLea(), wrapper.getDistrictId());
@@ -39,13 +39,13 @@ public class XLeaMapper extends BaseMapper {
         return response;
     }
 
-    public XLeaResponse convert(LeaWrapper wrapper) {
+    public XLeaResponse convert(LeaWrapper wrapper) throws MappingException {
         XLeaResponse response = new XLeaResponse();
         response.setXLea(map(wrapper.getLea(), wrapper.getDistrictId()));
         return response;
     }
 
-    public XLea map(Lea instance, String districtId) {
+    public XLea map(Lea instance, String districtId) throws MappingException {
         try {
             XLea xLea = new XLea();
             xLea.setDistrictId(districtId); // Required By Wrapper

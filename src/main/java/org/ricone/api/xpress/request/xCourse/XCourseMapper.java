@@ -1,12 +1,12 @@
 package org.ricone.api.xpress.request.xCourse;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.hibernate.MappingException;
 import org.ricone.api.core.model.Course;
 import org.ricone.api.core.model.CourseGrade;
 import org.ricone.api.core.model.CourseIdentifier;
 import org.ricone.api.core.model.wrapper.CourseWrapper;
 import org.ricone.api.xpress.component.BaseMapper;
+import org.ricone.api.xpress.component.error.exception.MappingException;
 import org.ricone.api.xpress.model.*;
 import org.springframework.stereotype.Component;
 
@@ -20,7 +20,7 @@ public class XCourseMapper extends BaseMapper {
     public XCourseMapper() {
     }
 
-    public XCoursesResponse convert(List<CourseWrapper> instance) {
+    public XCoursesResponse convert(List<CourseWrapper> instance) throws MappingException {
         List<XCourse> list = new ArrayList<>();
         for (CourseWrapper wrapper : instance) {
             XCourse xCourse = map(wrapper.getCourse(), wrapper.getDistrictId());
@@ -37,7 +37,7 @@ public class XCourseMapper extends BaseMapper {
         return response;
     }
 
-    public XCourseResponse convert(CourseWrapper instance) {
+    public XCourseResponse convert(CourseWrapper instance) throws MappingException {
         XCourseResponse response = new XCourseResponse();
         XCourse xCourse = map(instance.getCourse(), instance.getDistrictId());
         if(xCourse != null) {
@@ -47,7 +47,7 @@ public class XCourseMapper extends BaseMapper {
     }
 
 
-    public XCourse map(Course instance, String districtId) {
+    public XCourse map(Course instance, String districtId) throws MappingException {
         try {
             XCourse xCourse = new XCourse();
             xCourse.setDistrictId(districtId); //Required by Filtering

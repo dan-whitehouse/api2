@@ -133,8 +133,18 @@ public class Log {
 		this.errorDescription = errorDescription;
 	}
 
+
+	public String getLog() {
+		return "Provider='" + provider + '\'' + ", Component='" + component + '\'' + ", App='" + app + '\'' + ", Request='" + request + '\'' + ", RequestHeaders='" + requestHeaders + '\'' + ", RequestDateTime='" + requestDatetime + '\'' + ", ResponseDateTime='" + responseDatetime + '\'' + ", Duration='" + duration + '\'' + ", StatusCode='" + statusCode + '\'';
+	}
+
+	public String getLogWithErrors() {
+		return "Provider='" + provider + '\'' + ", Component='" + component + '\'' + ", App='" + app + '\'' + ", Request='" + request + '\'' + ", RequestHeaders='" + requestHeaders + '\'' + ", RequestDateTime='" + requestDatetime + '\'' + ", ResponseDateTime='" + responseDatetime + '\'' + ", Duration='" + duration + '\'' + ", StatusCode='" + statusCode + '\'' + ", ErrorMessage='" + errorMessage + '\'' + ", ErrorDescription='" + errorDescription + '\'';
+	}
+
 	@Override
 	public String toString() {
 		return "Provider='" + provider + '\'' + ", Component='" + component + '\'' + ", App='" + app + '\'' + ", Request='" + request + '\'' + ", RequestHeaders='" + requestHeaders + '\'' + ", RequestDateTime='" + requestDatetime + '\'' + ", ResponseDateTime='" + responseDatetime + '\'' + ", Duration='" + duration + '\'' + ", StatusCode='" + statusCode + '\'' + ", ErrorMessage='" + errorMessage + '\'' + ", ErrorDescription='" + errorDescription + '\'';
 	}
+
 }

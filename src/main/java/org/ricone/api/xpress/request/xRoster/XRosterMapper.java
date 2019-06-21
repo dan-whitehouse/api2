@@ -3,10 +3,10 @@ package org.ricone.api.xpress.request.xRoster;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
-import org.hibernate.MappingException;
 import org.ricone.api.core.model.*;
 import org.ricone.api.core.model.wrapper.CourseSectionWrapper;
 import org.ricone.api.xpress.component.BaseMapper;
+import org.ricone.api.xpress.component.error.exception.MappingException;
 import org.ricone.api.xpress.model.*;
 import org.springframework.stereotype.Component;
 
@@ -19,7 +19,7 @@ public class XRosterMapper extends BaseMapper {
     public XRosterMapper() {
     }
 
-    public XRostersResponse convert(List<CourseSectionWrapper> instance) {
+    public XRostersResponse convert(List<CourseSectionWrapper> instance) throws MappingException {
         List<XRoster> list = new ArrayList<>();
         for (CourseSectionWrapper wrapper : instance) {
             XRoster xRoster = map(wrapper.getCourseSection(), wrapper.getDistrictId());
@@ -36,7 +36,7 @@ public class XRosterMapper extends BaseMapper {
         return response;
     }
 
-    public XRosterResponse convert(CourseSectionWrapper instance) {
+    public XRosterResponse convert(CourseSectionWrapper instance) throws MappingException {
         XRosterResponse response = new XRosterResponse();
         XRoster xRoster = map(instance.getCourseSection(), instance.getDistrictId());
         if(xRoster != null) {
@@ -46,7 +46,7 @@ public class XRosterMapper extends BaseMapper {
     }
 
 
-    public XRoster map(CourseSection instance, String districtId) {
+    public XRoster map(CourseSection instance, String districtId) throws MappingException {
         try {
             XRoster xRoster = new XRoster();
             xRoster.setDistrictId(districtId); //Required by Filtering

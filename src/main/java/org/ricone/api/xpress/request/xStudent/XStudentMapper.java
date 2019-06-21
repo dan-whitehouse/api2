@@ -2,11 +2,12 @@ package org.ricone.api.xpress.request.xStudent;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
-import org.hibernate.MappingException;
 import org.ricone.api.core.model.*;
 import org.ricone.api.core.model.wrapper.StudentWrapper;
 import org.ricone.api.xpress.component.BaseMapper;
+import org.ricone.api.xpress.component.error.exception.MappingException;
 import org.ricone.api.xpress.model.*;
 import org.springframework.stereotype.Component;
 
@@ -18,7 +19,7 @@ public class XStudentMapper extends BaseMapper {
     public XStudentMapper() {
     }
 
-    public XStudentsResponse convert(List<StudentWrapper> instance) {
+    public XStudentsResponse convert(List<StudentWrapper> instance) throws MappingException {
         List<XStudent> list = new ArrayList<>();
         for (StudentWrapper wrapper : instance) {
             XStudent xStudent = map(wrapper.getStudent(), wrapper.getDistrictId());
@@ -35,7 +36,7 @@ public class XStudentMapper extends BaseMapper {
         return response;
     }
 
-    public XStudentResponse convert(StudentWrapper instance) {
+    public XStudentResponse convert(StudentWrapper instance) throws MappingException {
         XStudentResponse response = new XStudentResponse();
         XStudent xStudent = map(instance.getStudent(), instance.getDistrictId());
         if(xStudent != null) {
@@ -44,7 +45,7 @@ public class XStudentMapper extends BaseMapper {
         return response;
     }
 
-    public XStudent map(Student instance, String districtId) {
+    public XStudent map(Student instance, String districtId) throws MappingException {
         try {
             XStudent xStudent = new XStudent();
             xStudent.setDistrictId(districtId); //Required by Filtering
@@ -191,7 +192,9 @@ public class XStudentMapper extends BaseMapper {
         }
         catch (Exception ex) {
             ex.printStackTrace();
-            throw new MappingException("Mapping Exception: " + ex.getLocalizedMessage());
+            throw new MappingException("Mapping Exception: " + ExceptionUtils.getStackFrames(ex)[0]);
+            //Lets go with an env error, w/ no stacktrace just a nice..
+            //"An error occured while mapping your results. Pls contact RIC One"
         }
     }
 
@@ -201,7 +204,7 @@ public class XStudentMapper extends BaseMapper {
         StudentAcademicRecord academicRecord;
 
         if(CollectionUtils.isNotEmpty(academicRecordList)) {
-            academicRecordList.sort(Comparator.comparing(StudentAcademicRecord::getAsOfDate)); //Sort by Latest Date
+            academicRecordList.sort(Comparator.comparing(StudentAcademicRecord::getAsOfDate, Comparator.nullsLast(Comparator.naturalOrder()))); //Sort by Latest Date
 
             academicRecord = academicRecordList.get(0); //Get Latest Date
             AcademicSummary academicSummary = new AcademicSummary();
@@ -388,9 +391,9 @@ public class XStudentMapper extends BaseMapper {
             enrollment.setEntryDate(DateFormatUtils.format(studentEnrollment.getEnrollmentEntryDate(), DateFormatUtils.ISO_8601_EXTENDED_DATE_FORMAT.getPattern()));
         }
 
-        if(studentEnrollment.getEnrollmentExitDate() != null) {
+        //if(studentEnrollment.getEnrollmentExitDate() != null) { //TODO Mapping Exception Test
             enrollment.setExitDate(DateFormatUtils.format(studentEnrollment.getEnrollmentExitDate(), DateFormatUtils.ISO_8601_EXTENDED_DATE_FORMAT.getPattern()));
-        }
+        //}
 
         if(studentEnrollment.getSchool() != null) {
             enrollment.setSchoolRefId(studentEnrollment.getSchool().getSchoolRefId());

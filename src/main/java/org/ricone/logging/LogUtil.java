@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class LogUtil {
 
-	public static Map<String, String> getHeaders(HttpServletRequest request) {
+	static Map<String, String> getHeaders(HttpServletRequest request) {
 		Map<String, String> map = new HashMap<>();
 		Enumeration headerNames = request.getHeaderNames();
 		while (headerNames.hasMoreElements()) {
@@ -20,12 +20,27 @@ public class LogUtil {
 		return map;
 	}
 
-	public static Map<String, String> getHeaders(HttpServletResponse response) {
+	static Map<String, String> getHeaders(HttpServletResponse response) {
 		Map<String, String> map = new HashMap<>();
 		Collection<String> headerNames = response.getHeaderNames();
 		headerNames.forEach(headerName -> {
 			map.put(headerName, response.getHeader(headerName));
 		});
 		return map;
+	}
+
+	static boolean isBetween(int x, int lower, int upper) {
+		return lower <= x && x <= upper;
+	}
+
+	static String getRequestUrl(HttpServletRequest request) {
+		StringBuilder requestURL = new StringBuilder(request.getRequestURL().toString());
+		String queryString = request.getQueryString();
+
+		if (queryString == null) {
+			return request.getMethod() + " " + requestURL.toString();
+		} else {
+			return request.getMethod() + " " + requestURL.append('?').append(queryString).toString();
+		}
 	}
 }

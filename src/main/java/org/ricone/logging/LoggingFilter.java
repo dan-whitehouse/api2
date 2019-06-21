@@ -1,8 +1,16 @@
 package org.ricone.logging;
 
 import com.auth0.jwt.exceptions.JWTDecodeException;
+import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.ricone.api.oneroster.model.Error;
+import org.ricone.api.oneroster.model.ErrorResponse;
+import org.ricone.api.xpress.model.XErrorResponse;
 import org.ricone.security.Application;
 import org.ricone.security.AuthRequest;
 import org.ricone.security.TokenDecoder;
@@ -10,6 +18,8 @@ import org.ricone.security.oneroster.OneRosterDecodedToken;
 import org.ricone.security.xpress.XPressDecodedToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.event.Level;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -23,10 +33,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.util.stream.Collectors;
 
 import static org.apache.commons.io.Charsets.UTF_8;
 
 @Component
+@PropertySource("classpath:security.properties")
 public class LoggingFilter extends OncePerRequestFilter {
     private static final Logger logger = LoggerFactory.getLogger("splunk.logger");
     private final Environment environment;
@@ -40,94 +53,142 @@ public class LoggingFilter extends OncePerRequestFilter {
         ContentCachingRequestWrapper requestWrapper = new ContentCachingRequestWrapper(request);
         ContentCachingResponseWrapper responseWrapper = new ContentCachingResponseWrapper(response);
 
-        filterChain.doFilter(requestWrapper, responseWrapper);
+        filterChain.doFilter(requestWrapper, responseWrapper); /* !Important - Needs to occur before we inspect the response body */
 
-        /*logger.debug("-------------------------");
-        logger.debug("request.getPathInfo(): " + request.getPathInfo());
-        logger.debug("request.getServletPath(): " + request.getServletPath());
-        logger.debug("request.getRequestURI(): " + request.getRequestURI());
-        logger.debug("request.getAuthType(): " + request.getAuthType());
-        logger.debug("request.getContextPath(): " + request.getContextPath());
-        logger.debug("request.getMethod(): " + request.getMethod());
-        logger.debug("request.getPathTranslated(): " + request.getPathTranslated());
-        logger.debug("request.getUserPrincipal(): " + request.getUserPrincipal());
-        logger.debug("request.getRequestURL(): " + request.getRequestURL());
-        logger.debug("request.getServletContext(): " + request.getServletContext());
-        logger.debug("request.getRequestedSessionId(): " + request.getRequestedSessionId());
-        logger.debug("request.getQueryString(): " + request.getQueryString());
-        logger.debug("request.getRemoteUser(): " + request.getRemoteUser());
-        logger.debug("request.getCharacterEncoding(): " + request.getCharacterEncoding());
-        logger.debug("request.getContentType(): " + request.getContentType());
-        logger.debug("Authorization Header: " + request.getHeader("Authorization"));*/
-
-        if(SecurityContextHolder.getContext().getAuthentication() != null) {
-            logger.debug("SecurityContextHolder.getContext().getAuthentication(): " + ((Application)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername());
-        }
-        else {
-            logger.debug("SecurityContextHolder.getContext().getAuthentication(): " + "Null... Decoded Token: " + getAppId(request));
-        }
-
-        String output = IOUtils.toString(responseWrapper.getContentInputStream(), UTF_8);
-        logger.debug("response body: " + output);
+        String responseBody = IOUtils.toString(responseWrapper.getContentInputStream(), UTF_8);
+        logger.debug("response body: " + responseBody);
 
         try {
-            Log log = new LogBuilder()
-                    .component("API")
-                    .app(getAppId(request))
-                    .request(request.getRequestURI())
-                    .requestHeaders(LogUtil.getHeaders(request).toString())
-                    .requestDatetime(Instant.now().toString())
-                    .responseDatetime("")
-                    .statusCode(String.valueOf(response.getStatus()))
-                    //.errorMessage(ex != null ? ex.getMessage() : null)
-                    //.errorDescription(ex != null ? ex.getMessage() : null)
-                    .build();
-
-            logger.info(log.toString());
+            Log log;
+            if(Level.INFO.equals(getLogLevel(response.getStatus()))) {
+                log = new LogBuilder()
+                        .provider(environment.getProperty("security.auth.provider.id"))
+                        .component("API")
+                        .app(getAppId(request))
+                        .request(LogUtil.getRequestUrl(request))
+                        .requestHeaders(LogUtil.getHeaders(request).toString())
+                        .requestDatetime("")
+                        .responseDatetime(LocalDateTime.now().toString())
+                        .statusCode(String.valueOf(response.getStatus()))
+                        .build();
+                logger.info(log.getLog());
+            }
+            else {
+                String[] errors = getErrors(request, responseBody);
+                log = new LogBuilder()
+                        .provider(environment.getProperty("security.auth.provider.id"))
+                        .component("API")
+                        .app(getAppId(request))
+                        .request(LogUtil.getRequestUrl(request))
+                        .requestHeaders(LogUtil.getHeaders(request).toString())
+                        .requestDatetime("")
+                        .responseDatetime(LocalDateTime.now().toString())
+                        .statusCode(String.valueOf(response.getStatus()))
+                        .errorMessage(errors[0])
+                        .errorDescription(errors[1])
+                        .build();
+                if(Level.WARN.equals(getLogLevel(response.getStatus()))) {
+                    logger.warn(log.getLogWithErrors());
+                }
+                else if(Level.ERROR.equals(getLogLevel(response.getStatus()))) {
+                    logger.error(log.getLogWithErrors());
+                }
+                else if(Level.DEBUG.equals(getLogLevel(response.getStatus()))) {
+                    logger.debug(log.getLogWithErrors());
+                }
+            }
         }
         catch(Exception e) {
-            e.printStackTrace();
+            logger.debug(e.getMessage());
+        }
+        responseWrapper.copyBodyToResponse(); /* !Important - Without this line, no data is returned to the user */
+    }
+
+    private Level getLogLevel(int statusCode) {
+        if(LogUtil.isBetween(statusCode, 200, 299)) {
+            return Level.INFO;
+        }
+        else if(LogUtil.isBetween(statusCode, 400, 499)) {
+            return Level.WARN;
+        }
+        else if(LogUtil.isBetween(statusCode, 500, 599)) {
+            return Level.ERROR;
+        }
+        return Level.DEBUG;
+    }
+
+
+    private String[] getErrors(HttpServletRequest request, String responseBody) {
+        ObjectMapper mapper = new ObjectMapper();
+        if(request.getContentType() != null) {
+            if(request.getContentType().equalsIgnoreCase("application/xml")) {
+                mapper = new XmlMapper();
+            }
         }
 
-
-
-        responseWrapper.copyBodyToResponse(); /* !Important - Without this line, no data is returned to the user */
+        try {
+            if(StringUtils.startsWith(request.getServletPath(), "/requests/")) {
+                XErrorResponse errorResponse = mapper.readValue(responseBody, XErrorResponse.class);
+                if(errorResponse != null && errorResponse.getError() != null) {
+                    return new String[] {errorResponse.getError().getMessage(), errorResponse.getError().getDescription()};
+                }
+            }
+            else if(StringUtils.startsWith(request.getServletPath(), "/ims/oneroster/")) {
+                ErrorResponse errorResponse = mapper.readValue(responseBody, ErrorResponse.class);
+                if(errorResponse != null) {
+                    String[] errors = new String[2];
+                    errors[0] = errorResponse.getErrors().stream().map(Error::getCodeMinor).map(String::valueOf).collect(Collectors.joining(","));
+                    errors[1] = errorResponse.getErrors().stream().map(Error::getDescription).collect(Collectors.joining(","));
+                    return new String[] {errors[0], errors[1]};
+                }
+            }
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new String[]{"null", "There was an error using the object mapper to decode the error. So... we don't know"};
     }
 
 
     private String getAppId(HttpServletRequest request) {
         AuthRequest authRequest = new AuthRequest(request, environment);
-        try {
-            if(StringUtils.startsWith(request.getServletPath(), "/requests/")) {
-                XPressDecodedToken decodedToken = TokenDecoder.decodeToken(authRequest.getToken(), XPressDecodedToken.class);
-                if(decodedToken != null) {
-                    return decodedToken.getApplicationId();
+        if(StringUtils.isNotBlank(authRequest.getToken())) {
+            try {
+                if(StringUtils.startsWith(request.getServletPath(), "/requests/")) {
+                    XPressDecodedToken decodedToken = TokenDecoder.decodeToken(authRequest.getToken(), XPressDecodedToken.class);
+                    if(decodedToken != null) {
+                        return decodedToken.getApplicationId();
+                    }
+                }
+                else if(StringUtils.startsWith(request.getServletPath(), "/ims/oneroster/")) {
+                    OneRosterDecodedToken decodedToken = TokenDecoder.decodeToken(authRequest.getToken(), OneRosterDecodedToken.class);
+                    if(decodedToken != null) {
+                        return decodedToken.getAppId();
+                    }
                 }
             }
-            else if(StringUtils.startsWith(request.getServletPath(), "/ims/oneroster/")) {
-                OneRosterDecodedToken decodedToken = TokenDecoder.decodeToken(authRequest.getToken(), OneRosterDecodedToken.class);
-                if(decodedToken != null) {
-                    return decodedToken.getAppId();
+            catch(JWTVerificationException e) {
+                //Token Failed to Decode, lets try the opposite decoder. Maybe they gave us the wrong token.
+                logger.debug("Trying alternate token decoder...");
+                try {
+                    if(StringUtils.startsWith(request.getServletPath(), "/requests/")) {
+                        OneRosterDecodedToken decodedToken = TokenDecoder.decodeToken(authRequest.getToken(), OneRosterDecodedToken.class);
+                        if(decodedToken != null) {
+                            return decodedToken.getAppId();
+                        }
+                    }
+                    else if(StringUtils.startsWith(request.getServletPath(), "/ims/oneroster/")) {
+                        XPressDecodedToken decodedToken = TokenDecoder.decodeToken(authRequest.getToken(), XPressDecodedToken.class);
+                        if(decodedToken != null) {
+                            return decodedToken.getApplicationId();
+                        }
+                    }
+                }
+                catch (JWTVerificationException ignore) {
+                    //Exception is ignorable, because we log this someplace else higher up the chain. However, we need the catch.
                 }
             }
         }
-        catch(JWTDecodeException e) {
-            //Token Failed to Decode, lets try the opposite decoder. Maybe they gave us the wrong token.
-            logger.debug("Trying alternate token decoder...");
-            if(StringUtils.startsWith(request.getServletPath(), "/requests/")) {
-                OneRosterDecodedToken decodedToken = TokenDecoder.decodeToken(authRequest.getToken(), OneRosterDecodedToken.class);
-                if(decodedToken != null) {
-                    return decodedToken.getAppId();
-                }
-            }
-            else if(StringUtils.startsWith(request.getServletPath(), "/ims/oneroster/")) {
-                XPressDecodedToken decodedToken = TokenDecoder.decodeToken(authRequest.getToken(), XPressDecodedToken.class);
-                if(decodedToken != null) {
-                    return decodedToken.getApplicationId();
-                }
-            }
-        }
-        catch(Exception e){e.printStackTrace();}
         return null;
     }
 }

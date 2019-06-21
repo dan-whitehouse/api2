@@ -2,13 +2,13 @@ package org.ricone.api.xpress.request.xStaff;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
-import org.hibernate.MappingException;
 import org.ricone.api.core.model.Staff;
 import org.ricone.api.core.model.StaffAssignment;
 import org.ricone.api.core.model.StaffEmail;
 import org.ricone.api.core.model.StaffIdentifier;
 import org.ricone.api.core.model.wrapper.StaffWrapper;
 import org.ricone.api.xpress.component.BaseMapper;
+import org.ricone.api.xpress.component.error.exception.MappingException;
 import org.ricone.api.xpress.model.*;
 import org.springframework.stereotype.Component;
 
@@ -21,7 +21,7 @@ public class XStaffMapper extends BaseMapper {
     public XStaffMapper() {
     }
 
-    public XStaffsResponse convert(List<StaffWrapper> instance) {
+    public XStaffsResponse convert(List<StaffWrapper> instance) throws MappingException {
         List<XStaff> list = new ArrayList<>();
         for (StaffWrapper wrapper : instance) {
             XStaff xStaff = map(wrapper.getStaff(), wrapper.getDistrictId());
@@ -38,7 +38,7 @@ public class XStaffMapper extends BaseMapper {
         return response;
     }
 
-    public XStaffResponse convert(StaffWrapper instance) {
+    public XStaffResponse convert(StaffWrapper instance) throws MappingException {
         XStaffResponse response = new XStaffResponse();
         XStaff xStaff = map(instance.getStaff(), instance.getDistrictId());
         if(xStaff != null) {
@@ -48,7 +48,7 @@ public class XStaffMapper extends BaseMapper {
     }
 
 
-    public XStaff map(Staff instance, String districtId) {
+    public XStaff map(Staff instance, String districtId) throws MappingException {
         try {
             XStaff xStaff = new XStaff();
             xStaff.setDistrictId(districtId); //Required by Filtering

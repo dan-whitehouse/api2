@@ -17,8 +17,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.UUID;
 
 /*
 	Notes: https://medium.com/fullstackblog/spring-security-jwt-token-expired-custom-response-b85437914b81
@@ -33,15 +35,20 @@ public abstract class BaseAuthenticationFilter extends BasicAuthenticationFilter
 	}
 
 	@Override
-	protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException, ServletException {
-		AuthRequest authRequest = new AuthRequest(req, environment);
+	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
+		//Used and passed along for logging. Must keep.
+		request.setAttribute("requestDatetime", LocalDateTime.now());
+		request.setAttribute("uuid", UUID.randomUUID().toString());
+
+		//Auth class which checks both headers and query parameters for authentication
+		AuthRequest authRequest = new AuthRequest(request, environment);
 		if(authRequest.isAuthEnabled()) {
-			UsernamePasswordAuthenticationToken authentication = getAuthentication(req, authRequest.getToken());
+			UsernamePasswordAuthenticationToken authentication = getAuthentication(request, authRequest.getToken());
 			if(authentication != null) {
 				SecurityContextHolder.getContext().setAuthentication(authentication);
 			}
 		}
-		chain.doFilter(req, res);
+		chain.doFilter(request, response);
 	}
 
 	private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest req, String token) {

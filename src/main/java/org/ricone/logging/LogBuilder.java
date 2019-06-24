@@ -3,7 +3,7 @@ package org.ricone.logging;
 import org.slf4j.event.Level;
 
 public class LogBuilder {
-
+    private String uuid;
     private Level level;
     private String provider;
     private String component;
@@ -17,8 +17,13 @@ public class LogBuilder {
     private String errorMessage;
     private String errorDescription;
 
-    LogBuilder() {
+    public LogBuilder() {
 
+    }
+
+    public LogBuilder uuid(String uuid) {
+        this.uuid = uuid;
+        return this;
     }
 
     public LogBuilder level(Level level) {
@@ -66,8 +71,8 @@ public class LogBuilder {
         return this;
     }
 
-    public LogBuilder statusCode(String statusCode) {
-        this.statusCode = statusCode;
+    public LogBuilder statusCode(int statusCode) {
+        this.statusCode = String.valueOf(statusCode);
         return this;
     }
 
@@ -82,6 +87,6 @@ public class LogBuilder {
     }
 
     public Log build() {
-        return new Log(level, provider, component, app, request, requestHeaders, requestDatetime, responseDatetime, duration, statusCode, errorMessage, errorDescription);
+        return new Log(uuid, level, provider, component, app, request, requestHeaders, requestDatetime, responseDatetime, duration, statusCode, errorMessage, errorDescription);
     }
 }

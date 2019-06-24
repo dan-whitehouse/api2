@@ -5,6 +5,7 @@ import org.slf4j.event.Level;
 import java.time.LocalDateTime;
 
 public class Log {
+	private String uuid;
 	private Level level;
 	private String provider;
 	private String component;
@@ -22,7 +23,8 @@ public class Log {
 		super();
 	}
 
-	public Log(Level level, String provider, String component, String app, String request, String requestHeaders, String requestDatetime, String responseDatetime, String duration, String statusCode, String errorMessage, String errorDescription) {
+	public Log(String uuid, Level level, String provider, String component, String app, String request, String requestHeaders, String requestDatetime, String responseDatetime, String duration, String statusCode, String errorMessage, String errorDescription) {
+		this.uuid = uuid;
 		this.level = level;
 		this.provider = provider;
 		this.component = component;
@@ -35,6 +37,14 @@ public class Log {
 		this.statusCode = statusCode;
 		this.errorMessage = errorMessage;
 		this.errorDescription = errorDescription;
+	}
+
+	public String getUuid() {
+		return uuid;
+	}
+
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
 	}
 
 	public Level getLevel() {
@@ -133,18 +143,11 @@ public class Log {
 		this.errorDescription = errorDescription;
 	}
 
-
 	public String getLog() {
-		return "Provider='" + provider + '\'' + ", Component='" + component + '\'' + ", App='" + app + '\'' + ", Request='" + request + '\'' + ", RequestHeaders='" + requestHeaders + '\'' + ", RequestDateTime='" + requestDatetime + '\'' + ", ResponseDateTime='" + responseDatetime + '\'' + ", Duration='" + duration + '\'' + ", StatusCode='" + statusCode + '\'';
+		return "UUID='" + uuid + '\'' + ", Severity='" + level + '\'' + ", Provider='" + provider + '\'' + ", Component='" + component + '\'' + ", App='" + app + '\'' + ", Request='" + request + '\'' + ", RequestHeaders='" + requestHeaders + '\'' + ", RequestDateTime='" + requestDatetime + '\'' + ", ResponseDateTime='" + responseDatetime + '\'' + ", Duration='" + duration + '\'' + ", StatusCode='" + statusCode + '\'';
 	}
 
 	public String getLogWithErrors() {
-		return "Provider='" + provider + '\'' + ", Component='" + component + '\'' + ", App='" + app + '\'' + ", Request='" + request + '\'' + ", RequestHeaders='" + requestHeaders + '\'' + ", RequestDateTime='" + requestDatetime + '\'' + ", ResponseDateTime='" + responseDatetime + '\'' + ", Duration='" + duration + '\'' + ", StatusCode='" + statusCode + '\'' + ", ErrorMessage='" + errorMessage + '\'' + ", ErrorDescription='" + errorDescription + '\'';
+		return "UUID='" + uuid + '\'' + ", Severity='" + level + '\'' + ", Provider='" + provider + '\'' + ", Component='" + component + '\'' + ", App='" + app + '\'' + ", Request='" + request + '\'' + ", RequestHeaders='" + requestHeaders + '\'' + ", RequestDateTime='" + requestDatetime + '\'' + ", ResponseDateTime='" + responseDatetime + '\'' + ", Duration='" + duration + '\'' + ", StatusCode='" + statusCode + '\'' + ", ErrorMessage='" + errorMessage + '\'' + ", ErrorDescription='" + errorDescription + '\'';
 	}
-
-	@Override
-	public String toString() {
-		return "Provider='" + provider + '\'' + ", Component='" + component + '\'' + ", App='" + app + '\'' + ", Request='" + request + '\'' + ", RequestHeaders='" + requestHeaders + '\'' + ", RequestDateTime='" + requestDatetime + '\'' + ", ResponseDateTime='" + responseDatetime + '\'' + ", Duration='" + duration + '\'' + ", StatusCode='" + statusCode + '\'' + ", ErrorMessage='" + errorMessage + '\'' + ", ErrorDescription='" + errorDescription + '\'';
-	}
-
 }

@@ -75,8 +75,7 @@ public class XCalendarMapper extends BaseMapper {
             return xCalendar;
         }
         catch (Exception ex) {
-            ex.printStackTrace();
-            throw new MappingException("Mapping Exception: " + ex.getLocalizedMessage());
+            throw new MappingException();
         }
     }
 

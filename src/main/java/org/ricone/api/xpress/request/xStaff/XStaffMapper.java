@@ -126,8 +126,7 @@ public class XStaffMapper extends BaseMapper {
             return xStaff;
         }
         catch (Exception ex) {
-            ex.printStackTrace();
-            throw new MappingException("Mapping Exception: " + ex.getLocalizedMessage());
+            throw new MappingException();
         }
     }
 

@@ -1,20 +1,21 @@
 package org.ricone.init;
 
 import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.ZonedDateTimeSerializer;
 import org.ricone.api.oneroster.model.serializer.BooleanStringSerializer;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.time.ZoneId;
@@ -22,12 +23,13 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Configuration
+@PropertySource("classpath:security.properties")
 public class WebConfig implements WebMvcConfigurer {
+    private final Environment environment;
     private static final String dateFormat = "yyyy-MM-dd";
     private static final String dateTimeFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
 
-    @Autowired
-    private ObjectMapper jacksonObjectMapper;
+    public WebConfig(Environment environment) {this.environment = environment;}
 
     @Bean
     public Jackson2ObjectMapperBuilderCustomizer jsonCustomizer() {
@@ -67,9 +69,9 @@ public class WebConfig implements WebMvcConfigurer {
             .useRegisteredExtensionsOnly(true);
     }
 
-    /*@Override
+    @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        HandlerInterceptor logInterceptor = new LogInterceptor();
-        registry.addInterceptor(logInterceptor);
-    }*/
+        /*HandlerInterceptor logInterceptor = new LoggingInterceptor();
+        registry.addInterceptor(logInterceptor).order(Ordered.HIGHEST_PRECEDENCE);*/
+    }
 }

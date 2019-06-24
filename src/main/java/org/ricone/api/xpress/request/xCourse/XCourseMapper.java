@@ -101,8 +101,7 @@ public class XCourseMapper extends BaseMapper {
             return xCourse;
         }
         catch (Exception ex) {
-            ex.printStackTrace();
-            throw new MappingException("Mapping Exception: " + ex.getLocalizedMessage());
+            throw new MappingException();
         }
     }
 

@@ -191,10 +191,7 @@ public class XStudentMapper extends BaseMapper {
             return xStudent;
         }
         catch (Exception ex) {
-            ex.printStackTrace();
-            throw new MappingException("Mapping Exception: " + ExceptionUtils.getStackFrames(ex)[0]);
-            //Lets go with an env error, w/ no stacktrace just a nice..
-            //"An error occured while mapping your results. Pls contact RIC One"
+            throw new MappingException();
         }
     }
 

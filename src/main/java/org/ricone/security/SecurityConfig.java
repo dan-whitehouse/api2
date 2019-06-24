@@ -36,10 +36,12 @@ public class SecurityConfig {
 	public static class XPressWebSecurityConfigurationAdapter extends WebSecurityConfigurerAdapter {
 		private final AppService service;
 		private final Environment environment;
+		private final LoggingFilter loggingFilter;
 
-		public XPressWebSecurityConfigurationAdapter(AppService cacheService, Environment environment) {
+		public XPressWebSecurityConfigurationAdapter(AppService cacheService, Environment environment, LoggingFilter loggingFilter) {
 			this.service = cacheService;
 			this.environment = environment;
+			this.loggingFilter = loggingFilter;
 		}
 
 		@Bean
@@ -54,7 +56,7 @@ public class SecurityConfig {
 				.authorizeRequests().anyRequest().authenticated()
 				.and()
 					.addFilter(xPressAuthorizationFilter())
-					.addFilterAfter(new LoggingFilter(environment), XPressAuthorizationFilter.class)
+					.addFilterAfter(loggingFilter, XPressAuthorizationFilter.class)
 					.exceptionHandling().authenticationEntryPoint(new XPressAuthenticationEntryPoint())
 				.and()
 					.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -68,10 +70,12 @@ public class SecurityConfig {
 	public static class OneRosterWebSecurityConfigurationAdapter extends WebSecurityConfigurerAdapter {
 		private final AppService service;
 		private final Environment environment;
+		private final LoggingFilter loggingFilter;
 
-		public OneRosterWebSecurityConfigurationAdapter(AppService cacheService, Environment environment) {
+		public OneRosterWebSecurityConfigurationAdapter(AppService cacheService, Environment environment, LoggingFilter loggingFilter) {
 			this.service = cacheService;
 			this.environment = environment;
+			this.loggingFilter = loggingFilter;
 		}
 
 		@Bean
@@ -85,12 +89,10 @@ public class SecurityConfig {
 				.authorizeRequests().anyRequest().authenticated()
 				.and()
 					.addFilter(oneRosterAuthorizationFilter())
-					.addFilterAfter(new LoggingFilter(environment), OneRosterAuthorizationFilter.class)
+					.addFilterAfter(loggingFilter, OneRosterAuthorizationFilter.class)
 					.exceptionHandling().authenticationEntryPoint(new OneRosterAuthenticationEntryPoint())
 				.and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 			;
 		}
 	}
-
-
 }

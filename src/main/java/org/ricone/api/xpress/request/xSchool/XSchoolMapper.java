@@ -120,8 +120,7 @@ public class XSchoolMapper extends BaseMapper {
             return xSchool;
         }
         catch (Exception ex) {
-            ex.printStackTrace();
-            throw new MappingException("Mapping Exception: " + ex.getLocalizedMessage());
+            throw new MappingException();
         }
     }
 

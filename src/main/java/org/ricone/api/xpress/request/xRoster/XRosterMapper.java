@@ -149,8 +149,7 @@ public class XRosterMapper extends BaseMapper {
             return xRoster;
         }
         catch (Exception ex) {
-            ex.printStackTrace();
-            throw new MappingException("Mapping Exception: " + ex.getLocalizedMessage());
+            throw new MappingException();
         }
     }
 

@@ -88,8 +88,7 @@ public class XLeaMapper extends BaseMapper {
             return xLea;
         }
         catch (Exception ex) {
-            ex.printStackTrace();
-            throw new MappingException("Mapping Exception: " + ex.getLocalizedMessage());
+            throw new MappingException();
         }
     }
 

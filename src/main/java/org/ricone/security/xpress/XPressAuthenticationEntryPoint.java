@@ -38,7 +38,7 @@ public class XPressAuthenticationEntryPoint implements AuthenticationEntryPoint 
                 }
             }
 
-            XErrorResponse errorResponse = new XErrorResponse(new XError(UUID.randomUUID().toString(), 401, "Unauthorized", (String)request.getAttribute("JWTVerificationException")));
+            XErrorResponse errorResponse = new XErrorResponse(new XError(request.getAttribute("uuid").toString(), 401, "Unauthorized", (String)request.getAttribute("JWTVerificationException")));
             response.getOutputStream().println(mapper.writeValueAsString(errorResponse));
         }
         catch(Exception e) {

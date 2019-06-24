@@ -34,7 +34,6 @@ public class AppServiceImp implements org.ricone.api.xpress.request.app.AppServi
             district.setId(d.getId());
             district.setName(d.getName());
 
-
             cacheService.getSchoolsByDistrictId(d.getId()).forEach(sch -> {
                 School school = new School();
                 school.setId(sch.getId());

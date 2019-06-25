@@ -1,5 +1,6 @@
 package org.ricone.logging;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.event.Level;
 
 import java.time.LocalDateTime;
@@ -15,6 +16,7 @@ public class Log {
 	private String requestDatetime;
 	private String responseDatetime;
 	private String duration;
+	private String size;
 	private String statusCode;
 	private String errorMessage;
 	private String errorDescription;
@@ -23,7 +25,7 @@ public class Log {
 		super();
 	}
 
-	public Log(String uuid, Level level, String provider, String component, String app, String request, String requestHeaders, String requestDatetime, String responseDatetime, String duration, String statusCode, String errorMessage, String errorDescription) {
+	public Log(String uuid, Level level, String provider, String component, String app, String request, String requestHeaders, String requestDatetime, String responseDatetime, String duration, String size, String statusCode, String errorMessage, String errorDescription) {
 		this.uuid = uuid;
 		this.level = level;
 		this.provider = provider;
@@ -34,6 +36,7 @@ public class Log {
 		this.requestDatetime = requestDatetime;
 		this.responseDatetime = responseDatetime;
 		this.duration = duration;
+		this.size = size;
 		this.statusCode = statusCode;
 		this.errorMessage = errorMessage;
 		this.errorDescription = errorDescription;
@@ -119,6 +122,14 @@ public class Log {
 		this.duration = duration;
 	}
 
+	public String getSize() {
+		return size;
+	}
+
+	public void setSize(String size) {
+		this.size = size;
+	}
+
 	public String getStatusCode() {
 		return statusCode;
 	}
@@ -143,11 +154,15 @@ public class Log {
 		this.errorDescription = errorDescription;
 	}
 
-	public String getLog() {
-		return "UUID='" + uuid + '\'' + ", Severity='" + level + '\'' + ", Provider='" + provider + '\'' + ", Component='" + component + '\'' + ", App='" + app + '\'' + ", Request='" + request + '\'' + ", RequestHeaders='" + requestHeaders + '\'' + ", RequestDateTime='" + requestDatetime + '\'' + ", ResponseDateTime='" + responseDatetime + '\'' + ", Duration='" + duration + '\'' + ", StatusCode='" + statusCode + '\'';
+	String getLog() {
+		return "UUID='" + uuid + '\'' + ", Severity='" + level + '\'' + ", Provider='" + provider + '\'' + ", Component='" + component + '\'' + ", App='" + app + '\'' + ", Request='" + request + '\'' + ", RequestHeaders='" + requestHeaders + '\'' + ", RequestDateTime='" + requestDatetime + '\'' + ", ResponseDateTime='" + responseDatetime + '\'' + ", Duration='" + duration + '\'' + ", Size='" + size + '\'' + ", StatusCode='" + statusCode + '\'';
 	}
 
-	public String getLogWithErrors() {
-		return "UUID='" + uuid + '\'' + ", Severity='" + level + '\'' + ", Provider='" + provider + '\'' + ", Component='" + component + '\'' + ", App='" + app + '\'' + ", Request='" + request + '\'' + ", RequestHeaders='" + requestHeaders + '\'' + ", RequestDateTime='" + requestDatetime + '\'' + ", ResponseDateTime='" + responseDatetime + '\'' + ", Duration='" + duration + '\'' + ", StatusCode='" + statusCode + '\'' + ", ErrorMessage='" + errorMessage + '\'' + ", ErrorDescription='" + errorDescription + '\'';
+	String getLogWithErrors() {
+		return "UUID='" + uuid + '\'' + ", Severity='" + level + '\'' + ", Provider='" + provider + '\'' + ", Component='" + component + '\'' + ", App='" + app + '\'' + ", Request='" + request + '\'' + ", RequestHeaders='" + requestHeaders + '\'' + ", RequestDateTime='" + requestDatetime + '\'' + ", ResponseDateTime='" + responseDatetime + '\'' + ", Duration='" + duration + '\'' + ", Size='" + size + '\'' + ", StatusCode='" + statusCode + '\'' + ", ErrorMessage='" + errorMessage + '\'' + ", ErrorDescription='" + errorDescription + '\'';
+	}
+
+	String getLogWithStacktrace() {
+		return "UUID='" + uuid + '\'' + ", Severity='" + level + '\'' + ", Provider='" + provider + '\'' + ", Component='" + component + '\'' + ", StatusCode='" + statusCode + '\'' + ", ErrorMessage='" + errorMessage + '\'' + ", ErrorDescription='" + StringUtils.normalizeSpace(errorDescription) + '\'';
 	}
 }

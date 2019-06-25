@@ -4,6 +4,7 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.ricone.api.oneroster.model.Error;
 import org.ricone.api.oneroster.model.ErrorResponse;
 import org.ricone.api.xpress.model.XErrorResponse;
@@ -23,7 +24,21 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-class LogUtil {
+public class LogUtil {
+
+	public static String logStacktrace(Environment environment, HttpServletRequest request, Exception ex, Level level, int statusCode) {
+		return new LogBuilder()
+				.uuid(request.getAttribute("uuid").toString())
+				.component("API")
+				.provider(environment.getProperty("security.auth.provider.id"))
+				.app(getAppId(request, environment))
+				.level(level)
+				.statusCode(statusCode)
+				.errorMessage(ExceptionUtils.getRootCauseMessage(ex))
+				.errorDescription(ExceptionUtils.getStackTrace(ex))
+				.build().getLogWithStacktrace();
+	}
+
 
 	static Map<String, String> getHeaders(HttpServletRequest request) {
 		Map<String, String> map = new HashMap<>();
@@ -45,8 +60,10 @@ class LogUtil {
 		return map;
 	}
 
-	private static boolean isBetween(int x, int lower, int upper) {
-		return lower <= x && x <= upper;
+	static String formatByteSize(long v) {
+		if (v < 1024) return v + " B";
+		int z = (63 - Long.numberOfLeadingZeros(v)) / 10;
+		return String.format("%.2f %sB", (double)v / (1L << (z*10)), " KMGTPE".charAt(z));
 	}
 
 	static Level getLogLevel(int statusCode) {
@@ -143,5 +160,9 @@ class LogUtil {
 			e.printStackTrace();
 		}
 		return new String[]{"null", "There was an error using the object mapper to decode the error. So... we don't know"};
+	}
+
+	private static boolean isBetween(int x, int lower, int upper) {
+		return lower <= x && x <= upper;
 	}
 }

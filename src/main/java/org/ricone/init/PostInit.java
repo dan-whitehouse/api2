@@ -18,7 +18,9 @@ public class PostInit implements ApplicationListener<ApplicationReadyEvent> {
 
         try {
             DataSource dataSource = (DataSource)event.getApplicationContext().getBean("getDataSource");
+            logger.debug(dataSource);
             logger.debug(dataSource.getConnection().getMetaData().getURL());
+
 
         }
         catch (Exception e) {

@@ -37,7 +37,7 @@ public class XContactFilterer {
     }
 
     XContactResponse apply(XContactResponse response, ControllerData metadata) {
-        response.setXContact(filter(response.getXContact(), cacheService.getXContactFilter(response.getXContact().getDistrictId(), metadata.getApplication().getApp().getId())));
+        filter(response.getXContact(), cacheService.getXContactFilter(response.getXContact().getDistrictId(), metadata.getApplication().getApp().getId()));
         if (response.getXContact().isEmptyObject()) {
             return null;
         }

@@ -43,6 +43,10 @@ public class LoggingFilter extends OncePerRequestFilter {
         //Convert the InputStream into our response body
         String responseBody = IOUtils.toString(responseWrapper.getContentInputStream(), UTF_8);
 
+        /* !Important - Without this line, no data is returned to the user */
+        responseWrapper.copyBodyToResponse();
+
+        //Prepare the Log for Splunk
         try {
             Log log;
             LocalDateTime before = (LocalDateTime)request.getAttribute("requestDatetime");
@@ -52,7 +56,7 @@ public class LoggingFilter extends OncePerRequestFilter {
             if(Level.INFO.equals(level)) {
                 log = new LogBuilder()
                         .uuid(request.getAttribute("uuid").toString())
-                        .level(LogUtil.getLogLevel(response.getStatus()))
+                        .level(level)
                         .provider(environment.getProperty("security.auth.provider.id"))
                         .component("API")
                         .app(LogUtil.getAppId(request, environment))
@@ -61,15 +65,16 @@ public class LoggingFilter extends OncePerRequestFilter {
                         .requestDatetime(request.getAttribute("requestDatetime").toString())
                         .responseDatetime(LocalDateTime.now().toString())
                         .duration(Duration.between(before, now).toMillis()+"ms")
+                        .size(Long.parseLong(response.getHeader("Content-Length")))
                         .statusCode(response.getStatus())
                         .build();
-                logger.info("LoggingFilter: " + log.getLog());
+                logger.info(log.getLog());
             }
             else {
                 String[] errors = LogUtil.getErrors(request, responseBody);
                 log = new LogBuilder()
                         .uuid(request.getAttribute("uuid").toString())
-                        .level(LogUtil.getLogLevel(response.getStatus()))
+                        .level(level)
                         .provider(environment.getProperty("security.auth.provider.id"))
                         .component("API")
                         .app(LogUtil.getAppId(request, environment))
@@ -78,18 +83,19 @@ public class LoggingFilter extends OncePerRequestFilter {
                         .requestDatetime(request.getAttribute("requestDatetime").toString())
                         .responseDatetime(LocalDateTime.now().toString())
                         .duration(Duration.between(before, now).toMillis()+"ms")
+                        .size(Long.parseLong(response.getHeader("Content-Length")))
                         .statusCode(response.getStatus())
                         .errorMessage(errors[0])
                         .errorDescription(errors[1])
                         .build();
                 if(Level.WARN.equals(level)) {
-                    logger.warn("LoggingFilter: " + log.getLogWithErrors());
+                    logger.warn(log.getLogWithErrors());
                 }
                 else if(Level.ERROR.equals(level)) {
-                    logger.error("LoggingFilter: " + log.getLogWithErrors());
+                    logger.error(log.getLogWithErrors());
                 }
                 else if(Level.DEBUG.equals(level)) {
-                    logger.debug("LoggingFilter: " + log.getLogWithErrors());
+                    logger.debug(log.getLogWithErrors());
                 }
             }
         }
@@ -97,9 +103,5 @@ public class LoggingFilter extends OncePerRequestFilter {
             e.printStackTrace();
             logger.debug("LoggingFilter Catch: " + e.getMessage());
         }
-
-        /* !Important - Without this line, no data is returned to the user */
-        responseWrapper.copyBodyToResponse();
     }
-
 }

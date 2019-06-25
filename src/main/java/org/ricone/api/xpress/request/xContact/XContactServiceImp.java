@@ -55,7 +55,7 @@ public class XContactServiceImp implements XContactService {
         if(CollectionUtils.isEmpty(instance)) {
             throw new NoContentException();
         }
-        return mapper.convert(instance);
+        return filterer.apply(mapper.convert(instance), metadata);
     }
 
     @Override

@@ -7,6 +7,7 @@ import org.ricone.api.xpress.model.XErrorResponse;
 import org.ricone.error.NoContentException;
 import org.ricone.logging.Log;
 import org.ricone.logging.LogBuilder;
+import org.ricone.logging.LogUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.event.Level;
@@ -47,6 +48,7 @@ public class ErrorController {
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public XErrorResponse badRequest(HttpServletRequest request, HttpServletResponse response, Exception ex) {
         //Another 400 Exception is thrown in XChangesSinceController
+        logger.error(LogUtil.logStacktrace(environment, request, ex, Level.WARN, 400));
         return new XErrorResponse(new XError(request.getAttribute("uuid").toString(), 400, "Bad Request", ex.getMessage()));
     }
 
@@ -54,6 +56,7 @@ public class ErrorController {
     @ExceptionHandler({AccessDeniedException.class, UnauthorizedException.class})
     @ResponseStatus(value = HttpStatus.UNAUTHORIZED)
     public XErrorResponse unauthorized(HttpServletRequest request, HttpServletResponse response, Exception ex) {
+        logger.error(LogUtil.logStacktrace(environment, request, ex, Level.WARN, 401));
         return new XErrorResponse(new XError(request.getAttribute("uuid").toString(), 401, "Unauthorized", ex.getMessage()));
     }
 
@@ -61,6 +64,7 @@ public class ErrorController {
     @ExceptionHandler({ForbiddenException.class})
     @ResponseStatus(value = HttpStatus.FORBIDDEN)
     public XErrorResponse forbidden(HttpServletRequest request, HttpServletResponse response, Exception ex) {
+        logger.error(LogUtil.logStacktrace(environment, request, ex, Level.WARN, 403));
         return new XErrorResponse(new XError(request.getAttribute("uuid").toString(), 403, "Forbidden", ex.getMessage()));
     }
 
@@ -68,6 +72,7 @@ public class ErrorController {
     @ExceptionHandler({NotFoundException.class})
     @ResponseStatus(value = HttpStatus.NOT_FOUND)
     private XErrorResponse notFound(HttpServletRequest request, HttpServletResponse response, Exception ex) {
+        logger.error(LogUtil.logStacktrace(environment, request, ex, Level.WARN, 404));
         return new XErrorResponse(new XError(request.getAttribute("uuid").toString(), 404, "Not Found", ex.getMessage()));
     }
 
@@ -75,6 +80,7 @@ public class ErrorController {
     @ExceptionHandler({HttpMediaTypeNotAcceptableException.class})
     @ResponseStatus(value = HttpStatus.NOT_ACCEPTABLE)
     private XErrorResponse notAcceptable(HttpServletRequest request, HttpServletResponse response, Exception ex) {
+        logger.error(LogUtil.logStacktrace(environment, request, ex, Level.WARN, 406));
         return new XErrorResponse(new XError(request.getAttribute("uuid").toString(), 406, "Not Acceptable", ex.getMessage()));
     }
 
@@ -82,6 +88,7 @@ public class ErrorController {
     @ExceptionHandler({ConflictException.class, DataIntegrityViolationException.class})
     @ResponseStatus(value = HttpStatus.CONFLICT)
     private XErrorResponse conflict(HttpServletRequest request, HttpServletResponse response, Exception ex) {
+        logger.error(LogUtil.logStacktrace(environment, request, ex, Level.WARN, 409));
         return new XErrorResponse(new XError(request.getAttribute("uuid").toString(), 409, "Conflict", ex.getMessage()));
     }
 
@@ -90,6 +97,7 @@ public class ErrorController {
     @ExceptionHandler({Exception.class})
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
     private XErrorResponse serverError(HttpServletRequest request, HttpServletResponse response, Exception ex) {
+        logger.error(LogUtil.logStacktrace(environment, request, ex, Level.ERROR, 500));
         return new XErrorResponse(new XError(request.getAttribute("uuid").toString(), 500, "Internal Server Error", ex.getMessage()));
     }
 
@@ -97,6 +105,7 @@ public class ErrorController {
     @ExceptionHandler({MappingException.class})
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
     private XErrorResponse mappingError(HttpServletRequest request, HttpServletResponse response, Exception ex) {
+        logger.error(LogUtil.logStacktrace(environment, request, ex, Level.ERROR, 500));
         return new XErrorResponse(new XError(request.getAttribute("uuid").toString(), 500, "Internal Server Error", environment.getProperty("exception.mapping")));
     }
 
@@ -104,6 +113,7 @@ public class ErrorController {
     @ExceptionHandler(ConfigException.class)
     @ResponseStatus(value = HttpStatus.SERVICE_UNAVAILABLE)
     private XErrorResponse configError(HttpServletRequest request, HttpServletResponse response, Exception ex) {
+        logger.error(LogUtil.logStacktrace(environment, request, ex, Level.ERROR, 503));
         return new XErrorResponse(new XError(request.getAttribute("uuid").toString(), 503, "Service Unavailable", ex.getMessage()));
     }
 }

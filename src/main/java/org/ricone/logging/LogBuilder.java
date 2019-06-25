@@ -13,6 +13,7 @@ public class LogBuilder {
     private String requestDatetime;
     private String responseDatetime;
     private String duration;
+    private String size;
     private String statusCode;
     private String errorMessage;
     private String errorDescription;
@@ -71,6 +72,11 @@ public class LogBuilder {
         return this;
     }
 
+    public LogBuilder size(long bytes) {
+        this.size = LogUtil.formatByteSize(bytes);
+        return this;
+    }
+
     public LogBuilder statusCode(int statusCode) {
         this.statusCode = String.valueOf(statusCode);
         return this;
@@ -87,6 +93,6 @@ public class LogBuilder {
     }
 
     public Log build() {
-        return new Log(uuid, level, provider, component, app, request, requestHeaders, requestDatetime, responseDatetime, duration, statusCode, errorMessage, errorDescription);
+        return new Log(uuid, level, provider, component, app, request, requestHeaders, requestDatetime, responseDatetime, duration, size, statusCode, errorMessage, errorDescription);
     }
 }

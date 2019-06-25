@@ -388,9 +388,9 @@ public class XStudentMapper extends BaseMapper {
             enrollment.setEntryDate(DateFormatUtils.format(studentEnrollment.getEnrollmentEntryDate(), DateFormatUtils.ISO_8601_EXTENDED_DATE_FORMAT.getPattern()));
         }
 
-        //if(studentEnrollment.getEnrollmentExitDate() != null) { //TODO Mapping Exception Test
+        if(studentEnrollment.getEnrollmentExitDate() != null) { //TODO Mapping Exception Test
             enrollment.setExitDate(DateFormatUtils.format(studentEnrollment.getEnrollmentExitDate(), DateFormatUtils.ISO_8601_EXTENDED_DATE_FORMAT.getPattern()));
-        //}
+        }
 
         if(studentEnrollment.getSchool() != null) {
             enrollment.setSchoolRefId(studentEnrollment.getSchool().getSchoolRefId());

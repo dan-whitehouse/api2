@@ -22,7 +22,7 @@ public class FieldParamReader implements ParameterBuilderPlugin {
 	@Override
 	public void apply(ParameterContext parameterContext) {
 		ResolvedMethodParameter methodParameter = parameterContext.resolvedMethodParameter();
-		Optional<FieldParam> requestParam = methodParameter.findAnnotation(FieldParam.class);
+		Optional<SwaggerParam.Field> requestParam = methodParameter.findAnnotation(SwaggerParam.Field.class);
 		if(requestParam.isPresent()) {
 			parameterContext.parameterBuilder()
 					.parameterType("query")

@@ -22,7 +22,7 @@ public class FilterParamReader implements ParameterBuilderPlugin {
 	@Override
 	public void apply(ParameterContext parameterContext) {
 		ResolvedMethodParameter methodParameter = parameterContext.resolvedMethodParameter();
-		Optional<FilterParam> requestParam = methodParameter.findAnnotation(FilterParam.class);
+		Optional<SwaggerParam.Filter> requestParam = methodParameter.findAnnotation(SwaggerParam.Filter.class);
 		if(requestParam.isPresent()) {
 			parameterContext.parameterBuilder()
 					.parameterType("query")

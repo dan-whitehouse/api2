@@ -1,16 +1,20 @@
 <configuration>
-
     <!--
+        Documentation:
         https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-logging.html
         https://stackoverflow.com/questions/30571319/spring-boot-logging-pattern
         https://github.com/spring-projects/spring-boot/blob/master/spring-boot-project/spring-boot/src/main/java/org/springframework/boot/logging/logback/DefaultLogbackConfiguration.java
      -->
 
+    <!-- Stop Logback output INFO at start -->
+    <statusListener class="ch.qos.logback.core.status.NopStatusListener" />
+
+    <!-- Conversion Rules: Used for Spring Log formatting -->
     <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter" />
     <conversionRule conversionWord="wex" converterClass="org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter" />
     <conversionRule conversionWord="wEx" converterClass="org.springframework.boot.logging.logback.ExtendedWhitespaceThrowableProxyConverter" />
-    <conversionRule conversionWord="uuid" converterClass="org.ricone.logging.UUIDConverter" />
 
+    <!-- Appenders -->
     <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
         <layout class="ch.qos.logback.classic.PatternLayout">
             <Pattern>
@@ -27,6 +31,7 @@
         </layout>
     </appender>
 
+    <!-- Loggers -->
     <logger name="splunk.logger" additivity="false" level="ALL">
         <!--<appender-ref ref="socket"/>-->
        <appender-ref ref="console"/>

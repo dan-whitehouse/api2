@@ -11,25 +11,25 @@ import springfox.documentation.spi.service.contexts.ParameterContext;
 import springfox.documentation.swagger.common.SwaggerPluginSupport;
 
 @Component
-@Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER + 1002)
-public class PagingOffsetParamReader implements ParameterBuilderPlugin {
+@Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER + 1001)
+public class LimitParamReader implements ParameterBuilderPlugin {
 	private TypeResolver resolver;
 
-	public PagingOffsetParamReader(TypeResolver resolver) {
+	public LimitParamReader(TypeResolver resolver) {
 		this.resolver = resolver;
 	}
 
 	@Override
 	public void apply(ParameterContext parameterContext) {
 		ResolvedMethodParameter methodParameter = parameterContext.resolvedMethodParameter();
-		Optional<PagingOffsetParam> requestParam = methodParameter.findAnnotation(PagingOffsetParam.class);
+		Optional<SwaggerParam.Limit> requestParam = methodParameter.findAnnotation(SwaggerParam.Limit.class);
 		if(requestParam.isPresent()) {
 			parameterContext.parameterBuilder()
 					.parameterType("query")
-					.name("offset")
-					.description("The index of the first record to return")
+					.name("limit")
+					.description("The number of results to return")
 					.required(false)
-					.order(1002)
+					.order(1001)
 					.type(resolver.resolve(String.class));
 		}
 	}

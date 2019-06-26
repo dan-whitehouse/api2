@@ -25,7 +25,7 @@ public class OrderByParamReader implements ParameterBuilderPlugin {
 	@Override
 	public void apply(ParameterContext parameterContext) {
 		ResolvedMethodParameter methodParameter = parameterContext.resolvedMethodParameter();
-		Optional<OrderByParam> requestParam = methodParameter.findAnnotation(OrderByParam.class);
+		Optional<SwaggerParam.OrderBy> requestParam = methodParameter.findAnnotation(SwaggerParam.OrderBy.class);
 		if(requestParam.isPresent()) {
 			parameterContext.parameterBuilder()
 					.parameterType("query")

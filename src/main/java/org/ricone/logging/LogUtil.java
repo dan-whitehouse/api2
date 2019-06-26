@@ -36,7 +36,7 @@ public class LogUtil {
 				.statusCode(statusCode)
 				.errorMessage(ExceptionUtils.getRootCauseMessage(ex))
 				.errorDescription(ExceptionUtils.getStackTrace(ex))
-				.build().getLogWithStacktrace();
+				.build().toLogWithStacktrace();
 	}
 
 

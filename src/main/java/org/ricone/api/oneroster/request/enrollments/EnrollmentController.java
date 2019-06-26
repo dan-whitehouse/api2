@@ -1,14 +1,14 @@
 package org.ricone.api.oneroster.request.enrollments;
 
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.ricone.api.oneroster.component.BaseController;
+import org.ricone.api.oneroster.component.springfox.Swagger;
+import org.ricone.api.oneroster.component.springfox.SwaggerParam;
 import org.ricone.api.oneroster.model.EnrollmentResponse;
 import org.ricone.api.oneroster.model.EnrollmentsResponse;
 import org.ricone.api.oneroster.model.ErrorResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -18,65 +18,33 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @RestController("OneRoster:Enrollments:EnrollmentController")
-@Api(value = "Enrollment", description = "One Roster - Enrollments", tags = {"Enrollment"})
+@Swagger.Controller.Enrollment
 class EnrollmentController extends BaseController {
 	private final EnrollmentService service;
 
 	public EnrollmentController(EnrollmentService service) {this.service = service;}
 
 	@ResponseBody @GetMapping(value = "/ims/oneroster/v1p1/enrollments/{id}")
-	@ApiOperation(value = "getEnrollment", tags = {"Enrollment"})
-	@ApiResponses({
-			@ApiResponse(code = 200, message = "Success", response = EnrollmentResponse.class),
-			@ApiResponse(code = 400, message = "Bad Request", response = ErrorResponse.class),
-			@ApiResponse(code = 401, message = "Unauthorized", response = ErrorResponse.class),
-			@ApiResponse(code = 403, message = "Forbidden", response = ErrorResponse.class),
-			@ApiResponse(code = 404, message = "Not Found", response = ErrorResponse.class),
-			@ApiResponse(code = 500, message = "Internal Server Error", response = ErrorResponse.class)
-	})
-	EnrollmentResponse getEnrollment(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "id") String id) throws Exception {
+	@Swagger.Operation.Enrollment.GetEnrollment /**/ @Swagger.Response.Enrollment
+	EnrollmentResponse getEnrollment(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "id") String id, @SwaggerParam.Field String fields) throws Exception {
 		return service.getEnrollment(getMetaData(request, response), id);
 	}
 
 	@ResponseBody @GetMapping(value = "/ims/oneroster/v1p1/enrollments")
-	@ApiOperation(value = "getAllEnrollments", tags = {"Enrollment"})
-	@ApiResponses({
-			@ApiResponse(code = 200, message = "Success", response = EnrollmentsResponse.class),
-			@ApiResponse(code = 400, message = "Bad Request", response = ErrorResponse.class),
-			@ApiResponse(code = 401, message = "Unauthorized", response = ErrorResponse.class),
-			@ApiResponse(code = 403, message = "Forbidden", response = ErrorResponse.class),
-			@ApiResponse(code = 404, message = "Not Found", response = ErrorResponse.class),
-			@ApiResponse(code = 500, message = "Internal Server Error", response = ErrorResponse.class)
-	})
-	EnrollmentsResponse getAllEnrollments(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	@Swagger.Operation.Enrollment.GetAllEnrollments /**/ @Swagger.Response.Enrollments
+	EnrollmentsResponse getAllEnrollments(HttpServletRequest request, HttpServletResponse response, @SwaggerParam.Limit String limit, @SwaggerParam.Offset String offset, @SwaggerParam.Sort String sort, @SwaggerParam.OrderBy String orderBy, @SwaggerParam.Filter String filter, @SwaggerParam.Field String fields) throws Exception {
 		return service.getAllEnrollments(getMetaData(request, response));
 	}
 
 	@ResponseBody @GetMapping(value = "/ims/oneroster/v1p1/schools/{id}/enrollments")
-	@ApiOperation(value = "getEnrollmentsForSchool", tags = {"Enrollment"})
-	@ApiResponses({
-			@ApiResponse(code = 200, message = "Success", response = EnrollmentsResponse.class),
-			@ApiResponse(code = 400, message = "Bad Request", response = ErrorResponse.class),
-			@ApiResponse(code = 401, message = "Unauthorized", response = ErrorResponse.class),
-			@ApiResponse(code = 403, message = "Forbidden", response = ErrorResponse.class),
-			@ApiResponse(code = 404, message = "Not Found", response = ErrorResponse.class),
-			@ApiResponse(code = 500, message = "Internal Server Error", response = ErrorResponse.class)
-	})
-	EnrollmentsResponse getEnrollmentsForSchool(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "id") String id) throws Exception {
+	@Swagger.Operation.Enrollment.GetEnrollmentsForSchool /**/ @Swagger.Response.Enrollments
+	EnrollmentsResponse getEnrollmentsForSchool(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "id") String id, @SwaggerParam.Limit String limit, @SwaggerParam.Offset String offset, @SwaggerParam.Sort String sort, @SwaggerParam.OrderBy String orderBy, @SwaggerParam.Filter String filter, @SwaggerParam.Field String fields) throws Exception {
 		return service.getEnrollmentsForSchool(getMetaData(request, response), id);
 	}
 
 	@ResponseBody @GetMapping(value = "/ims/oneroster/v1p1/schools/{schoolId}/classes/{classId}/enrollments")
-	@ApiOperation(value = "getEnrollmentsForClassInSchool", tags = {"Enrollment"})
-	@ApiResponses({
-			@ApiResponse(code = 200, message = "Success", response = EnrollmentsResponse.class),
-			@ApiResponse(code = 400, message = "Bad Request", response = ErrorResponse.class),
-			@ApiResponse(code = 401, message = "Unauthorized", response = ErrorResponse.class),
-			@ApiResponse(code = 403, message = "Forbidden", response = ErrorResponse.class),
-			@ApiResponse(code = 404, message = "Not Found", response = ErrorResponse.class),
-			@ApiResponse(code = 500, message = "Internal Server Error", response = ErrorResponse.class)
-	})
-	EnrollmentsResponse getEnrollmentsForClassInSchool(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "schoolId") String schoolId, @PathVariable(value = "classId") String classId) throws Exception {
+	@Swagger.Operation.Enrollment.GetEnrollmentsForClassInSchool /**/ @Swagger.Response.Enrollments
+	EnrollmentsResponse getEnrollmentsForClassInSchool(HttpServletRequest request, HttpServletResponse response, @PathVariable(value = "schoolId") String schoolId, @PathVariable(value = "classId") String classId, @SwaggerParam.Limit String limit, @SwaggerParam.Offset String offset, @SwaggerParam.Sort String sort, @SwaggerParam.OrderBy String orderBy, @SwaggerParam.Filter String filter, @SwaggerParam.Field String fields) throws Exception {
 		return service.getEnrollmentsForClassInSchool(getMetaData(request, response), schoolId, classId);
 	}
 }

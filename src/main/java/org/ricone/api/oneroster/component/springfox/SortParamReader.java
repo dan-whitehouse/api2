@@ -22,7 +22,7 @@ public class SortParamReader implements ParameterBuilderPlugin {
 	@Override
 	public void apply(ParameterContext parameterContext) {
 		ResolvedMethodParameter methodParameter = parameterContext.resolvedMethodParameter();
-		Optional<SortParam> requestParam = methodParameter.findAnnotation(SortParam.class);
+		Optional<SwaggerParam.Sort> requestParam = methodParameter.findAnnotation(SwaggerParam.Sort.class);
 		if(requestParam.isPresent()) {
 			parameterContext.parameterBuilder()
 					.parameterType("query")

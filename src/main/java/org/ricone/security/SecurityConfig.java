@@ -60,7 +60,6 @@ public class SecurityConfig {
 					.exceptionHandling().authenticationEntryPoint(new XPressAuthenticationEntryPoint())
 				.and()
 					.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-
 			;
 		}
 	}
@@ -86,12 +85,12 @@ public class SecurityConfig {
 		@Override
 		protected void configure(HttpSecurity http) throws Exception {
 			http.antMatcher("/ims/oneroster/v1p1/**")
-				.authorizeRequests().anyRequest().authenticated()
-				.and()
+					.authorizeRequests().anyRequest().authenticated()
+					.and()
 					.addFilter(oneRosterAuthorizationFilter())
 					.addFilterAfter(loggingFilter, OneRosterAuthorizationFilter.class)
 					.exceptionHandling().authenticationEntryPoint(new OneRosterAuthenticationEntryPoint())
-				.and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+					.and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 			;
 		}
 	}

@@ -3,18 +3,20 @@ package org.ricone.api.oneroster.model;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"type", "identifier"})
 public class UserId implements Serializable {
-
+	private final static long serialVersionUID = -4197544761658759008L;
 	@JsonProperty("type")
+	@ApiModelProperty(position = 1, value = "", example = "")
 	private String type;
 	@JsonProperty("identifier")
+	@ApiModelProperty(position = 5, value = "", example = "")
 	private String identifier;
-	private final static long serialVersionUID = -4197544761658759008L;
 
 	/**
 	 * No args constructor for use in serialization

@@ -3,6 +3,7 @@ package org.ricone.api.oneroster.model;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -13,20 +14,28 @@ import java.util.List;
 public class Course extends Base implements Serializable {
 	private final static long serialVersionUID = 6014301965221202137L;
 	@JsonProperty("title")
+	@ApiModelProperty(position = 5, value = "", example = "Basic Chemistry")
 	private String title;
 	@JsonProperty("schoolYear")
+	@ApiModelProperty(position = 6, value = "", example = "Link to academicSession i.e. the AcademicSession 'sourcedId'")
 	private GUIDRef schoolYear;
 	@JsonProperty("courseCode")
+	@ApiModelProperty(position = 7, value = "", example = "CHEM101")
 	private String courseCode;
 	@JsonProperty("grades")
+	@ApiModelProperty(position = 8, value = "Grade(s) for which the class is attended", example = "09 or an array of 09,10", notes = "https://ceds.ed.gov/CEDSElementDetails.aspx?TermId=7100")
 	private List<String> grades = new ArrayList<>();
 	@JsonProperty("subjects")
+	@ApiModelProperty(position = 9, value = "This is a human readable string", example = "Chemistry")
 	private List<String> subjects = new ArrayList<>();
 	@JsonProperty("org")
+	@ApiModelProperty(position = 10, value = "Link to org i.e. the 'sourcedId' of the org")
 	private GUIDRef org;
 	@JsonProperty("subjectCodes")
+	@ApiModelProperty(position = 11, value = "This is a machine readable set of codes and the number should match the associated 'subjects' attribute")
 	private List<String> subjectCodes = new ArrayList<>();
 	@JsonProperty("resources")
+	@ApiModelProperty(position = 12, value = "Link to resources if applicable i.e. the 'sourcedIds'")
 	private List<GUIDRef> resources = new ArrayList<>();
 
 	/**

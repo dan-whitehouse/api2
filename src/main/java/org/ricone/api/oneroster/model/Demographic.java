@@ -3,6 +3,7 @@ package org.ricone.api.oneroster.model;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import io.swagger.annotations.ApiModelProperty;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
@@ -13,30 +14,43 @@ import java.time.LocalDate;
 public class Demographic extends Base implements Serializable {
 	private final static long serialVersionUID = 2904493540623173207L;
 	@JsonProperty("birthDate")
+	@ApiModelProperty(position = 5, value = "", example = "2005-11-28")
 	private LocalDate birthDate;
 	@JsonProperty("sex")
+	@ApiModelProperty(position = 6, value = "The set of permitted tokens for the type of gender", example = "")
 	private Gender sex;
 	@JsonProperty("americanIndianOrAlaskaNative")
+	@ApiModelProperty(position = 7, value = "", example = "true", allowableValues = "true,false")
 	private Boolean americanIndianOrAlaskaNative;
 	@JsonProperty("asian")
+	@ApiModelProperty(position = 8, value = "", example = "false", allowableValues = "true,false")
 	private Boolean asian;
 	@JsonProperty("blackOrAfricanAmerican")
+	@ApiModelProperty(position = 9, value = "", example = "true", allowableValues = "true,false")
 	private Boolean blackOrAfricanAmerican;
 	@JsonProperty("nativeHawaiianOrOtherPacificIslander")
+	@ApiModelProperty(position = 10, value = "", example = "false", allowableValues = "true,false")
 	private Boolean nativeHawaiianOrOtherPacificIslander;
 	@JsonProperty("white")
+	@ApiModelProperty(position = 11, value = "", example = "true", allowableValues = "true,false")
 	private Boolean white;
 	@JsonProperty("demographicRaceTwoOrMoreRaces")
+	@ApiModelProperty(position = 12, value = "", example = "false", allowableValues = "true,false")
 	private Boolean demographicRaceTwoOrMoreRaces;
 	@JsonProperty("hispanicOrLatinoEthnicity")
+	@ApiModelProperty(position = 13, value = "", example = "true", allowableValues = "true,false")
 	private Boolean hispanicOrLatinoEthnicity;
 	@JsonProperty("countryOfBirthCode")
+	@ApiModelProperty(position = 14, value = "", example = "US", notes = "https://ceds.ed.gov/CEDSElementDetails.aspx?TermxTopicId=20002")
 	private String countryOfBirthCode;
 	@JsonProperty("stateOfBirthAbbreviation")
+	@ApiModelProperty(position = 15, value = "", example = "NY", notes = "https://ceds.ed.gov/CEDSElementDetails.aspx?TermxTopicId=20837")
 	private String stateOfBirthAbbreviation;
 	@JsonProperty("cityOfBirth")
+	@ApiModelProperty(position = 16, value = "", example = "Albany")
 	private String cityOfBirth;
 	@JsonProperty("publicSchoolResidenceStatus")
+	@ApiModelProperty(position = 17, value = "", example = "01652", notes = "https://ceds.ed.gov/CEDSElementDetails.aspx?TermxTopicId=20863")
 	private String publicSchoolResidenceStatus;
 
 	/**

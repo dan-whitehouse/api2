@@ -3,25 +3,32 @@ package org.ricone.api.oneroster.model;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @JsonPropertyOrder({"codeMajor", "severity", "codeMinor", "description", "messageRefIdentifier", "operationRefIdentifier"})
 public class Error implements Serializable {
+	private final static long serialVersionUID = 1931034646494144369L;
 	@JsonProperty("codeMajor")
+	@ApiModelProperty(position = 1, value = "", example = "")
 	private CodeMajor codeMajor;
 	@JsonProperty("severity")
+	@ApiModelProperty(position = 2, value = "", example = "")
 	private Severity severity;
 	@JsonProperty("messageRefIdentifier")
+	@ApiModelProperty(position = 3, value = "", example = "")
 	private String messageRefIdentifier;
 	@JsonProperty("operationRefIdentifier")
+	@ApiModelProperty(position = 4, value = "", example = "")
 	private String operationRefIdentifier;
 	@JsonProperty("description")
+	@ApiModelProperty(position = 5, value = "", example = "")
 	private String description;
 	@JsonProperty("codeMinor")
+	@ApiModelProperty(position = 6, value = "", example = "")
 	private CodeMinor codeMinor;
-	private final static long serialVersionUID = 1931034646494144369L;
 
 	/**
 	 * No args constructor for use in serialization

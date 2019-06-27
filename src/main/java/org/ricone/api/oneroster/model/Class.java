@@ -3,6 +3,7 @@ package org.ricone.api.oneroster.model;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -13,28 +14,40 @@ import java.util.List;
 public class Class extends Base implements Serializable {
 	private final static long serialVersionUID = -6826277327573344241L;
 	@JsonProperty("title")
+	@ApiModelProperty(position = 5, value = "", example = "Basic Chemistry")
 	private String title;
 	@JsonProperty("classCode")
+	@ApiModelProperty(position = 6, value = "", example = "Chem101-Mr Rogers")
 	private String classCode;
 	@JsonProperty("classType")
+	@ApiModelProperty(position = 7, value = "The set of permitted tokens for the type of class")
 	private ClassType classType;
 	@JsonProperty("location")
+	@ApiModelProperty(position = 8, value = "", example = "room 19")
 	private String location;
 	@JsonProperty("grades")
+	@ApiModelProperty(position = 9, value = "Grade(s) for which the class is attended", example = "09 or an array of 09,10", notes = "https://ceds.ed.gov/CEDSElementDetails.aspx?TermId=7100")
 	private List<String> grades = new ArrayList<>();
 	@JsonProperty("subjects")
+	@ApiModelProperty(position = 10, value = "Subject name(s)", example = "Chemistry")
 	private List<String> subjects = new ArrayList<>();
 	@JsonProperty("course")
+	@ApiModelProperty(position = 11, value = "Link to course i.e. the Course 'sourcedId'")
 	private GUIDRef course;
 	@JsonProperty("school")
+	@ApiModelProperty(position = 12, value = "Link to school i.e. the School 'sourcedId'")
 	private GUIDRef school;
 	@JsonProperty("terms")
+	@ApiModelProperty(position = 13, value = "Links to terms or semesters (academicSession) i.e. the set of 'sourcedIds' for the terms within the associated school year", example = "")
 	private List<GUIDRef> terms = new ArrayList<>();
 	@JsonProperty("subjectCodes")
+	@ApiModelProperty(position = 14, value = "This is a machine readable set of codes and the number should match the associated 'subjects' attribute.", example = "")
 	private List<String> subjectCodes = new ArrayList<>();
 	@JsonProperty("periods")
+	@ApiModelProperty(position = 15, value = "The time slots in the day that the class will be given", example = "1, 3, 5")
 	private List<String> periods = new ArrayList<>();
 	@JsonProperty("resources")
+	@ApiModelProperty(position = 16, value = "Link to resources i.e. the Resource 'sourcedId'")
 	private List<GUIDRef> resources = new ArrayList<>();
 
 	/**

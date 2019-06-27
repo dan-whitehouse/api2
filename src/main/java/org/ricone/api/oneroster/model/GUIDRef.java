@@ -3,20 +3,24 @@ package org.ricone.api.oneroster.model;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
-
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"href", "sourcedId", "type"})
+@ApiModel(description = "This is a reference to a globally unique identifier")
 public class GUIDRef implements Serializable {
-
+	private final static long serialVersionUID = 4584680713330325553L;
 	@JsonProperty("href")
+	@ApiModelProperty(position = 1, value = "The URI for the type of object being referenced", example = "")
 	private String href;
 	@JsonProperty("sourcedId")
+	@ApiModelProperty(position = 2, value = "The globally unique identifier of the object being referenced", example = "02e23746-2b23-40d4-ba98-24afe6cf187e")
 	private String sourcedId;
 	@JsonProperty("type")
+	@ApiModelProperty(position = 3, value = "The type of object being referenced. This is enumerated", example = "student")
 	private GUIDType type;
-	private final static long serialVersionUID = 4584680713330325553L;
 
 	/**
 	 * No args constructor for use in serialization

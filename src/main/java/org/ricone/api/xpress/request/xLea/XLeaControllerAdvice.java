@@ -10,8 +10,6 @@ import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
-import java.util.Objects;
-
 //https://stackoverflow.com/questions/44375435/spring-auto-add-x-total-count-header
 
 @ControllerAdvice("XPress:XLeas:XLeaControllerAdvice")

@@ -3,8 +3,8 @@ package org.ricone.api.xpress.request.app;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.ricone.api.xpress.component.ControllerData;
-import org.ricone.config.model.App;
 import org.ricone.config.cache.AppService;
+import org.ricone.config.model.App;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

@@ -1,8 +1,8 @@
 package org.ricone.api.oneroster.component;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.ricone.api.oneroster.model.*;
 import org.ricone.api.oneroster.model.Error;
+import org.ricone.api.oneroster.model.*;
 
 import java.lang.Class;
 import java.lang.reflect.Constructor;

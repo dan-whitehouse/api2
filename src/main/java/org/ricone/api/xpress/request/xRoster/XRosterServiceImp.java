@@ -5,11 +5,10 @@ import org.ricone.api.core.model.RosterEventLog;
 import org.ricone.api.core.model.wrapper.CourseSectionWrapper;
 import org.ricone.api.core.model.wrapper.EventLogWrapper;
 import org.ricone.api.xpress.component.ControllerData;
-import org.ricone.error.NoContentException;
 import org.ricone.api.xpress.component.error.exception.NotFoundException;
 import org.ricone.api.xpress.model.XRosterResponse;
 import org.ricone.api.xpress.model.XRostersResponse;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.ricone.error.NoContentException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;

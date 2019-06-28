@@ -1,8 +1,6 @@
 package org.ricone.api.xpress.request.xSchool;
 
 import org.ricone.api.xpress.component.ControllerData;
-import org.ricone.api.xpress.model.XLeaResponse;
-import org.ricone.api.xpress.model.XLeasResponse;
 import org.ricone.api.xpress.model.XSchoolResponse;
 import org.ricone.api.xpress.model.XSchoolsResponse;
 

@@ -1,12 +1,11 @@
 package org.ricone.api.xpress.request.xCourse;
 
 import org.ricone.api.core.model.CourseEventLog;
-import org.ricone.api.core.model.LeaEventLog;
 import org.ricone.api.core.model.wrapper.EventLogWrapper;
 import org.ricone.api.xpress.component.error.exception.MappingException;
-import org.ricone.api.xpress.model.*;
-import org.ricone.api.xpress.request.xLea.XLeaMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.ricone.api.xpress.model.XCourse;
+import org.ricone.api.xpress.model.XCourses;
+import org.ricone.api.xpress.model.XCoursesResponse;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;

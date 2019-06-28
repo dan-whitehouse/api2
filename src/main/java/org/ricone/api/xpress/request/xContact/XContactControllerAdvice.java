@@ -2,7 +2,6 @@ package org.ricone.api.xpress.request.xContact;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.ricone.api.xpress.model.XContactsResponse;
-import org.ricone.api.xpress.model.XCoursesResponse;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;

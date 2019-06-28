@@ -2,7 +2,6 @@ package org.ricone.api.xpress.request.xRoster;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.ricone.api.xpress.model.XRostersResponse;
-import org.ricone.api.xpress.model.XSchoolsResponse;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;

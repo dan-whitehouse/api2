@@ -2,7 +2,6 @@ package org.ricone.api.core.model.wrapper;
 
 
 import org.ricone.api.core.model.StaffCourseSection;
-import org.ricone.api.core.model.StudentCourseSection;
 
 public class StaffCourseSectionWrapper {
 	private String districtId;

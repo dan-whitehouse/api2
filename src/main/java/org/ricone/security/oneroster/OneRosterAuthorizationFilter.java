@@ -7,7 +7,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.ricone.config.cache.AppService;
 import org.ricone.security.Application;
 import org.ricone.security.BaseAuthenticationFilter;
-import org.ricone.security.BaseDecodedToken;
 import org.ricone.security.TokenDecoder;
 import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.AuthenticationManager;

@@ -2,7 +2,6 @@ package org.ricone.api.xpress.request.validation;
 
 import org.ricone.api.xpress.component.ControllerData;
 import org.ricone.api.xpress.model.validation.Validation;
-import org.ricone.api.xpress.request.app.Application;
 
 /**
  * @author Dan Whitehouse <daniel.whitehouse@neric.org>

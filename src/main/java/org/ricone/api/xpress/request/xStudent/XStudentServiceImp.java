@@ -9,7 +9,6 @@ import org.ricone.api.xpress.component.error.exception.NotFoundException;
 import org.ricone.api.xpress.model.XStudentResponse;
 import org.ricone.api.xpress.model.XStudentsResponse;
 import org.ricone.error.NoContentException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;

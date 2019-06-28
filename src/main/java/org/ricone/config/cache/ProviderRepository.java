@@ -2,21 +2,17 @@ package org.ricone.config.cache;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ricone.config.model.*;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Caching;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.*;
+import org.ricone.config.model.ProviderKV;
+import org.ricone.config.model.ProviderPasswordKV;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
-
-import static org.ricone.config.cache.CacheConfig.*;
 
 @Repository("Config:ProviderRepository")
 public class ProviderRepository {

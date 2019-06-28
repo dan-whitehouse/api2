@@ -1,15 +1,9 @@
 package org.ricone.api.xpress.request.xStudent;
 
-import org.ricone.api.core.model.*;
+import org.ricone.api.core.model.StudentEventLog;
 import org.ricone.api.core.model.wrapper.EventLogWrapper;
-import org.ricone.api.xpress.component.BaseDAO;
 import org.ricone.api.xpress.component.ControllerData;
-import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-import javax.persistence.criteria.*;
 import java.util.Date;
 import java.util.List;
 

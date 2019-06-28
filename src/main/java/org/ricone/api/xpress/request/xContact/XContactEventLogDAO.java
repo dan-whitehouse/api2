@@ -1,14 +1,9 @@
 package org.ricone.api.xpress.request.xContact;
 
-import org.ricone.api.core.model.*;
+import org.ricone.api.core.model.ContactEventLog;
 import org.ricone.api.core.model.wrapper.EventLogWrapper;
-import org.ricone.api.xpress.component.BaseDAO;
 import org.ricone.api.xpress.component.ControllerData;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-import javax.persistence.criteria.*;
 import java.util.Date;
 import java.util.List;
 

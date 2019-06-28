@@ -4,22 +4,16 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.ricone.api.core.model.Lea;
-import org.ricone.api.core.model.School;
-import org.ricone.api.core.model.SchoolIdentifier;
 import org.ricone.security.acl.PathPermission;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"longDescription", "type", "name", "permTemplate", "status", "profile_id", "tags", "licenseName", "includeExitedStudents", "providerSecret", "siteUrl", "vendor_id", "iconUrl", "sis_id", "public", "severityLevelDataAPI", "shortDescription", "title", "id", "password"})

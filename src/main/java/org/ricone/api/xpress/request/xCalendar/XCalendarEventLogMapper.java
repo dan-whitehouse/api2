@@ -6,7 +6,6 @@ import org.ricone.api.xpress.component.error.exception.MappingException;
 import org.ricone.api.xpress.model.XCalendar;
 import org.ricone.api.xpress.model.XCalendars;
 import org.ricone.api.xpress.model.XCalendarsResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;

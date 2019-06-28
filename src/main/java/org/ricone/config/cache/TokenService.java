@@ -2,14 +2,12 @@ package org.ricone.config.cache;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.hibernate.annotations.Cache;
-import org.ricone.api.xpress.request.xSchool.XSchoolDAO;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
 
-import static org.ricone.config.cache.CacheConfig.*;
+import static org.ricone.config.cache.CacheConfig.CACHE_TOKEN;
 
 @Service("Config:TokenService")
 @Scope(proxyMode = ScopedProxyMode.DEFAULT)

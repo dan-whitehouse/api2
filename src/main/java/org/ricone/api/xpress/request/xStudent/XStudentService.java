@@ -1,8 +1,6 @@
 package org.ricone.api.xpress.request.xStudent;
 
 import org.ricone.api.xpress.component.ControllerData;
-import org.ricone.api.xpress.model.XStaffResponse;
-import org.ricone.api.xpress.model.XStaffsResponse;
 import org.ricone.api.xpress.model.XStudentResponse;
 import org.ricone.api.xpress.model.XStudentsResponse;
 

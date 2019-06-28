@@ -2,9 +2,6 @@ package org.ricone.api.oneroster.component.springfox;
 
 import io.swagger.annotations.*;
 import org.ricone.api.oneroster.model.*;
-import org.ricone.api.xpress.model.*;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 
 import java.lang.annotation.*;
 

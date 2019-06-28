@@ -7,7 +7,6 @@ import org.ricone.api.oneroster.component.error.exception.UnknownObjectException
 import org.ricone.api.oneroster.model.DemographicResponse;
 import org.ricone.api.oneroster.model.DemographicsResponse;
 import org.ricone.error.NoContentException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;

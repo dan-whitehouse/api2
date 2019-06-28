@@ -1,7 +1,6 @@
 package org.ricone.api.core.model.wrapper;
 
 
-import org.ricone.api.core.model.Student;
 import org.ricone.api.core.model.StudentCourseSection;
 
 public class StudentCourseSectionWrapper {

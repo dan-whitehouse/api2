@@ -1,7 +1,8 @@
 package org.ricone.api.oneroster.request.academicSessions;
 
 import org.ricone.api.oneroster.component.BaseController;
-import org.ricone.api.oneroster.component.springfox.*;
+import org.ricone.api.oneroster.component.springfox.Swagger;
+import org.ricone.api.oneroster.component.springfox.SwaggerParam;
 import org.ricone.api.oneroster.model.AcademicSessionResponse;
 import org.ricone.api.oneroster.model.AcademicSessionsResponse;
 import org.springframework.web.bind.annotation.GetMapping;

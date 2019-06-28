@@ -16,8 +16,8 @@ public abstract class TokenDecoder {
 	public static <T> T decodeToken(String token, Class<T> clazz) throws JWTVerificationException {
 		try {
 			DecodedJWT jwt = JWT.decode(token);
-			ObjectMapper map = new ObjectMapper();
-			return map.readValue(base64Decode(jwt.getPayload()), clazz);
+			ObjectMapper mapper = new ObjectMapper();
+			return mapper.readValue(base64Decode(jwt.getPayload()), clazz);
 		}
 		catch (Exception e) {
 			throw new JWTVerificationException("Invalid Authorization Token provided");

@@ -4,8 +4,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ricone.api.xpress.component.error.exception.BadRequestException;
-import org.ricone.security.Application;
 import org.ricone.api.xpress.util.Util;
+import org.ricone.security.Application;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.servlet.http.HttpServletRequest;

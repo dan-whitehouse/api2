@@ -84,7 +84,7 @@ public class LoggingFilter extends OncePerRequestFilter {
                         .requestDatetime(request.getAttribute("requestDatetime").toString())
                         .responseDatetime(LocalDateTime.now().toString())
                         .duration(Duration.between(before, now).toMillis()+"ms")
-                        .size(Long.parseLong(response.getHeader("Content-Length")))
+                        .size(response.getHeader("Content-Length") != null ? Long.parseLong(response.getHeader("Content-Length")) : 0)
                         .statusCode(response.getStatus())
                         .errorMessage(errors[0])
                         .errorDescription(errors[1])

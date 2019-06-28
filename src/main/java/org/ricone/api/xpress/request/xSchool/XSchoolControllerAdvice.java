@@ -1,7 +1,6 @@
 package org.ricone.api.xpress.request.xSchool;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.ricone.api.xpress.model.XLeasResponse;
 import org.ricone.api.xpress.model.XSchoolsResponse;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;

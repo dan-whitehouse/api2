@@ -2,10 +2,10 @@ package org.ricone.security;
 
 import org.ricone.config.cache.AppService;
 import org.ricone.logging.LoggingFilter;
-import org.ricone.security.xpress.XPressAuthenticationEntryPoint;
-import org.ricone.security.xpress.XPressAuthorizationFilter;
 import org.ricone.security.oneroster.OneRosterAuthenticationEntryPoint;
 import org.ricone.security.oneroster.OneRosterAuthorizationFilter;
+import org.ricone.security.xpress.XPressAuthenticationEntryPoint;
+import org.ricone.security.xpress.XPressAuthorizationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;

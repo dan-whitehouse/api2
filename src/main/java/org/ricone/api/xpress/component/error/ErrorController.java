@@ -1,12 +1,9 @@
 package org.ricone.api.xpress.component.error;
 
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.ricone.api.xpress.component.error.exception.*;
 import org.ricone.api.xpress.model.XError;
 import org.ricone.api.xpress.model.XErrorResponse;
 import org.ricone.error.NoContentException;
-import org.ricone.logging.Log;
-import org.ricone.logging.LogBuilder;
 import org.ricone.logging.LogUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.UUID;
 
 @RestController("xPressErrorController")
 @ControllerAdvice(basePackages = "org.ricone.api.xpress")

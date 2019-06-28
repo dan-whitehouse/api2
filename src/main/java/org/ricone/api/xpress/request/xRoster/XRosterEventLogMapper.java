@@ -6,7 +6,6 @@ import org.ricone.api.xpress.component.error.exception.MappingException;
 import org.ricone.api.xpress.model.XRoster;
 import org.ricone.api.xpress.model.XRosters;
 import org.ricone.api.xpress.model.XRostersResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;

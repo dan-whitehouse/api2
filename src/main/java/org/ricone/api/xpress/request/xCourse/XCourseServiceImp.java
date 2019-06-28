@@ -5,11 +5,10 @@ import org.ricone.api.core.model.CourseEventLog;
 import org.ricone.api.core.model.wrapper.CourseWrapper;
 import org.ricone.api.core.model.wrapper.EventLogWrapper;
 import org.ricone.api.xpress.component.ControllerData;
-import org.ricone.error.NoContentException;
 import org.ricone.api.xpress.component.error.exception.NotFoundException;
 import org.ricone.api.xpress.model.XCourseResponse;
 import org.ricone.api.xpress.model.XCoursesResponse;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.ricone.error.NoContentException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;

@@ -7,7 +7,6 @@ import org.ricone.api.xpress.component.swagger.Swagger;
 import org.ricone.api.xpress.component.swagger.SwaggerParam;
 import org.ricone.api.xpress.model.XContactResponse;
 import org.ricone.api.xpress.model.XContactsResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;

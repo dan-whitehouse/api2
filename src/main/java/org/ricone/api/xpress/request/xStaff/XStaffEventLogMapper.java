@@ -6,7 +6,6 @@ import org.ricone.api.xpress.component.error.exception.MappingException;
 import org.ricone.api.xpress.model.XStaff;
 import org.ricone.api.xpress.model.XStaffs;
 import org.ricone.api.xpress.model.XStaffsResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;

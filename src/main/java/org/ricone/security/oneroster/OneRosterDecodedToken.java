@@ -1,7 +1,6 @@
 package org.ricone.security.oneroster;
 
 import com.fasterxml.jackson.annotation.*;
-import org.ricone.security.BaseDecodedToken;
 
 import java.io.Serializable;
 import java.util.HashMap;

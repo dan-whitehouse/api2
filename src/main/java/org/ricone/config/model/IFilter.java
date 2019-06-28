@@ -1,12 +1,5 @@
 package org.ricone.config.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-
-import static com.fasterxml.jackson.annotation.JsonTypeInfo.As.*;
-import static com.fasterxml.jackson.annotation.JsonTypeInfo.Id.NAME;
-
 /*@JsonTypeInfo(use = NAME, include = PROPERTY)
 @JsonSubTypes({
 		@JsonSubTypes.Type(value=XLeaFilter.class, name = "XLeaFilter"),

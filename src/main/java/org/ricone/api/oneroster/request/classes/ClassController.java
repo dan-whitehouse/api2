@@ -1,14 +1,10 @@
 package org.ricone.api.oneroster.request.classes;
 
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
 import org.ricone.api.oneroster.component.BaseController;
 import org.ricone.api.oneroster.component.springfox.Swagger;
 import org.ricone.api.oneroster.component.springfox.SwaggerParam;
 import org.ricone.api.oneroster.model.ClassResponse;
 import org.ricone.api.oneroster.model.ClassesResponse;
-import org.ricone.api.oneroster.model.ErrorResponse;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;

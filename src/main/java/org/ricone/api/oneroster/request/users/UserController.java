@@ -1,12 +1,8 @@
 package org.ricone.api.oneroster.request.users;
 
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
 import org.ricone.api.oneroster.component.BaseController;
 import org.ricone.api.oneroster.component.springfox.Swagger;
 import org.ricone.api.oneroster.component.springfox.SwaggerParam;
-import org.ricone.api.oneroster.model.ErrorResponse;
 import org.ricone.api.oneroster.model.UserResponse;
 import org.ricone.api.oneroster.model.UsersResponse;
 import org.springframework.web.bind.annotation.GetMapping;

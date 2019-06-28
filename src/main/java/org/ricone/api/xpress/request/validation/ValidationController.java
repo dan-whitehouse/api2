@@ -1,11 +1,8 @@
 package org.ricone.api.xpress.request.validation;
 
+import org.ricone.api.xpress.component.BaseController;
 import org.ricone.api.xpress.component.swagger.Swagger;
 import org.ricone.api.xpress.model.validation.Validation;
-import org.ricone.api.xpress.request.app.AppService;
-import org.ricone.api.xpress.request.app.Application;
-import org.ricone.api.xpress.component.BaseController;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;

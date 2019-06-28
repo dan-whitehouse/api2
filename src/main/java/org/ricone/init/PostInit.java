@@ -6,9 +6,6 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 
-import javax.sql.DataSource;
-import java.sql.SQLException;
-
 @Component
 public class PostInit implements ApplicationListener<ApplicationReadyEvent> {
     private final Logger logger = LogManager.getLogger(this.getClass());

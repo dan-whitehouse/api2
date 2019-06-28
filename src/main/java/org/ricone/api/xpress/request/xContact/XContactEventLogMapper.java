@@ -1,12 +1,11 @@
 package org.ricone.api.xpress.request.xContact;
 
 import org.ricone.api.core.model.ContactEventLog;
-import org.ricone.api.core.model.LeaEventLog;
 import org.ricone.api.core.model.wrapper.EventLogWrapper;
 import org.ricone.api.xpress.component.error.exception.MappingException;
-import org.ricone.api.xpress.model.*;
-import org.ricone.api.xpress.request.xLea.XLeaMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.ricone.api.xpress.model.XContact;
+import org.ricone.api.xpress.model.XContacts;
+import org.ricone.api.xpress.model.XContactsResponse;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;

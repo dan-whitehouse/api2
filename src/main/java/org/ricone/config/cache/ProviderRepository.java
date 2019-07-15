@@ -80,19 +80,7 @@ public class ProviderRepository {
 	}
 
 	/* Other */
-	private String getProvider() {
-		return System.getenv("provider_id");
-	}
-
 	private String getUrl() {
 		return System.getenv("config_url");
-	}
-
-	private String getUsername() {
-		return System.getenv("api_config_username");
-	}
-
-	private String getPassword() {
-		return System.getenv("api_config_password");
 	}
 }

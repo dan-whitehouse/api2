@@ -72,7 +72,7 @@ public class LoggingFilter extends OncePerRequestFilter {
                 logger.info(log.toLog());
             }
             else {
-                String[] errors = LogUtil.getErrors(request, responseBody);
+                //String[] errors = LogUtil.getErrors(request, responseBody);
                 log = new LogBuilder()
                         .uuid(request.getAttribute("uuid").toString())
                         .level(level)
@@ -86,8 +86,8 @@ public class LoggingFilter extends OncePerRequestFilter {
                         .duration(Duration.between(before, now).toMillis()+"ms")
                         .size(response.getHeader("Content-Length") != null ? Long.parseLong(response.getHeader("Content-Length")) : 0)
                         .statusCode(response.getStatus())
-                        .errorMessage(errors[0])
-                        .errorDescription(errors[1])
+                        //.errorMessage(errors[0])
+                        //.errorDescription(errors[1])
                         .build();
                 if(Level.WARN.equals(level)) {
                     logger.warn(log.toLogWithErrors());

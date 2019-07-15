@@ -41,17 +41,20 @@ body {
   color: #232323;
 }
 
+/*
 .notfound .notfound-404 h1>span {
-  display: inline-block;
-  width: 120px;
-  height: 120px;
-  background-image: url('/img/emoji.png');
-  background-size: cover;
-  -webkit-transform: scale(1.4);
-      -ms-transform: scale(1.4);
-          transform: scale(1.4);
-  z-index: -1;
-}
+   display: inline-block;
+   width: 120px;
+   height: 120px;
+
+   background-image: url('/api/img/emoji.png');
+   background-size: cover;
+   -webkit-transform: scale(1.4);
+   -ms-transform: scale(1.4);
+   transform: scale(1.4);
+   z-index: -1;
+ }
+*/
 
 .notfound h2 {
   font-family: 'Montserrat', sans-serif;

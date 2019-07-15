@@ -1,11 +1,9 @@
 package org.ricone.init;
 
-import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.ZonedDateTimeSerializer;
 import org.ricone.api.oneroster.model.serializer.BooleanStringSerializer;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.time.ZoneId;
@@ -45,6 +44,19 @@ public class WebConfig implements WebMvcConfigurer {
         };
     }
 
+    /*	@Bean
+	public CorsFilter corsFilter() {
+		//https://stackoverflow.com/questions/51720552/enabling-cors-globally-in-spring-boot
+		final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		final CorsConfiguration config = new CorsConfiguration();
+		config.setAllowCredentials(true);
+		config.setAllowedOrigins(Collections.singletonList("*"));
+		config.setAllowedHeaders(Arrays.asList("Origin", "Content-Type", "Accept", "Authorization", "SchoolYear", "IdType", "NavigationPage", "NavigationPageSize"));
+		config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "HEAD", "OPTIONS", "DELETE", "PATCH"));
+		source.registerCorsConfiguration("/**", config);
+		return new CorsFilter(source);
+	}*/
+
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
         //Override default paging settings, so that an empty paging request is 'unpaged', instead of (0,10)
@@ -71,5 +83,14 @@ public class WebConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         /*HandlerInterceptor logInterceptor = new LoggingInterceptor();
         registry.addInterceptor(logInterceptor).order(Ordered.HIGHEST_PRECEDENCE);*/
+    }
+
+    private static final String[] CLASSPATH_RESOURCE_LOCATIONS = {
+            "classpath:/META-INF/resources/", "classpath:/resources/",
+            "classpath:/static/", "classpath:/public/" };
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/**").addResourceLocations(CLASSPATH_RESOURCE_LOCATIONS);
     }
 }

@@ -29,7 +29,7 @@ public class DataSourceConfig {
     public DataSource getDataSource() {
         HashMap<String, String> pkv = null;
 
-        ProviderPasswordKV credentials = getCredentials();
+        ProviderPasswordKV credentials = getPasswordKV();
         if(credentials != null) {
             pkv = service.getProviderKV(environment.getProperty("security.auth.provider.id"));
 
@@ -42,7 +42,7 @@ public class DataSourceConfig {
         return null;
     }
 
-    private ProviderPasswordKV getCredentials() {
+    private ProviderPasswordKV getPasswordKV() {
         HashMap<String, ProviderPasswordKV> ppkv = service.getProviderPasswordKV(environment.getProperty("security.auth.provider.id"));
         for(Map.Entry<String, ProviderPasswordKV> kv : ppkv.entrySet()) {
             if(kv.getKey().equalsIgnoreCase("db.core")) {

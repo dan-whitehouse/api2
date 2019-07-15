@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <!-- https://colorlib.com/wp/free-404-error-page-templates/ -->
     <meta charset="UTF-8">
@@ -7,29 +7,38 @@
 
     <link href="https://fonts.googleapis.com/css?family=Montserrat:300,700" rel="stylesheet">
 
-    <link rel="stylesheet" type="text/css" href="/swagger-ui.css">
-    <link rel="stylesheet" type="text/css" href="/error.css" />
+    <link rel="stylesheet" type="text/css" th:href="@{/swagger-ui.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/error.css}" />
 
-    <link rel="icon" type="image/x-icon" href="/favicon.ico" sizes="32x32">
-    <link rel="icon" type="image/x-icon" href="/favicon.ico" sizes="16x16">
-    <style>
-			html
-			{
-			box-sizing: border-box;
-			overflow: -moz-scrollbars-vertical;
-			overflow-y: scroll;
+    <link rel="icon" type="image/x-icon" th:href="@{/favicon.ico}" sizes="32x32">
+    <link rel="icon" type="image/x-icon" th:href="@{/favicon.ico}" sizes="16x16">
+    <style th:inline="text">
+			html {
+                box-sizing: border-box;
+                overflow: -moz-scrollbars-vertical;
+                overflow-y: scroll;
 			}
 			*,
 			*:before,
-			*:after
-			{
-			box-sizing: inherit;
+			*:after {
+			    box-sizing: inherit;
 			}
-			body
-			{
-			margin:0;
-			background: #fafafa;
+			body {
+                margin:0;
+                background: #fafafa;
 			}
+
+            .notfound .notfound-404 h1>span {
+                display: inline-block;
+                width: 120px;
+                height: 120px;
+                background-image: url([[@{/img/emoji.png}]]);
+                background-size: cover;
+                -webkit-transform: scale(1.4);
+                -ms-transform: scale(1.4);
+                transform: scale(1.4);
+                z-index: -1;
+            }
 		</style>
 </head>
     <body>
@@ -51,89 +60,13 @@
                         </div>
                         <h2>Oops! Page Not Found</h2>
                         <p>Sorry but the page you are looking for does not exist, has been removed or is temporarily unavailable</p>
-                        <a href="/">Back to homepage</a>
+                        <a th:href="@{/}">Back to homepage</a>
                     </div>
                 </div>
             </section>
         </div>
-        <script src="/swagger-ui-bundle.js"> </script>
-        <script src="/swagger-ui-standalone-preset.js"> </script>
-        <script src="https://code.jquery.com/jquery-1.8.3.min.js" integrity="sha256-YcbK69I5IXQftf/mYD8WY0/KmEDCv1asggHpJk1trM8=" crossorigin="anonymous"></script>
-        <footer>
-            <div class="scrollup">
-                <i class="arrow-up"></i>
-            </div>
-        </footer>
-        <!-- Auth Dropdown -->
-        <script>
-            function addAuthDropdown() {
-
-                $('button.btn.authorize').ajaxSuccess(function() {
-                  alert('click');
-                  // Inject Dropdown into Authorize Modal
-                  $('.modal-ux-header').append('<select onChange="authDropdown(this, \'theinput\')" onMouseOut="authDropdownInit(this)"><option>Bearer</option><option value="ZTk3MDcxZmItYmFiOS00ODYwLThiOTctNjM2OWZhYjk1Y2IxOlBhc3N3b3JkMQ">Basic Auth - Single</option><option value="OTQzOGI4MDUtOTE1Ni00ZDU0LWJhMGQtM2Q4YTMzNWI2NGRiOlBhc3N3b3JkMQ">Basic Auth - Multi</option></select>');
-                });
-
-
-                if($('select#select option:selected').attr('value').indexOf('xPress') > -1) {
-                    //Add Dropdown if xPress is the selected definition
-                    $('.description').append('<select id="bearerTokenSelector" onChange="authDropdown(this, \'theinput\')" onMouseOut="authDropdownInit(this)"><option>Bearer</option><option value="ZTk3MDcxZmItYmFiOS00ODYwLThiOTctNjM2OWZhYjk1Y2IxOlBhc3N3b3JkMQ">Basic Auth - Single</option><option value="OTQzOGI4MDUtOTE1Ni00ZDU0LWJhMGQtM2Q4YTMzNWI2NGRiOlBhc3N3b3JkMQ">Basic Auth - Multi</option></select>');
-                }
-                else {
-                    $('#bearerTokenSelector').remove();
-                }
-            }
-
-
-            function authDropdownInit(e)
-            {
-                var theinput = document.getElementById('theinput');
-                var n = e.selectedIndex;
-                var t = e.options[n].value;
-                if(t != 'Bearer')
-                {
-                    "" == theinput.value && (theinput.value = t)
-                }
-                else
-                {
-                "" == theinput.value && (theinput.value = "Bearer ")
-                }
-            }
-
-            function authDropdown(e,n)
-            {
-                n=document.getElementById(n);
-                var t = e.selectedIndex;
-                var	o = e.options[t].value;
-
-                if(e.options[t].innerHTML != 'Bearer')
-                {
-                    n.value = o;
-                }
-                else
-                {
-                    n.value = "Bearer ";
-                }
-            }
-        </script>
-        <!-- Scroll Up -->
-        <script>
-            $(function() {
-                $(window).scroll(function () {
-                    if ($(this).scrollTop() > 300) {
-                        $('.scrollup').fadeIn();
-                    } else {
-                        $('.scrollup').fadeOut();
-                    }
-                });
-
-                $('.scrollup').click(function () {
-                    $('html, body').animate({
-                        scrollTop: 0
-                    }, 300);
-                    return false;
-                });
-            });
-        </script>
+        <script th:src="@{/swagger-ui-bundle.js}"> </script>
+        <script th:src="@{/swagger-ui-standalone-preset.js}"> </script>
+        <script th:src="@{/https://code.jquery.com/jquery-1.8.3.min.js}" integrity="sha256-YcbK69I5IXQftf/mYD8WY0/KmEDCv1asggHpJk1trM8=" crossorigin="anonymous"></script>
     </body>
 </html>
